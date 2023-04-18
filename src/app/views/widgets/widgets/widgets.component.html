@@ -1,0 +1,58 @@
+<c-card class="mb-4">
+  <c-card-header>Create Youtube Video</c-card-header>
+  <c-card-body>
+    <app-docs-example href="components/widgets/#cwidgetstatsb">
+      <c-row>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Virality'"
+            class="mb-4"
+            text="Probability that this content will gain traction very quickly."
+            value="89.9%"
+          >
+            <c-progress class="my-2" thin>
+              <c-progress-bar [value]="89.9" color="success"></c-progress-bar>
+            </c-progress>
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Potential Reach'"
+            class="mb-4"
+            text="Based on similar content this is how many views it could get."
+            value="12.124"
+          >
+            <c-progress class="my-2" thin>
+              <c-progress-bar [value]="89.9" color="info"></c-progress-bar>
+            </c-progress>
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Earning Potential'"
+            class="mb-4"
+            text="If properly monetized this is how much you could earn."
+            value="$8,111"
+          >
+            <c-progress class="my-2" thin>
+              <c-progress-bar [value]="89.9" color="warning"></c-progress-bar>
+            </c-progress>
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Ideal Video Length'"
+            class="mb-4"
+            text="Content on similar content have done the best at this duration."
+            value="12 Minutes"
+          >
+            <c-progress class="my-2" thin>
+              <c-progress-bar [value]="89.9" color="primary"></c-progress-bar>
+            </c-progress>
+          </c-widget-stat-b>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+
+  </c-card-body>
+</c-card>
