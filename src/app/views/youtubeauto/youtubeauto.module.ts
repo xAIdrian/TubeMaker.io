@@ -30,6 +30,8 @@ import { IconModule } from '@coreui/icons-angular';
 import { YoutubeAutoRoutingModule } from './youtubeauto-routing.module';
 import { VideoListComponent } from './videolist/videolist.component';
 import { DocsComponentsModule } from "../../../components/docs-components.module";
+import { DocsExampleComponent } from '@docs-components/docs-example/docs-example.component';
+import { DocsCalloutComponent } from '@docs-components/docs-callout/docs-callout.component';
 
 @NgModule({
     declarations: [

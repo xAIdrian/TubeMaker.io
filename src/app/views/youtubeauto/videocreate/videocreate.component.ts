@@ -4,14 +4,14 @@ import { Video } from '../service/video.model';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'video-list',
-    templateUrl: './videolist.component.html',
-    styleUrls: ['./videolist.component.scss'],
+    selector: 'video-create',
+    templateUrl: './videocreate.component.html',
+    styleUrls: ['./videocreate.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class VideoListComponent implements OnInit, AfterContentInit {
+export class VideoCreateComponent implements OnInit, AfterContentInit {
 
-    videos: Video[] = [];
+    // private video: Video;
     
     constructor(
         private router: Router,
@@ -20,17 +20,10 @@ export class VideoListComponent implements OnInit, AfterContentInit {
     ) { }
 
     ngOnInit(): void {
-        this.videoService.getVideos().subscribe(videos => {
-            this.videos = videos;
-            console.log("🚀 ~ file: videolist.component.ts:25 ~ VideoListComponent ~ ngOnInit ~ this.videos", this.videos)
-        });
+        
     }
 
     ngAfterContentInit(): void {
         this.changeDetectorRef.detectChanges();
-    }
-
-    newVideoOnClick() {
-        this.router.navigate(['youtubeauto/create']);
     }
 }

@@ -110,25 +110,25 @@ export const navItems: INavData[] = [
       }
     ]
   },
-  // {
-  //   name: 'Buttons',
-  //   url: '/buttons',
-  //   iconComponent: { name: 'cil-cursor' },
-  //   children: [
-  //     {
-  //       name: 'Buttons',
-  //       url: '/buttons/buttons'
-  //     },
-  //     {
-  //       name: 'Button groups',
-  //       url: '/buttons/button-groups'
-  //     },
-  //     {
-  //       name: 'Dropdowns',
-  //       url: '/buttons/dropdowns'
-  //     },
-  //   ]
-  // },
+  {
+    name: 'Buttons',
+    url: '/buttons',
+    iconComponent: { name: 'cil-cursor' },
+    children: [
+      {
+        name: 'Buttons',
+        url: '/buttons/buttons'
+      },
+      {
+        name: 'Button groups',
+        url: '/buttons/button-groups'
+      },
+      {
+        name: 'Dropdowns',
+        url: '/buttons/dropdowns'
+      },
+    ]
+  },
   // {
   //   name: 'Forms',
   //   url: '/forms',
