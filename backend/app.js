@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path')
 
 const app = express();
-const postsRoutes = require('./routes/posts');
+const openaiRoutes = require('./routes/openai')
 
 
 app.use(bodyParser.json())
@@ -29,5 +29,6 @@ app.use((req, res, next) => {
 });
 
 // app.use("/api/posts", postsRoutes)
+app.use("/api/openai", openaiRoutes)
 
 module.exports = app;

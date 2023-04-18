@@ -1,0 +1,26 @@
+<c-card class="mb-4">
+  <c-card-body>
+    <strong>Create Your Video</strong> 
+    <p class="text-medium-emphasis small">
+      Simply enter your text into the box below, and our AI will generate all the information you need!
+    </p>
+    <form cForm class="row g-3" #myForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="col">
+        <input 
+          aria-label="lg input example" 
+          cFormControl 
+          name="name" [(ngModel)]="promptQuery" required
+          placeholder="Type in any ideas you have or just click Create Video!" 
+          sizing="lg" 
+          type="text" 
+          class="left"/>
+      </div>
+      <div class="col-auto" style="display: flex; align-items: center;">
+        <button type="submit" class="btn btn-primary">Create Video</button>
+      </div>
+    </form>
+
+    <p>{{ gptResponse }}</p>
+
+  </c-card-body>
+</c-card>

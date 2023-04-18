@@ -25,23 +25,24 @@ import {
     TooltipModule,
     UtilitiesModule
 } from '@coreui/angular';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IconModule } from '@coreui/icons-angular';
 import { YoutubeAutoRoutingModule } from './youtubeauto-routing.module';
 import { VideoListComponent } from './videolist/videolist.component';
 import { DocsComponentsModule } from "../../../components/docs-components.module";
-import { DocsExampleComponent } from '@docs-components/docs-example/docs-example.component';
-import { DocsCalloutComponent } from '@docs-components/docs-callout/docs-callout.component';
+import { VideoCreateComponent } from './videocreate/videocreate.component';
 
 @NgModule({
     declarations: [
-        VideoListComponent
+        VideoListComponent,
+        VideoCreateComponent
     ],
     exports: [],
     imports: [
         CommonModule,
         IconModule,
         ReactiveFormsModule,
+        FormsModule,
         AccordionModule,
         BadgeModule,
         BreadcrumbModule,
