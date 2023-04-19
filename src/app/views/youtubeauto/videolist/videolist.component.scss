@@ -1,35 +1,26 @@
-.card-list {
-    width: 100%;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+.video-list {
+    margin-top: 0.5rem;
 
-.card-item {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    div {
+        border-radius: 0.25rem;
 
-    .header-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        &:hover {
+            background-color: #f2f2f2;
+        }
 
-        .checkbox {
+        .title-published {
             display: flex;
+            flex-direction: row;
             align-items: center;
+            justify-content: space-between;
         }
 
-        .text-fields {
-            display: flex;
-            gap: 1rem;
-        }
-    }
+        .description {
+            padding-top: 0.5rem;
 
-    .description {
-        margin-top: 0.5rem;
-        margin-left: 2rem;
+            small {
+                display: block;
+            }
+        }
     }
 }

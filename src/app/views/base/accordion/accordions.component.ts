@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { VideoService } from '../../youtubeauto/service/video.service';
 
 @Component({
   selector: 'app-accordions',
