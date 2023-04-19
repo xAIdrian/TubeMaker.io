@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { VideoService } from '../service/video.service';
-import { Video } from '../service/video.model';
+import { ListVideo } from '../video.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class VideoListComponent implements OnInit, AfterContentInit {
 
-    videos: Video[] = [];
+    videos: ListVideo[] = [];
     
     constructor(
         private router: Router,

@@ -1,5 +1,8 @@
-export interface GptGenerative {
-    id: string,
-    prompt: string,
-    bulkText: string
+export interface GptGeneratedVideo {
+    id: string;
+    prompt: string;
+    title: string;
+    description: string;
+    script: string;
+    tags: string[];
 }

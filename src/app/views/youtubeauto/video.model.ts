@@ -1,4 +1,4 @@
-export interface Video {
+export interface ListVideo {
     id: string;
     title: string;
     description: string;
@@ -6,7 +6,14 @@ export interface Video {
     channelTitle: string;
 }
 
-export interface VideoFull {
+export interface GptSourcesVideo {
+    prompt: string;
+    videoStyle: string;
+    videoDuration: string;  
+    voice: string;
+}
+
+export interface YoutubeVideo {
     id: string;
     title: string;
     description: string;

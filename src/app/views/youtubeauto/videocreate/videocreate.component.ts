@@ -7,7 +7,12 @@ import {
 } from '@angular/core';
 import { VideoService } from '../service/video.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 
 @Component({
   selector: 'video-create',
@@ -16,7 +21,6 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoCreateComponent implements OnInit, AfterContentInit {
-  
   promptQuery: any;
   gptResponse: string = 'Waiting for response...';
 
@@ -27,13 +31,12 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   selectedStyleControl: FormControl;
 
-  options: String[] = []
-  voiceOptions: String[] = []
+  options: String[] = [];
+  voiceOptions: String[] = [];
 
   // private video: Video;
 
   constructor(
-    private router: Router,
     private videoService: VideoService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -47,10 +50,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     });
     this.secondFormGroup = this._formBuilder.group({
       selectedStyle: ['', Validators.required],
-      selectedDuration: ['', Validators.required]
+      selectedDuration: ['', Validators.required],
     });
     this.thirdFormGroup = this._formBuilder.group({
-        selectedVoice: [''],
+      selectedVoice: [''],
     });
   }
 
@@ -59,33 +62,28 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   setupValueSubscribers() {
-      this.videoService.getVideoOptionsObserver().subscribe((response) => {
-          console.log("🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:", response)
-          this.options = response
-      });
-      this.videoService.getVoiceOptionsObserver().subscribe((response) => {
-          console.log("🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:", response)
-          this.voiceOptions = response
-      });
-  }
-
-  onStyleChange(event: any) {
-    console.log("🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ event:", event)
-    this.secondFormGroup.value.selectedStyle = event.value
-}
-
-  submit() {
-    console.log(this.firstFormGroup.value.subject);
-    console.log(this.secondFormGroup.value.selectedStyle);
-    console.log(this.secondFormGroup.value.selectedDuration);
-    console.log(this.thirdFormGroup.value.selectedVoice);
+    this.videoService.getVideoOptionsObserver().subscribe((response) => {
+      console.log(
+        '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
+        response
+      );
+      this.options = response;
+    });
+    this.videoService.getVoiceOptionsObserver().subscribe((response) => {
+      console.log(
+        '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
+        response
+      );
+      this.voiceOptions = response;
+    });
   }
 
   onSubmit() {
-    console.log(
-      '🚀 ~ file: videocreate.component.ts:25 ~ VideoCreateComponent ~ ngOnInit ~ this.promptQuery',
-      this.promptQuery
+    this.videoService.submitInputs(
+        this.firstFormGroup.value.subject,
+        this.secondFormGroup.value.selectedStyle,
+        this.secondFormGroup.value.selectedDuration,
+        this.thirdFormGroup.value.selectedVoice
     );
-    this.videoService.submitPrompt(this.promptQuery);
   }
 }

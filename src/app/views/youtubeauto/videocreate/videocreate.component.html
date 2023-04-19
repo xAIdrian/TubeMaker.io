@@ -53,7 +53,7 @@
           <br />
 
           <div>
-            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperNext>Go Back</button>
+            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
             <button class="btn btn-primary" matStepperNext>Go To Next Step</button>
           </div>
         </form>
@@ -73,30 +73,12 @@
             <br />
 
           <div class="full-width">
-            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperNext>Go Back</button>
-            <button class="btn btn-primary flex-grow-1" matStepperNext (click)="submit()">GENERATE My Video Script, Title, & Everything Else!</button>
+            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
+            <button class="btn btn-primary flex-grow-1" matStepperNext (click)="onSubmit()">GENERATE My Video Script, Title, & Everything Else!</button>
           </div>
         </form>
       </mat-step>
 
     </mat-horizontal-stepper>
-    <!-- <form cForm class="row g-3" #myForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="col">
-        <input 
-          aria-label="lg input example" 
-          cFormControl 
-          name="name" [(ngModel)]="promptQuery" required
-          placeholder="Type in any ideas you have or just click Create Video!" 
-          sizing="lg" 
-          type="text" 
-          class="left"/>
-      </div>
-      <div class="col-auto" style="display: flex; align-items: center;">
-        <button type="submit" class="btn btn-primary">Create Video</button>
-      </div>
-    </form>
-
-    <p>{{ gptResponse }}</p> -->
-
   </c-card-body>
 </c-card>
