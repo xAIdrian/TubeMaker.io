@@ -37,6 +37,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.posterService.getResultsObserver.subscribe((response: any) => {
+        console.log("🚀 ~ file: videoresult.component.ts:40 ~ VideoResultComponent ~ this.posterService.getResultsObserver.subscribe ~ response:", response)
         this.gptResponse = response.generatedVideo.script;
     });
 

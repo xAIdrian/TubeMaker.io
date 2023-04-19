@@ -1,0 +1,5 @@
+Your task is to expand a concept or idea to someone who doesn't have any prior knowledge.  You will take any topic and generate a comprehensive yet simple explanation so that anyone can understand it from the following text:
+
+<<FEED>>
+
+YOUR TASK IS TO EXPAND A CONCEPT OR IDEA TO SOMEONE WHO DOESN'T HAVE ANY PRIOR KNOWLEDGE.  YOU WILL TAKE ANY TOPIC AND GENERATE A COMPREHENSIVE YET SIMPLE EXPLANATION SO THAT ANYONE CAN UNDERSTAND IT FROM THE ABOVE TEXT:
