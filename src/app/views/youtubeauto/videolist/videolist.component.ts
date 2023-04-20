@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { VideoService } from '../service/video.service';
 import { ListVideo } from '../model/listvideo.model';
 import { Router } from '@angular/router';
+import { NavigationService } from '../service/navigation.service';
 
 @Component({
     selector: 'video-list',
@@ -16,6 +17,7 @@ export class VideoListComponent implements OnInit, AfterContentInit {
     constructor(
         private router: Router,
         private videoService: VideoService,
+        private navigationService: NavigationService,
         private changeDetectorRef: ChangeDetectorRef
     ) { }
 
@@ -31,6 +33,6 @@ export class VideoListComponent implements OnInit, AfterContentInit {
     }
 
     newVideoOnClick() {
-        this.router.navigate(['youtubeauto/create']);
+        this.navigationService.navigateToCreateVideo();
     }
 }

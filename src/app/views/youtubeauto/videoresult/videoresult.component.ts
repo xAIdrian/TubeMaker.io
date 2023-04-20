@@ -5,7 +5,8 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { PosterService } from '../service/poster.service';
+import { VoiceService } from '../service/voice.service';
+import { NavigationService } from '../service/navigation.service';
 import {
   FormBuilder,
   FormGroup,
@@ -14,6 +15,7 @@ import {
 } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { GptGeneratedVideo } from '../model/gptgeneratedvideo.model';
+import { GptService } from '../service/gpt.service';
 
 @Component({
   selector: 'video-result',
@@ -34,13 +36,15 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   thirdFormGroup: FormGroup;
 
   constructor(
-    private posterService: PosterService,
+    private gptService: GptService,
+    private voiceService: VoiceService,
+    private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.posterService.getResultsObserver.subscribe(
+    this.gptService.getPromptResponseObserver().subscribe(
       (response: GptGeneratedVideo) => {
         this.isLoading = false;
         console.log(
@@ -69,15 +73,15 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-    this.posterService.getGptContent();
+    this.gptService.getGptContent();
   }
 
   onReset() {
-    this.posterService.backNavigation();
+    this.navigationService.navigateToCreateVideo();
   }
 
   downloadTextFile() {
-    this.posterService.getScriptForDownload().subscribe((blobItem) => {
+    this.gptService.getScriptForDownload().subscribe((blobItem) => {
       saveAs(blobItem.blob, blobItem.filename);
     });
   }

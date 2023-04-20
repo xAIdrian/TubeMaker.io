@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { VideoService } from '../service/video.service';
+import { GptService } from '../service/gpt.service';
 import { Router } from '@angular/router';
 import {
   FormBuilder,
@@ -13,6 +13,7 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
+import { NavigationService } from '../service/navigation.service';
 
 @Component({
   selector: 'video-create',
@@ -37,7 +38,8 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   // private video: Video;
 
   constructor(
-    private videoService: VideoService,
+    private gptService: GptService,
+    private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
@@ -62,14 +64,14 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   setupValueSubscribers() {
-    this.videoService.getVideoOptionsObserver().subscribe((response) => {
+    this.gptService.getVideoOptionsObserver().subscribe((response) => {
       console.log(
         '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
         response
       );
       this.options = response;
     });
-    this.videoService.getVoiceOptionsObserver().subscribe((response) => {
+    this.gptService.getVoiceOptionsObserver().subscribe((response) => {
       console.log(
         '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
         response
@@ -79,11 +81,12 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   onSubmit() {
-    this.videoService.submitInputs(
+    this.gptService.submitInputs(
         this.firstFormGroup.value.subject,
         this.secondFormGroup.value.selectedStyle,
         this.secondFormGroup.value.selectedDuration,
         this.thirdFormGroup.value.selectedVoice
     );
+    this.navigationService.navigateToResults();
   }
 }
