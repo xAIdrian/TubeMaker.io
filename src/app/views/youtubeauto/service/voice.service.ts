@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError, interval } from 'rxjs';
+import { Observable, throwError, interval, Subject } from 'rxjs';
 import { catchError, map, switchMap, takeWhile } from 'rxjs/operators';
+import { Voice } from '../model/voice/voice.model';
+import { ArticleStatus } from '../model/voice/articlestatus.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VoiceService {
+
+  private generativeVoices: String[] = []
+  private voiceObserverSubject = new Subject<{ name: string, sampleUrl: string }[]>();
 
   constructor(
     private http: HttpClient
@@ -20,21 +25,14 @@ export class VoiceService {
     'X-USER-ID': 'Y0Yo31zn6ofKRyhNFyNj1gSxEJ63'
   });
 
-  getArticleStatus(transcriptionId: string): Observable<any> {
-    const url = `${this.baseUrl}/api/article-status?transcriptionId=${transcriptionId}`;
-    return interval(5000).pipe(
-      switchMap(() => this.http.get(url, { headers: this.headers })),
-      map((response: any) => {
-        if (response.converted) {
-          return response;
-        } else {
-          throw new Error('Transcription still in progress.');
-        }
-      }),
-      takeWhile((response: any) => !response.converted, true),
-      catchError(error => throwError(error))
-    );
+  getVoiceOptionsObserver(): Observable<{ name: string, sampleUrl: string }[]> {
+    return this.voiceObserverSubject.asObservable()
   }
 
-  
+  getVoiceOptions() {
+    this.http.get<{ name: string, sampleUrl: string }[]>(`${this.baseUrl}/api/voice/voices`, { headers: this.headers })
+      .subscribe((data) => {
+        this.voiceObserverSubject.next(data);
+      })
+  }
 }

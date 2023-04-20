@@ -7,30 +7,35 @@ const playhtUserId = "Y0Yo31zn6ofKRyhNFyNj1gSxEJ63";
 const playhtSecret = "5992824d1a1b4779a76e4176ca0d1d07";
 
 router.get("/voices", async (req, res) => {
-  try {
-    const url = "https://play.ht/api/v1/getVoices";
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        AUTHORIZATION: `Bearer ${playhtSecret}`,
-        "X-USER-ID": playhtUserId,
-      },
-    };
-    const response = await fetch(url, options);
-
-    if (response.status === 200) {
-      const jsonResponse = await response.json();
-      const filteredVoices = jsonResponse.filter(
-        (voice) => voice.languageCode === "fr-FR"
+  const url = "https://play.ht/api/v1/getVoices";
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      AUTHORIZATION: `Bearer ${playhtSecret}`,
+      "X-USER-ID": playhtUserId,
+    },
+  };
+  await fetch(url, options)
+    .then((response) => {
+      JSON.parse(response.json());
+    })
+    .then((responseObj) => {
+      console.log("🚀 ~ file: voice.js:23 ~ .then ~ responseObj:", responseObj);
+      const jsonVoices = responseObj.voices;
+      jsonVoices.filter((voice) => voice.languageCode === "fr-FR");
+    })
+    .then((filteredVoices) => {
+      console.log(
+        "🚀 ~ file: voice.js:29 ~ .then ~ filteredVoices:",
+        filteredVoices
       );
       return res.status(200).json(filteredVoices);
-    }
-    throw new Error(await response.text());
-  } catch (error) {
-    console.log("🚀 ~ file: media.js:29 ~ router.get ~ error:", error);
-    return res.status(403).json(error.message);
-  }
+    })
+    .catch((error) => {
+      console.log("🚀 ~ file: voice.js:24 ~ router.get ~ error:", error);
+      return res.status(403).json(error.message);
+    });
 });
 
 router.post("/convert", async (req, res) => {

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, Subject } from 'rxjs';
-import { ListVideo } from '../model/listvideo.model';
-import { GptGeneratedVideo } from '../model/gptgeneratedvideo.model';
+import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';
 import { Router } from '@angular/router'; 
-import { GptVideoReqBody } from '../model/gptvideoreqbody.model';
-import { GptResponse} from '../model/gptresponse.model';
+import { GptVideoReqBody } from '../model/gpt/gptvideoreqbody.model';
+import { GptResponse} from '../model/gpt/gptresponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +24,6 @@ export class GptService {
     "Financial advice and money management tutorials",
     "Motivational and self-help videos"
   ]
-  //these need to come from our server
-  private generativeVoices: String[] = ["fr-FR-Neural2-A", "fr-FR-Neural2-B", "fr-FR-Neural2-C", "fr-FR-Neural2-D", "fr-FR-Neural2-E", "fr-FR-Standard-A", "fr-FR-Standard-B", "fr-FR-Standard-C", "fr-FR-Standard-D", "fr-FR-Standard-E", "fr-FR-Wavenet-A", "fr-FR-Wavenet-B", "fr-FR-Wavenet-C", "fr-FR-Wavenet-D", "fr-FR-Wavenet-E"]
 
   private sourcesVideo: GptVideoReqBody;
 
@@ -41,10 +38,6 @@ export class GptService {
     return of(this.videoStyleAndToneOptions);
   }
 
-  getVoiceOptionsObserver(): Observable<String[]> {
-    return of(this.generativeVoices);
-  }
-
   getPromptResponseObserver(): Observable<GptGeneratedVideo> {
     return this.resultsObserverSubject.asObservable();
   }
@@ -52,14 +45,12 @@ export class GptService {
   submitInputs(
     promptQuery: string,
     videoStyle: string,
-    videoDuration: string,
-    voice: string
+    videoDuration: string
   ) {
     this.sourcesVideo = {
       prompt: promptQuery,
       videoStyle: videoStyle,
-      videoDuration: videoDuration,
-      voice: voice
+      videoDuration: videoDuration
     }
   }
 
@@ -69,8 +60,7 @@ export class GptService {
     const requestBody = {
       prompt: this.sourcesVideo.prompt,
       style: this.sourcesVideo.videoStyle,
-      duration: this.sourcesVideo.videoDuration,
-      voice: this.sourcesVideo.voice
+      duration: this.sourcesVideo.videoDuration
     };
     console.log("🚀 ~ file: video.service.ts:58 ~ VideoService ~ submitPrompt ~ requestBody:", requestBody)
     
@@ -80,7 +70,6 @@ export class GptService {
         requestBody
       )
       .pipe(map((gptResponse) => {
-        console.log("🚀 ~ file: video.service.ts:64 ~ VideoService ~ .pipe ~ gptResponse:", gptResponse)
         
         return {
           id: gptResponse.result.id,

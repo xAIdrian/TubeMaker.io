@@ -31,11 +31,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   thirdFormGroup: FormGroup;
 
   selectedStyleControl: FormControl;
-
-  options: String[] = [];
-  voiceOptions: String[] = [];
-
-  // private video: Video;
+  videoStyles: String[] = [];
 
   constructor(
     private gptService: GptService,
@@ -52,10 +48,9 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     });
     this.secondFormGroup = this._formBuilder.group({
       selectedStyle: ['', Validators.required],
-      selectedDuration: ['', Validators.required],
     });
     this.thirdFormGroup = this._formBuilder.group({
-      selectedVoice: [''],
+      selectedDuration: ['', Validators.required]
     });
   }
 
@@ -69,14 +64,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
         '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
         response
       );
-      this.options = response;
-    });
-    this.gptService.getVoiceOptionsObserver().subscribe((response) => {
-      console.log(
-        '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
-        response
-      );
-      this.voiceOptions = response;
+      this.videoStyles = response;
     });
   }
 
@@ -84,8 +72,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.gptService.submitInputs(
         this.firstFormGroup.value.subject,
         this.secondFormGroup.value.selectedStyle,
-        this.secondFormGroup.value.selectedDuration,
-        this.thirdFormGroup.value.selectedVoice
+        this.thirdFormGroup.value.selectedDuration
     );
     this.navigationService.navigateToResults();
   }
