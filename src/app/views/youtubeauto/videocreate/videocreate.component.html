@@ -1,26 +1,84 @@
 <c-card class="mb-4">
   <c-card-body>
-    <strong>Create Your Video</strong> 
-    <p class="text-medium-emphasis small">
-      Simply enter your text into the box below, and our AI will generate all the information you need!
-    </p>
-    <form cForm class="row g-3" #myForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="col">
-        <input 
-          aria-label="lg input example" 
-          cFormControl 
-          name="name" [(ngModel)]="promptQuery" required
-          placeholder="Type in any ideas you have or just click Create Video!" 
-          sizing="lg" 
-          type="text" 
-          class="left"/>
-      </div>
-      <div class="col-auto" style="display: flex; align-items: center;">
-        <button type="submit" class="btn btn-primary">Create Video</button>
-      </div>
-    </form>
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
-    <p>{{ gptResponse }}</p>
+    <mat-step [stepControl]="firstFormGroup">
+      <strong>Pick Your Video Subject</strong>
+      <p class="text-medium-emphasis small">
+        Simply enter your video topic into the box below, or our AI will a topic for you!
+      </p>
+      <form [formGroup]="firstFormGroup" class="d-flex align-items-center">
+        <ng-template matStepLabel>Subject</ng-template>
 
+        <div class="flex-grow-1">
+          <input 
+            matInput
+            placeholder="Type your idea or just click to go to Next Step!" 
+            formControlName="subject" required
+            aria-label="lg input example" 
+            cFormControl 
+            sizing="lg" 
+            type="text" 
+            class="mat-input-element"/>
+          </div>
+        <div class="col-auto" style="display: flex; align-items: center;">
+          <button class="btn btn-primary" matStepperNext>Go To Next Step</button>
+        </div>
+      </form>
+    </mat-step>
+
+      <mat-step [stepControl]="secondFormGroup">
+        <p class="text-medium-emphasis">
+          Your Video Subject: {{ this.firstFormGroup.value.subject }}
+        </p>
+        <strong>Now, Pick Your Video Style & Tone</strong>
+        <p class="text-medium-emphasis small">
+          Great. Now, pick your video style and tone. You can always change this later.
+        </p>
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Style</ng-template>
+
+          <mat-button-toggle-group formControlName="selectedStyle">
+            <mat-button-toggle *ngFor="let option of options" [value]="option">{{ option }}</mat-button-toggle>
+          </mat-button-toggle-group>
+          <br />
+          <strong>Set The Duration</strong>
+          <br />
+          <mat-button-toggle-group formControlName="selectedDuration">
+            <mat-button-toggle [value]="30">30 second Short</mat-button-toggle>
+            <mat-button-toggle [value]="1">1 minute Short</mat-button-toggle>
+            <mat-button-toggle [value]="5">5 minutes</mat-button-toggle>
+            <mat-button-toggle [value]="12">12 minutes</mat-button-toggle>
+          </mat-button-toggle-group>
+          <br />
+
+          <div>
+            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
+            <button class="btn btn-primary" matStepperNext>Go To Next Step</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="thirdFormGroup">
+        <strong>We Can Create An AI Voice For You...Or Just Click "Generate"</strong>
+        <p class="text-medium-emphasis small">
+          Pick a voice. We'll take care of the audio for you and you'll have it on the next page.
+        </p>
+        <form [formGroup]="thirdFormGroup">
+          <ng-template matStepLabel>Sound</ng-template>        
+          <br />
+            <mat-button-toggle-group formControlName="selectedVoice">
+              <mat-button-toggle *ngFor="let voice of voiceOptions" [value]="voice">{{ voice }}</mat-button-toggle>
+            </mat-button-toggle-group>
+            <br />
+
+          <div class="full-width">
+            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
+            <button class="btn btn-primary flex-grow-1" matStepperNext (click)="onSubmit()">GENERATE My Video Script, Title, & Everything Else!</button>
+          </div>
+        </form>
+      </mat-step>
+
+    </mat-horizontal-stepper>
   </c-card-body>
 </c-card>

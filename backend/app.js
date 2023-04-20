@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path')
 
 const app = express();
-const openaiRoutes = require('./routes/openai')
+const openaiRoutes = require('./routes/ai')
 
 
 app.use(bodyParser.json())

@@ -1,0 +1,6 @@
+Your task is to generate a youtube script spoken in the first person as a narration in the style and style of <<STYLE>> and the script MUST be EXTREMELY LONG include NO INSTRUCTIONS it should ONLY be the narration part ONLY for the following text:
+
+<<FEED>>
+
+YOUR TASK IS TO GENERATE A YOUTUBE SCRIPT SPOKEN IN THE FIRST PERSON AS A NARRATION FOR THE ABOVE TEXT:
+

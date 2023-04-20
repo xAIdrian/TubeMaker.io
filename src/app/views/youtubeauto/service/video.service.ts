@@ -1,65 +1,83 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, Subject } from 'rxjs';
-import { Video } from './video.model';
-import { GptGenerative } from './gptgenerative.model';
+import { ListVideo } from '../model/listvideo.model';
+import { GptGeneratedVideo } from '../model/gptgeneratedvideo.model';
 import { Router } from '@angular/router'; 
+import { GptVideoReqBody } from '../model/gptvideoreqbody.model';
+import { GptResponse} from '../model/gptresponse.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VideoService {
   private readonly API_URL = 'https://your-api-url/videos';
-  exampleVideos: Video[] = [
-    {
-      id: '1',
-      title:
-        'How to Make a Delicious Chocolate Cake With Lady Gaga- Easy Recipe for Beginners',
-      description:
-        'Learn how to make a delicious chocolate cake with this easy recipe for beginners. This cake is moist, rich, and chocolatey, and is sure to be a hit with your friends and family. Watch this video to learn how to make it step by step.',
-      channelTitle: 'Clever Celebertiy News',
-      publishedAt: '2020-01-01',
-    },
-    {
-      id: '2',
-      title:
-        '10 Minute Yoga Routine for Stress Relief - Easy and Gentle Yoga Poses',
-      description:
-        'This 10 minute yoga routine is perfect for stress relief and relaxation. The gentle and easy yoga poses are perfect for beginners and are designed to help you release tension and calm your mind. Watch this video to follow along and start feeling more relaxed today.',
-      channelTitle: 'Keep Productive & Earn',
-      publishedAt: '2020-01-02',
-    },
-    {
-      id: '3',
-      title: "Trevor Noah's Guide To Europe",
-      description:
-        'Planning a trip to Europe and not sure where to go? Check out this list of the top 10 places to visit in Europe, featuring the best destinations for travel. From stunning cities to beautiful beaches, Europe has it all. Watch this video to get inspired for your next trip.',
-      channelTitle: 'Clever Celebrity News',
-      publishedAt: '2020-01-03',
-    },
-  ];
+  exampleVideos: ListVideo[] = [];
+  videoStyleAndToneOptions: String[] = [
+    "ASMR (Autonomous Sensory Meridian Response)",
+    "Gaming tutorials and playthroughs",
+    "Cooking and Food",
+    "DIY and crafting tutorials",
+    "Educational",
+    "Product reviews and unboxing videos",
+    "Health and fitness tutorials and tips",
+    "Beauty and fashion tutorials",
+    "Financial advice and money management tutorials",
+    "Motivational and self-help videos"
+  ]
+  generativeVoices: String[] = ["fr-FR-Neural2-A", "fr-FR-Neural2-B", "fr-FR-Neural2-C", "fr-FR-Neural2-D", "fr-FR-Neural2-E", "fr-FR-Standard-A", "fr-FR-Standard-B", "fr-FR-Standard-C", "fr-FR-Standard-D", "fr-FR-Standard-E", "fr-FR-Wavenet-A", "fr-FR-Wavenet-B", "fr-FR-Wavenet-C", "fr-FR-Wavenet-D", "fr-FR-Wavenet-E"]
 
-  private gptGenerative = new Subject<GptGenerative>();
+  sourcesVideo: GptVideoReqBody;
+
+  gptGenerative = new Subject<GptGeneratedVideo>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getVideos(): Observable<Video[]> {
+  getVideos(): Observable<ListVideo[]> {
     return of(this.exampleVideos);
   }
 
-  getPromptResponseObserver(): Observable<GptGenerative> {
+  getVideoOptionsObserver(): Observable<String[]> {
+    return of(this.videoStyleAndToneOptions);
+  }
+
+  getVoiceOptionsObserver(): Observable<String[]> {
+    return of(this.generativeVoices);
+  }
+
+  getPromptResponseObserver(): Observable<GptGeneratedVideo> {
     return this.gptGenerative.asObservable();
   }
 
-  submitPrompt(promptQuery: any) {
-    const requestBody = {
+  submitInputs(
+    promptQuery: string,
+    videoStyle: string,
+    videoDuration: string,
+    voice: string
+  ) {
+    this.sourcesVideo = {
       prompt: promptQuery,
+      videoStyle: videoStyle,
+      videoDuration: videoDuration,
+      voice: voice
+    }
+    this.router.navigate(['youtubeauto/result']);
+  }
+
+  generateVideoFromSources() {
+    if (this.sourcesVideo === undefined) { return; }
+
+    const requestBody = {
+      prompt: this.sourcesVideo.prompt,
+      style: this.sourcesVideo.videoStyle,
+      duration: this.sourcesVideo.videoDuration,
+      voice: this.sourcesVideo.voice
     };
     console.log("🚀 ~ file: video.service.ts:58 ~ VideoService ~ submitPrompt ~ requestBody:", requestBody)
     
     this.http
-      .post<{ message: string; result: any }>(
-        'http://localhost:4200/api/openai',
+      .post<GptResponse>(
+        'http://localhost:3000/api/openai',
         requestBody
       )
       .pipe(map((gptResponse) => {
@@ -67,8 +85,10 @@ export class VideoService {
         
         return {
           id: gptResponse.result.id,
-          prompt: gptResponse.result.prompt,
-          bulkText: gptResponse.result.bulkText,
+          title: gptResponse.result.title,
+          description: gptResponse.result.description,
+          script: gptResponse.result.script,
+          tags: gptResponse.result.tags,
       };
     }))
       .subscribe((response) => {

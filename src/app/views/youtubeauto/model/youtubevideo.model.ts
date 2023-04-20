@@ -1,12 +1,4 @@
-export interface Video {
-    id: string;
-    title: string;
-    description: string;
-    publishedAt: string;
-    channelTitle: string;
-}
-
-export interface VideoFull {
+export interface YoutubeVideo {
     id: string;
     title: string;
     description: string;

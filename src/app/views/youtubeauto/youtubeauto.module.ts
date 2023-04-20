@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {MatStepperModule} from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import {
     AccordionModule,
@@ -23,7 +28,7 @@ import {
     TableModule,
     TabsModule,
     TooltipModule,
-    UtilitiesModule
+    UtilitiesModule,
 } from '@coreui/angular';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IconModule } from '@coreui/icons-angular';
@@ -31,14 +36,17 @@ import { YoutubeAutoRoutingModule } from './youtubeauto-routing.module';
 import { VideoListComponent } from './videolist/videolist.component';
 import { DocsComponentsModule } from "../../../components/docs-components.module";
 import { VideoCreateComponent } from './videocreate/videocreate.component';
+import { VideoResultComponent } from './videoresult/videoresult.component';
 
 @NgModule({
     declarations: [
         VideoListComponent,
-        VideoCreateComponent
+        VideoCreateComponent,
+        VideoResultComponent
     ],
     exports: [],
     imports: [
+        MatStepperModule,
         CommonModule,
         IconModule,
         ReactiveFormsModule,
@@ -66,7 +74,11 @@ import { VideoCreateComponent } from './videocreate/videocreate.component';
         TooltipModule,
         UtilitiesModule,
         YoutubeAutoRoutingModule,
-        DocsComponentsModule
+        DocsComponentsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatListModule,
+        MatButtonToggleModule
     ]
 })
 export class YoutubeAutoModule {/* */}
