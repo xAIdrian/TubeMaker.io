@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { VideoService } from '../service/video.service';
-import { ListVideo } from '../video.model';
+import { ListVideo } from '../model/listvideo.model';
 import { Router } from '@angular/router';
 
 @Component({

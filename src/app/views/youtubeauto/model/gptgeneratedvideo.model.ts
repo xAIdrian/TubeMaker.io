@@ -1,6 +1,5 @@
 export interface GptGeneratedVideo {
     id: string;
-    prompt: string;
     title: string;
     description: string;
     script: string;

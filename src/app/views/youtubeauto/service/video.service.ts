@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, Subject } from 'rxjs';
-import { ListVideo } from '../video.model';
-import { GptGeneratedVideo } from './gptgenerative.model';
+import { ListVideo } from '../model/listvideo.model';
+import { GptGeneratedVideo } from '../model/gptgeneratedvideo.model';
 import { Router } from '@angular/router'; 
-import { GptSourcesVideo } from '../video.model';
+import { GptVideoReqBody } from '../model/gptvideoreqbody.model';
+import { GptResponse} from '../model/gptresponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class VideoService {
   ]
   generativeVoices: String[] = ["fr-FR-Neural2-A", "fr-FR-Neural2-B", "fr-FR-Neural2-C", "fr-FR-Neural2-D", "fr-FR-Neural2-E", "fr-FR-Standard-A", "fr-FR-Standard-B", "fr-FR-Standard-C", "fr-FR-Standard-D", "fr-FR-Standard-E", "fr-FR-Wavenet-A", "fr-FR-Wavenet-B", "fr-FR-Wavenet-C", "fr-FR-Wavenet-D", "fr-FR-Wavenet-E"]
 
-  sourcesVideo: GptSourcesVideo;
+  sourcesVideo: GptVideoReqBody;
 
   gptGenerative = new Subject<GptGeneratedVideo>();
 
@@ -75,7 +76,7 @@ export class VideoService {
     console.log("🚀 ~ file: video.service.ts:58 ~ VideoService ~ submitPrompt ~ requestBody:", requestBody)
     
     this.http
-      .post<{ message: string; result: any }>(
+      .post<GptResponse>(
         'http://localhost:3000/api/openai',
         requestBody
       )
@@ -84,7 +85,6 @@ export class VideoService {
         
         return {
           id: gptResponse.result.id,
-          prompt: gptResponse.result.prompt,
           title: gptResponse.result.title,
           description: gptResponse.result.description,
           script: gptResponse.result.script,

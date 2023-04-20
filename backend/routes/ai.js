@@ -3,7 +3,6 @@ const router = express.Router();
 const fs = require("fs");
 const shortid = require('shortid');
 const { Configuration, OpenAIApi } = require("openai");
-const { title } = require("process");
 
 const configuration = new Configuration({
   //   apiKey: process.env.OPENAI_API_KEY,
@@ -12,74 +11,101 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.post("", async (req, res, next) => {
-  console.log("🚀 ~ file: openai.js:12 ~ router.post ~ req:", req);
+  console.log("🚀 ~ file: openai.js:12 ~ router.post ~ req:", req.body);
 
-  prompt = req.body.prompt;
+  let prompt = req.body.prompt;
   if (prompt === "") {
     // this needs to be another GPT prompt
     prompt = "How to make money using faceless youtube channels.";
   }
 
-  style = req.body.style;
-  duration = req.body.duration;
+  const style = req.body.style;
+  const duration = req.body.duration;
 
-  summary = await summaryPromptCompletion(prompt);
-  script = await paramPromptCompletion("youtube_script.txt", summary);
-  title = await paramPromptCompletion("youtube_title.txt", summary);
-  description = await paramPromptCompletion("youtube_description.txt", summary);
-  tags = await paramPromptCompletion("youtube_tags.txt", summary).split(",");
+  let gptSummary = await summaryPromptCompletion(prompt);
+  console.log("🚀 ~ file: ai.js:26 ~ router.post ~ gptSummary:", gptSummary)
+
+  let gptTitle = await paramPromptCompletion("backend/routes/inputprompts/youtube_title.txt", gptSummary);
+  console.log("🚀 ~ file: ai.js:28 ~ router.post ~ gptTitle:", gptTitle)
+
+  let gptDescription = await paramPromptCompletion("backend/routes/inputprompts/youtube_description.txt", gptSummary);
+  console.log("🚀 ~ file: ai.js:30 ~ router.post ~ gptDescription:", gptDescription)
+  
+  let gptTags = await paramPromptCompletion("backend/routes/inputprompts/youtube_tags.txt", gptSummary);
+  gptTags = gptTags.split(",");
+  console.log("🚀 ~ file: ai.js:32 ~ router.post ~ gptTags:", gptTags)
+
+  let gptScript = await scriptPromptCompletion(gptSummary, style, duration);
+  console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
 
   res.status(200).json({
     message: "Response sent successfully",
     result: {
-      id: shortid.generate(),
-      title: title,
-      description: description,
-      script: script,
-      tags: tags
-      },
-  });
+        id: shortid.generate(),
+        title: gptTitle,
+        description: gptDescription,
+        script: gptScript,
+        tags: gptTags
+    }
+});
 });
 
-async function summaryPromptCompletion(inputParam) {
-  summaryPrompt = readTextFileToPrompt("summary.txt");
-  summaryPrompt.replace("{<<FEED>>", inputParam);
-
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: summaryPrompt,
-    temperature: 0.3,
-    max_tokens: 2000,
-    top_p: 1,
-  });
-  console.log("🚀 ~ file: openai.js:33 ~ completion:", completion);
-  return completion.data.choices[0].text;
+async function getCompletion(prompt) {
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: prompt,
+      temperature: 0.3,
+      max_tokens: 2000,
+      top_p: 1,
+    });
+    return completion.data.choices[0].text;
+    
+  } catch (error) {
+    if (error.response) {
+      console.log("🚀 ~ file: ai.js:56 ~ getCompletion ~ error")
+      console.log(error.response.status);
+      console.log(error.response.data);
+    } else {
+      console.log("🚀 ~ file: ai.js:61 ~ getCompletion ~ else")
+      console.log(error.message);
+    }
+  }
 }
 
-async function paramPromptCompletion(filename, inputParam) {
-  rawPrompt = readTextFileToPrompt(filename);
-  rawPrompt.replace("<<FEED>>", inputParam);
+async function summaryPromptCompletion(inputParam) {
+  summaryPrompt = readTextFileToPrompt("backend/routes/inputprompts/summary.txt"); 
+  summaryPrompt = summaryPrompt.replace("<<FEED>>", inputParam);
+  
 
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: rawPrompt,
-    temperature: 0.7,
-    max_tokens: 2000,
-    top_p: 1,
-  });
-  console.log("🚀 ~ file: openai.js:33 ~ completion:", completion);
-  response = completion.data.choices[0].text;
+  const completion = getCompletion(summaryPrompt);
+  return completion;
+}
+
+function scriptPromptCompletion(inputParam, styleParam, durationParam) {
+  scriptPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_script.txt"); 
+  scriptPrompt = scriptPrompt.replace("<<FEED>>", inputParam);
+  scriptPrompt = scriptPrompt.replace("<<STYLE>>", styleParam);
+
+  const completion = getCompletion(scriptPrompt);
+  return completion;
+}
+
+function paramPromptCompletion(filename, inputParam) {
+  rawPrompt = readTextFileToPrompt(filename);
+  rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);
+
+  const completion = getCompletion(rawPrompt);
+  return completion;
 }
 
 function readTextFileToPrompt(filename) {
-  fs.readFile(filename, "utf8", function (err, data) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(data);
+  try {
+    const data = fs.readFileSync(filename, 'utf8');
     return data;
-  });
+  } catch (err) {
+    console.log("🚀 ~ file: ai.js:80 ~ readTextFileToPrompt ~ err:", err)
+  }
 }
 
 module.exports = router;

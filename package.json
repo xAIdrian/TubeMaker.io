@@ -11,7 +11,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "start:dev": "nodemon ./backend/server.js"
+    "start:dev": "nodemon ./backend/server.js",
+    "start:debug": "nodemon --inspect ./backend/server.js"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +43,7 @@
     "nodemon": "^2.0.22",
     "openai": "^3.2.1",
     "rxjs": "~7.8.0",
+    "shortid": "^2.2.16",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { VideoService } from './video.service';
 import { Router } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
-import { GptGeneratedVideo } from './gptgenerative.model';
+import { GptGeneratedVideo } from '../model/gptgeneratedvideo.model';
 
 @Injectable({
   providedIn: 'root',

@@ -1,18 +1,3 @@
-export interface ListVideo {
-    id: string;
-    title: string;
-    description: string;
-    publishedAt: string;
-    channelTitle: string;
-}
-
-export interface GptSourcesVideo {
-    prompt: string;
-    videoStyle: string;
-    videoDuration: string;  
-    voice: string;
-}
-
 export interface YoutubeVideo {
     id: string;
     title: string;
