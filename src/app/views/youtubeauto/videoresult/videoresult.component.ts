@@ -3,7 +3,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   OnInit,
+  Output,
 } from '@angular/core';
 import { VoiceService } from '../service/voice.service';
 import { NavigationService } from '../service/navigation.service';
@@ -14,6 +16,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { saveAs } from 'file-saver';
+
 import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../service/gpt.service';
 
@@ -94,13 +97,10 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       tags: ['', Validators.required],
     });
     this.mediaFormGroup = this._formBuilder.group({
-      selectedVoice: ['']
+      selectedVoice: [''],
+      audio: [''],
     });
     this.uploadFormGroup = this._formBuilder.group({ /* */ });
-  }
-
-  onReset() {
-    this.navigationService.navigateToCreateVideo();
   }
 
   downloadTextFile() {
@@ -108,6 +108,31 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       saveAs(blobItem.blob, blobItem.filename);
     });
   }
+  
+  onAudioPicked(event: Event) {
+    const htmlTarget = (event?.target as HTMLInputElement)
+    if (htmlTarget !== null) {
+      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
+        const file = htmlTarget.files[0]
+        this.mediaFormGroup.patchValue({ audio: file });
+        this.voiceService.updateAudioFile(file);
+        //use these if we need to use them locally
+        // const audio = this.mediaFormGroup.get('audio')
+        // audio?.updateValueAndValidity();
+      }
+    }
+  }
 
-  onSchedule() {}
+  generateTextToSpeech() {
+    const selectedVoice = this.mediaFormGroup.get('selectedVoice')?.value;
+    console.log("🚀 ~ file: videoresult.component.ts:128 ~ VideoResultComponent ~ generateTextToSpeech ~ selectedVoice:", selectedVoice)
+  }
+
+  onSchedule() {
+
+  }
+
+  onReset() {
+    this.navigationService.navigateToCreateVideo();
+  }
 }

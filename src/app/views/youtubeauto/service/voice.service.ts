@@ -9,6 +9,8 @@ import { ArticleStatus } from '../model/voice/articlestatus.model';
   providedIn: 'root',
 })
 export class VoiceService {
+  
+  private audioFile: Blob;
 
   private voiceObserverSubject = new Subject<{ name: string, sampleUrl: string }[]>();
 
@@ -40,6 +42,10 @@ export class VoiceService {
         })
         this.voiceObserverSubject.next(displayVoices);
       })
+  }
+
+  updateAudioFile(file: File) {
+    this.audioFile = file;
   }
 }
 

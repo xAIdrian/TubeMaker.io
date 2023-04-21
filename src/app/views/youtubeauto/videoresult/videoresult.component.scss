@@ -1,7 +1,8 @@
 mat-button-toggle-group {
     display: flex;
     flex-wrap: wrap;
-    margin: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     border: none;
 
     mat-button-toggle {
@@ -20,33 +21,29 @@ mat-button-toggle-group {
     }
 }
 
-.custom-player {
-    appearance: none;
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: none;
-    outline: none;
-    background: url('../assets/icons8-play-24.png') no-repeat center center;
-    background-size: 50%;
-    cursor: pointer;
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    /* Set the container height */
+}
 
-    /* Hide all the default controls */
-    &::-webkit-media-controls-panel {
-        display: none !important;
-        -webkit-appearance: none;
-    }
+.btn {
+    /* Make the buttons grow to fill the container */
+    flex: 1;
+    /* Set the height to match the container height */
+    height: 100%;
+    /* Split the container into two equal halves */
+    width: 50%;
+    margin-right: 0.5rem;
+}
 
-    &::-webkit-media-controls-play-button {
-        display: none !important;
-        -webkit-appearance: none;
-    }
-
-    &::-webkit-media-controls-current-time-display,
-    &::-webkit-media-controls-time-remaining-display,
-    &::-webkit-media-controls-volume-slider {
-        display: none !important;
-        -webkit-appearance: none;
-    }
+.input-flex {
+    /* Make the buttons grow to fill the container */
+    flex: 1;
+    /* Set the height to match the container height */
+    height: 100%;
+    /* Split the container into two equal halves */
+    width: 50%;
+    margin-left: 0.5rem;
 }

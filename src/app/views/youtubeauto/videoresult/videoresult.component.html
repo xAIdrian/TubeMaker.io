@@ -67,7 +67,7 @@
       </mat-step>
 
       <mat-step [stepControl]="mediaFormGroup" *ngIf="!isLoading">
-        <strong>Let's Finish Your Audio & Video</strong>
+        <strong>Let's Finish Your Audio & Start The Video</strong>
         <p></p>
         <form [formGroup]="mediaFormGroup">
           <ng-template matStepLabel>Media</ng-template>
@@ -86,17 +86,30 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
           <p></p>
-          <strong>Download The Script And Do It Yourself</strong>
-          <div>
-            <button class="btn btn-primary flex-grow-1" (click)="downloadTextFile()">Download Script</button>
+          <button 
+            class="btn btn-primary flex-grow-1" 
+            style="width: 100%;" 
+            [disabled]="!mediaFormGroup.get('selectedVoice')?.value"
+            (click)="generateTextToSpeech()">Generate Your AI Narration</button>
+          <p></p>
+          <strong style="margin-top: 1rem;">Or Download The Script And Record It Yourself</strong>
+          <div class="container">
+            <button class="btn btn-success flex-grow-1" (click)="downloadTextFile()">Download Script</button>
+            <!-- This sets a proxy where our nice button triggers our ugly one's func -->
+            <button type="button" class="btn btn-primary flex-grow-1" (click)="audioPicker.click()">Upload mp3</button>
+            <input 
+              cFormControl 
+              id="audioFile" 
+              type="file" 
+              accept="audio/mpeg" 
+              hidden 
+              #audioPicker 
+              (change)="onAudioPicked($event)">
           </div>
-          <div>
-            <label cLabel for="formFileLg">Select the completely finished video that's ready for Youtube</label>
-            <input cFormControl id="formFileLg" sizing="lg" type="file" />
-          </div>
+          <br />
 
-          <strong>Finally, Put It All Together With Descript</strong>
-          <button class="btn btn-primary flex-grow-1">Go To Descript</button>
+          <strong>Finally, Put It All Together With Descript</strong><br/>
+          <button class="btn btn-primary flex-grow-1" style="width: 100%; margin-top: 1rem; margin-bottom: 1rem">Go To Descript</button>
 
           <div>
             <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
