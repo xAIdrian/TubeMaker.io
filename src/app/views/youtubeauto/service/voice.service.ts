@@ -10,7 +10,6 @@ import { ArticleStatus } from '../model/voice/articlestatus.model';
 })
 export class VoiceService {
 
-  private generativeVoices: String[] = []
   private voiceObserverSubject = new Subject<{ name: string, sampleUrl: string }[]>();
 
   constructor(
@@ -30,9 +29,30 @@ export class VoiceService {
   }
 
   getVoiceOptions() {
-    this.http.get<{ name: string, sampleUrl: string }[]>(`${this.baseUrl}/api/voice/voices`, { headers: this.headers })
+    this.http.get<{ name: string, sample: string }[]>(`${this.baseUrl}/api/voice/voices`, { headers: this.headers })
       .subscribe((data) => {
-        this.voiceObserverSubject.next(data);
+        let displayVoices: { name: string, sampleUrl: string }[] = []
+        data.forEach((voice) => {
+          displayVoices.push({
+            name: voice.name,
+            sampleUrl: voice.sample
+          })
+        })
+        this.voiceObserverSubject.next(displayVoices);
       })
   }
 }
+
+/**
+ * {
+    value: 'fr-FR-YvesNeural',
+    name: 'Yves',
+    language: 'French',
+    voiceType: 'Neural',
+    languageCode: 'fr-FR',
+    gender: 'Male',
+    service: 'ms',
+    sample: 'https://media.play.ht/voice-samples/fr-FR-YvesNeural.mp3',
+    isNew: true
+  }
+ */

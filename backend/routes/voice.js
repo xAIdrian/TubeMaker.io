@@ -16,21 +16,13 @@ router.get("/voices", async (req, res) => {
       "X-USER-ID": playhtUserId,
     },
   };
+
   await fetch(url, options)
-    .then((response) => {
-      JSON.parse(response.json());
-    })
+    .then((response) => response.json())
     .then((responseObj) => {
-      console.log("🚀 ~ file: voice.js:23 ~ .then ~ responseObj:", responseObj);
-      const jsonVoices = responseObj.voices;
-      jsonVoices.filter((voice) => voice.languageCode === "fr-FR");
-    })
-    .then((filteredVoices) => {
-      console.log(
-        "🚀 ~ file: voice.js:29 ~ .then ~ filteredVoices:",
-        filteredVoices
-      );
-      return res.status(200).json(filteredVoices);
+      const jsonVoicesArr = responseObj.voices;
+      const frenchVoicesArr = jsonVoicesArr.filter(voice => voice.languageCode === 'fr-FR');
+      return res.status(200).json(frenchVoicesArr);
     })
     .catch((error) => {
       console.log("🚀 ~ file: voice.js:24 ~ router.get ~ error:", error);
