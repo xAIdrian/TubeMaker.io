@@ -68,10 +68,7 @@
 
       <mat-step [stepControl]="mediaFormGroup" *ngIf="!isLoading">
         <strong>Let's Finish Your Audio & Video</strong>
-        <p class="text-medium-emphasis small">
-          If you want to use your own audio, just upload the file. Otherwise, your AI voice is ready.
-          Get started editing your video in Descript instantly or you can download the mp3 and script for your own use.
-        </p>
+        <p></p>
         <form [formGroup]="mediaFormGroup">
           <ng-template matStepLabel>Media</ng-template>
 
@@ -79,9 +76,14 @@
           <p class="text-medium-emphasis small">
             Pick a voice. We'll take care of the audio for you or you can upload your own below.
           </p>
-          <br />
           <mat-button-toggle-group formControlName="selectedVoice">
-            <mat-button-toggle *ngFor="let voice of voiceOptions" [value]="voice">{{ voice.name }}</mat-button-toggle>
+            <mat-button-toggle *ngFor="let voice of voiceOptions" [value]="voice">
+              {{ voice.name }}
+              <audio controls>
+                <source [src]="voice.sampleUrl" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+            </mat-button-toggle>
           </mat-button-toggle-group>
           <p></p>
           <strong>Download The Script And Do It Yourself</strong>

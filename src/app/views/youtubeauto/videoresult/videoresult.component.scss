@@ -3,17 +3,50 @@ mat-button-toggle-group {
     flex-wrap: wrap;
     margin: 1rem;
     border: none;
-  
+
     mat-button-toggle {
-      margin: 0.5rem;
-      border-radius: 20px;
-      background-color: #f0f0f0;
-      color: #333;
-      font-size: 1rem;
-  
-      &.mat-button-toggle-checked {
-        background-color: #007bff;
-        color: #fff;
-      }
+        margin: 0.5rem;
+        border-radius: 1rem;
+        background-color: #f0f0f0;
+        color: #333;
+        font-size: 1rem;
+        width: 100%;
+        display: flex;
+
+        &.mat-button-toggle-checked {
+            background-color: #007bff;
+            color: #fff;
+        }
     }
-  }
+}
+
+.custom-player {
+    appearance: none;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    background: url('../assets/icons8-play-24.png') no-repeat center center;
+    background-size: 50%;
+    cursor: pointer;
+
+    /* Hide all the default controls */
+    &::-webkit-media-controls-panel {
+        display: none !important;
+        -webkit-appearance: none;
+    }
+
+    &::-webkit-media-controls-play-button {
+        display: none !important;
+        -webkit-appearance: none;
+    }
+
+    &::-webkit-media-controls-current-time-display,
+    &::-webkit-media-controls-time-remaining-display,
+    &::-webkit-media-controls-volume-slider {
+        display: none !important;
+        -webkit-appearance: none;
+    }
+}
