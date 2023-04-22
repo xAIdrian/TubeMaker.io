@@ -54,23 +54,20 @@ router.post("/generate", async (req, res) => {
     console.log("🚀 ~ file: voice.js:48 ~ handleResponse ~ jsonResponse:", jsonResponse)
     if (jsonResponse['status'] === 'CREATED') {
       //We have successfully kicked off our job. Now we need to poll the status of the job
-      await pollForStatus(jsonResponse['transcriptionId']).then((audioUrl) => {
-        console.log("🚀 ~ file: voice.js:51 ~ awaitpollForStatus ~ audioUrl:", audioUrl)
-        res.status(200).json({
-          message: "Successfully generated audio",
-          audioUrl: audioUrl
-        });
+      await pollForStatus(res, jsonResponse['transcriptionId']).catch((error) => {
+        console.log("🔥 ~ file: voice.js:52 ~ router.post ~ error:", error);
+        return res.status(403).json(error.message);
       });
     }
   });
 });
 
 /**
-   * 
+   * @param {Response<any, Record<string, any>, number>} res
    * @param {string} transcriptionId 
    * @returns string: AudioUrl
    */
-async function pollForStatus(transcriptionId) {
+async function pollForStatus(res, transcriptionId) {
   const url = `https://play.ht/api/v1/articleStatus?transcriptionId=${transcriptionId}`;
   const options = {
     method: "GET",
@@ -86,14 +83,23 @@ async function pollForStatus(transcriptionId) {
     articleStatusError = jsonResponse['error'];
 
     if (articleStatusConverted === true) {
-      console.log("🚀 ~ file: voice.js:82 ~ returnhandleResponse ~ articleStatusConverted:", articleStatusConverted)
-      return jsonResponse['audioUrl'];
+      res.status(200).json({
+        message: "Successfully generated audio",
+        error: false,
+        audioUrl: jsonResponse['audioUrl']
+      });
+
     } else if (articleStatusError === true) {
-      console.log("🚀 ~ file: voice.js:85 ~ returnhandleResponse ~ articleStatusError:", articleStatusError)
-      return jsonResponse['errorMessage'];
+      console.log("🔥 ~ file: voice.js:85 ~ returnhandleResponse ~ articleStatusError:", articleStatusError)
+      res.status(400).json({
+        message: "Error generating audio",
+        error: true,
+        audioUrl: audioUrl
+      });
     } else {
-      console.log("🚀 ~ file: voice.js:88 ~ returnhandleResponse ~ else:")
-      setTimeout(pollForStatus(transcriptionId), 5000);
+      setTimeout(() => {
+        pollForStatus(res, transcriptionId)
+      }, 5000);
     }
   });
 }
@@ -101,30 +107,29 @@ async function pollForStatus(transcriptionId) {
 /**
    * Just a nifty wrapper for error handling
    * @param {Response} fetchResponse 
-   * @param {Function} callback 
+   * @param {Function | Promise<any>} callback 
    * @returns Promise<any>
    */
 async function handleResponse(fetchResponse, callback) {
   try {
     if (fetchResponse.ok) {
-      console.log("🚀 ~ file: voice.js:104 ~ handleResponse ~ ok:")
       const jsonResponse = await fetchResponse.json();
       return callback(jsonResponse);
 
     } else if (fetchResponse.status === 400) {
-      console.error("🔥 Unsupported Voice");
+      console.log("🔥 ~ file: voice.js:133 ~ handleResponse ~ fetchResponse:", fetchResponse)
       // res.status(400).json(jsonResponse);
 
     } else if (fetchResponse.status === 403) {
-      console.error("🔥 Auth Key is not working");
+      console.log("🔥 ~ file: voice.js:138 ~ handleResponse ~ fetchResponse:", fetchResponse)
       // res.status(403).send(jsonResponse);
 
     } else {
-      console.log("🔥 Unexpected response from API");
+      console.log("🔥 ~ file: voice.js:143 ~ handleResponse ~ fetchResponse:", fetchResponse)
       // res.status(500).send(jsonResponse);
     }
   } catch (error) {
-    console.error("🔥Error:", error.message);
+    console.error("🔥 Error:", error.message);
     // res.status(500).json({ message: "Internal Server Error" });
   }
 }

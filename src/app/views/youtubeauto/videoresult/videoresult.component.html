@@ -86,11 +86,18 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
           <p></p>
-          <button 
-            class="btn btn-primary flex-grow-1" 
-            style="width: 100%;" 
-            [disabled]="!mediaFormGroup.get('selectedVoice')?.value"
-            (click)="generateTextToSpeech()">Generate Your AI Narration</button>
+          <div class="full-width">
+            <button 
+              class="btn btn-primary flex-grow-1" 
+              style="width: 100%;" 
+              [disabled]="!mediaFormGroup.get('selectedVoice')?.value"
+              (click)="generateTextToSpeech()">Generate Your AI Narration</button>
+            <audio class="flex-grow-1" style="width: 100%;" controls>
+              <source *ngIf="generatedAudioIsVisible" [src]="generatedAudio" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+          <br/>
           <p></p>
           <strong style="margin-top: 1rem;">Or Download The Script And Record It Yourself</strong>
           <div class="container">

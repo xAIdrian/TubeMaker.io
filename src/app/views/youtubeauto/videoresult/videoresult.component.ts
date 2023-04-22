@@ -29,8 +29,8 @@ import { GptService } from '../service/gpt.service';
 export class VideoResultComponent implements OnInit, AfterContentInit {
 
   isLinear: any;
-  // isLoading: boolean = true;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
+  // isLoading: boolean = false;
 
   resultsFormGroup: FormGroup;
   mediaFormGroup: FormGroup;
@@ -42,6 +42,9 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   gptResponseDescription: string = 'Waiting for desc...';
   gptResponseScript: string = 'Waiting for script...';
   gptResponseTags: string = 'Waiting for tags...';
+
+  generatedAudio: string;
+  generatedAudioIsVisible = false;
 
   constructor(
     private gptService: GptService,
@@ -61,7 +64,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     // removed for testing purposes
-    // this.gptService.getGptContent();
+    this.gptService.getGptContent();
   }
 
   setupObservers() {
@@ -86,6 +89,12 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
         response
       );
       this.voiceOptions = response;
+    });
+    this.voiceService.getTextToSpeechObserver().subscribe((response) => {
+      if (response !== '') {
+        this.generatedAudio = response;
+        this.generatedAudioIsVisible = true;
+      }
     });
   }
 
@@ -124,12 +133,18 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   }
 
   generateTextToSpeech() {
+    const scriptValue = this.resultsFormGroup.get('script')?.value;
+    if (scriptValue === null || scriptValue === '') {
+      alert('Please enter a script before generating audio');
+      return;
+    }
+    this.generatedAudio = "";
+    this.generatedAudioIsVisible = false;
+
     const selectedVoiceControl = this.mediaFormGroup.get('selectedVoice')?.value;
-    const scriptControl = this.resultsFormGroup.get('script')?.value;
     this.voiceService.generateTextToSpeech(
       selectedVoiceControl.value, 
-      "Here we are manipulating the data so we can have everything we need to submit the data"
-      // scriptControl.script
+      scriptValue
     );
   }
 

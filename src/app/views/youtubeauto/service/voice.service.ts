@@ -25,7 +25,7 @@ export class VoiceService {
   };
 
   private voiceObserverSubject = new Subject<{ name: string; sampleUrl: string; value: string }[]>();
-  private textToSpeechSubject = new Subject<ArticleStatus>();
+  private textToSpeechSubject = new Subject<string>();
 
   constructor(
     private http: HttpClient
@@ -43,7 +43,7 @@ export class VoiceService {
     return this.voiceObserverSubject.asObservable();
   }
 
-  getTextToSpeechObserver(): Observable<ArticleStatus> {
+  getTextToSpeechObserver(): Observable<string> {
     return this.textToSpeechSubject.asObservable();
   }
 
@@ -82,15 +82,20 @@ export class VoiceService {
       voice: voiceValue,
       content: script
     };
-    this.http.post<{ message: string, audioUrl: string }>(`${this.baseUrl}/api/voice/generate`, reqBody, {headers: this.headers})
+    this.http.post<{ message: string, error: boolean, audioUrl: string }>(`${this.baseUrl}/api/voice/generate`, reqBody, {headers: this.headers})
     .pipe(
       catchError((err) => {
-        console.log("🚀 ~ file: voice.service.ts:89 ~ VoiceService ~ catchError ~ err:", err)
+        console.log("~ file: voice.service.ts:89 ~ VoiceService ~ catchError ~ err:", err)
         return throwError(err);
       }
-    )).subscribe((convertResponse) => {
+    )).subscribe((audioResponse) => {
       //we've generated, waited, and this is the final URL
-      console.log("🚀 ~ file: voice.service.ts:93 ~ catchError ~ convertResponse:", convertResponse)
+      if (audioResponse.error === false) {
+        console.log("🚀 ~ file: voice.service.ts:93 ~ catchError ~ convertResponse:", audioResponse)
+        this.textToSpeechSubject.next(audioResponse.audioUrl)
+      } else {
+        console.log("🔥 ~ file: voice.service.ts:96 ~ catchError ~ convertResponse:", audioResponse)
+      }
     });
   }
 }
