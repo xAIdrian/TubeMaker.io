@@ -19,49 +19,33 @@
 
           <strong>Title</strong>
           <div class="mb-3">
-            <textarea 
-              cFormControl 
-              style="margin-top: 1rem;" 
-              id="formControlTextarea1" 
-              formControlName="title">
+            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea1" formControlName="title">
             </textarea>
           </div>
 
           <strong>Description</strong>
           <div class="mb-3">
-            <textarea 
-              cFormControl 
-              style="margin-top: 1rem;" 
-              id="formControlTextarea2" 
-              rows="10"
+            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea2" rows="10"
               formControlName="description">
             </textarea>
           </div>
 
           <strong>Script</strong>
           <div class="mb-3">
-            <textarea 
-              cFormControl 
-              style="margin-top: 1rem;" 
-              id="formControlTextarea2" 
-              rows="20"
+            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea2" rows="20"
               formControlName="script">
             </textarea>
           </div>
 
           <strong>Tags</strong>
           <div class="mb-3">
-            <textarea 
-              cFormControl 
-              style="margin-top: 1rem;" 
-              id="formControlTextarea3" 
-              formControlName="tags">
+            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea3" formControlName="tags">
             </textarea>
           </div>
 
-          <div class="full-width">
-            <button class="btn btn-secondary" style="margin-right: 1rem;" (click)="onReset()">Reset My Content</button>
-            <button class="btn btn-primary flex-grow-1" matStepperNext>Next</button>
+          <div class="container">
+            <button class="btn btn-secondary" (click)="onReset()">Reset My Content</button>
+            <button class="btn btn-primary" matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>
@@ -70,7 +54,7 @@
         <strong>Let's Finish Your Audio & Start The Video</strong>
         <p></p>
         <form [formGroup]="mediaFormGroup">
-          <ng-template matStepLabel>Media</ng-template>
+          <ng-template matStepLabel>Audio</ng-template>
 
           <strong>Use Our AI Generated Voice</strong>
           <p class="text-medium-emphasis small">
@@ -86,60 +70,101 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
           <p></p>
-          <div class="full-width">
-            <button 
-              class="btn btn-primary flex-grow-1" 
-              style="width: 100%;" 
-              [disabled]="!mediaFormGroup.get('selectedVoice')?.value"
-              (click)="generateTextToSpeech()">Generate Your AI Narration</button>
-            <audio class="flex-grow-1" style="width: 100%;" controls>
-              <source *ngIf="generatedAudioIsVisible" [src]="generatedAudio" type="audio/mpeg">
+          <div class="container">
+            <button class="btn btn-primary flex-grow-1" style="width: 100%"
+              [disabled]="!mediaFormGroup.get('selectedVoice')?.value" (click)="generateTextToSpeech()">Generate Your AI
+              Narration</button>
+            <audio *ngIf="generatedAudioIsVisible" class="flex-grow-1" style="width: 100%;" controls>
+              <source [src]="generatedAudio" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
           </div>
-          <br/>
+          <br />
           <p></p>
           <strong style="margin-top: 1rem;">Or Download The Script And Record It Yourself</strong>
           <div class="container">
-            <button class="btn btn-success flex-grow-1" (click)="downloadTextFile()">Download Script</button>
+            <button class="btn btn-primary" (click)="downloadTextFile()">Download Script</button>
             <!-- This sets a proxy where our nice button triggers our ugly one's func -->
-            <button type="button" class="btn btn-primary flex-grow-1" (click)="audioPicker.click()">Upload mp3</button>
-            <input 
-              cFormControl 
-              id="audioFile" 
-              type="file" 
-              accept="audio/mpeg" 
-              hidden 
-              #audioPicker 
+            <button type="button" class="btn btn-success flex-grow-1" (click)="audioPicker.click()">Upload Audio</button>
+            <input cFormControl id="audioFile" type="file" accept="audio/mpeg" hidden #audioPicker
               (change)="onAudioPicked($event)">
           </div>
           <br />
-
-          <strong>Finally, Put It All Together With Descript</strong><br/>
-          <button class="btn btn-primary flex-grow-1" style="width: 100%; margin-top: 1rem; margin-bottom: 1rem">Go To Descript</button>
-
-          <div>
-            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
+          <div class="container" style="margin-top: 2rem;">
+            <button class="btn btn-secondary" matStepperPrevious>Go Back</button>
             <button class="btn btn-primary" matStepperNext>Go To Next Step</button>
           </div>
         </form>
       </mat-step>
 
       <mat-step [stepControl]="uploadFormGroup" *ngIf="!isLoading">
-        <strong>We Can Create An AI Voice For You...Or Just Click "Generate"</strong>
+        <strong>Almost Done, Put It All Together With Descript</strong><br />
+        <p class="text-medium-emphasis small">
+          Now that you have downloaded your AI narration or created your own, it's time to put it all together with video.
+        </p>
+        <div class="container">
+          <button class="btn btn-primary flex-grow-1" (click)="descriptButtonClicked()">Edit In Descript</button>
+          <!-- This sets a proxy where our nice button triggers our ugly one's func -->
+          <button type="button" class="btn btn-success flex-grow-1" (click)="videoPicker.click()">Upload Video</button>
+          <input cFormControl id="videoFile" type="file" accept="video/*" hidden #videoPicker
+            (change)="onVideoPicked($event)">
+        </div>
+        <br/>
+        <strong>Edit & Upload Your Thumbnail</strong>
         <p class="text-medium-emphasis small">
           Pick a voice. We'll take care of the audio for you and you'll have it on the next page.
         </p>
         <form [formGroup]="uploadFormGroup">
-          <ng-template matStepLabel>Upload!</ng-template>
-          <br />
+          <ng-template matStepLabel>Video</ng-template>
 
-          <!-- Insert Here -->
+          <div class="grid-container">
+            <div class="grid-item">
+              <div class="responsive-wrapper">
+                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0g7iFaU/view?embed" frameborder="0"></iframe>
+              </div>
+              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-left: 0;" color="primary" href="https://www.canva.com/design/DAFg0g7iFaU/r17BFd44EDBdpayWyKrnQg/edit?utm_content=DAFg0g7iFaU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">Click to Edit Above Thumbnail</a>
+            </div>
+            <div class="grid-item">
+              <div class="responsive-wrapper">
+                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0qAz46Q/view?embed" frameborder="0"></iframe>
+              </div>
+              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-left: 0;" color="primary" href="https://www.canva.com/design/DAFg0qAz46Q/L4M5HjasBM6H2yQIYEUsfg/edit?utm_content=DAFg0qAz46Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">Click to Edit Above Thumbnail</a>
+            </div>
+            <div class="grid-item">
+              <div class="responsive-wrapper">
+                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0qpS228/view?embed" frameborder="0"></iframe>
+              </div>
+              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-left: 0;" color="primary" href="https://www.canva.com/design/DAFg0qpS228/HC7MUiBXS9Q1PJocqzOTNg/edit?utm_content=DAFg0qpS228&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">Click to Edit Above Thumbnail</a>
+            </div>
+            <div class="grid-item">
+              <div class="responsive-wrapper">
+                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0jHKpT0/view?embed" frameborder="0"></iframe>
+              </div>
+              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-left: 0;" color="primary" href="https://www.canva.com/design/DAFg0jHKpT0/NzysEvkx0ORQTe5fzkDh4w/edit?utm_content=DAFg0jHKpT0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">Click to Edit Above Thumbnail</a>
+            </div>
+            <div class="grid-item">
+              <div class="responsive-wrapper">
+                <iframe loading="lazy" src="https://www.canva.com/design/DAFg08A6ApE/view?embed" frameborder="0"></iframe>
+              </div>
+              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-left: 0;" color="primary" href="https://www.canva.com/design/DAFg08A6ApE/RB29GcwLgd6W0GpkvjkNxA/edit?utm_content=DAFg08A6ApE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">Click to Edit Above Thumbnail</a>
+            </div>
+            <div class="grid-item">
+              <div class="responsive-wrapper">
+                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0_bcsik/view?embed" frameborder="0"></iframe>
+              </div>
+              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-left: 0;" color="primary" href="https://www.canva.com/design/DAFg0_bcsik/whqApc5ek7brC7nYuZWN0w/edit?utm_content=DAFg0_bcsik&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">Click to Edit Above Thumbnail</a>
+            </div>
+          </div>
 
-          <div class="full-width">
-            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperNext>Go Back</button>
-            <button class="btn btn-primary flex-grow-1" matStepperNext (click)="onSchedule()">Schedule My Video To Post
-              Automatically</button>
+          <!-- This sets a proxy where our nice button triggers our ugly one's func -->
+          <button type="button" class="btn btn-success flex-grow-1" style="width: 100%;" (click)="thumbPicker.click()">Upload Image</button>
+          <input cFormControl id="imageFile" type="file" accept="image/*" hidden #thumbPicker
+            (change)="onVideoPicked($event)">
+          <br/>
+          <p></p>
+          <div class="container">
+            <button class="btn btn-secondary flex-grow-1" matStepperPrevious>Go Back</button>
+            <button class="btn btn-primary flex-grow-1" (click)="goToReview()">Review & Upload</button>
           </div>
         </form>
       </mat-step>
