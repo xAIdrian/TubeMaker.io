@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path')
+var cors = require('cors')
 
 const app = express();
 const openaiRoutes = require('./routes/ai')
-
+const voiceRoutes = require('./routes/voice')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,6 +16,7 @@ app.use("/images", express.static(path.join('backend', 'images')));
  * 'use' means all requests will go through this middleware
  * CORS
  */
+app.use(cors())
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
@@ -30,5 +32,6 @@ app.use((req, res, next) => {
 
 // app.use("/api/posts", postsRoutes)
 app.use("/api/openai", openaiRoutes)
+app.use("/api/voice", voiceRoutes)
 
 module.exports = app;

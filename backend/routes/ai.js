@@ -26,6 +26,7 @@ router.post("", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:26 ~ router.post ~ gptSummary:", gptSummary)
 
   let gptTitle = await paramPromptCompletion("backend/routes/inputprompts/youtube_title.txt", gptSummary);
+  gptTitle = gptTitle.replace('"', "")
   console.log("🚀 ~ file: ai.js:28 ~ router.post ~ gptTitle:", gptTitle)
 
   let gptDescription = await paramPromptCompletion("backend/routes/inputprompts/youtube_description.txt", gptSummary);
@@ -77,7 +78,6 @@ async function summaryPromptCompletion(inputParam) {
   summaryPrompt = readTextFileToPrompt("backend/routes/inputprompts/summary.txt"); 
   summaryPrompt = summaryPrompt.replace("<<FEED>>", inputParam);
   
-
   const completion = getCompletion(summaryPrompt);
   return completion;
 }
@@ -109,34 +109,3 @@ function readTextFileToPrompt(filename) {
 }
 
 module.exports = router;
-
-// https://cloud.google.com/text-to-speech/docs/voices
-// French (Canada)	Neural2	fr-CA	fr-CA-Neural2-A	FEMALE
-// French (Canada)	Neural2	fr-CA	fr-CA-Neural2-B	MALE
-// French (Canada)	Neural2	fr-CA	fr-CA-Neural2-C	FEMALE
-// French (Canada)	Neural2	fr-CA	fr-CA-Neural2-D	MALE
-// French (Canada)	Standard	fr-CA	fr-CA-Standard-A	FEMALE
-// French (Canada)	Standard	fr-CA	fr-CA-Standard-B	MALE
-// French (Canada)	Standard	fr-CA	fr-CA-Standard-C	FEMALE
-// French (Canada)	Standard	fr-CA	fr-CA-Standard-D	MALE
-// French (Canada)	WaveNet	fr-CA	fr-CA-Wavenet-A	FEMALE
-// French (Canada)	WaveNet	fr-CA	fr-CA-Wavenet-B	MALE
-// French (Canada)	WaveNet	fr-CA	fr-CA-Wavenet-C	FEMALE
-// French (Canada)	WaveNet	fr-CA	fr-CA-Wavenet-D	MALE
-
-//Language	Voice type	Language code	Voice name	     SSML Gender
-// French  Neural2	     fr-FR	      "fr-FR-Neural2-A",	 FEMALE
-// French  Neural2	     fr-FR	      "fr-FR-Neural2-B",	 MALE
-// French  Neural2	     fr-FR	      "fr-FR-Neural2-C",	 FEMALE
-// French  Neural2	     fr-FR	      "fr-FR-Neural2-D",	 MALE
-// French  Neural2	     fr-FR	      "fr-FR-Neural2-E",	 FEMALE
-// French  Standard     	fr-FR      	"fr-FR-Standard-A",	FEMALE
-// French  Standard     	fr-FR      	"fr-FR-Standard-B",	MALE
-// French  Standard     	fr-FR      	"fr-FR-Standard-C",	FEMALE
-// French  Standard     	fr-FR      	"fr-FR-Standard-D",	MALE
-// French  Standard     	fr-FR      	"fr-FR-Standard-E",	FEMALE
-// French  WaveNet	     fr-FR	      "fr-FR-Wavenet-A",	 FEMALE
-// French  WaveNet	     fr-FR	      "fr-FR-Wavenet-B",	 MALE
-// French  WaveNet	     fr-FR	      "fr-FR-Wavenet-C",	 FEMALE
-// French  WaveNet	     fr-FR	      "fr-FR-Wavenet-D",	 MALE
-// French  WaveNet	     fr-FR	      "fr-FR-Wavenet-E",	 FEMALE

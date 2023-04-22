@@ -20,7 +20,7 @@ const routes: Routes = [
         }
     },
     {
-        path: "result",
+        path: "results",
         component: VideoResultComponent,
         data: {
             title: "Results"

@@ -1,0 +1,49 @@
+mat-button-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: none;
+
+    mat-button-toggle {
+        margin: 0.5rem;
+        border-radius: 1rem;
+        background-color: #f0f0f0;
+        color: #333;
+        font-size: 1rem;
+        width: 100%;
+        display: flex;
+
+        &.mat-button-toggle-checked {
+            background-color: #007bff;
+            color: #fff;
+        }
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    /* Set the container height */
+}
+
+.btn {
+    /* Make the buttons grow to fill the container */
+    flex: 1;
+    /* Set the height to match the container height */
+    height: 100%;
+    /* Split the container into two equal halves */
+    width: 50%;
+    margin-right: 0.5rem;
+}
+
+.input-flex {
+    /* Make the buttons grow to fill the container */
+    flex: 1;
+    /* Set the height to match the container height */
+    height: 100%;
+    /* Split the container into two equal halves */
+    width: 50%;
+    margin-left: 0.5rem;
+}

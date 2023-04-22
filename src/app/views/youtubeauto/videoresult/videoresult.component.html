@@ -2,43 +2,60 @@
   <c-card-body>
 
     <div style="display: flex; align-items: center;" *ngIf="isLoading">
-      <c-spinner style="margin-top: 0.75rem; width: 24px; height: 24px;" ></c-spinner>
-      <p style="margin-left: 1rem; margin-bottom: 0; margin-top: 0.75rem; flex: 1;" class="text-medium-emphasis">We are generating your video now...</p>
+      <c-spinner style="margin-top: 0.75rem; width: 24px; height: 24px;"></c-spinner>
+      <p style="margin-left: 1rem; margin-bottom: 0; margin-top: 0.75rem; flex: 1;" class="text-medium-emphasis">We are
+        generating your video now...</p>
     </div>
 
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
-      <mat-step [stepControl]="firstFormGroup" *ngIf="!isLoading">
+      <mat-step [stepControl]="resultsFormGroup" *ngIf="!isLoading">
         <strong>Here's Everything You Need For Your Video</strong>
         <p class="text-medium-emphasis small">
           Go through your new video and make any edits or just click Next!
         </p>
-        <form [formGroup]="firstFormGroup">
+        <form [formGroup]="resultsFormGroup">
           <ng-template matStepLabel>Text</ng-template>
 
           <strong>Title</strong>
           <div class="mb-3">
-            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea1" [value]="gptResponseTitle">
+            <textarea 
+              cFormControl 
+              style="margin-top: 1rem;" 
+              id="formControlTextarea1" 
+              formControlName="title">
             </textarea>
           </div>
 
           <strong>Description</strong>
           <div class="mb-3">
-            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea2" rows="10"
-              [value]="gptResponseDescription">
+            <textarea 
+              cFormControl 
+              style="margin-top: 1rem;" 
+              id="formControlTextarea2" 
+              rows="10"
+              formControlName="description">
             </textarea>
           </div>
 
           <strong>Script</strong>
           <div class="mb-3">
-            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea2" rows="20"
-              [value]="gptResponseScript">
+            <textarea 
+              cFormControl 
+              style="margin-top: 1rem;" 
+              id="formControlTextarea2" 
+              rows="20"
+              formControlName="script">
             </textarea>
           </div>
 
           <strong>Tags</strong>
           <div class="mb-3">
-            <textarea cFormControl style="margin-top: 1rem;" id="formControlTextarea3" [value]="gptResponseTags">
+            <textarea 
+              cFormControl 
+              style="margin-top: 1rem;" 
+              id="formControlTextarea3" 
+              formControlName="tags">
             </textarea>
           </div>
 
@@ -49,28 +66,57 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="secondFormGroup"  *ngIf="!isLoading">
-        <strong>Let's Finish Your Audio & Video</strong>
-        <p class="text-medium-emphasis small">
-          If you want to use your own audio, just upload the file. Otherwise, your AI voice is ready.
-          Get started editing your video in Descript instantly or you can download the mp3 and script for your own use.
-        </p>
-        <form [formGroup]="secondFormGroup">
+      <mat-step [stepControl]="mediaFormGroup" *ngIf="!isLoading">
+        <strong>Let's Finish Your Audio & Start The Video</strong>
+        <p></p>
+        <form [formGroup]="mediaFormGroup">
           <ng-template matStepLabel>Media</ng-template>
 
           <strong>Use Our AI Generated Voice</strong>
-
-          <strong>Download The Script And Do It Yourself</strong>
-          <div>
-            <button class="btn btn-primary flex-grow-1" (click)="downloadTextFile()">Download Script</button>
+          <p class="text-medium-emphasis small">
+            Pick a voice. We'll take care of the audio for you or you can upload your own below.
+          </p>
+          <mat-button-toggle-group formControlName="selectedVoice">
+            <mat-button-toggle *ngFor="let voice of voiceOptions" [value]="voice">
+              {{ voice.name }}
+              <audio controls>
+                <source [src]="voice.sampleUrl" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+          <p></p>
+          <div class="full-width">
+            <button 
+              class="btn btn-primary flex-grow-1" 
+              style="width: 100%;" 
+              [disabled]="!mediaFormGroup.get('selectedVoice')?.value"
+              (click)="generateTextToSpeech()">Generate Your AI Narration</button>
+            <audio class="flex-grow-1" style="width: 100%;" controls>
+              <source *ngIf="generatedAudioIsVisible" [src]="generatedAudio" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
           </div>
-          <div>
-            <label cLabel for="formFileLg">Select the completely finished video that's ready for Youtube</label>
-            <input cFormControl id="formFileLg" sizing="lg" type="file" />
+          <br/>
+          <p></p>
+          <strong style="margin-top: 1rem;">Or Download The Script And Record It Yourself</strong>
+          <div class="container">
+            <button class="btn btn-success flex-grow-1" (click)="downloadTextFile()">Download Script</button>
+            <!-- This sets a proxy where our nice button triggers our ugly one's func -->
+            <button type="button" class="btn btn-primary flex-grow-1" (click)="audioPicker.click()">Upload mp3</button>
+            <input 
+              cFormControl 
+              id="audioFile" 
+              type="file" 
+              accept="audio/mpeg" 
+              hidden 
+              #audioPicker 
+              (change)="onAudioPicked($event)">
           </div>
+          <br />
 
-          <strong>Finally, Put It All Together With Descript</strong>
-          <button class="btn btn-primary flex-grow-1">Go To Descript</button>
+          <strong>Finally, Put It All Together With Descript</strong><br/>
+          <button class="btn btn-primary flex-grow-1" style="width: 100%; margin-top: 1rem; margin-bottom: 1rem">Go To Descript</button>
 
           <div>
             <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
@@ -79,12 +125,12 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="thirdFormGroup"  *ngIf="!isLoading">
+      <mat-step [stepControl]="uploadFormGroup" *ngIf="!isLoading">
         <strong>We Can Create An AI Voice For You...Or Just Click "Generate"</strong>
         <p class="text-medium-emphasis small">
           Pick a voice. We'll take care of the audio for you and you'll have it on the next page.
         </p>
-        <form [formGroup]="thirdFormGroup">
+        <form [formGroup]="uploadFormGroup">
           <ng-template matStepLabel>Upload!</ng-template>
           <br />
 
