@@ -22,10 +22,10 @@ export class VideoListComponent implements OnInit, AfterContentInit {
     ) { }
 
     ngOnInit(): void {
-        this.videoService.getVideos().subscribe(videos => {
-            this.videos = videos;
-            console.log("🚀 ~ file: videolist.component.ts:25 ~ VideoListComponent ~ ngOnInit ~ this.videos", this.videos)
-        });
+        // this.videoService.getVideos().subscribe(videos => {
+        //     this.videos = videos;
+        //     console.log("🚀 ~ file: videolist.component.ts:25 ~ VideoListComponent ~ ngOnInit ~ this.videos", this.videos)
+        // });
     }
 
     ngAfterContentInit(): void {

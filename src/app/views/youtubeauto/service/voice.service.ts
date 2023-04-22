@@ -1,18 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError, interval, Subject } from 'rxjs';
-import { catchError, map, switchMap, takeWhile } from 'rxjs/operators';
-import { Voice } from '../model/voice/voice.model';
+import {
+  Observable,
+  throwError,
+  interval,
+  Subject,
+  catchError,
+  map,
+  generate,
+  switchMap,
+  takeUntil,
+  delay,
+} from 'rxjs';
+import { FirebaseService } from './domain/firebase.service';
+import { ConvertResponse } from '../model/voice/convertresponse.model';
 import { ArticleStatus } from '../model/voice/articlestatus.model';
-
 @Injectable({
   providedIn: 'root',
 })
 export class VoiceService {
-  
-  private audioFile: Blob;
+  audioFile: {
+    title: string;
+    file: File;
+  };
 
-  private voiceObserverSubject = new Subject<{ name: string, sampleUrl: string }[]>();
+  private voiceObserverSubject = new Subject<{ name: string; sampleUrl: string; value: string }[]>();
+  private textToSpeechSubject = new Subject<ArticleStatus>();
 
   constructor(
     private http: HttpClient
@@ -22,43 +35,62 @@ export class VoiceService {
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer 5992824d1a1b4779a76e4176ca0d1d07',
-    'X-USER-ID': 'Y0Yo31zn6ofKRyhNFyNj1gSxEJ63'
+    Authorization: 'Bearer 5992824d1a1b4779a76e4176ca0d1d07',
+    'X-USER-ID': 'Y0Yo31zn6ofKRyhNFyNj1gSxEJ63',
   });
 
-  getVoiceOptionsObserver(): Observable<{ name: string, sampleUrl: string }[]> {
-    return this.voiceObserverSubject.asObservable()
+  getVoiceOptionsObserver(): Observable<{ name: string; sampleUrl: string }[]> {
+    return this.voiceObserverSubject.asObservable();
+  }
+
+  getTextToSpeechObserver(): Observable<ArticleStatus> {
+    return this.textToSpeechSubject.asObservable();
   }
 
   getVoiceOptions() {
-    this.http.get<{ name: string, sample: string }[]>(`${this.baseUrl}/api/voice/voices`, { headers: this.headers })
+    this.http
+      .get<{ name: string; sample: string; value: string }[]>(
+        `${this.baseUrl}/api/voice/voices`,
+        { headers: this.headers }
+      )
       .subscribe((data) => {
-        let displayVoices: { name: string, sampleUrl: string }[] = []
+        let displayVoices: {
+          name: string;
+          sampleUrl: string;
+          value: string;
+        }[] = [];
         data.forEach((voice) => {
           displayVoices.push({
             name: voice.name,
-            sampleUrl: voice.sample
-          })
-        })
+            sampleUrl: voice.sample,
+            value: voice.value,
+          });
+        });
         this.voiceObserverSubject.next(displayVoices);
-      })
+      });
   }
 
   updateAudioFile(file: File) {
-    this.audioFile = file;
+    this.audioFile = {
+      title: file.name,
+      file: file,
+    };
+  }
+
+  generateTextToSpeech(voiceValue: string, script: string) {
+    const reqBody = {
+      voice: voiceValue,
+      content: script
+    };
+    this.http.post<{ message: string, audioUrl: string }>(`${this.baseUrl}/api/voice/generate`, reqBody, {headers: this.headers})
+    .pipe(
+      catchError((err) => {
+        console.log("🚀 ~ file: voice.service.ts:89 ~ VoiceService ~ catchError ~ err:", err)
+        return throwError(err);
+      }
+    )).subscribe((convertResponse) => {
+      //we've generated, waited, and this is the final URL
+      console.log("🚀 ~ file: voice.service.ts:93 ~ catchError ~ convertResponse:", convertResponse)
+    });
   }
 }
-
-/**
- * {
-    value: 'fr-FR-YvesNeural',
-    name: 'Yves',
-    language: 'French',
-    voiceType: 'Neural',
-    languageCode: 'fr-FR',
-    gender: 'Male',
-    service: 'ms',
-    sample: 'https://media.play.ht/voice-samples/fr-FR-YvesNeural.mp3',
-    isNew: true
-  }
- */

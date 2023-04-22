@@ -124,8 +124,13 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   }
 
   generateTextToSpeech() {
-    const selectedVoice = this.mediaFormGroup.get('selectedVoice')?.value;
-    console.log("🚀 ~ file: videoresult.component.ts:128 ~ VideoResultComponent ~ generateTextToSpeech ~ selectedVoice:", selectedVoice)
+    const selectedVoiceControl = this.mediaFormGroup.get('selectedVoice')?.value;
+    const scriptControl = this.resultsFormGroup.get('script')?.value;
+    this.voiceService.generateTextToSpeech(
+      selectedVoiceControl.value, 
+      "Here we are manipulating the data so we can have everything we need to submit the data"
+      // scriptControl.script
+    );
   }
 
   onSchedule() {
