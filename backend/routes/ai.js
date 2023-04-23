@@ -134,7 +134,7 @@ async function getCompletion(prompt) {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
-      temperature: 0.3,
+      temperature: 0.7,
       max_tokens: 2000,
       top_p: 1,
     });

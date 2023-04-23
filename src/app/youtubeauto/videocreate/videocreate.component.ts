@@ -65,7 +65,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.gptService.getTopicSubjectObserver().subscribe((response) => {
       this.topicLoading = false;
       this.firstFormGroup.setValue({
-        subject: response
+        subject: response.replace('"', '').trim()
       })
     });
 

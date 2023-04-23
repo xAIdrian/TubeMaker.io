@@ -103,27 +103,19 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     );
     this.gptService.getTitleSubjectObserver().subscribe((response) => {
       this.isTitleLoading = false;
-      this.resultsFormGroup.setValue({
-        title: response.replace('"', '').trim(),
-      })
+      this.resultsFormGroup.patchValue({ title: response.replace('"', '').trim() })
     });
     this.gptService.getDescriptionSubjectObserver().subscribe((response) => {
       this.isDescLoading = false;
-      this.resultsFormGroup.setValue({
-        description: response.trim(),
-      })
+      this.resultsFormGroup.patchValue({ description: response.trim() })
     });
     this.gptService.getScriptSubjectObserver().subscribe((response) => {
       this.isScriptLoading = false;
-      this.resultsFormGroup.setValue({
-        script: response.trim(),
-      })
+      this.resultsFormGroup.patchValue({ script: response.trim() })
     });
     this.gptService.getTagsSubjectObserver().subscribe((response) => {  
       this.isTagsLoading = false;
-      this.resultsFormGroup.setValue({
-        tags: response.join(', ').trim(),
-      })
+      this.resultsFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
     this.voiceService.getVoiceOptionsObserver().subscribe((response) => {
       console.log(
@@ -157,33 +149,25 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
 
   rerollTitle() {
     this.isTitleLoading = true;
-    this.resultsFormGroup.setValue({
-      title: 'Please wait...',
-    })
+    this.resultsFormGroup.patchValue({ title: 'Please wait...' })
     this.gptService.getIsolatedTitle();
   }
 
   rerollDescription() {
     this.isDescLoading = true;
-    this.resultsFormGroup.setValue({
-      description: 'Please wait...',
-    })
+    this.resultsFormGroup.patchValue({ description: 'Please wait...' })
     this.gptService.getIsolatedDescription();
   }
 
   rerollScript() {
     this.isScriptLoading = true;
-    this.resultsFormGroup.setValue({
-      script: 'Please wait...',
-    })
+    this.resultsFormGroup.patchValue({ script: 'Please wait...'  })
     this.gptService.getIsolatedScript();
   }
 
   rerollTags() {
     this.isTagsLoading = true;
-    this.resultsFormGroup.setValue({
-      tags: 'Please wait...',
-    })
+    this.resultsFormGroup.patchValue({ tags: 'Please wait...' })
     this.gptService.getIsolatedTags();
   }
 
