@@ -15,9 +15,17 @@
               required aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
           </div>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-primary" matStepperNext>Pick This Topic</button>
+            <button class="btn btn-primary" (click)="reRollTopic()">
+              Generate Topic
+              <c-spinner *ngIf="topicLoading" size="sm" color="white"></c-spinner>
+            </button>
           </div>
+          <br/>
         </form>
+        <div class="full-width" style="margin-top: 2rem;">
+          <button class="btn btn-light" style="margin-right: 1rem; text-align: left;">Need Help? Click Here</button>
+          <button class="btn btn-info flex-grow-1"  matStepperNext>Go To Next Step</button>
+        </div>
       </mat-step>
 
       <mat-step [stepControl]="secondFormGroup">

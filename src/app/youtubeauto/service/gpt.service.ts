@@ -11,8 +11,9 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class GptService {
+  
   //these need to come from our server
-  videoStyleAndToneOptions: String[] = [
+  private videoStyleAndToneOptions: String[] = [
     'ASMR (Autonomous Sensory Meridian Response)',
     'Gaming tutorials and playthroughs',
     'Cooking and Food',
@@ -24,10 +25,6 @@ export class GptService {
     'Financial advice and money management tutorials',
     'Motivational and self-help videos',
   ];
-
-  private sourcesVideo: GptVideoReqBody;
-
-  // this needs to be returned to private generatedVideo: GPtGeneratedVideo;
   private generatedVideo: GptGeneratedVideo = {
     id: '3u42o3ih23on',
     title: 'Sample title',
@@ -35,16 +32,37 @@ export class GptService {
     script: 'here is the very long way to say hello',
     tags: ['title', 'description', 'script'],
   };
-  private resultsObserverSubject = new Subject<GptGeneratedVideo>();
+
+  private sourcesVideo: GptVideoReqBody;
+
+  private topicObserverSubject = new Subject<String>();
+  private completeResultsObserverSubject = new Subject<GptGeneratedVideo>();
 
   constructor(private http: HttpClient) {}
+
+  getTopicSubjectObserver() {
+    return this.topicObserverSubject.asObservable();
+  }
 
   getVideoOptionsObserver(): Observable<String[]> {
     return of(this.videoStyleAndToneOptions);
   }
 
-  getPromptResponseObserver(): Observable<GptGeneratedVideo> {
-    return this.resultsObserverSubject.asObservable();
+  getCompleteResultsSubjectObserver(): Observable<GptGeneratedVideo> {
+    return this.completeResultsObserverSubject.asObservable();
+  }
+
+  getTopicObservable(): Observable<{ message: string, result: any }> {
+    return this.http.get<{ message: string, result: any }>('http://localhost:3000/api/openai/topic');
+  }
+
+  getIsolatedTopic() {
+    this.getTopicObservable().subscribe((response) => {
+      if (response.message !== 'success') {
+        this.topicObserverSubject.next("How to make money with faceless youtube automation");
+      }
+      this.topicObserverSubject.next(response.result.topic);
+    });
   }
 
   submitInputs(promptQuery: string, videoStyle: string, videoDuration: string) {
@@ -85,7 +103,7 @@ export class GptService {
       )
       .subscribe((response) => {
         this.generatedVideo = response;
-        this.resultsObserverSubject.next(response);
+        this.completeResultsObserverSubject.next(response);
       });
   }
 

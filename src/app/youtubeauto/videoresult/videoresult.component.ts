@@ -75,7 +75,7 @@ throw new Error('Method not implemented.');
   }
 
   setupObservers() {
-    this.gptService.getPromptResponseObserver().subscribe(
+    this.gptService.getCompleteResultsSubjectObserver().subscribe(
       (response: GptGeneratedVideo) => {
         this.isLoading = false;
         console.log(

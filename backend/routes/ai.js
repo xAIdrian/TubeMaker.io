@@ -11,11 +11,30 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.get("/topic", async (req, res, next) => {
-  let gptResponse = await paramPromptCompletion("backend/routes/inputprompts/youtube_topic.txt", "");
-  res.status(200).json({
-    message: "Topic sent successfully",
-    result: { topic: gptResponse },
-  });
+  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_topic.txt");
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: rawPrompt,
+      temperature: 1.2,
+      max_tokens: 2000,
+      top_p: 1,
+    });
+    response = completion.data.choices[0].text;
+    res.status(200).json({
+      message: "success",
+      result: { topic: response },
+    })
+    
+  } catch (error) {
+    if (error.response) {
+      console.log("🚀 ~ file: ai.js:31 ~ router.get ~ error.respons:", error.respons)
+      res.status(403).json(error.response.data);
+    } else {
+      console.log("🚀 ~ file: ai.js:34 ~ router.get ~ error.message:", error.message)
+      res.status(403).json(error.message);
+    }
+  }
 });
 
 router.post("/summary", async (req, res, next) => {
