@@ -1,39 +1,46 @@
 .full-width {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
 .mat-input-element {
-    background-color: #fff;
-    border-radius: 20px;
-  }
+  background-color: #fff;
+  border-radius: 20px;
+}
+
 .flex-grow-1 {
-    padding-right: 1rem;
-}  
+  padding-right: 1rem;
+}
+
 .d-flex {
-    padding-top: 1rem;
-}  
+  padding-top: 1rem;
+}
 
 mat-button-toggle-group {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 1rem;
-    border: none;
-  
-    mat-button-toggle {
-      margin: 0.5rem;
-      border-radius: 20px;
-      padding: 0.5rem 0.5rem;
-      background-color: #f0f0f0;
-      color: #333;
-      font-size: 1rem;
-  
-      &.mat-button-toggle-checked {
-        background-color: #007bff;
-        color: #fff;
-      }
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem;
+  border: none;
+
+  mat-button-toggle {
+    margin: 0.5rem;
+    border-radius: 20px;
+    padding: 0.5rem 0.5rem;
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 1rem;
+
+    &.mat-button-toggle-checked {
+      background-color: #007bff;
+      color: #fff;
     }
   }
-  
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}

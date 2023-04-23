@@ -18,6 +18,7 @@ import {
     FormModule,
     GridModule,
     ListGroupModule,
+    ModalModule,
     NavModule,
     PaginationModule,
     PlaceholderModule,
@@ -78,7 +79,8 @@ import { VideoResultComponent } from './videoresult/videoresult.component';
         MatInputModule,
         MatButtonModule,
         MatListModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        ModalModule
     ]
 })
 export class YoutubeAutoModule {/* */}

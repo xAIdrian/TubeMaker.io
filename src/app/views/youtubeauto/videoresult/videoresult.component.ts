@@ -25,6 +25,15 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoResultComponent implements OnInit, AfterContentInit {
+rerollTitle() {
+throw new Error('Method not implemented.');
+}
+rerollScript() {
+throw new Error('Method not implemented.');
+}
+rerollTags() {
+throw new Error('Method not implemented.');
+}
 
   isLinear: any;
   // isLoading: boolean = true;
