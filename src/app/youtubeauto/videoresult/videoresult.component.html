@@ -2,9 +2,11 @@
   <c-card-body>
 
     <div style="display: flex; align-items: center;" *ngIf="isLoading">
-      <c-spinner style="margin-top: 0.75rem; width: 24px; height: 24px;"></c-spinner>
+      <c-progress class="mb-3" style="width: 100%">
+        <c-progress-bar [value]="progressValue"></c-progress-bar>
+      </c-progress>
       <p style="margin-left: 1rem; margin-bottom: 0; margin-top: 0.75rem; flex: 1;" class="text-medium-emphasis">We are
-        generating your video now...</p>
+        {{ progressLabel }}</p>
     </div>
 
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
