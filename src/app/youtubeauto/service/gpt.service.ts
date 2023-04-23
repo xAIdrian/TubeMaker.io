@@ -27,6 +27,7 @@ export class GptService {
   ];
   private generatedVideo: GptGeneratedVideo = {
     id: '3u42o3ih23on',
+    summary: 'here is a sample summary',
     title: 'Sample title',
     description: 'here is another sample description',
     script: 'here is the very long way to say hello',
@@ -36,13 +37,35 @@ export class GptService {
   private sourcesVideo: GptVideoReqBody;
 
   private topicObserverSubject = new Subject<String>();
+
   private progressObserverSubject = new Subject<number>();
   private completeResultsObserverSubject = new Subject<GptGeneratedVideo>();
+
+  private titleObserverSubject = new Subject<String>();
+  private descriptionObserverSubject = new Subject<String>();
+  private scriptObserverSubject = new Subject<String>();
+  private tagsObserverSubject = new Subject<String[]>();
 
   constructor(private http: HttpClient) {}
 
   getTopicSubjectObserver() {
     return this.topicObserverSubject.asObservable();
+  }
+
+  getTitleSubjectObserver() {
+    return this.titleObserverSubject.asObservable();
+  }
+
+  getDescriptionSubjectObserver() {
+    return this.descriptionObserverSubject.asObservable();
+  }
+
+  getScriptSubjectObserver() {
+    return this.scriptObserverSubject.asObservable();
+  }
+
+  getTagsSubjectObserver() {
+    return this.tagsObserverSubject.asObservable();
   }
 
   getVideoOptionsObserver(): Observable<String[]> {
@@ -65,8 +88,73 @@ export class GptService {
     this.getTopicObservable().subscribe((response) => {
       if (response.message !== 'success') {
         this.topicObserverSubject.next("How to make money with faceless youtube automation");
+        return;
       }
       this.topicObserverSubject.next(response.result.topic);
+    });
+  }
+
+  getTitleObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { title: string } }> {
+    return this.http.post<{ message: string, result: { title: string } }>('http://localhost:3000/api/openai/title', {
+      summary: inputSummary
+    });
+  }
+
+  getIsolatedTitle() {
+    this.getTitleObservable().subscribe((response) => {
+      if (response.message !== 'success') {
+        this.titleObserverSubject.next("How to make money with faceless youtube automation");
+        return;
+      }
+      this.titleObserverSubject.next(response.result.title);
+    });
+  }
+
+  getDescriptionObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { description: string } }> {
+    return this.http.post<{ message: string, result: { description: string } }>('http://localhost:3000/api/openai/description', {
+      summary: inputSummary
+    });
+  }
+
+  getIsolatedDescription() {
+    this.getDescriptionObservable().subscribe((response) => {
+      if (response.message !== 'success') {
+        this.descriptionObserverSubject.next("How to make money with faceless youtube automation");
+        return;
+      }
+      this.descriptionObserverSubject.next(response.result.description);
+    });
+  }
+
+  getScriptObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { script: string } }> {
+    return this.http.post<{ message: string, result: { script: string } }>('http://localhost:3000/api/openai/script', {
+      summary: inputSummary
+    });
+  }
+
+  getIsolatedScript() {
+    this.getScriptObservable().subscribe((response) => {
+      if (response.message !== 'success') {
+        this.scriptObserverSubject.next("How to make money with faceless youtube automation");
+        return;
+      }
+      this.scriptObserverSubject.next(response.result.script);
+    });
+  }
+
+  getTagsObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { tags: string } }> {
+    return this.http.post<{ message: string, result: { tags: string } }>('http://localhost:3000/api/openai/tags', {
+      summary: inputSummary 
+    });
+  }
+
+  getIsolatedTags() {
+    this.getTagsObservable().subscribe((response) => {
+      if (response.message !== 'success') {
+        this.tagsObserverSubject.next(["How", "to", "make", "money", "with", "faceless", "youtube", "automation"]);
+        return;
+      }
+      this.tagsObserverSubject.next(response.result.tags.split(','));
     });
   }
 
@@ -84,6 +172,7 @@ export class GptService {
     }
     var compeleteResults: GptGeneratedVideo = {
       id: '',
+      summary: '',
       title: '',
       description: '',
       script: '',
@@ -101,11 +190,10 @@ export class GptService {
         const requestSummary = response.result.summary;
 
         compeleteResults.id = response.result.id;
+        compeleteResults.summary = requestSummary;
         this.progressObserverSubject.next(20);
   
-        this.http.post<{ message: string, result: { title: string } }>('http://localhost:3000/api/openai/title', {
-          summary: requestSummary 
-        }).subscribe((response) => {
+        this.getTitleObservable(requestSummary).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:108 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -117,9 +205,7 @@ export class GptService {
           }
         });
 
-        this.http.post<{ message: string, result: { description: string } }>('http://localhost:3000/api/openai/description', {
-          summary: requestSummary 
-        }).subscribe((response) => {
+        this.getDescriptionObservable(requestSummary).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:122 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -131,9 +217,7 @@ export class GptService {
           }
         });
 
-        this.http.post<{ message: string, result: { script: string } }>('http://localhost:3000/api/openai/script', {
-          summary: requestSummary 
-        }).subscribe((response) => {
+        this.getScriptObservable(requestSummary).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:136 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -145,9 +229,7 @@ export class GptService {
           }
         });
 
-        this.http.post<{ message: string, result: { tags: string } }>('http://localhost:3000/api/openai/tags', {
-          summary: requestSummary 
-        }).subscribe((response) => {
+        this.getTagsObservable(requestSummary).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:150 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -160,34 +242,6 @@ export class GptService {
         });
       }
     });
-
-    // const requestBody = {
-    //   prompt: this.sourcesVideo.prompt,
-    //   style: this.sourcesVideo.videoStyle,
-    //   duration: this.sourcesVideo.videoDuration,
-    // };
-
-    // return this.http
-    //   .post<GptResponse>('http://localhost:3000/api/openai', requestBody)
-    //   .pipe(
-    //     catchError((error) => {
-    //       console.error('Failed to generate video', error);
-    //       return throwError('Failed to generate video');
-    //     }),
-    //     map((gptResponse) => {
-    //       return {
-    //         id: gptResponse.result.id,
-    //         title: gptResponse.result.title,
-    //         description: gptResponse.result.description,
-    //         script: gptResponse.result.script,
-    //         tags: gptResponse.result.tags,
-    //       };
-    //     })
-    //   )
-    //   .subscribe((response) => {
-    //     this.generatedVideo = response;
-    //     this.completeResultsObserverSubject.next(response);
-    //   });
   }
 
   /**

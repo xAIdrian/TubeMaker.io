@@ -15,9 +15,9 @@
               required aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
           </div>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-primary" (click)="reRollTopic()">
-              Generate Topic
+            <button class="btn btn-primary" style="padding-left: 2rem; padding-right: 2rem;" [disabled]="topicLoading" (click)="reRollTopic()">
               <c-spinner *ngIf="topicLoading" size="sm" color="white"></c-spinner>
+              Generate Topic
             </button>
           </div>
           <br/>

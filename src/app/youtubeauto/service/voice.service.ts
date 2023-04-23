@@ -3,18 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   Observable,
   throwError,
-  interval,
   Subject,
   catchError,
-  map,
-  generate,
-  switchMap,
-  takeUntil,
-  delay,
 } from 'rxjs';
-import { FirebaseService } from './domain/firebase.service';
-import { ConvertResponse } from '../model/voice/convertresponse.model';
-import { ArticleStatus } from '../model/voice/articlestatus.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,7 +16,7 @@ export class VoiceService {
   };
 
   private voiceObserverSubject = new Subject<{ name: string; sampleUrl: string; value: string }[]>();
-  private textToSpeechSubject = new Subject<string>();
+  private textToSpeechObserverSubject = new Subject<string>();
 
   constructor(
     private http: HttpClient
@@ -44,7 +35,7 @@ export class VoiceService {
   }
 
   getTextToSpeechObserver(): Observable<string> {
-    return this.textToSpeechSubject.asObservable();
+    return this.textToSpeechObserverSubject.asObservable();
   }
 
   getVoiceOptions() {
@@ -92,7 +83,7 @@ export class VoiceService {
       //we've generated, waited, and this is the final URL
       if (audioResponse.error === false) {
         console.log("🚀 ~ file: voice.service.ts:93 ~ catchError ~ convertResponse:", audioResponse)
-        this.textToSpeechSubject.next(audioResponse.audioUrl)
+        this.textToSpeechObserverSubject.next(audioResponse.audioUrl)
       } else {
         console.log("🔥 ~ file: voice.service.ts:96 ~ catchError ~ convertResponse:", audioResponse)
       }
