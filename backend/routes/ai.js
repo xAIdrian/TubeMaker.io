@@ -10,7 +10,15 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-router.post("", async (req, res, next) => {
+router.get("/topic", async (req, res, next) => {
+  let gptResponse = await paramPromptCompletion("backend/routes/inputprompts/youtube_topic.txt", "");
+  res.status(200).json({
+    message: "Topic sent successfully",
+    result: { topic: gptResponse },
+  });
+});
+
+router.post("/summary", async (req, res, next) => {
   console.log("🚀 ~ file: openai.js:12 ~ router.post ~ req:", req.body);
 
   let prompt = req.body.prompt;
@@ -47,8 +55,21 @@ router.post("", async (req, res, next) => {
         description: gptDescription,
         script: gptScript,
         tags: gptTags
-    }
+      }
+  });
 });
+
+router.post("/title", async (req, res, next) => {
+});
+
+router.post("/description", async (req, res, next) => {
+});
+
+router.post("/script", async (req, res, next) => {
+  console.log("🚀 ~ file: openai.js:12 ~ router.post ~ req:", req.body);
+});
+
+router.post("/tags", async (req, res, next) => {
 });
 
 async function getCompletion(prompt) {
@@ -93,7 +114,7 @@ function scriptPromptCompletion(inputParam, styleParam, durationParam) {
 
 function paramPromptCompletion(filename, inputParam) {
   rawPrompt = readTextFileToPrompt(filename);
-  rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);
+  if (inputParam !== '') {rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);}
 
   const completion = getCompletion(rawPrompt);
   return completion;

@@ -68,7 +68,7 @@ const routes: Routes = [
       {
         path: 'youtubeauto',
         loadChildren: () =>
-          import('./views/youtubeauto/youtubeauto.module').then((m) => m.YoutubeAutoModule)
+          import('./youtubeauto/youtubeauto.module').then((m) => m.YoutubeAutoModule)
       },
       {
         path: 'pages',
