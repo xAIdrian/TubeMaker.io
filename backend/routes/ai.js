@@ -10,7 +10,34 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-router.post("", async (req, res, next) => {
+router.get("/topic", async (req, res, next) => {
+  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_topic.txt");
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: rawPrompt,
+      temperature: 1.2,
+      max_tokens: 2000,
+      top_p: 1,
+    });
+    response = completion.data.choices[0].text;
+    res.status(200).json({
+      message: "success",
+      result: { topic: response },
+    })
+    
+  } catch (error) {
+    if (error.response) {
+      console.log("🚀 ~ file: ai.js:31 ~ router.get ~ error.respons:", error.respons)
+      res.status(403).json(error.response.data);
+    } else {
+      console.log("🚀 ~ file: ai.js:34 ~ router.get ~ error.message:", error.message)
+      res.status(403).json(error.message);
+    }
+  }
+});
+
+router.post("/summary", async (req, res, next) => {
   console.log("🚀 ~ file: openai.js:12 ~ router.post ~ req:", req.body);
 
   let prompt = req.body.prompt;
@@ -19,36 +46,87 @@ router.post("", async (req, res, next) => {
     prompt = "How to make money using faceless youtube channels.";
   }
 
-  const style = req.body.style;
-  const duration = req.body.duration;
-
   let gptSummary = await summaryPromptCompletion(prompt);
   console.log("🚀 ~ file: ai.js:26 ~ router.post ~ gptSummary:", gptSummary)
 
-  let gptTitle = await paramPromptCompletion("backend/routes/inputprompts/youtube_title.txt", gptSummary);
-  gptTitle = gptTitle.replace('"', "")
+  res.status(200).json({
+    message: "success",
+    result: {
+      id: shortid.generate(),
+      summary: gptSummary
+    }
+  });
+});
+
+router.post("/title", async (req, res, next) => {
+
+  let summary = req.body.summary;
+  if (summary === "") {
+    res.status(403).json({
+      message: "summary is required",
+    });
+  }
+
+  let gptTitle = await paramPromptCompletion("backend/routes/inputprompts/youtube_title.txt", summary);
+  gptTitle = gptTitle.replace('"', '')
   console.log("🚀 ~ file: ai.js:28 ~ router.post ~ gptTitle:", gptTitle)
 
-  let gptDescription = await paramPromptCompletion("backend/routes/inputprompts/youtube_description.txt", gptSummary);
-  console.log("🚀 ~ file: ai.js:30 ~ router.post ~ gptDescription:", gptDescription)
-  
-  let gptTags = await paramPromptCompletion("backend/routes/inputprompts/youtube_tags.txt", gptSummary);
-  gptTags = gptTags.split(",");
-  console.log("🚀 ~ file: ai.js:32 ~ router.post ~ gptTags:", gptTags)
+  res.status(200).json({
+    message: "success",
+    result: { title: gptTitle },
+  });
+});
 
-  let gptScript = await scriptPromptCompletion(gptSummary, style, duration);
+router.post("/description", async (req, res, next) => {
+  let summary = req.body.summary;
+  if (summary === "") {
+    res.status(403).json({
+      message: "summary is required",
+    });
+  }
+
+  let gptDescription = await paramPromptCompletion("backend/routes/inputprompts/youtube_description.txt", summary);
+
+  res.status(200).json({
+    message: "success",
+    result: { description: gptDescription },
+  });
+});
+
+router.post("/script", async (req, res, next) => {
+  let summary = req.body.summary;
+  if (summary === "") {
+    res.status(403).json({
+      message: "summary is required",
+    });
+  }
+
+  const style = req.body.style;
+  const duration = req.body.duration;
+
+  let gptScript = await scriptPromptCompletion(summary, style, duration);
   console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
 
   res.status(200).json({
-    message: "Response sent successfully",
-    result: {
-        id: shortid.generate(),
-        title: gptTitle,
-        description: gptDescription,
-        script: gptScript,
-        tags: gptTags
-    }
+    message: "success",
+    result: { script: gptScript },
+  });
 });
+
+router.post("/tags", async (req, res, next) => {
+  let summary = req.body.summary;
+  if (summary === "") {
+    res.status(403).json({
+      message: "summary is required",
+    });
+  }
+
+  let gptTags = await paramPromptCompletion("backend/routes/inputprompts/youtube_tags.txt", summary);
+
+  res.status(200).json({
+    message: "success",
+    result: { tags: gptTags },
+  });
 });
 
 async function getCompletion(prompt) {
@@ -56,7 +134,7 @@ async function getCompletion(prompt) {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
-      temperature: 0.3,
+      temperature: 0.7,
       max_tokens: 2000,
       top_p: 1,
     });
@@ -93,7 +171,7 @@ function scriptPromptCompletion(inputParam, styleParam, durationParam) {
 
 function paramPromptCompletion(filename, inputParam) {
   rawPrompt = readTextFileToPrompt(filename);
-  rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);
+  if (inputParam !== '') {rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);}
 
   const completion = getCompletion(rawPrompt);
   return completion;

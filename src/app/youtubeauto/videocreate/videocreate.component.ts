@@ -22,6 +22,7 @@ import { NavigationService } from '../service/navigation.service';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoCreateComponent implements OnInit, AfterContentInit {
+
   promptQuery: any;
   gptResponse: string = 'Waiting for response...';
 
@@ -32,6 +33,8 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   selectedStyleControl: FormControl;
   videoStyles: String[] = [];
+
+  topicLoading: boolean = false;
 
   constructor(
     private gptService: GptService,
@@ -59,6 +62,13 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   setupValueSubscribers() {
+    this.gptService.getTopicSubjectObserver().subscribe((response) => {
+      this.topicLoading = false;
+      this.firstFormGroup.setValue({
+        subject: response.replace('"', '').trim()
+      })
+    });
+
     this.gptService.getVideoOptionsObserver().subscribe((response) => {
       console.log(
         '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
@@ -66,6 +76,11 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
       );
       this.videoStyles = response;
     });
+  }
+
+  reRollTopic() { 
+    this.topicLoading = true;
+    this.gptService.getIsolatedTopic() 
   }
 
   onSubmit() {

@@ -2,10 +2,15 @@
   <c-card-body>
 
     <div style="display: flex; align-items: center;" *ngIf="isLoading">
-      <c-spinner style="margin-top: 0.75rem; width: 24px; height: 24px;"></c-spinner>
-      <p style="margin-left: 1rem; margin-bottom: 0; margin-top: 0.75rem; flex: 1;" class="text-medium-emphasis">We are
-        generating your video now...</p>
+      <c-progress class="mb-3" style="width: 100%">
+        <c-progress-bar [value]="progressValue"></c-progress-bar>
+      </c-progress>
     </div>
+    <p *ngIf="isLoading"
+      style="margin-top: 1rem;" 
+      class="text-medium-emphasis">
+      {{ progressLabel }}
+    </p>
 
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
@@ -22,7 +27,10 @@
             <textarea cFormControl style="margin: 0.5rem; padding:0.5rem" id="formControlTextarea1" formControlName="title">
             </textarea>
             <div style="display: flex; align-items: center; padding: 0; margin:0">
-              <button class="btn btn-primary" (click)="rerollTitle()">Re-Roll</button>
+              <button class="btn btn-primary" [disabled]="isTitleLoading" (click)="rerollTitle()">
+                <c-spinner *ngIf="isTitleLoading" size="sm" color="white"></c-spinner>
+                Re-Roll
+              </button>
             </div>
           </div>
 
@@ -32,7 +40,10 @@
               formControlName="description">
             </textarea>
             <div style="display: flex; align-items: center; padding: 0; margin:0">
-              <button class="btn btn-primary" (click)="rerollScript()">Re-Roll</button>
+              <button class="btn btn-primary" [disabled]="isDescLoading" (click)="rerollDescription()">
+                <c-spinner *ngIf="isDescLoading" size="sm" color="white"></c-spinner>
+                Re-Roll
+              </button>
             </div>
           </div>
 
@@ -42,7 +53,10 @@
               formControlName="script">
             </textarea>
             <div style="display: flex; align-items: center; padding: 0; margin:0">
-              <button class="btn btn-primary" (click)="rerollScript()">Re-Roll</button>
+              <button class="btn btn-primary" [disabled]="isScriptLoading" (click)="rerollScript()">
+                <c-spinner *ngIf="isScriptLoading" size="sm" color="white"></c-spinner>
+                Re-Roll
+              </button>
             </div>
           </div>
 
@@ -51,7 +65,10 @@
             <textarea cFormControl style="margin: 0.5rem;" id="formControlTextarea3" formControlName="tags">
             </textarea>
             <div style="display: flex; align-items: center; padding: 0; margin:0">
-              <button class="btn btn-primary" (click)="rerollTags()">Re-Roll</button>
+              <button class="btn btn-primary" [disabled]="isTagsLoading" (click)="rerollTags()">
+                <c-spinner *ngIf="isTagsLoading" size="sm" color="white"></c-spinner>
+                Re-Roll
+              </button>
             </div>
           </div>
 
