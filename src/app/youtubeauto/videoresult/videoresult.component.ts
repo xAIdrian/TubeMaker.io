@@ -62,7 +62,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     this.setupObservers();
     this.setupFormGroups();
     
-    // this.voiceService.getVoiceOptions()
+    this.voiceService.getVoiceOptions()
   }
 
   ngAfterContentInit(): void {
