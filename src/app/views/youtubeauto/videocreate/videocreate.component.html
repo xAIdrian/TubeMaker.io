@@ -15,18 +15,15 @@
               required aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
           </div>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-primary" matStepperNext>Go To Next Step</button>
+            <button class="btn btn-primary" matStepperNext>Pick This Topic</button>
           </div>
         </form>
       </mat-step>
 
       <mat-step [stepControl]="secondFormGroup">
-        <p class="text-medium-emphasis">
-          Your Video Subject: {{ this.firstFormGroup.value.subject }}
-        </p>
         <strong>Now, Pick Your Video Style & Tone</strong>
         <p class="text-medium-emphasis small">
-          Great. Now, pick your video style and tone. You can always change this later.
+          Great. Now, pick your video style and tone.  We'll use this to help generate your script.
         </p>
 
         <form [formGroup]="secondFormGroup">
@@ -37,9 +34,9 @@
           </mat-button-toggle-group>
           <br />
 
-          <div>
-            <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
-            <button class="btn btn-primary" matStepperNext>Go To Next Step</button>
+          <div class="container">
+            <button class="btn btn-light" style="margin-right: 1rem; text-align: left; width: 50%;" matStepperPrevious>Go Back</button>
+            <button class="btn btn-info" style="text-align: right; width: 50%" matStepperNext>Go To Next Step 👉</button>
           </div>
         </form>
       </mat-step>
@@ -59,9 +56,8 @@
         <br />
 
         <div class="full-width">
-          <button class="btn btn-secondary" style="margin-right: 1rem;" matStepperPrevious>Go Back</button>
-          <button class="btn btn-primary flex-grow-1" matStepperNext (click)="onSubmit()">GENERATE My Video Script,
-            Title, & Everything Else!</button>
+          <button class="btn btn-light" style="margin-right: 1rem; text-align: left;" matStepperPrevious>Go Back</button>
+          <button class="btn btn-info flex-grow-1" matStepperNext (click)="onSubmit()">GENERATE My Video Script, Title, & Everything Else! 👉</button>
         </div>
         </form>
       </mat-step>

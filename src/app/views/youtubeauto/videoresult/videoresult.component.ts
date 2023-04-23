@@ -3,9 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   OnInit,
-  Output,
 } from '@angular/core';
 import { VoiceService } from '../service/voice.service';
 import { NavigationService } from '../service/navigation.service';
@@ -13,12 +11,12 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormControl,
 } from '@angular/forms';
 import { saveAs } from 'file-saver';
 
 import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../service/gpt.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'video-result',
@@ -27,10 +25,19 @@ import { GptService } from '../service/gpt.service';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoResultComponent implements OnInit, AfterContentInit {
+rerollTitle() {
+throw new Error('Method not implemented.');
+}
+rerollScript() {
+throw new Error('Method not implemented.');
+}
+rerollTags() {
+throw new Error('Method not implemented.');
+}
 
   isLinear: any;
-  isLoading: boolean = true;
-  // isLoading: boolean = false;
+  // isLoading: boolean = true;
+  isLoading: boolean = false;
 
   resultsFormGroup: FormGroup;
   mediaFormGroup: FormGroup;
@@ -51,20 +58,20 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     private voiceService: VoiceService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.setupObservers();
     this.setupFormGroups();
     
-    this.voiceService.getVoiceOptions()
+    // this.voiceService.getVoiceOptions()
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     // removed for testing purposes
-    this.gptService.getGptContent();
+    // this.gptService.getGptContent();
   }
 
   setupObservers() {
@@ -109,6 +116,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       selectedVoice: [''],
       audio: [''],
     });
+    //TODO we will neeed this to be updated for our uploaded files held across services
     this.uploadFormGroup = this._formBuilder.group({ /* */ });
   }
 
@@ -132,6 +140,10 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     }
   }
 
+  onVideoPicked($event: Event) {
+    throw new Error('Method not implemented.');
+  }
+
   generateTextToSpeech() {
     const scriptValue = this.resultsFormGroup.get('script')?.value;
     if (scriptValue === null || scriptValue === '') {
@@ -148,7 +160,16 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     );
   }
 
-  onSchedule() {
+  descriptButtonClicked() {
+    ///https://media.play.ht/full_-NTbzfZeyW_-qJQLq4Wg.mp3?generation=1682150707643372&alt=media
+    window.open('https://web.descript.com/', '_blank');
+  }
+
+  onItemClick(_t122: any) {
+    throw new Error('Method not implemented.');
+  }
+
+  goToReview() {
 
   }
 
