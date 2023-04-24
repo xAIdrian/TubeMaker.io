@@ -25,7 +25,7 @@ export class GptService {
     'Financial advice and money management tutorials',
     'Motivational and self-help videos',
   ];
-  private generatedVideo: GptGeneratedVideo = {
+  generatedVideo: GptGeneratedVideo = {
     id: '3u42o3ih23on',
     summary: 'here is a sample summary',
     title: 'Sample title',

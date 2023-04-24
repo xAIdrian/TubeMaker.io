@@ -49,13 +49,28 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
         tags: ['', Validators.required],
       });
       this.uploadFormGroup = this._formBuilder.group({
-        audioFile: [''],
-        videoFile: [''],
-        imageFile: [''],
+        audioFile: ['', Validators.required],
+        videoFile: ['', Validators.required],
+        imageFile: ['', Validators.required],
       });
   }
+
   setupObservers() {
-    // throw new Error('Method not implemented.');
+    this.videoService.getContentObserver().subscribe((content) => {
+        this.resultsFormGroup.setValue({
+            title: content.title,
+            description: content.description,
+            script: content.script,
+            tags: content.tags
+        })
+    });
+    this.videoService.getMediaObserver().subscribe((media) => {
+        // this.uploadFormGroup.setValue({
+        //     audioFile: media.audioFile,
+        //     videoFile: media.videoFile,
+        //     imageFile: media.imageFile
+        // })
+    });
   }
 
   onResetMedia() {

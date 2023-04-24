@@ -5,7 +5,7 @@ import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ListVideo } from '../../model/video/listvideo.model';
+import { ListVideo } from '../../model/media/video/listvideo.model';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
