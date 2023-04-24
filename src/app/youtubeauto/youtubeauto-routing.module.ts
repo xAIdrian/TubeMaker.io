@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { VideoListComponent } from "./videolist/videolist.component";
 import { VideoCreateComponent } from "./videocreate/videocreate.component";
 import { VideoResultComponent } from "./videoresult/videoresult.component";
+import { VideoUploadComponent } from "./videoupload/videoupload.component";
 
 const routes: Routes = [
     {
@@ -24,6 +25,13 @@ const routes: Routes = [
         component: VideoResultComponent,
         data: {
             title: "Results"
+        }
+    },
+    {
+        path: "upload",
+        component: VideoUploadComponent,
+        data: {
+            title: "Upload"
         }
     }
 ];

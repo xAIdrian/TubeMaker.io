@@ -38,12 +38,14 @@ import { VideoListComponent } from './videolist/videolist.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './videocreate/videocreate.component';
 import { VideoResultComponent } from './videoresult/videoresult.component';
+import { VideoUploadComponent } from './videoupload/videoupload.component';
 
 @NgModule({
     declarations: [
         VideoListComponent,
         VideoCreateComponent,
-        VideoResultComponent
+        VideoResultComponent,
+        VideoUploadComponent
     ],
     exports: [],
     imports: [

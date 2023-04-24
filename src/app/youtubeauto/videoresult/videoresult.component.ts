@@ -144,7 +144,11 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       audio: [''],
     });
     //TODO we will neeed this to be updated for our uploaded files held across services
-    this.uploadFormGroup = this._formBuilder.group({ /* */ });
+    this.uploadFormGroup = this._formBuilder.group({ 
+      audioFile: ['', Validators.required],
+      videoFile: ['', Validators.required],
+      imageFile: ['', Validators.required],
+     });
   }
 
   rerollTitle() {
@@ -216,12 +220,8 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     window.open('https://web.descript.com/', '_blank');
   }
 
-  onItemClick(_t122: any) {
-    throw new Error('Method not implemented.');
-  }
-
   goToReview() {
-
+    this.navigationService.navigateToUploadVideo();
   }
 
   onReset() {

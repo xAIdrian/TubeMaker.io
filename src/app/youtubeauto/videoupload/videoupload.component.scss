@@ -1,0 +1,18 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1rem;
+  }
+  
+  .col-8 {
+    flex-basis: calc(66.66667% - 20px);
+    max-width: calc(66.66667% - 20px);
+    padding: 0 10px;
+  }
+  
+  .col-4 {
+    flex-basis: calc(33.33333% - 20px);
+    max-width: calc(33.33333% - 20px);
+    margin-top: 1rem;;
+  }
+  

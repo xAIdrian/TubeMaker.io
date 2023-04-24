@@ -15,4 +15,8 @@ export class NavigationService {
   navigateToCreateVideo() {
     this.router.navigate(['youtubeauto/create']);
   }
+
+  navigateToUploadVideo() {
+    this.router.navigate(['youtubeauto/upload']);
+  }
 }

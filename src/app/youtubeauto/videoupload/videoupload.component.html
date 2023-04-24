@@ -1,0 +1,76 @@
+<c-card class="mb-4">
+
+    <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
+        <strong>Review Video Details</strong>
+        <button type="button" class="btn btn-success" (click)="publishVideoClick()">Click To Publish Your Video</button>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <form [formGroup]="resultsFormGroup">
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong>Title</strong>
+                </div>
+                <div class="mb-3 flex-grow-1" style="margin-bottom: 1rem;">
+                    <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea1"
+                        formControlName="title">
+                    </textarea>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong>Description</strong>
+                </div>
+                <div class="mb-3" style="margin-bottom: 1rem;">
+                    <textarea cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea2"
+                        rows="10" formControlName="description">
+                    </textarea>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong>Script</strong>
+                </div>
+                <div class="mb-3" style="margin-bottom: 1rem;">
+                    <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea2"
+                        rows="20" formControlName="script">
+                    </textarea>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong>Tags</strong>
+                </div>
+                <div class="mb-3" style="margin-bottom: 1rem;">
+                    <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea3"
+                        formControlName="tags">
+                    </textarea>
+                </div>
+            </form>
+        </div>
+        <div class="col-4">
+            <div class="video-player">
+                <video controls>
+                    <source src="path/to/video.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="image-display">
+                <strong>Thumbnail</strong>
+                <img src="path/to/image.jpg" alt="Image description">
+            </div>
+
+            <div class="audio-player">
+                <strong>Title of the audio</strong>
+                <audio controls>
+                    <source src="path/to/audio.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+            <button cButton variant="outline" color="dark" (click)="onResetMedia()">Reset Media</button>
+            <button cButton variant="outline" color="dark" style="margin-left: 1rem;" (click)="onResetContent()">
+                Reset Content
+            </button>
+        </div>
+    </div>
+    <c-card-body>
+    </c-card-body>
+</c-card>

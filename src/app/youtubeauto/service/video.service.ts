@@ -26,15 +26,4 @@ export class VideoService {
   //     return of(this.exampleVideos);
   //   }
   // }
-
-  configureDescriptButton() {
-    const uploadFile = this.voiceService.audioFile;
-    if (uploadFile === undefined) {
-      alert('Please upload a file first');
-      return;
-    }
-    this.firebaseService.uploadMp3(uploadFile.title, uploadFile.file, {}).subscribe((data) => {
-      console.log(data);
-    });
-  }
 }
