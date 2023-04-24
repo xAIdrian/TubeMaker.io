@@ -97,15 +97,7 @@
           <p class="text-medium-emphasis small">
             Pick a voice. We'll take care of the audio for you or you can upload your own below.
           </p>
-          <mat-button-toggle-group formControlName="selectedVoice">
-            <mat-button-toggle *ngFor="let voice of voiceOptions" [value]="voice">
-              {{ voice.name }}
-              <audio controls>
-                <source [src]="voice.sampleUrl" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
+          <audio-dropdown #audiochild></audio-dropdown>
           <p></p>
           <div class="container">
             <button class="btn btn-info flex-grow-1" style="width: 100%"

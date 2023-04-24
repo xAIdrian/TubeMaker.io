@@ -10,10 +10,6 @@ import {
   providedIn: 'root',
 })
 export class VoiceService {
-  audioFile: {
-    title: string;
-    file: File;
-  };
 
   private voiceObserverSubject = new Subject<{ name: string; sampleUrl: string; value: string }[]>();
   private textToSpeechObserverSubject = new Subject<string>();
@@ -59,13 +55,6 @@ export class VoiceService {
         });
         this.voiceObserverSubject.next(displayVoices);
       });
-  }
-
-  updateAudioFile(file: File) {
-    this.audioFile = {
-      title: file.name,
-      file: file,
-    };
   }
 
   generateTextToSpeech(voiceValue: string, script: string) {

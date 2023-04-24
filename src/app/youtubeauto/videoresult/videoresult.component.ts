@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { VoiceService } from '../service/voice.service';
 import { NavigationService } from '../service/navigation.service';
@@ -16,7 +17,8 @@ import { saveAs } from 'file-saver';
 
 import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../service/gpt.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { VideoService } from '../service/video.service';
+import { AudioDropdownComponent } from '../views/audio-dropdown.component';
 
 @Component({
   selector: 'video-result',
@@ -40,8 +42,6 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   mediaFormGroup: FormGroup;
   uploadFormGroup: FormGroup;
 
-  voiceOptions: { name: string, sampleUrl: string }[] = [];
-
   gptResponseTitle: string = 'Waiting for title...';
   gptResponseDescription: string = 'Waiting for desc...';
   gptResponseScript: string = 'Waiting for script...';
@@ -50,9 +50,12 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   generatedAudio: string;
   generatedAudioIsVisible = false;
 
+  @ViewChild('audiochild') audioDropdown: AudioDropdownComponent;
+
   constructor(
     private gptService: GptService,
     private voiceService: VoiceService,
+    private videoService: VideoService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -61,13 +64,12 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.setupObservers();
     this.setupFormGroups();
-    
-    // this.voiceService.getVoiceOptions()
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-    // removed for testing purposes
+    this.audioDropdown.setMediaGroup(this.mediaFormGroup);
+    this.voiceService.getVoiceOptions()
     // this.gptService.getGptContent();
   }
 
@@ -122,7 +124,8 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
         '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
         response
       );
-      this.voiceOptions = response;
+      
+      this.audioDropdown.populateList(response);
     });
     this.voiceService.getTextToSpeechObserver().subscribe((response) => {
       if (response !== '') {
@@ -140,10 +143,8 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       tags: ['', Validators.required],
     });
     this.mediaFormGroup = this._formBuilder.group({
-      selectedVoice: [''],
-      audio: [''],
+      selectedVoice: ['']
     });
-    //TODO we will neeed this to be updated for our uploaded files held across services
     this.uploadFormGroup = this._formBuilder.group({ 
       audioFile: ['', Validators.required],
       videoFile: ['', Validators.required],
@@ -186,17 +187,32 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     if (htmlTarget !== null) {
       if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
         const file = htmlTarget.files[0]
-        this.mediaFormGroup.patchValue({ audio: file });
-        this.voiceService.updateAudioFile(file);
-        //use these if we need to use them locally
-        // const audio = this.mediaFormGroup.get('audio')
-        // audio?.updateValueAndValidity();
+        this.uploadFormGroup.patchValue({ audioFile: file });
+        this.videoService.updateAudioFile(file);
       }
     }
   }
 
-  onVideoPicked($event: Event) {
-    throw new Error('Method not implemented.');
+  onVideoPicked(event: Event) {
+    const htmlTarget = (event?.target as HTMLInputElement)
+    if (htmlTarget !== null) {
+      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
+        const file = htmlTarget.files[0]
+        this.uploadFormGroup.patchValue({ videoFile: file });
+        this.videoService.updateVideoFile(file);
+      }
+    }
+  }
+
+  onImagePicked(event: Event) {
+    const htmlTarget = (event?.target as HTMLInputElement)
+    if (htmlTarget !== null) {
+      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
+        const file = htmlTarget.files[0]
+        this.uploadFormGroup.patchValue({ imageFile: file });
+        this.videoService.updateImageFile(file);
+      }
+    }
   }
 
   generateTextToSpeech() {
@@ -216,7 +232,6 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   }
 
   descriptButtonClicked() {
-    ///https://media.play.ht/full_-NTbzfZeyW_-qJQLq4Wg.mp3?generation=1682150707643372&alt=media
     window.open('https://web.descript.com/', '_blank');
   }
 

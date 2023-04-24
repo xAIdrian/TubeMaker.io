@@ -1,3 +1,5 @@
+import { Media } from "../media.model";
+
 export interface YoutubeVideo {
     id: string;
     title: string;

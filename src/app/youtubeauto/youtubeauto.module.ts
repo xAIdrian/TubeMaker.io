@@ -39,13 +39,15 @@ import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './videocreate/videocreate.component';
 import { VideoResultComponent } from './videoresult/videoresult.component';
 import { VideoUploadComponent } from './videoupload/videoupload.component';
+import { AudioDropdownComponent } from './views/audio-dropdown.component';
 
 @NgModule({
     declarations: [
         VideoListComponent,
         VideoCreateComponent,
         VideoResultComponent,
-        VideoUploadComponent
+        VideoUploadComponent,
+        AudioDropdownComponent,
     ],
     exports: [],
     imports: [
