@@ -10,21 +10,21 @@ export const navItems: INavData[] = [
       text: 'NEW'
     }
   },
-  {
-    title: true,
-    name: 'Manage Channels'
-  },
-  {
-    name: 'Keep Productive & Earn',
-    url: '/charts',
-    iconComponent: { name: 'cil-media-play' }
-  },
-  {
-    name: 'Clever Celebrity News',
-    url: '/charts',
-    linkProps: { fragment: 'someAnchor' },
-    iconComponent: { name: 'cil-media-play' }
-  },
+  // {
+  //   title: true,
+  //   name: 'Manage Channels'
+  // },
+  // {
+  //   name: 'Keep Productive & Earn',
+  //   url: '/charts',
+  //   iconComponent: { name: 'cil-media-play' }
+  // },
+  // {
+  //   name: 'Clever Celebrity News',
+  //   url: '/charts',
+  //   linkProps: { fragment: 'someAnchor' },
+  //   iconComponent: { name: 'cil-media-play' }
+  // },
   {
     name: 'Create',
     title: true
@@ -39,7 +39,7 @@ export const navItems: INavData[] = [
     }
   },
   {
-    name: 'Content Strategy',
+    name: 'Forms',
     url: '/forms',
     iconComponent: { name: 'cil-notes' }
   },
@@ -169,47 +169,24 @@ export const navItems: INavData[] = [
     ]
   },
   {
-    name: 'Trending Topics',
-    iconComponent: { name: 'cil-star' },
-    url: '/icons',
-    children: [
-      {
-        name: 'Recommended',
-        url: '/icons/coreui-icons',
-        badge: {
-          color: 'success',
-          text: 'FREE'
-        }
-      },
-      {
-        name: 'Most Viewed',
-        url: '/icons/flags'
-      },
-      {
-        name: 'Highest Earning',
-        url: '/icons/brands'
-      }
-    ]
-  },
-  {
-    name: 'Notifications',
+    name: 'Alerts / Modals',
     url: '/notifications',
     iconComponent: { name: 'cil-bell' },
     children: [
       {
-        name: 'New Trend Alert',
+        name: 'Alerts',
         url: '/notifications/alerts'
       },
       {
-        name: 'Earned Badges',
+        name: 'Badges',
         url: '/notifications/badges'
       },
       {
-        name: 'Business Model',
+        name: 'Modals',
         url: '/notifications/modal'
       },
       {
-        name: 'Toast Competition',
+        name: 'Toasts',
         url: '/notifications/toasts'
       }
     ]

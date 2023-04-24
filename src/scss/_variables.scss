@@ -6,18 +6,18 @@
 
 // Color system
 
-// $white:     #fff;
-// $gray-base: #3c4b64;
-// $gray-100:  #ebedef;
-// $gray-200:  #d8dbe0;
-// $gray-300:  #c4c9d0;
-// $gray-400:  #b1b7c1;
-// $gray-500:  #9da5b1;
-// $gray-600:  #8a93a2;
-// $gray-700:  #768192;
-// $gray-800:  #636f83;
-// $gray-900:  #4f5d73;
-// $black:     #000015;
+$white:     #fcfdfd;
+$gray-base: #3f4452;
+$gray-100:  #fcfdfd;
+$gray-200:  #d1d6db;
+$gray-300:  #9fa6b4;
+$gray-400:  #9e9e9e;
+$gray-500:  #747d8c;
+$gray-600:  #5e6778;
+$gray-700:  #475166;
+$gray-800:  #3f4452;
+$gray-900:  #000000;
+$black:     #000000;
 
 // fusv-disable
 // $grays: (
@@ -61,47 +61,51 @@
 //   "gray-dark":  $gray-800
 // );
 // scss-docs-end colors-map
+$primary-dark: #1d1a7c;
+$primary: #3040A7;
+$primary-50: #8083be;
+$primary-25: #d3d5ed;
 
-// $primary-dark:  #1f1498;
-$primary:       #065FD4;
-// $primary-50:    #988fed;
-// $primary-25:    #ccc7f6;
+// Secondary colors
+$secondary-dark: #1e1f2c;
+$secondary: #9E2BF7;
+$secondary-50: #c7b5e5;
+$secondary-25: #f2e9fa;
 
-// $secondary-dark:  #212233;
-// $secondary:       #9da5b1;
-// $secondary-50:    #9da5b1;
-// $secondary-25:    #ced2d8;
+// Success colors
+$success-dark: #1e7f30;
+$success: #9E2BF7;
+$success-50: #f8d785;
+$success-25: #fef2cd;
 
-// $success-dark:  #1b9e3e;
-$success:       #007800;
-// $success-50:    #96dbad;
-// $success-25:    #cbedd6;
+// Info colors
+$info-dark: #24618c;
+$info: #065FD4;
+$info-50: #7fa8d9;
+$info-25: #d1e1f4;
 
-// $info-dark:  #2982cc;
-// $info:       #2FA5CB;
-// $info-50:    #80c6ff;
-// $info-25:    #c0e6ff;
+// Warning colors
+$warning-dark: #a15e00;
+$warning: #F9C53E;
+$warning-50: #fcd78c;
+$warning-25: #fef1cc;
 
-// $warning-dark:  #f6960b;
-// $warning:       #f9b115;
-// $warning-50:    #fcd88a;
-// $warning-25:    #feecc5;
+// Danger colors
+$danger-dark: #8c2e2e;
+$danger: #FF506E;
+$danger-50: #ffb6c3;
+$danger-25: #ffe1e4;
 
-// $danger-dark:  #d93737;
-// $danger:       #e55353;
-// $danger-50:    #f2a9a9;
-// $danger-25:    #f9d4d4;
+// Light and Dark colors
+$light-dark: #F6F7F8;
+$light: #F6F7F8;
+$light-50: #f8f8f9;
+$light-25: #fdfdfd;
 
-// $light-dark:     $gray-100;
-// $light:          $gray-100;
-// $light-50:       shift-color($light, -70);
-// $light-25:       shift-color($light, -80);
-
-// $dark-dark:      $gray-900;
-// $dark:           $gray-900;
-// $dark-50:        shift-color($dark, -70);
-// $dark-25:        shift-color($dark, -80);
-
+$dark-dark: #2b2b2b;
+$dark: #212233;
+$dark-50: #444455;
+$dark-25: #757584;
 // scss-docs-start theme-colors-map
 // $theme-colors: (
 //   "primary":    $primary,

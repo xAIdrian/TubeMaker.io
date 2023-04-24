@@ -11,20 +11,20 @@
           <ng-template matStepLabel>Subject</ng-template>
 
           <div class="flex-grow-1">
-            <input matInput placeholder="Type your idea or just click to go to Next Step!" formControlName="subject"
+            <input matInput placeholder="Type your idea or let us pick one for you 👉" formControlName="subject"
               required aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
           </div>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-primary" style="padding-left: 2rem; padding-right: 2rem;" [disabled]="topicLoading" (click)="reRollTopic()">
+            <button class="btn btn-info" style="padding-left: 2rem; padding-right: 2rem;" [disabled]="topicLoading" (click)="reRollTopic()">
               <c-spinner *ngIf="topicLoading" size="sm" color="white"></c-spinner>
               Generate Topic
             </button>
           </div>
           <br/>
         </form>
-        <div class="full-width" style="margin-top: 2rem;">
-          <button class="btn btn-light" style="margin-right: 1rem; text-align: left;">Need Help? Click Here</button>
-          <button class="btn btn-info flex-grow-1"  matStepperNext>Go To Next Step</button>
+        <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+          <button variant="outline" color="dark" cButton>Need Help?</button>
+          <button class="btn btn-primary ml-3" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
         </div>
       </mat-step>
 
@@ -42,9 +42,9 @@
           </mat-button-toggle-group>
           <br />
 
-          <div class="container">
-            <button class="btn btn-light" style="margin-right: 1rem; text-align: left; width: 50%;" matStepperPrevious>Go Back</button>
-            <button class="btn btn-info" style="text-align: right; width: 50%" matStepperNext>Go To Next Step 👉</button>
+          <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+            <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
           </div>
         </form>
       </mat-step>
@@ -63,9 +63,9 @@
         </mat-button-toggle-group>
         <br />
 
-        <div class="full-width">
-          <button class="btn btn-light" style="margin-right: 1rem; text-align: left;" matStepperPrevious>Go Back</button>
-          <button class="btn btn-info flex-grow-1" matStepperNext (click)="onSubmit()">GENERATE My Video Script, Title, & Everything Else! 👉</button>
+        <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+          <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
+          <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">GENERATE My Video Script, Title, & Everything Else!</button>
         </div>
         </form>
       </mat-step>

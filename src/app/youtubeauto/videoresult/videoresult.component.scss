@@ -24,17 +24,19 @@ mat-button-toggle-group {
 .container {
     display: flex;
     flex-direction: row;
+
+    .btn {
+        /* Make the buttons grow to fill the container */
+        flex: 1;
+        /* Set the height to match the container height */
+        height: 100%;
+        /* Split the container into two equal halves */
+        width: 50%;
+        margin: 0.5rem;
+    }
 }
 
-.btn {
-    /* Make the buttons grow to fill the container */
-    flex: 1;
-    /* Set the height to match the container height */
-    height: 100%;
-    /* Split the container into two equal halves */
-    width: 50%;
-    margin: 0.5rem;
-}
+
 
 .grid-container {
     display: flex;

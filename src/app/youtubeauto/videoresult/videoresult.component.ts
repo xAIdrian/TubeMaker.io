@@ -29,8 +29,8 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   progressLabel: string = 'Searching the web...';
 
   isLinear: any;
-  isLoading: boolean = true;
-  // isLoading: boolean = false;
+  // isLoading: boolean = true;
+  isLoading: boolean = false;
   isTitleLoading: boolean = false;
   isDescLoading: boolean = false;
   isScriptLoading: boolean = false;
@@ -62,13 +62,13 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     this.setupObservers();
     this.setupFormGroups();
     
-    this.voiceService.getVoiceOptions()
+    // this.voiceService.getVoiceOptions()
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     // removed for testing purposes
-    this.gptService.getGptContent();
+    // this.gptService.getGptContent();
   }
 
   setupObservers() {
