@@ -13,7 +13,7 @@ import { Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class VideoService {
+export class MediaService {
 
   contentSubjectObserver = new Subject<GptGeneratedVideo>();
   mediaSubjectObserver = new Subject<Media>();
@@ -25,15 +25,15 @@ export class VideoService {
     id: '',
     audio: {
       title: '',
-      file: undefined
+      file: ''
     },
     video: {
       title: '',
-      file: undefined
+      file: ''
     },
     image: {
       title: '',
-      file: undefined
+      file: ''
     }
   };
 
@@ -63,17 +63,17 @@ export class VideoService {
   }
 
   updateAudioFile(file: File) {
-    this.mediaholder.audio.file = file;
+    this.mediaholder.audio.file = URL.createObjectURL(file);
     this.mediaholder.audio.title = file.name;
   }
 
   updateVideoFile(file: File) {
-    this.mediaholder.video.file = file;
+    this.mediaholder.video.file = URL.createObjectURL(file);
     this.mediaholder.video.title = file.name;
   }
 
   updateImageFile(file: File) {
-    this.mediaholder.image.file = file;
+    this.mediaholder.image.file = URL.createObjectURL(file);
     this.mediaholder.image.title = file.name;
   }
 

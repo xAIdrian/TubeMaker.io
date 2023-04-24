@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver';
 import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../service/gpt.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { MediaService } from '../service/media.service';
 
 @Component({
   selector: 'video-result',
@@ -29,16 +30,16 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   progressLabel: string = 'Searching the web...';
 
   isLinear: any;
-  isLoading: boolean = true;
-  // isLoading: boolean = false;
+  // isLoading: boolean = true;
+  isLoading: boolean = false;
   isTitleLoading: boolean = false;
   isDescLoading: boolean = false;
   isScriptLoading: boolean = false;
   isTagsLoading: boolean = false;
 
   resultsFormGroup: FormGroup;
-  mediaFormGroup: FormGroup;
-  uploadFormGroup: FormGroup;
+  audioFormGroup: FormGroup;
+  videoFormGroup: FormGroup;
 
   voiceOptions: { name: string, sampleUrl: string }[] = [];
 
@@ -50,9 +51,14 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   generatedAudio: string;
   generatedAudioIsVisible = false;
 
+  audioFileName: string;
+  videoFileName: string;
+  imageFileName: string;
+
   constructor(
     private gptService: GptService,
     private voiceService: VoiceService,
+    private videoService: MediaService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -62,12 +68,12 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     this.setupObservers();
     this.setupFormGroups();
     
-    this.voiceService.getVoiceOptions()
+    // this.voiceService.getVoiceOptions()
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-    this.gptService.getGptContent();
+    // this.gptService.getGptContent();
   }
 
   setupObservers() {
@@ -138,13 +144,12 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       script: ['', Validators.required],
       tags: ['', Validators.required],
     });
-    this.mediaFormGroup = this._formBuilder.group({
+    this.audioFormGroup = this._formBuilder.group({
       selectedVoice: [''],
-      audio: [''],
+      audioFile: ['']
     });
     //TODO we will neeed this to be updated for our uploaded files held across services
-    this.uploadFormGroup = this._formBuilder.group({ 
-      audioFile: ['', Validators.required],
+    this.videoFormGroup = this._formBuilder.group({ 
       videoFile: ['', Validators.required],
       imageFile: ['', Validators.required],
      });
@@ -185,17 +190,35 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     if (htmlTarget !== null) {
       if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
         const file = htmlTarget.files[0]
-        this.mediaFormGroup.patchValue({ audio: file });
-        this.voiceService.updateAudioFile(file);
-        //use these if we need to use them locally
-        // const audio = this.mediaFormGroup.get('audio')
-        // audio?.updateValueAndValidity();
+        this.audioFormGroup.patchValue({ audioFile: file.name });
+        this.audioFileName = file.name;
+        this.videoService.updateAudioFile(file);
+      }
+    }
+  }  
+
+  onVideoPicked(event: Event) {
+    const htmlTarget = (event?.target as HTMLInputElement)
+    if (htmlTarget !== null) {
+      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
+        const file = htmlTarget.files[0]
+        this.videoFormGroup.patchValue({ videoFile: file.name });
+        this.videoFileName = file.name;
+        this.videoService.updateVideoFile(file);
       }
     }
   }
 
-  onVideoPicked($event: Event) {
-    throw new Error('Method not implemented.');
+  onImagePicked(event: Event) {
+    const htmlTarget = (event?.target as HTMLInputElement)
+    if (htmlTarget !== null) {
+      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
+        const file = htmlTarget.files[0]
+        this.videoFormGroup.patchValue({ imageFile: file.name });
+        this.imageFileName = file.name;
+        this.videoService.updateImageFile(file);
+      }
+    }
   }
 
   generateTextToSpeech() {
@@ -207,7 +230,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     this.generatedAudio = "";
     this.generatedAudioIsVisible = false;
 
-    const selectedVoiceControl = this.mediaFormGroup.get('selectedVoice')?.value;
+    const selectedVoiceControl = this.audioFormGroup.get('selectedVoice')?.value;
     this.voiceService.generateTextToSpeech(
       selectedVoiceControl.value, 
       scriptValue

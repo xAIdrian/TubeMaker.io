@@ -2,14 +2,14 @@ export interface Media {
     id: string;
     audio: {
         title: string;
-        file: File | undefined;
+        file: string;
     };
     video: {
         title: string;
-        file: File | undefined;
+        file: string;
     };
     image: {
         title: string;
-        file: File | undefined;
+        file:  string;
     };
 }

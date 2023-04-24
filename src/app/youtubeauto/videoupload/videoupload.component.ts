@@ -6,8 +6,10 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationService } from '../service/navigation.service';
-import { VideoService } from '../service/video.service';
+import { MediaService } from '../service/media.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'video-upload',
@@ -17,19 +19,24 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class VideoUploadComponent implements OnInit, AfterContentInit {
   
-  isLoading: any;
+  isLoading: false;
   
   resultsFormGroup: FormGroup;
   uploadFormGroup: FormGroup;
+
+  videoUrlPath: SafeUrl;
+  imageUrlPath: SafeUrl;
+  audioUrlPath: SafeUrl;
 
   publishVideoClick() {
     throw new Error('Method not implemented.');
   }
   constructor(
-    private videoService: VideoService,
+    private videoService: MediaService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +46,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
+    this.videoService.getLatest();
   }
 
   setupFormGroups() {
@@ -65,11 +73,9 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
         })
     });
     this.videoService.getMediaObserver().subscribe((media) => {
-        // this.uploadFormGroup.setValue({
-        //     audioFile: media.audioFile,
-        //     videoFile: media.videoFile,
-        //     imageFile: media.imageFile
-        // })
+      this.imageUrlPath = this.sanitizer.bypassSecurityTrustUrl(media.image.file);
+      this.videoUrlPath = this.sanitizer.bypassSecurityTrustUrl(media.video.file);
+      this.audioUrlPath = this.sanitizer.bypassSecurityTrustUrl(media.audio.file);
     });
   }
 

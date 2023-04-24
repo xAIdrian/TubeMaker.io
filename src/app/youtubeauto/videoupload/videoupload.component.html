@@ -48,19 +48,19 @@
         <div class="col-4">
             <div class="video-player">
                 <video controls>
-                    <source src="path/to/video.mp4" type="video/mp4">
+                    <source [src]="videoUrlPath" type="video/mp4">
                 </video>
             </div>
 
             <div class="image-display">
                 <strong>Thumbnail</strong>
-                <img src="path/to/image.jpg" alt="Image description">
+                <img [src]="imageUrlPath" alt="Image description">
             </div>
 
             <div class="audio-player">
                 <strong>Title of the audio</strong>
                 <audio controls>
-                    <source src="path/to/audio.mp3" type="audio/mpeg">
+                    <source [src]="audioUrlPath" type="audio/mpeg">
                 </audio>
             </div>
         </div>
