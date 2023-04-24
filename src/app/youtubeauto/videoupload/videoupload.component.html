@@ -56,13 +56,6 @@
                 <strong>Thumbnail</strong>
                 <img [src]="imageUrlPath" alt="Image description">
             </div>
-
-            <div class="audio-player">
-                <strong>Title of the audio</strong>
-                <audio controls>
-                    <source [src]="audioUrlPath" type="audio/mpeg">
-                </audio>
-            </div>
         </div>
         <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
             <button cButton variant="outline" color="dark" (click)="onResetMedia()">Reset Media</button>

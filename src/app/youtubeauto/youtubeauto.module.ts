@@ -10,6 +10,7 @@ import {
     AccordionModule,
     BadgeModule,
     BreadcrumbModule,
+    ButtonGroupComponent,
     ButtonModule,
     CardModule,
     CarouselModule,
@@ -82,7 +83,8 @@ import { VideoUploadComponent } from './videoupload/videoupload.component';
         MatButtonModule,
         MatListModule,
         MatButtonToggleModule,
-        ModalModule
+        ModalModule,
+        ButtonGroupComponent
     ]
 })
 export class YoutubeAutoModule {/* */}
