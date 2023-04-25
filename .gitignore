@@ -133,3 +133,5 @@ dist
 *.iml
 *.ipr
 .github/
+
+src/oligarch-freewebgptadmin-oauth.json

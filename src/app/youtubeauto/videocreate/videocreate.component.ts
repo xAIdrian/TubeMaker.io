@@ -14,6 +14,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
+import { MediaService } from '../service/media.service';
 
 @Component({
   selector: 'video-create',
@@ -31,20 +32,34 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
 
-  selectedStyleControl: FormControl;
-  videoStyles: String[] = [];
-
+  videoStyles: { name: string, header: string, description: string }[] = [];
+  selectedVideoOption: { name: string, header: string, description: string };
+  durationOptions: { name: string, header: string, description: string }[] = [];
+  selectedDurationOption: { name: string, header: string, description: string };
+  
   topicLoading: boolean = false;
 
   constructor(
     private gptService: GptService,
+    private mediaService: MediaService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.setupValueSubscribers();
+    this.setupObservers();
+
+    this.selectedVideoOption = { 
+      name: '',
+      header: 'Select The Style For Your Video',
+      description: 'Each video needs a specific style and tone to present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche'
+    }
+    this.selectedDurationOption = { 
+      name: '',
+      header: 'Select The Duration For Your Video',
+      description: 'Each video needs a specific duration present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche'
+    }
 
     this.firstFormGroup = this._formBuilder.group({
       subject: ['', Validators.required],
@@ -61,26 +76,32 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  setupValueSubscribers() {
+  setupObservers() {
     this.gptService.getTopicSubjectObserver().subscribe((response) => {
       this.topicLoading = false;
       this.firstFormGroup.setValue({
         subject: response.replace('"', '').trim()
       })
     });
-
-    this.gptService.getVideoOptionsObserver().subscribe((response) => {
-      console.log(
-        '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
-        response
-      );
+    this.mediaService.getVideoOptionsObserver().subscribe((response) => {
       this.videoStyles = response;
+    });
+    this.mediaService.getDurationOptionsObserver().subscribe((response) => {
+      this.durationOptions = response;
     });
   }
 
   reRollTopic() { 
     this.topicLoading = true;
     this.gptService.getIsolatedTopic() 
+  }
+
+  onVideoOptionSelected(option: { name: string; header: string; description: string; }) {
+    this.selectedVideoOption = option;
+  }
+
+  onVideoDurationSelected(option: { name: string; header: string; description: string; }) {
+    this.selectedDurationOption = option;
   }
 
   onSubmit() {

@@ -9,16 +9,15 @@
         </p>
         <form [formGroup]="firstFormGroup" class="d-flex align-items-center">
           <ng-template matStepLabel>Subject</ng-template>
-
-          <div class="flex-grow-1">
-            <input matInput placeholder="Type your idea or let us pick one for you 👉" formControlName="subject"
-              required aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
-          </div>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-info" style="padding-left: 2rem; padding-right: 2rem;" [disabled]="topicLoading" (click)="reRollTopic()">
+            <button class="btn btn-info" style="padding-right: 2rem; padding-left: 2rem; margin-right: 1rem;;" [disabled]="topicLoading" (click)="reRollTopic()">
               <c-spinner *ngIf="topicLoading" size="sm" color="white"></c-spinner>
               Generate Topic
             </button>
+          </div>
+          <div class="flex-grow-1">
+            <input matInput placeholder="Type your idea or let us pick one for you" formControlName="subject"
+              required aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
           </div>
           <br/>
         </form>
@@ -29,38 +28,42 @@
       </mat-step>
 
       <mat-step [stepControl]="secondFormGroup">
-        <strong>Now, Pick Your Video Style & Tone</strong>
-        <p class="text-medium-emphasis small">
-          Great. Now, pick your video style and tone.  We'll use this to help generate your script.
-        </p>
-
-        <form [formGroup]="secondFormGroup">
-          <ng-template matStepLabel>Style</ng-template>
-
-          <mat-button-toggle-group formControlName="selectedStyle">
-            <mat-button-toggle *ngFor="let option of videoStyles" [value]="option">{{ option }}</mat-button-toggle>
-          </mat-button-toggle-group>
-          <br />
-
-          <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
-            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
-          </div>
-        </form>
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Style</ng-template>
+            <div class="row">
+              <div class="col-4">
+                <mat-button-toggle-group formControlName="selectedStyle">
+                  <mat-button-toggle *ngFor="let videoOption of videoStyles" [value]="videoOption" (click)="onVideoOptionSelected(videoOption)">{{ videoOption.name }}</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+              <div class="col-8">
+                <strong>{{ selectedVideoOption.header }}</strong>
+                <p class="text-medium-emphasis small" style="margin-top: 1rem;">{{ selectedVideoOption.description }}</p>
+              </div>
+            </div>
+            <br />
+            <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+              <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
+              <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
+            </div>
+          </form>
+        
       </mat-step>
 
       <mat-step [stepControl]="thirdFormGroup">
-        <strong>Set The Duration Of Your Video</strong>
-        
         <form [formGroup]="thirdFormGroup">
           <ng-template matStepLabel>Length</ng-template>
-
-        <mat-button-toggle-group formControlName="selectedDuration">
-          <mat-button-toggle [value]="30">30 second Short</mat-button-toggle>
-          <mat-button-toggle [value]="1">1 minute Short</mat-button-toggle>
-          <mat-button-toggle [value]="5">5 minutes</mat-button-toggle>
-          <mat-button-toggle [value]="12">12 minutes</mat-button-toggle>
-        </mat-button-toggle-group>
+          <div class="row">
+              <div class="col-4">
+                <mat-button-toggle-group formControlName="selectedDuration">
+                  <mat-button-toggle *ngFor="let durationOption of durationOptions" [value]="durationOption" (click)="onVideoDurationSelected(durationOption)">{{ durationOption.name }}</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+              <div class="col-8">
+                <strong>{{ selectedDurationOption.header }}</strong>
+                <p class="text-medium-emphasis small" style="margin-top: 1rem;">{{ selectedDurationOption.description }}</p>
+              </div>
+            </div>
         <br />
 
         <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">

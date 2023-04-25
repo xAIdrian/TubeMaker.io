@@ -11,20 +11,7 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class GptService {
-  
-  //these need to come from our server
-  private videoStyleAndToneOptions: String[] = [
-    'ASMR (Autonomous Sensory Meridian Response)',
-    'Gaming tutorials and playthroughs',
-    'Cooking and Food',
-    'DIY and crafting tutorials',
-    'Educational',
-    'Product reviews and unboxing videos',
-    'Health and fitness tutorials and tips',
-    'Beauty and fashion tutorials',
-    'Financial advice and money management tutorials',
-    'Motivational and self-help videos',
-  ];
+
   generatedVideo: GptGeneratedVideo = {
     id: '3u42o3ih23on',
     summary: 'here is a sample summary',
@@ -66,10 +53,6 @@ export class GptService {
 
   getTagsSubjectObserver() {
     return this.tagsObserverSubject.asObservable();
-  }
-
-  getVideoOptionsObserver(): Observable<String[]> {
-    return of(this.videoStyleAndToneOptions);
   }
 
   getProgressSubjectObserver(): Observable<number> {
