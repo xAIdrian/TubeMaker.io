@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './default-layout.component.html',
+  templateUrl: './default.component.html',
 })
 export class DefaultComponent implements OnInit, OnDestroy {
 
