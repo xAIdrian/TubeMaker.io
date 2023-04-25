@@ -197,12 +197,12 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Courses',
-    url: '/login',
+    url: '/lander',
     iconComponent: { name: 'cil-star' },
     children: [
       {
-        name: 'Login',
-        url: '/login'
+        name: 'Lander',
+        url: '/lander'
       },
       {
         name: 'Register',
