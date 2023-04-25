@@ -60,6 +60,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
         audioFile: ['', Validators.required],
         videoFile: ['', Validators.required],
         imageFile: ['', Validators.required],
+        isMadeForKids: [false],
       });
   }
 
@@ -77,6 +78,16 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
       this.videoUrlPath = this.sanitizer.bypassSecurityTrustUrl(media.video.file);
       this.audioUrlPath = this.sanitizer.bypassSecurityTrustUrl(media.audio.file);
     });
+  }
+
+  onMadeForKidsClicked(isForKids: boolean) {
+    this.uploadFormGroup.patchValue({
+      isMadeForKids: isForKids
+    });
+  }
+
+  copyTitle() {
+    throw new Error('Method not implemented.');
   }
 
   onResetMedia() {

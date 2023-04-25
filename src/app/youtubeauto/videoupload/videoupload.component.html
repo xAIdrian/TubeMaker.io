@@ -10,6 +10,9 @@
             <form [formGroup]="resultsFormGroup">
                 <div class="d-flex justify-content-between align-items-center">
                     <strong>Title</strong>
+                    <div style="display: flex; align-items: center; padding: 0; margin:0">
+                        <button cButton variant="outline" color="dark" (click)="copyTitle()">Copy</button>
+                    </div>
                 </div>
                 <div class="mb-3 flex-grow-1" style="margin-bottom: 1rem;">
                     <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea1"
@@ -19,6 +22,9 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                     <strong>Description</strong>
+                    <div style="display: flex; align-items: center; padding: 0; margin:0">
+                        <button cButton variant="outline" color="dark" (click)="copyTitle()">Copy</button>
+                    </div>
                 </div>
                 <div class="mb-3" style="margin-bottom: 1rem;">
                     <textarea cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea2"
@@ -28,6 +34,9 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                     <strong>Script</strong>
+                    <div style="display: flex; align-items: center; padding: 0; margin:0">
+                        <button cButton variant="outline" color="dark" (click)="copyTitle()">Copy</button>
+                    </div>
                 </div>
                 <div class="mb-3" style="margin-bottom: 1rem;">
                     <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea2"
@@ -37,6 +46,9 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                     <strong>Tags</strong>
+                    <div style="display: flex; align-items: center; padding: 0; margin:0">
+                        <button cButton variant="outline" color="dark" (click)="copyTitle()">Copy</button>
+                    </div>
                 </div>
                 <div class="mb-3" style="margin-bottom: 1rem;">
                     <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" id="formControlTextarea3"
@@ -46,16 +58,28 @@
             </form>
         </div>
         <div class="col-4">
-            <div class="video-player">
-                <video controls>
-                    <source [src]="videoUrlPath" type="video/mp4">
-                </video>
-            </div>
+            <form [formGroup]="uploadFormGroup">
+                <div class="video-container">
+                    <video controls>
+                        <source [src]="videoUrlPath" type="video/mp4">
+                        <source [src]="videoUrlPath" type="video/webm">
+                        <source [src]="videoUrlPath" type="video/mov">
+                    </video>
+                </div>
 
-            <div class="image-display">
-                <strong>Thumbnail</strong>
-                <img [src]="imageUrlPath" alt="Image description">
-            </div>
+                <div class="image-display" style="margin:1rem;">
+                    <img [src]="imageUrlPath" alt="Image description">
+                </div>
+
+                <strong>Is this video made for kids?</strong>
+                <p class="text-medium-emphasis small">
+                    Regardless of your location, you're legally required to comply with the Children's Online Privacy Protection Act (COPPA) and/or other laws. You're required to tell Youtube whether your videos are made for kids. Features like personalized ads and notifications won’t be available.
+                </p>
+                <mat-button-toggle-group formControlName="isMadeForKids">
+                    <mat-button-toggle (click)="onMadeForKidsClicked(true)">Yes, it's for kids</mat-button-toggle>
+                    <mat-button-toggle (click)="onMadeForKidsClicked(false)">No, it's not for kids</mat-button-toggle>
+                </mat-button-toggle-group>
+            </form>
         </div>
         <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
             <button cButton variant="outline" color="dark" (click)="onResetMedia()">Reset Media</button>

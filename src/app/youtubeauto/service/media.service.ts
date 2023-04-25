@@ -133,19 +133,26 @@ export class MediaService {
     return this.mediaSubjectObserver.asObservable();
   }
 
-  updateAudioFile(file: File) {
-    this.mediaholder.audio.file = URL.createObjectURL(file);
-    this.mediaholder.audio.title = file.name;
+  updateAudioFile(audio: File) {
+    this.mediaholder.audio.file = URL.createObjectURL(audio);
+    this.mediaholder.audio.title = audio.name;
   }
 
-  updateVideoFile(file: File) {
-    this.mediaholder.video.file = URL.createObjectURL(file);
-    this.mediaholder.video.title = file.name;
+  updateVideoFile(video: File) {
+    if (!video.type.match(/video\/*/) || !['mp4', 'webm', 'mov'].includes(video.type.split('/')[1])) {
+      console.log("🚀 ~ file: media.service.ts:143 ~ MediaService ~ updateVideoFile ~ video.type:", video.type)
+      console.error('Invalid video format.');
+      return;
+    }
+    console.log("🚀 ~ file: media.service.ts:143 ~ MediaService ~ updateVideoFile ~ video.type:", video.type)
+    const videoBlob = new Blob([video], { type: video.type });
+    this.mediaholder.video.file = URL.createObjectURL(videoBlob);
+    this.mediaholder.video.title = video.name;
   }
 
-  updateImageFile(file: File) {
-    this.mediaholder.image.file = URL.createObjectURL(file);
-    this.mediaholder.image.title = file.name;
+  updateImageFile(image: File) {
+    this.mediaholder.image.file = URL.createObjectURL(image);
+    this.mediaholder.image.title = image.name;
   }
 
   getLatest() {
