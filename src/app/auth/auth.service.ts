@@ -13,7 +13,7 @@ import {
   reauthenticateWithCredential,
 } from 'firebase/auth';
 
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -48,6 +48,10 @@ export class AuthService {
 
   async logout() {
     this.angularFireAuth.signOut();
+  }
+
+  observeCurrentUser(): Observable<User | null> {
+    return of(this.getCurrentUser())
   }
 
   getCurrentUser(): User | null {

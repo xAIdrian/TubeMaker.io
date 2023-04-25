@@ -8,6 +8,7 @@ import { LanderComponent } from './views/pages/lander/lander.component';
 import { RegisterComponent } from './views/pages/register/register.component';
 
 const routes: Routes = [
+  // { path: 'protected', component: ProtectedComponent, canActivate: [AuthGuard] },
   {
     path: '',
     redirectTo: 'lander',
