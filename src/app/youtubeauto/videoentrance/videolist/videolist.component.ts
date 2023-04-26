@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { MediaService } from '../service/media.service';
-import { ListVideo } from '../model/media/video/listvideo.model';
+import { MediaService } from '../../service/media.service';
+import { ListVideo } from '../../model/media/video/listvideo.model';
 import { Router } from '@angular/router';
-import { NavigationService } from '../service/navigation.service';
+import { NavigationService } from '../../service/navigation.service';
 
 @Component({
     selector: 'video-list',

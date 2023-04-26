@@ -1,0 +1,7 @@
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<c-card class="container" *ngIf="isNotOnYoutube">
+    <div class="text-area">
+        <p>Welcome!  In order to get started making money on youtube, we will need you to log in to your account.</p>
+    </div>
+    <button class="btn btn-danger" cTextColor="white" (click)="onYoutubeClick()">Login to Youtube</button>
+</c-card>

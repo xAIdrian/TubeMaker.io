@@ -19,14 +19,13 @@ import { Observable, from, of } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private auth = getAuth();
+  private firebaseAuth = getAuth();
   private userObservable: any;
-  private declare gapi: any; //what is "declare"?
 
-  authObservable = onAuthStateChanged(this.auth, (user) => {
+  authObservable = onAuthStateChanged(this.firebaseAuth, (user) => {
     if (user) {
       console.log(
-        '🚀 ~ LOGGEDIN: auth.service.ts:35 ~ AuthService ~ onAuthStateChanged ~ user:',
+        '🚀 ~ LOGGEDIN: firebaseAuth.service.ts:35 ~ AuthService ~ onAuthStateChanged ~ user:',
         user
       );
       // User is signed in, see docs for a list of available properties
@@ -34,7 +33,7 @@ export class AuthService {
       const uid = user.uid;
     } else {
       console.log(
-        '🚀 ~ LOGGEDOUT: auth.service.ts:42 ~ AuthService ~ onAuthStateChanged ~ user:',
+        '🚀 ~ LOGGEDOUT: firebaseAuth.service.ts:42 ~ AuthService ~ onAuthStateChanged ~ user:',
         user
       );
       // User is signed out
@@ -46,84 +45,6 @@ export class AuthService {
     // this.initializeGoogleAuth();
   }
 
-//   private async initializeGoogleAuth(): Promise<void> {
-//     await new Promise((resolve, reject) => {
-//       this.gapi.load('client:auth2', {
-//         callback: resolve,
-//         onerror: reject,
-//         timeout: 1000,
-//         ontimeout: reject,
-//       });
-//     });
-//     await this.gapi.client.init({
-//       clientId:
-//         '355466863083-ejvc4sc0c96guq7c48o7sb1nlf6kqn5n.apps.googleusercontent.com',
-//       discoveryDocs: [
-//         'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-//       ],
-//       scope: [
-//         'https://www.googleapis.com/auth/youtube.readonly',
-//         'https://www.googleapis.com/auth/youtube.force-ssl',
-//         'https://www.googleapis.com/auth/youtube',
-//         'https://www.googleapis.com/auth/youtube.upload',
-//         'https://www.googleapis.com/auth/youtubepartner-channel-audit',
-//       ],
-//     });
-//   }
-
-  getYoutubeAccessTokenWithGoogle(): Observable<string> {
-    return from(
-      new Promise<string>(async (resolve, reject) => {
-        try {    
-            const googleAuth = this.gapi.auth2.getAuthInstance();
-            console.log("🚀 ~ file: auth.service.ts:82 ~ AuthService ~ newPromise<string> ~ googleAuth:", googleAuth)
-
-            if (!googleAuth.isSignedIn.get()) {
-                let currentUserToken = googleAuth.currentUser
-                    .get()
-                    .getAuthResponse().access_token;
-                console.log(
-                    '🚀 ~ file: auth.service.ts:80 ~ AuthService ~ newPromise<string> ~ currentUserToken:',
-                    currentUserToken
-                );
-                resolve(currentUserToken);
-            } else {
-                console.log("🔥 ~ file: auth.service.ts:95 ~ AuthService ~ newPromise<string> ~ else: user not signed in to google")
-                
-                //not signed in
-                // this.quickSignInWithGoogleAuth(googleAuth).then((token) => {
-                //     resolve(token);
-                // });
-            }
-        } catch (error) {
-            console.log('🔥 ~ file: auth.service.ts:91 ~ AuthService ~ newPromise<string> ~ error:', error);
-            reject(error);
-        }
-      })
-    );
-  }
-
-  /**
-   * Quick sign in with Google Auth
-   * @returns Promise<string> access token
-   */
-//   private quickSignInWithGoogleAuth(googleAuth2: any): Promise<any> {
-//     return new Promise<void>(async (resolve, reject) => {
-//       try {
-//         const provider = new firebase.auth.GoogleAuthProvider();
-//         provider.addScope('https://www.googleapis.com/auth/youtube.force-ssl');
-        
-//         await this.angularFireAuth.signInWithPopup(provider);
-        
-//         const googleUser = googleAuth2.currentUser.get();
-//         resolve(googleUser.getAuthResponse().access_token);
-//       } catch (error) {
-//         console.log("🔥 ~ file: auth.service.ts:116 ~ AuthService ~ returnnewPromise<void> ~ error:", error)
-//         reject();
-//       }
-//     });
-//   }
-
   async logout() {
     this.angularFireAuth.signOut();
   }
@@ -133,7 +54,7 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
-    let user = this.auth.currentUser;
+    let user = this.firebaseAuth.currentUser;
 
     if (user) {
       // User is signed in, see docs for a list of available properties
@@ -220,7 +141,7 @@ export class AuthService {
 //   sendPasswordResetEmail(email: string) {
 //     let currentUser = this.getCurrentUser();
 //     if (currentUser !== null) {
-//       return sendPasswordResetEmail(this.auth, email);
+//       return sendPasswordResetEmail(this.firebaseAuth, email);
 //     }
 //   }
 
@@ -243,7 +164,7 @@ export class AuthService {
  * "Object
 authResult":"additionalUserInfo":"GoogleAdditionalUserInfo
 isNewUser":"false
-profile":"email":"amohnacs@gmail.com""family_name":"Mohnacs""given_name":"Adrian""granted_scopes":"openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email""id":"109494647011748400470""locale":"en""name":"Adrian Mohnacs""picture":"https://lh3.googleusercontent.com/a/AGNmyxYXnCKTMb7ewkebsIT46vC4ee2Ms2kWEwnyYFm6RA=s96-c""verified_email":true[
+profile":"email":"amohnacs@gmail.com""family_name":"Mohnacs""given_name":"Adrian""granted_scopes":"openid https://www.googleapis.com/firebaseAuth/userinfo.profile https://www.googleapis.com/firebaseAuth/userinfo.email""id":"109494647011748400470""locale":"en""name":"Adrian Mohnacs""picture":"https://lh3.googleusercontent.com/a/AGNmyxYXnCKTMb7ewkebsIT46vC4ee2Ms2kWEwnyYFm6RA=s96-c""verified_email":true[
    [
       "Prototype"
    ]

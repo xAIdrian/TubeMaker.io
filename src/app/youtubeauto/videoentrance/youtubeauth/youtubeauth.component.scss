@@ -1,0 +1,27 @@
+.container {
+    flex-direction: row;
+    align-items: center;
+    background-color: #FFE4E1;
+    display: flex;
+    align-items: center;
+    background-color: #ffebee;
+    padding: 1rem;
+}
+
+.text-area {
+    width: 100%;
+}
+
+.btn {
+    margin-left: auto;
+    margin-right: 1rem;
+    margin-left: 16px;
+    width: fit-content;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+p {
+    margin: 0;
+    flex: 1;
+}
