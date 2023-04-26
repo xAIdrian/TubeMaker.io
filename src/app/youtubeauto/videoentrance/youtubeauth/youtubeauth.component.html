@@ -1,7 +1,12 @@
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<c-card class="container" *ngIf="isNotOnYoutube">
+<c-card class="container" *ngIf="!hasCompletedYoutubeAuth">
     <div class="text-area">
-        <p>Welcome!  In order to get started making money on youtube, we will need you to log in to your account.</p>
+        <p>Welcome! In order to get started making money on youtube, we will need you to log in to your account.</p>
     </div>
-    <button class="btn btn-danger" cTextColor="white" (click)="onYoutubeClick()">Login to Youtube</button>
+    <div id="g_id_onload" data-client_id="355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com"
+        data-context="signin" data-ux_mode="popup" data-callback="gisSuccess" data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+        data-text="continue_with" data-size="large" data-logo_alignment="left">
+    </div>
 </c-card>

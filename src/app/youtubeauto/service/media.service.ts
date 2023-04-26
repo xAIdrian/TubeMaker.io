@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Media } from '../model/media/media.model';
 import { ListVideo } from '../model/media/video/listvideo.model';
 import { Router } from '@angular/router';
-import { FirebaseService } from './domain/firebase.service';
 import { VoiceService } from './voice.service';
 import { YoutubeVideo } from '../model/media/video/youtubevideo.model';
 import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';

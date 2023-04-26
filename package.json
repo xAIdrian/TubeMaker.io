@@ -35,6 +35,7 @@
     "@coreui/icons-angular": "~4.4.1",
     "@coreui/utils": "^2.0.1",
     "@types/gapi": "^0.0.44",
+    "@types/google-one-tap": "^1.2.2",
     "chart.js": "^3.9.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",

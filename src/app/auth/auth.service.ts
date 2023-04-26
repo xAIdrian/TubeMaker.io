@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   onAuthStateChanged,
@@ -12,13 +13,16 @@ import {
   deleteUser,
   reauthenticateWithCredential,
 } from 'firebase/auth';
+import { CredentialResponse } from 'google-one-tap';
 
 import { Observable, from, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private app = initializeApp(environment.firebaseConfig);
   private firebaseAuth = getAuth();
   private userObservable: any;
 
@@ -41,7 +45,7 @@ export class AuthService {
   });
 
   constructor(private angularFireAuth: AngularFireAuth) {
-    this.userObservable = this.angularFireAuth.authState
+    this.userObservable = this.angularFireAuth.authState;
     // this.initializeGoogleAuth();
   }
 
@@ -106,28 +110,28 @@ export class AuthService {
     } else {
       return false;
     }
-    return false
+    return false;
   }
 
   setUserEmail(email: string) {
     return new Promise((resolve, reject) => {
-        let currentUser = this.getCurrentUser();
-        if (currentUser !== null) {
-            resolve(updateEmail(currentUser, email))
-        } else {
-            reject('no current user')
-        }
+      let currentUser = this.getCurrentUser();
+      if (currentUser !== null) {
+        resolve(updateEmail(currentUser, email));
+      } else {
+        reject('no current user');
+      }
     });
   }
 
   sendEmailVerification() {
     return new Promise((resolve, reject) => {
-        let currentUser = this.getCurrentUser();
-        if (currentUser !== null) {
-            resolve(sendEmailVerification(currentUser))
-        } else {
-            reject('no current user')
-        }
+      let currentUser = this.getCurrentUser();
+      if (currentUser !== null) {
+        resolve(sendEmailVerification(currentUser));
+      } else {
+        reject('no current user');
+      }
     });
   }
 }

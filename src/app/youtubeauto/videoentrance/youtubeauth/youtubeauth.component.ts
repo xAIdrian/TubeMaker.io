@@ -6,11 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./youtubeauth.component.scss']
 })
 export class YoutubeAuthComponent {
-onYoutubeClick() {
-throw new Error('Method not implemented.');
-}
-isNotOnYoutube: any;
-onYoutubeLoginClick() {
-throw new Error('Method not implemented.');
-}
+    hasCompletedYoutubeAuth = false;
+
+    onYoutubeClick() {
+        throw new Error('Method not implemented.');
+    }
 }
