@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { initializeApp } from 'firebase/app';
@@ -22,6 +23,64 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
+
+  login() {
+    // @ts-ignore
+    const state = google.accounts.oauth2.initCodeClient({
+      client_id: this.clientId,
+      scope: 'https://www.googleapis.com/auth/youtube.readonly',
+      ux_mode: 'redirect',
+      // @ts-ignore
+      callback: (response) => {
+        console.log("🚀 ~ file: auth.service.ts:49 ~ login ~ response:", response)
+        var code_receiver_uri = 'http://localhost:63990/'
+        // Send auth code to your backend platform
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', code_receiver_uri, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.onload = function() {
+          console.log("🚀 ~ file: auth.service.ts:43 ~ AuthService ~ login ~ 'Signed in as: ' + xhr.responseText:", 'Signed in as: ' + xhr.responseText)
+        };
+        xhr.send('code=' + response.code);
+        // After receipt, the code is exchanged for an access token and
+        // refresh token, and the platform then updates this web app
+        // running in user's browser with the requested calendar info.
+      },
+    })
+    console.log("🚀 ~ file: auth.service.ts:51 ~ AuthService ~ login ~ state:", state)
+
+    const star = state.requestCode();
+    console.log("🚀 ~ file: auth.service.ts:53 ~ AuthService ~ login ~ star:", star)
+  }    
+
+  private readonly clientId = '355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com';
+  private readonly API_URL = 'https://www.googleapis.com/youtube/v3';
+
+  getChannels(access_token: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${access_token}`);
+    return this.http.get(`${this.API_URL}/channels?part=snippet&mine=true`, { headers });
+  }
+
+  initGisClient() {
+    // @ts-ignore
+    console.log(google.accounts.oauth2.initTokenClient({
+      client_id: this.clientId,
+      scope: [
+        'https://www.googleapis.com/auth/youtube',
+        'https://www.googleapis.com/auth/youtube.readonly',
+        'https://www.googleapis.com/auth/youtube.upload',
+      ],
+      callback: (tokenResponse: { access_token: any; }) => {
+        console.log("🚀 ~ file: auth.service.ts:51 ~ AuthService ~ initGisClient ~ tokenResponse:", tokenResponse)
+        let access_token = tokenResponse.access_token;
+        this.getChannels(access_token).subscribe((response: any) => {
+          console.log("🚀 ~ file: auth.service.ts:91 ~ AuthService ~ initGisClient ~ response:", response)
+        });
+      }
+    }))
+  }
+
   private app = initializeApp(environment.firebaseConfig);
   private firebaseAuth = getAuth();
   private userObservable: any;
@@ -44,7 +103,10 @@ export class AuthService {
     }
   });
 
-  constructor(private angularFireAuth: AngularFireAuth) {
+  constructor(
+    private angularFireAuth: AngularFireAuth,
+    private http: HttpClient
+  ) {
     this.userObservable = this.angularFireAuth.authState;
     // this.initializeGoogleAuth();
   }
