@@ -133,5 +133,5 @@ dist
 *.iml
 *.ipr
 .github/
-
-src/oligarch-freewebgptadmin-oauth.json
+src/environments/
+src/client_secret_355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com.json

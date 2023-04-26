@@ -43,33 +43,33 @@ export class AuthService {
 
   constructor(private angularFireAuth: AngularFireAuth) {
     this.userObservable = this.angularFireAuth.authState
-    this.initializeGoogleAuth();
+    // this.initializeGoogleAuth();
   }
 
-  private async initializeGoogleAuth(): Promise<void> {
-    await new Promise((resolve, reject) => {
-      this.gapi.load('client:auth2', {
-        callback: resolve,
-        onerror: reject,
-        timeout: 1000,
-        ontimeout: reject,
-      });
-    });
-    await this.gapi.client.init({
-      clientId:
-        '355466863083-ejvc4sc0c96guq7c48o7sb1nlf6kqn5n.apps.googleusercontent.com',
-      discoveryDocs: [
-        'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-      ],
-      scope: [
-        'https://www.googleapis.com/auth/youtube.readonly',
-        'https://www.googleapis.com/auth/youtube.force-ssl',
-        'https://www.googleapis.com/auth/youtube',
-        'https://www.googleapis.com/auth/youtube.upload',
-        'https://www.googleapis.com/auth/youtubepartner-channel-audit',
-      ],
-    });
-  }
+//   private async initializeGoogleAuth(): Promise<void> {
+//     await new Promise((resolve, reject) => {
+//       this.gapi.load('client:auth2', {
+//         callback: resolve,
+//         onerror: reject,
+//         timeout: 1000,
+//         ontimeout: reject,
+//       });
+//     });
+//     await this.gapi.client.init({
+//       clientId:
+//         '355466863083-ejvc4sc0c96guq7c48o7sb1nlf6kqn5n.apps.googleusercontent.com',
+//       discoveryDocs: [
+//         'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+//       ],
+//       scope: [
+//         'https://www.googleapis.com/auth/youtube.readonly',
+//         'https://www.googleapis.com/auth/youtube.force-ssl',
+//         'https://www.googleapis.com/auth/youtube',
+//         'https://www.googleapis.com/auth/youtube.upload',
+//         'https://www.googleapis.com/auth/youtubepartner-channel-audit',
+//       ],
+//     });
+//   }
 
   getYoutubeAccessTokenWithGoogle(): Observable<string> {
     return from(

@@ -26,9 +26,6 @@ export class LanderComponent {
 
   successCallback(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     console.log("🚀 ~ file: login.component.ts:23 ~ LoginComponent ~ successCallback ~ signinSuccessData:", signinSuccessData)
-    this.authService.getYoutubeAccessTokenWithGoogle().subscribe((res) => {
-      console.log("🚀 ~ file: login.component.ts:25 ~ LoginComponent ~ this.authService.getYoutubeAccessTokenWithGoogle ~ res:", res)
-    })
     this.router.navigate(['dashboard']);
   }
 }

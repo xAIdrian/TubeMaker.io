@@ -11,7 +11,7 @@ const routes: Routes = [
   // { path: 'protected', component: ProtectedComponent, canActivate: [AuthGuard] },
   {
     path: '',
-    redirectTo: 'lander',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
@@ -106,7 +106,7 @@ const routes: Routes = [
       title: 'Register Page'
     }
   },
-  {path: '**', redirectTo: 'lander'}
+  {path: '**', redirectTo: 'dashboard'}
 ];
 
 @NgModule({
