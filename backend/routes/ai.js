@@ -11,6 +11,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.get("/topic", async (req, res, next) => {
+  console.log('🔥🔥🔥🔥🔥🔥🔥')
   rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_topic.txt");
   try {
     const completion = await openai.createCompletion({

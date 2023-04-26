@@ -26,32 +26,46 @@ export class AuthService {
 
   login() {
     // @ts-ignore
-    const state = google.accounts.oauth2.initCodeClient({
+    const state = google.accounts.oauth2.initTokenClient({
       client_id: this.clientId,
       scope: 'https://www.googleapis.com/auth/youtube.readonly',
-      ux_mode: 'redirect',
+      ux_mode: 'popup',
       // @ts-ignore
-      callback: (response) => {
-        console.log("🚀 ~ file: auth.service.ts:49 ~ login ~ response:", response)
-        var code_receiver_uri = 'http://localhost:63990/'
+      callback: (tokenResponse) => {
+        console.log("🚀 ~ file: auth.service.ts:49 ~ login ~ response:", tokenResponse)
+
+        /**
+         * how we use our tokens
+         * var xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://www.googleapis.com/calendar/v3/calendars/primary/events');
+xhr.setRequestHeader('Authorization', 'Bearer ' + tokenResponse.access_token);
+xhr.send();
+         */
+
+
+        // var code_receiver_uri = 'http://localhost:3000/api/youtube/auth'
         // Send auth code to your backend platform
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', code_receiver_uri, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.onload = function() {
-          console.log("🚀 ~ file: auth.service.ts:43 ~ AuthService ~ login ~ 'Signed in as: ' + xhr.responseText:", 'Signed in as: ' + xhr.responseText)
-        };
-        xhr.send('code=' + response.code);
+        // const xhr = new XMLHttpRequest();
+        // xhr.open('POST', code_receiver_uri, true);
+        // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        // xhr.onload = function() {
+        //   console.log("🚀 ~ file: auth.service.ts:43 ~ AuthService ~ login ~ 'Signed in as: ' + xhr.responseText:", 'Signed in as: ' + xhr.responseText)
+        // };
+        // xhr.send('code=' + response.code);
+
         // After receipt, the code is exchanged for an access token and
         // refresh token, and the platform then updates this web app
         // running in user's browser with the requested calendar info.
       },
+      error_callback: (error: any) => {
+        console.log("🚀 ~ file: auth.service.ts:55 ~ AuthService ~ login ~ e:", error)
+      }
     })
-    console.log("🚀 ~ file: auth.service.ts:51 ~ AuthService ~ login ~ state:", state)
+    // console.log("🚀 ~ file: auth.service.ts:51 ~ AuthService ~ login ~ state:", state)
 
-    const star = state.requestCode();
-    console.log("🚀 ~ file: auth.service.ts:53 ~ AuthService ~ login ~ star:", star)
+    const star = state.requestAccessToken();
+    // console.log("🚀 ~ file: auth.service.ts:53 ~ AuthService ~ login ~ star:", star)
   }    
 
   private readonly clientId = '355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com';
