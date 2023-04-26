@@ -35,12 +35,11 @@ import {
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IconModule } from '@coreui/icons-angular';
 import { YoutubeAutoRoutingModule } from './youtubeauto-routing.module';
-import { VideoListComponent } from './videoentrance/videolist/videolist.component';
+import { VideoListComponent } from './videolist/videolist.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './videocreate/videocreate.component';
 import { VideoResultComponent } from './videoresult/videoresult.component';
 import { VideoUploadComponent } from './videoupload/videoupload.component';
-import { YoutubeAuthComponent } from './videoentrance/youtubeauth/youtubeauth.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +47,6 @@ import { YoutubeAuthComponent } from './videoentrance/youtubeauth/youtubeauth.co
         VideoCreateComponent,
         VideoResultComponent,
         VideoUploadComponent,
-        YoutubeAuthComponent
     ],
     exports: [],
     imports: [

@@ -1,8 +1,13 @@
+<c-card class="container" *ngIf="!hasCompletedYoutubeAuth" style="margin-bottom: 1.5rem;">
+    <div class="text-area">
+        <p>Wait! In order to get started making money on youtube, we will need you to log in.</p>
+    </div>
+    <div id="google-signin-button"></div>
+</c-card>
 <c-card class="mb-4">
-
     <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
         <strong>Review Video Details</strong>
-        <button type="button" class="btn btn-success" (click)="publishVideoClick()">Click To Publish Your Video</button>
+        <button type="button" class="btn btn-success" [disabled]="!hasCompletedYoutubeAuth" (click)="publishVideoClick()">Click To Publish Your Video</button>
     </div>
 
     <div class="row">
@@ -73,7 +78,9 @@
 
                 <strong>Is this video made for kids?</strong>
                 <p class="text-medium-emphasis small">
-                    Regardless of your location, you're legally required to comply with the Children's Online Privacy Protection Act (COPPA) and/or other laws. You're required to tell Youtube whether your videos are made for kids. Features like personalized ads and notifications won’t be available.
+                    Regardless of your location, you're legally required to comply with the Children's Online Privacy
+                    Protection Act (COPPA) and/or other laws. You're required to tell Youtube whether your videos are
+                    made for kids.
                 </p>
                 <mat-button-toggle-group formControlName="isMadeForKids">
                     <mat-button-toggle (click)="onMadeForKidsClicked(true)">Yes, it's for kids</mat-button-toggle>
