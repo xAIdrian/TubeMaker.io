@@ -1,5 +1,11 @@
 {
   "projects": {
-    "default": "freeadmingptwebapp"
+    "default": "freeadmingptwebapp-384207"
+  },
+  "targets": {},
+  "etags": {
+    "freeadmingptwebapp-384207": {
+      "extensionInstances": {}
+    }
   }
 }

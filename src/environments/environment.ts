@@ -1,13 +1,12 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyBp9LjyyZYGtbRYGnYUEO0ex4fM0_ghJqw",
-    authDomain: "freeadmingptwebapp.firebaseapp.com",
-    databaseURL: "https://freeadmingptwebapp-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "freeadmingptwebapp",
-    storageBucket: "freeadmingptwebapp.appspot.com",
-    messagingSenderId: "747467278125",
-    appId: "1:747467278125:web:7c77769cc10bd84892f5a4",
-    measurementId: "G-SQD6B5Q7LC"
+    apiKey: "AIzaSyDSfFtYPRdqAl79FyMko4110FGMP1wm1f8",
+    authDomain: "freeadmingptwebapp-384207.firebaseapp.com",
+    projectId: "freeadmingptwebapp-384207",
+    storageBucket: "freeadmingptwebapp-384207.appspot.com",
+    messagingSenderId: "355466863083",
+    appId: "1:355466863083:web:7c5320de04f550c35279ae",
+    measurementId: "G-NV1DH6VK32"
   }
 };

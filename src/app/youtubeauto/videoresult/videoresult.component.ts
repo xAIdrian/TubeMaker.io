@@ -26,12 +26,15 @@ import { MediaService } from '../service/media.service';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoResultComponent implements OnInit, AfterContentInit {
+  //debug variable to be removed
+  isInDebugMode: boolean = true;
+  ////////////////////////////
+
   progressValue: number = 0;
   progressLabel: string = 'Searching the web...';
 
   isLinear: any;
-  // isLoading: boolean = true;
-  isLoading: boolean = false;
+  isLoading: boolean = !this.isInDebugMode //should be set to true in production;
   isTitleLoading: boolean = false;
   isDescLoading: boolean = false;
   isScriptLoading: boolean = false;
@@ -68,12 +71,13 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     this.setupObservers();
     this.setupFormGroups();
     
-    // this.voiceService.getVoiceOptions()
+    if (!this.isInDebugMode) { this.voiceService.getVoiceOptions() }
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-    // this.gptService.getGptContent();
+    
+    if (!this.isInDebugMode) { this.gptService.getGptContent(); }
   }
 
   setupObservers() {
