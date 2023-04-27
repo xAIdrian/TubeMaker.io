@@ -20,7 +20,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService { 
+export class UserAuthService { 
 
   private app = initializeApp(environment.firebaseConfig);
   private firebaseAuth = getAuth();
@@ -29,14 +29,14 @@ export class AuthService {
   authObservable = onAuthStateChanged(this.firebaseAuth, (user) => {
     if (user) {
       console.log(
-        '🚀 ~ LOGGEDIN: firebaseAuth.service.ts:35 ~ AuthService ~ onAuthStateChanged ~ user:',
+        '🚀 ~ LOGGEDIN: firebaseAuth.service.ts:35 ~ UserAuthService ~ onAuthStateChanged ~ user:',
         user
       );
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
       const uid = user.uid;
     } else {
-      console.log('firebaseAuth.service.ts:42 ~ AuthService ~ onAuthStateChanged ~ user logged out:');
+      console.log('firebaseAuth.service.ts:42 ~ UserAuthService ~ onAuthStateChanged ~ user logged out:');
       // User is signed out
     }
   });
@@ -134,31 +134,49 @@ export class AuthService {
       }
     });
   }
+
+  setUserPassword(newPassword: string) {
+    new Promise((resolve, reject) => {
+      let currentUser = this.getCurrentUser();
+      if (currentUser !== null) {
+        resolve(updatePassword(currentUser, newPassword));
+      } else {
+        reject('no current user');
+      }
+    });
+  }
+
+  sendPasswordResetEmail(email: string) {
+    new Promise((resolve, reject) => {
+      let currentUser = this.getCurrentUser();
+      if (currentUser !== null) {
+        resolve(sendPasswordResetEmail(this.firebaseAuth, email));
+      } else {
+        reject('no current user');
+      }
+    });
+  }
+
+  deleteUserAccount() {
+    new Promise((resolve, reject) => {
+      let currentUser = this.getCurrentUser();
+      if (currentUser !== null) {
+        resolve(deleteUser(currentUser));
+      } else {
+        reject('no current user');
+      }
+    });
+  }
+
+  reauthenticateWithCredentials(credential: any) {
+    new Promise((resolve, reject) => {
+      let currentUser = this.getCurrentUser();
+      if (currentUser !== null) {
+        resolve(reauthenticateWithCredential(currentUser, credential));
+      } else {
+        reject('no current user');
+      }
+    });
+  }
 }
-//   setUserPassword(newPassword: string) {
-//     let currentUser = this.getCurrentUser();
-//     if (currentUser !== null) {
-//       return updatePassword(currentUser, newPassword);
-//     }
-//   }
-
-//   sendPasswordResetEmail(email: string) {
-//     let currentUser = this.getCurrentUser();
-//     if (currentUser !== null) {
-//       return sendPasswordResetEmail(this.firebaseAuth, email);
-//     }
-//   }
-
-//   deleteUserAccount() {
-//     let currentUser = this.getCurrentUser();
-//     if (currentUser !== null) {
-//       return deleteUser(currentUser);
-//     }
-//   }
-
-//   reauthenticateWithCredentials(credential: any) {
-//     let currentUser = this.getCurrentUser();
-//     if (currentUser !== null) {
-//       return reauthenticateWithCredential(currentUser, credential);
-//     }
-//   }
+  

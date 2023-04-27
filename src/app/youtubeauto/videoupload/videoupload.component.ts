@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
 import { YoutubeService } from '../service/youtube.service';
-import { AuthService } from '../service/auth/auth.service'
+import { UserAuthService } from '../service/auth/userauth.service'
 
 @Component({
   selector: 'video-upload',
