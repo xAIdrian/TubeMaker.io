@@ -1,6 +1,7 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { from, Observable, Observer, of, Subject } from 'rxjs';
+import { catchError, concatMap, map, tap } from 'rxjs/operators';
 
 declare var gapi: any;
 
@@ -8,39 +9,56 @@ declare var gapi: any;
   providedIn: 'root',
 })
 export class YoutubeService {
-  private readonly clientId = '355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com';
+  private readonly API_URL = 'https://www.googleapis.com/youtube/v3';
+  private readonly clientId =
+    '355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com';
+  
+  private identityTokenClient: any;
+  private accessToken: string;  
 
-  constructor() {  }
+  private tokenSuccessSubjectObserver = new Subject<boolean>();
 
-  private loadYouTubeApiClient() {
-    return from(new Promise((resolve) => {
-      gapi.load('client', resolve);
-    }))
+  constructor(private http: HttpClient) {}
+
+  initTokenClient() {
+    console.log("🚀 ~ file: youtube.service.ts:24 ~ YoutubeService ~ initTokenClient ~ initTokenClient:")
+    //@ts-ignore
+    this.identityTokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: this.clientId,
+        scope: 'https://www.googleapis.com/auth/youtube.readonly',
+        ux_mode: 'popup',
+        // @ts-ignore
+        callback: (tokenResponse) => {
+          console.log(
+            '🚀 ~ file: auth.service.ts:49 ~ tokenClientInit ~ tokenResponse:',
+            tokenResponse
+          );
+          this.accessToken = tokenResponse.access_token;
+          this.tokenSuccessSubjectObserver.next(true);
+        },
+        error_callback: (error: any) => {
+          console.log(
+            '🚀 ~ file: auth.service.ts:55 ~ AuthService ~ tokenClientInit ~ e:',
+            error
+          );
+          this.tokenSuccessSubjectObserver.next(true);
+        },
+      });
   }
 
+  requestAccessToken() {
+    this.identityTokenClient.requestAccessToken();
+  }
 
-  initYouTubeApiClient(): Observable<any> {
-    return this.loadYouTubeApiClient().pipe(
-      tap(() => console.log("🚀 ~ file: youtube.service.ts:26 ~ YoutubeService ~ initYouTubeApiClient ~ loadYouTubeApiClient:", 'client loaded')),
-      concatMap(() => from(
-        gapi.client.init({
-            apiKey: 'AIzaSyDSfFtYPRdqAl79FyMko4110FGMP1wm1f8',
-            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
-            clientId: this.clientId,
-        })))
+  getTokenSuccessObserver(): Observable<boolean> {
+    return this.tokenSuccessSubjectObserver.asObservable();
+  }
+
+  getChannels(): Observable<any> {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${this.accessToken}`
     );
+    return this.http.get(`${this.API_URL}/channels?part=snippet&mine=true`, { headers });
   }
-
-  getChannels(accessToken: string) {
-    console.log("🚀 ~ file: youtube.service.ts:35 ~ YoutubeService ~ getChannels ~ accessToken:", accessToken)
-    gapi.client.setToken({ access_token: accessToken });
-    from(
-        gapi.client.youtube.channels.list({
-            part: 'snippet,contentDetails,statistics',
-            mine: true,
-        })
-    ).subscribe((response: any) => {
-        console.log("🚀 ~ file: youtube.service.ts:43 ~ YoutubeService ~ getChannels ~ response:", response)
-    });
-  }  
 }

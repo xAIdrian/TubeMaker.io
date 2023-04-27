@@ -31,9 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use("/api/posts", postsRoutes)
 app.use("/api/openai", openaiRoutes)
 app.use("/api/voice", voiceRoutes)
-app.use('api/youtube', youtubeRoutes)
 
 module.exports = app;

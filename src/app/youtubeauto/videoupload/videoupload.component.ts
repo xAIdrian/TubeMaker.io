@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
 import { YoutubeService } from '../service/youtube.service';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from '../service/auth/auth.service'
 
 @Component({
   selector: 'video-upload',
@@ -21,7 +21,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class VideoUploadComponent implements OnInit, AfterContentInit {
 
-  isLoading: false;
+  isWindowLoaded = false;
 
   resultsFormGroup: FormGroup;
   uploadFormGroup: FormGroup;
@@ -29,7 +29,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   videoUrlPath: SafeUrl;
   imageUrlPath: SafeUrl;
   audioUrlPath: SafeUrl;
-  hasCompletedYoutubeAuth: any;
+  hasCompletedYoutubeAuth = false;
 
   publishVideoClick() {
     throw new Error('Method not implemented.');
@@ -41,28 +41,14 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
-    private authService: AuthService,
     private youtubeService: YoutubeService
   ) {}
 
   ngOnInit(): void {
     // @ts-ignore
     window.onGoogleLibraryLoad = () => {
-      this.authService.login();
-
-    //   // @ts-ignore
-    //   google.accounts.id.initialize({
-    //     client_id:
-    //       '355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com',
-    //     callback: this.handleCredentialResponse.bind(this),
-    //     auto_select: false,
-    //     cancel_on_tap_outside: true,
-    //   });
-    //   const parent = document.getElementById('google-signin-button');
-    //   //@ts-ignore
-    //   google.accounts.id.renderButton(parent, { theme: 'outline' });
-    //   // @ts-ignore
-    //   // google.accounts.id.prompt((notification: PromptMomentNotification) => { });
+      console.log("🚀 ~ file: videoupload.component.ts:50 ~ VideoUploadComponent ~ ngOnInit ~ onGoogleLibraryLoad:")
+      this.youtubeService.initTokenClient();
     };
 
     this.setupObservers();
@@ -72,11 +58,6 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     this.videoService.getLatest();
-  }
-
-  loginOnClick() {
-    // console.log("🚀 ~ file: videoupload.component.ts:77 ~ VideoUploadComponent ~ loginOnClick ~ loginOnClick:", this.authService.getAuthCode())
-    
   }
 
   setupFormGroups() {
@@ -114,6 +95,21 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
         media.audio.file
       );
     });
+    this.youtubeService.getTokenSuccessObserver().subscribe((success) => {
+      console.log("🚀 ~ file: videoupload.component.ts:123 ~ VideoUploadComponent ~ this.youtubeService.getTokenSuccessObserver ~ token", success)
+      if (success) {
+        this.hasCompletedYoutubeAuth = true;
+        if (this.hasCompletedYoutubeAuth) {
+          this.youtubeService.getChannels().subscribe((channels) => {
+            console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
+          });
+        }
+      }
+    });
+  }
+
+  loginOnClick() {
+    this.youtubeService.requestAccessToken();
   }
 
   onMadeForKidsClicked(isForKids: boolean) {
@@ -132,22 +128,5 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   
   onResetContent() {
     this.navigationService.navigateToCreateVideo();
-  }
-
-  handleCredentialResponse(credentialResponse: CredentialResponse) {
-  console.log("🚀 ~ file: videoupload.component.ts:130 ~ VideoUploadComponent ~ handleCredentialResponse ~ credentialResponse:", credentialResponse)
-
-    this.authService.initGisClient();
-    // console.log(
-    //   '🚀 ~ file: videolist.component.ts:60 ~ VideoListComponent ~ handleCredentialResponse ~ credentialResponse:',
-    //   credentialResponse
-    // );
-    // this.youtubeService.initYouTubeApiClient().subscribe((response) => {
-    //   console.log(
-    //     '🚀 ~ file: videolist.component.ts:63 ~ VideoListComponent ~ this.youtubeService.initYouTubeApiClient ~ response:',
-    //     response
-    //   );
-    //   this.youtubeService.getChannels(credentialResponse.credential)
-    // });
   }
 }

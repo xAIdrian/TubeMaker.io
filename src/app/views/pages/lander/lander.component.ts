@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseUIModule, FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
-import { AuthService } from 'src/app/auth/auth.service';
+import  { AuthService } from '../../../youtubeauto/service/auth/auth.service';
 
 @Component({
   selector: 'app-login',
