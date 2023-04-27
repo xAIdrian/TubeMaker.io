@@ -1,9 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MediaService } from '../service/media.service';
 import { ListVideo } from '../model/media/video/listvideo.model';
 import { Router } from '@angular/router';
 import { NavigationService } from '../service/navigation.service';
-
 @Component({
     selector: 'video-list',
     templateUrl: './videolist.component.html',
@@ -21,7 +20,7 @@ export class VideoListComponent implements OnInit, AfterContentInit {
         private changeDetectorRef: ChangeDetectorRef
     ) { }
 
-    ngOnInit(): void {
+    ngOnInit() {
         // this.videoService.getVideos().subscribe(videos => {
         //     this.videos = videos;
         //     console.log("🚀 ~ file: videolist.component.ts:25 ~ VideoListComponent ~ ngOnInit ~ this.videos", this.videos)

@@ -1,7 +1,12 @@
 <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
   <c-container>
     <c-row class="justify-content-center">
-      <c-col md="8">
+      <firebase-ui
+        (signInSuccessWithAuthResult)="successCallback($event)"
+        (signInFailure)="errorCallback($event)"
+        (uiShown)="uiShownCallback()">
+      </firebase-ui>
+      <!-- <c-col md="8">
         <c-card-group>
           <c-card class="p-4">
             <c-card-body>
@@ -55,7 +60,7 @@
             </c-card-body>
           </c-card>
         </c-card-group>
-      </c-col>
+      </c-col> -->
     </c-row>
   </c-container>
 </div>

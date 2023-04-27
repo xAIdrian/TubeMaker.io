@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
@@ -9,6 +9,7 @@ import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 })
 export class DefaultHeaderComponent extends HeaderComponent {
 
+  @Output() logoutEvent = new EventEmitter();
   @Input() sidebarId: string = "sidebar";
 
   public newMessages = new Array(4)
@@ -17,5 +18,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   constructor(private classToggler: ClassToggleService) {
     super();
+  }
+
+  onUserLogout() {
+    this.logoutEvent.emit();
   }
 }

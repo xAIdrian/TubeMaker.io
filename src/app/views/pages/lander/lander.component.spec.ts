@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ButtonModule, CardModule, FormModule, GridModule } from '@coreui/angular';
-import { LoginComponent } from './login.component';
+import { LanderComponent } from './lander.component';
 import { IconModule } from '@coreui/icons-angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../../icons/icon-subset';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+describe('LanderComponent', () => {
+  let component: LanderComponent;
+  let fixture: ComponentFixture<LanderComponent>;
   let iconSetService: IconSetService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
+      declarations: [ LanderComponent ],
       imports: [FormModule, CardModule, GridModule, ButtonModule, IconModule],
       providers: [IconSetService]
     })
@@ -24,7 +24,7 @@ describe('LoginComponent', () => {
     iconSetService = TestBed.inject(IconSetService);
     iconSetService.icons = { ...iconSubset };
 
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(LanderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

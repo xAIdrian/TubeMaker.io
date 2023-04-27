@@ -8,7 +8,6 @@ const functions = require("firebase-functions");
 //   response.send("Hello from Firebase!");
 // });
 
-const functions = require("firebase-functions");
 const express = require("express");
 const server = express();
 server.get("/some-data", (request, response) => {

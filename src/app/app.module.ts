@@ -20,7 +20,7 @@ import { AppComponent } from './app.component';
 import {
   DefaultFooterComponent,
   DefaultHeaderComponent,
-  DefaultLayoutComponent,
+  DefaultComponent,
 } from './containers';
 
 import {
@@ -47,9 +47,23 @@ import {
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import { HttpClientModule } from '@angular/common/http';
 
-import {AngularFireModule} from "@angular/fire/compat";
-import {AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR} from "@angular/fire/compat/auth";
+import { firebase, firebaseui, FirebaseUIModule } from 'firebaseui-angular';
+import { environment } from "../environments/environment";
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR } from "@angular/fire/compat/auth";
 
+const firebaseUiAuthConfig: firebaseui.auth.Config = {
+  signInFlow: 'popup',
+  signInOptions: [
+    {
+      requireDisplayName: false,
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+    }
+  ],
+  tosUrl: 'https://www.tubemaker.io/terms-of-service',
+  privacyPolicyUrl: 'https://www.tubemaker.io/privacy-policy',
+  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+};
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -58,7 +72,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 const APP_CONTAINERS = [
   DefaultFooterComponent,
   DefaultHeaderComponent,
-  DefaultLayoutComponent,
+  DefaultComponent,
 ];
 
 @NgModule({
@@ -93,9 +107,13 @@ const APP_CONTAINERS = [
     BadgeModule,
     ListGroupModule,
     CardModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig)
   ],
   providers: [
+    // {provide: USE_AUTH_EMULATOR, useValue: !environment.production ? ['localhost', 9099] : undefined},
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,

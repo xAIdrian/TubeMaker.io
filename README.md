@@ -105,7 +105,7 @@ coreui-free-angular-admin-template
 ├── src/                         # project root
 │   ├── app/                     # main app directory
 |   │   ├── containers/          # layout containers
-|   |   │   └── default-layout/  # layout containers
+|   |   │   └── default/  # layout containers
 |   |   |       └── _nav.js      # sidebar navigation config
 |   │   ├── icons/               # icons set for the app
 |   │   └── views/               # application views

@@ -46,7 +46,7 @@ import { VideoUploadComponent } from './videoupload/videoupload.component';
         VideoListComponent,
         VideoCreateComponent,
         VideoResultComponent,
-        VideoUploadComponent
+        VideoUploadComponent,
     ],
     exports: [],
     imports: [
