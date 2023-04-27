@@ -40,15 +40,21 @@ import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './videocreate/videocreate.component';
 import { VideoResultComponent } from './videoresult/videoresult.component';
 import { VideoUploadComponent } from './videoupload/videoupload.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CorsInterceptor } from './service/domain/cors.interceptor';
 
 @NgModule({
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: CorsInterceptor,
+        multi: true
+    }],
     declarations: [
         VideoListComponent,
         VideoCreateComponent,
         VideoResultComponent,
         VideoUploadComponent,
     ],
-    exports: [],
     imports: [
         MatStepperModule,
         CommonModule,

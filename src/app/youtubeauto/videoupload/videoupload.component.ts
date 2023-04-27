@@ -9,9 +9,7 @@ import { NavigationService } from '../service/navigation.service';
 import { MediaService } from '../service/media.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
 import { YoutubeService } from '../service/youtube.service';
-import { UserAuthService } from '../service/auth/userauth.service'
 
 @Component({
   selector: 'video-upload',
@@ -30,10 +28,6 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   imageUrlPath: SafeUrl;
   audioUrlPath: SafeUrl;
   hasCompletedYoutubeAuth = false;
-
-  publishVideoClick() {
-    throw new Error('Method not implemented.');
-  }
 
   constructor(
     private videoService: MediaService,
@@ -99,11 +93,6 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
       console.log("🚀 ~ file: videoupload.component.ts:123 ~ VideoUploadComponent ~ this.youtubeService.getTokenSuccessObserver ~ token", success)
       if (success) {
         this.hasCompletedYoutubeAuth = true;
-        if (this.hasCompletedYoutubeAuth) {
-          this.youtubeService.getChannels().subscribe((channels) => {
-            console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
-          });
-        }
       }
     });
   }
@@ -120,6 +109,18 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
 
   copyTitle() {
     throw new Error('Method not implemented.');
+  }
+
+  publishVideoClick() {
+    if (this.hasCompletedYoutubeAuth) {
+      this.youtubeService.uploadChannelDefaultsForFirstChannel(
+        this.resultsFormGroup.value.title,
+        this.resultsFormGroup.value.description,
+      );
+      // ).subscribe((item) => {
+      //   console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
+      // });
+    }
   }
 
   onResetMedia() {
