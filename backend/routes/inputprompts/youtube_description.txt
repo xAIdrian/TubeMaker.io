@@ -1,5 +1,8 @@
-Imagine and Write a SEO optimized YouTube description less than 5000 characters including a call to action to like, comment, subscribe, and visit our site for a video on the following:
+Your task is to write a search engine optimized video description for a YouTube video based on the following summary with a clear call-to-action (CTA) to encourage viewers to watch your other videos. The description should include relevant keywords and phrases related to the topic of the video, as well as an engaging hook that entices viewers to click on the video.
+
+The CTA should be placed towards the end of the description and clearly communicate why viewers should watch your other videos. 
+
+Please keep in mind that while it's important to optimize your description for search engines, it's equally important to make it readable and engaging for human readers and MUST be 5000 characters. Your description should accurately reflect the content of the following text:
 
 <<FEED>>
 
-IMAGINE AND WRITE A SEO OPTIMIOZED YOUTUBE DESCRIPTION LESS THAN 5000 CHARACTERS INCLUDING A CALL TO ACTION TO LIKE, COMMENT, SUBSCRIBE, AND VISIT OUR SITE FOR A VIDEO ON THE ABOVE:

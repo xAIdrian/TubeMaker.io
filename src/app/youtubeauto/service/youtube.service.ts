@@ -10,9 +10,8 @@ declare var gapi: any;
 })
 export class YoutubeService {
   private readonly BASE_URL = 'https://www.googleapis.com/youtube/v3';
-  private readonly UPDATE_URL = 'https://www.googleapis.com/youtube/v3/channels?part=snippet';
-  private readonly clientId =
-    '355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com';
+  private readonly UPDATE_URL = 'https://www.googleapis.com/youtube/v3/channels';
+  private readonly clientId ='355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com';
 
   private identityTokenClient: any;
   private accessToken: string;
@@ -82,8 +81,7 @@ export class YoutubeService {
         description: vidDefaultDesc,
       },
     };
-    const headers = new HttpHeaders()
-      .set('Authorization', `Bearer ${this.accessToken}`)
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`)
 
     return this.http.put(this.UPDATE_URL, body, { headers })
   }
