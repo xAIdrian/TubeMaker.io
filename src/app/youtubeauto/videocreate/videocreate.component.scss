@@ -49,8 +49,13 @@ mat-button-toggle-group {
 }
 
 .container {
-  display: flex;
   flex-direction: row;
+  align-items: center;
+  background-color: #FFE4E1;
+  display: flex;
+  align-items: center;
+  background-color: #ffebee;
+  padding-top: 1rem;
 }
 
 .row {

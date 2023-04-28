@@ -12,6 +12,7 @@ import {
   FormGroup,
   Validators,
   FormControl,
+  FormArray,
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
 import { MediaService } from '../service/media.service';
@@ -39,9 +40,11 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   selectedVideoOption: VideoStyle;
   durationOptions: VideoDuration[] = [];
   selectedDurationOption: VideoDuration;
-  
-  topicLoading: boolean = false;
+  moneyOptions = [ 'Ad Sense',  'Affiliate' ]
+  selectedMonitizationOption = '';
 
+  topicLoading: boolean = false;
+  hasInputError = false;
 
   constructor(
     private gptService: GptService,
@@ -73,8 +76,14 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.styleFormGroup = this._formBuilder.group({
       selectedStyle: ['', Validators.required],
     });
+    this.durationFormGroup = this._formBuilder.group({
+      selectedDuration: ['', Validators.required],
+    });
     this.moneyFormGroup = this._formBuilder.group({
-      selectedDuration: ['', Validators.required]
+      selectedMonetization: [''],
+      productName: [''],
+      productDescription: [''],
+      links: this._formBuilder.array([]) // Add FormArray to the FormGroup
     });
   }
 
@@ -86,7 +95,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.gptService.getTopicSubjectObserver().subscribe((response) => {
       this.topicLoading = false;
       this.topicFormGroup.setValue({
-        subject: response.replace('"', '').trim()
+        topic: response.replace('"', '').trim()
       })
     });
     this.mediaService.getVideoOptionsObserver().subscribe((response) => {
@@ -95,6 +104,16 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.mediaService.getDurationOptionsObserver().subscribe((response) => {
       this.durationOptions = response;
     });
+  }
+
+  // Helper method to get links FormArray
+  get links(): FormArray {
+    return this.moneyFormGroup.get('links') as FormArray;
+  }
+
+  // Method to add a new input to links FormArray
+  addLink() {
+    this.links.push(this._formBuilder.control(''));
   }
 
   reRollTopic() { 
@@ -110,12 +129,30 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.selectedDurationOption = option;
   }
 
+
+  onMoneyOptionSelected(selectedOption: string) {
+    this.selectedMonitizationOption = selectedOption
+  }
+
   onSubmit() {
-    this.gptService.submitInputs(
+    this.topicFormGroup.markAsTouched();
+    this.styleFormGroup.markAsTouched();
+    this.durationFormGroup.markAsTouched();
+
+    if (this.topicFormGroup.invalid || this.styleFormGroup.invalid || this.durationFormGroup.invalid) {
+      this.hasInputError = true;
+    } else {
+      this.hasInputError = false;
+      this.gptService.submitInputs(
         this.topicFormGroup.value.subject,
         this.styleFormGroup.value.selectedStyle,
-        this.moneyFormGroup.value.selectedDuration
-    );
-    this.navigationService.navigateToResults();
+        this.durationFormGroup.value.selectedDuration,
+        this.moneyFormGroup.value.selectedMonetization,
+        this.moneyFormGroup.value.productName,
+        this.moneyFormGroup.value.productDescription,
+        this.moneyFormGroup.value.links
+      );
+      this.navigationService.navigateToResults();
+    }
   }
 }

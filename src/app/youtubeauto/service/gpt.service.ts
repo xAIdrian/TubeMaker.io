@@ -141,7 +141,15 @@ export class GptService {
     });
   }
 
-  submitInputs(promptQuery: string, videoStyle: string, videoDuration: string) {
+  submitInputs(
+    promptQuery: string, 
+    videoStyle: string, 
+    videoDuration: string,
+    monitizationMethod: string,
+    productName: string,
+    productDescription: string,
+    links: string[]
+  ) {
     this.sourcesVideo = {
       prompt: promptQuery,
       videoStyle: videoStyle,

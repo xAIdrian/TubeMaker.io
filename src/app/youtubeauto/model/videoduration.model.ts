@@ -5,6 +5,7 @@ export interface VideoDuration {
   sections: {
     name: string;
     points: string[];
+    isLoading?: boolean;
   }[];
 }
 

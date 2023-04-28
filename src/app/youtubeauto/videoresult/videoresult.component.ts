@@ -18,6 +18,7 @@ import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../service/gpt.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MediaService } from '../service/media.service';
+import { VideoDuration } from '../model/videoduration.model';
 
 @Component({
   selector: 'video-result',
@@ -26,6 +27,24 @@ import { MediaService } from '../service/media.service';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoResultComponent implements OnInit, AfterContentInit {
+rerollSection(arg0: any) {
+throw new Error('Method not implemented.');
+}
+optimizeSection() {
+throw new Error('Method not implemented.');
+}
+scriptFormGroup: FormGroup;
+currentVideoDuration: VideoDuration;
+isSectionLoading = false;
+optimizeTags() {
+throw new Error('Method not implemented.');
+}
+optimizeDesc() {
+throw new Error('Method not implemented.');
+}
+optimizeTitle() {
+throw new Error('Method not implemented.');
+}
   //debug variable to be removed
   isInDebugMode: boolean = true;
   ////////////////////////////
