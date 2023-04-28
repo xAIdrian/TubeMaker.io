@@ -117,7 +117,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   reRollTopic() { 
     this.topicLoading = true;
-    this.gptService.getIsolatedTopic() 
+    this.gptService.getNewTopic() 
   }
 
   onVideoOptionSelected(option: VideoStyle) {

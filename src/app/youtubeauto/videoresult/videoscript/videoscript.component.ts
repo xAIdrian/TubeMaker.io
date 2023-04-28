@@ -91,7 +91,7 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
   rerollScript() {
     this.isScriptLoading = true;
     this.scriptFormGroup.patchValue({ script: 'Please wait...'  })
-    this.gptService.getIsolatedScript();
+    this.gptService.getNewScriptSection();
   }
 
   optimizeScript() {

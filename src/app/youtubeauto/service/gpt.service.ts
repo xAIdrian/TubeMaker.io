@@ -6,22 +6,13 @@ import { GptVideoReqBody } from '../model/gpt/gptvideoreqbody.model';
 import { GptResponse } from '../model/gpt/gptresponse.model';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { ContentService } from './content.service';
+import { VideoDuration } from '../model/videoduration.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GptService {
-
-  generatedVideo: GptGeneratedVideo = {
-    id: '3u42o3ih23on',
-    summary: 'here is a sample summary',
-    title: 'Sample title',
-    description: 'here is another sample description',
-    script: 'here is the very long way to say hello',
-    tags: ['title', 'description', 'script'],
-  };
-
-  private sourcesVideo: GptVideoReqBody;
 
   private topicObserverSubject = new Subject<String>();
 
@@ -33,7 +24,12 @@ export class GptService {
   private scriptObserverSubject = new Subject<String>();
   private tagsObserverSubject = new Subject<String[]>();
 
-  constructor(private http: HttpClient) {}
+  private gptGeneratedSummary: string = ''
+
+  constructor(
+    private http: HttpClient,
+    private contentService: ContentService
+  ) {}
 
   getTopicSubjectObserver() {
     return this.topicObserverSubject.asObservable();
@@ -63,12 +59,46 @@ export class GptService {
     return this.completeResultsObserverSubject.asObservable();
   }
 
-  getTopicObservable(): Observable<{ message: string, result: any }> {
-    return this.http.get<{ message: string, result: any }>('http://localhost:3000/api/openai/topic');
+  postNewTopicObservable(): Observable<{ message: string, result: any }> {
+    return this.http.get<{ message: string, result: any }>(
+      'http://localhost:3000/api/openai/new/topic'
+    );
   }
 
-  getIsolatedTopic() {
-    this.getTopicObservable().subscribe((response) => {
+  getSummaryObservable(reqBody: { prompt: string }): Observable<{ message: string, result: { id: string, summary: string } }> {
+    return this.http.post<{ message: string, result: { id: string, summary: string } }>(
+      'http://localhost:3000/api/openai/summary', reqBody
+    );
+  }
+
+  postNewTitleObservable(reqBody: { summary: string, style: string}): Observable<{ message: string, result: { title: string } }> {
+    return this.http.post<{ message: string, result: { title: string } }>(
+      'http://localhost:3000/api/openai/new/title', reqBody
+      );
+  }
+
+  postNewDescriptionObservable(reqBody: { summary: string, style: string}): Observable<{ message: string, result: { description: string } }> {
+    return this.http.post<{ message: string, result: { description: string } }>(
+      'http://localhost:3000/api/openai/new/description', reqBody
+    );
+  }
+
+  postNewScriptObservable(reqBody: { summary: string, style: string, point: string}): Observable<{ message: string, result: { script: string } }> {
+    return this.http.post<{ message: string, result: { script: string } }>(
+      'http://localhost:3000/api/openai/new/script', 
+      reqBody
+    );
+  }
+
+  postNewTagsObservable(reqBody: { summary: string, style: string}): Observable<{ message: string, result: { tags: string } }> {
+    return this.http.post<{ message: string, result: { tags: string } }>(
+      'http://localhost:3000/api/openai/new/tags', 
+      reqBody
+    );
+  }
+
+  getNewTopic() {
+    this.postNewTopicObservable().subscribe((response) => {
       if (response.message !== 'success') {
         this.topicObserverSubject.next("How to make money with faceless youtube automation");
         return;
@@ -77,14 +107,8 @@ export class GptService {
     });
   }
 
-  getTitleObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { title: string } }> {
-    return this.http.post<{ message: string, result: { title: string } }>('http://localhost:3000/api/openai/title', {
-      summary: inputSummary
-    });
-  }
-
-  getIsolatedTitle() {
-    this.getTitleObservable().subscribe((response) => {
+  getNewTitle() {
+    this.postNewTitleObservable().subscribe((response) => {
       if (response.message !== 'success') {
         this.titleObserverSubject.next("How to make money with faceless youtube automation");
         return;
@@ -93,14 +117,8 @@ export class GptService {
     });
   }
 
-  getDescriptionObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { description: string } }> {
-    return this.http.post<{ message: string, result: { description: string } }>('http://localhost:3000/api/openai/description', {
-      summary: inputSummary
-    });
-  }
-
-  getIsolatedDescription() {
-    this.getDescriptionObservable().subscribe((response) => {
+  getNewDescription() {
+    this.postNewDescriptionObservable().subscribe((response) => {
       if (response.message !== 'success') {
         this.descriptionObserverSubject.next("How to make money with faceless youtube automation");
         return;
@@ -109,14 +127,8 @@ export class GptService {
     });
   }
 
-  getScriptObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { script: string } }> {
-    return this.http.post<{ message: string, result: { script: string } }>('http://localhost:3000/api/openai/script', {
-      summary: inputSummary
-    });
-  }
-
-  getIsolatedScript() {
-    this.getScriptObservable().subscribe((response) => {
+  getNewScriptSection() {
+    this.postNewScriptObservable().subscribe((response) => {
       if (response.message !== 'success') {
         this.scriptObserverSubject.next("How to make money with faceless youtube automation");
         return;
@@ -125,14 +137,8 @@ export class GptService {
     });
   }
 
-  getTagsObservable(inputSummary = this.generatedVideo.summary): Observable<{ message: string, result: { tags: string } }> {
-    return this.http.post<{ message: string, result: { tags: string } }>('http://localhost:3000/api/openai/tags', {
-      summary: inputSummary 
-    });
-  }
-
-  getIsolatedTags() {
-    this.getTagsObservable().subscribe((response) => {
+  getNewTags() {
+    this.postNewTagsObservable().subscribe((response) => {
       if (response.message !== 'success') {
         this.tagsObserverSubject.next(["How", "to", "make", "money", "with", "faceless", "youtube", "automation"]);
         return;
@@ -142,10 +148,14 @@ export class GptService {
   }
 
   generateVideoFromSources(): void {
-    if (this.sourcesVideo === undefined) {
+    if (
+      this.contentService.getCurrentTopic() === undefined
+      || this.contentService.getCurrentVideoStyle() === undefined
+      || this.contentService.getCurrentVideoDuration() === undefined
+    ) {
       throw new Error('Sources video is undefined');
     }
-    var compeleteResults: GptGeneratedVideo = {
+    let compeleteResults: GptGeneratedVideo = {
       id: '',
       summary: '',
       title: '',
@@ -154,8 +164,8 @@ export class GptService {
       tags: [],
     };
 
-    this.http.post<{ message: string, result: { id: string, summary: string } }>('http://localhost:3000/api/openai/summary', {
-      prompt: this.sourcesVideo.prompt,
+    this.getSummaryObservable({
+      prompt: this.contentService.getCurrentTopic()
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:96 ~ GptService ~ generateVideoFromSources ~ response:", response)
       if (response.message !== 'success') {
@@ -166,9 +176,13 @@ export class GptService {
 
         compeleteResults.id = response.result.id;
         compeleteResults.summary = requestSummary;
+        this.gptGeneratedSummary = requestSummary;
         this.progressObserverSubject.next(20);
   
-        this.getTitleObservable(requestSummary).subscribe((response) => {
+        this.postNewTitleObservable({
+          summary: requestSummary,
+          style: this.contentService.getCurrentVideoStyle().name
+        }).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:108 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -180,7 +194,10 @@ export class GptService {
           }
         });
 
-        this.getDescriptionObservable(requestSummary).subscribe((response) => {
+        this.postNewDescriptionObservable({
+          summary: requestSummary,
+          style: this.contentService.getCurrentVideoStyle().name
+        }).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:122 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -192,7 +209,14 @@ export class GptService {
           }
         });
 
-        this.getScriptObservable(requestSummary).subscribe((response) => {
+        /**
+         * we need a chained for loop to complete all of these synchronously
+         */
+        this.postNewScriptObservable({
+          summary: requestSummary,
+          style: this.contentService.getCurrentVideoStyle().name,
+          // point: Selection.point
+        }).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:136 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -204,7 +228,10 @@ export class GptService {
           }
         });
 
-        this.getTagsObservable(requestSummary).subscribe((response) => {
+        this.postNewTagsObservable({
+          summary: requestSummary,
+          style: this.contentService.getCurrentVideoStyle().name
+        }).subscribe((response) => {
           console.log("🚀 ~ file: gpt.service.ts:150 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             console.error('Failed to generate video', response.message);
@@ -232,8 +259,7 @@ export class GptService {
       && completeResults.tags.length > 0
       ) {
         console.log("🚀 ~ file: gpt.service.ts:206 ~ GptService ~ checkForCompleteResultsCompletion ~ generatedVideo:", completeResults)
-        this.generatedVideo = completeResults;
-        this.completeResultsObserverSubject.next(this.generatedVideo);
+        this.completeResultsObserverSubject.next(completeResults);
       }
   }
 

@@ -22,7 +22,9 @@ router.get("/topic", async (req, res, next) => {
       prompt: rawPrompt,
       temperature: 1.2,
       max_tokens: 3000,
-      top_p: 1
+      top_p: 1,
+      presence_penalty: 0.7,
+      frequency_penalty: 0.7
     });
     response = completion.data.choices[0].text;
     res.status(200).json({
@@ -62,16 +64,19 @@ router.post("/summary", async (req, res, next) => {
   });
 });
 
-router.post("/title", async (req, res, next) => {
-
+router.post("/new/title", async (req, res, next) => {
   let summary = req.body.summary;
+  let style = req.body.style;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
-
-  let gptTitle = await paramPromptCompletion("backend/routes/inputprompts/youtube_title.txt", summary);
+  let gptTitle = await paramPromptCompletion(
+    "backend/routes/inputprompts/youtube_title.txt",
+    summary,
+    style
+  );
   gptTitle = gptTitle.replace('"', '')
   console.log("🚀 ~ file: ai.js:28 ~ router.post ~ gptTitle:", gptTitle)
 
@@ -81,15 +86,19 @@ router.post("/title", async (req, res, next) => {
   });
 });
 
-router.post("/description", async (req, res, next) => {
+router.post("/new/description", async (req, res, next) => {
   let summary = req.body.summary;
+  let style = req.body.style;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
-
-  let gptDescription = await paramPromptCompletion("backend/routes/inputprompts/youtube_description.txt", summary);
+  let gptDescription = await paramPromptCompletion(
+    "backend/routes/inputprompts/youtube_description.txt",
+    summary,
+    style
+  );
 
   res.status(200).json({
     message: "success",
@@ -97,18 +106,17 @@ router.post("/description", async (req, res, next) => {
   });
 });
 
-router.post("/script", async (req, res, next) => {
+router.post("/new/script", async (req, res, next) => {
   let summary = req.body.summary;
+  let style = req.body.style;
+  let point = req.body.point;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
 
-  const style = req.body.style;
-  const duration = req.body.duration;
-
-  let gptScript = await scriptPromptCompletion(summary, style, duration);
+  let gptScript = await scriptPromptCompletion(summary, style, point);
   console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
 
   res.status(200).json({
@@ -117,15 +125,19 @@ router.post("/script", async (req, res, next) => {
   });
 });
 
-router.post("/tags", async (req, res, next) => {
+router.post("/new/tags", async (req, res, next) => {
   let summary = req.body.summary;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
-
-  let gptTags = await paramPromptCompletion("backend/routes/inputprompts/youtube_tags.txt", summary);
+  let style = req.body.style;
+  let gptTags = await paramPromptCompletion(
+    "backend/routes/inputprompts/youtube_tags.txt",
+    summary,
+    style
+  );
 
   res.status(200).json({
     message: "success",
@@ -189,18 +201,22 @@ async function summaryPromptCompletion(inputParam) {
   return completion;
 }
 
-function scriptPromptCompletion(inputParam, styleParam, durationParam) {
+function scriptPromptCompletion(inputParam, styleParam, durationPoint) {
   scriptPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_script.txt"); 
   scriptPrompt = scriptPrompt.replace("<<FEED>>", inputParam);
   scriptPrompt = scriptPrompt.replace("<<STYLE>>", styleParam);
+  scriptPromtp = scriptPrompt.replace("<<POINT>>", durationPoint);
 
-  const completion = getNewOutputCompletion(scriptPrompt);
+  const completion = getOptimizedOutputCompletion(scriptPrompt);
   return completion;
 }
 
-function paramPromptCompletion(filename, inputParam) {
+function paramPromptCompletion(filename, inputParam, styleParam) {
   rawPrompt = readTextFileToPrompt(filename);
-  if (inputParam !== '') {rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);}
+  if (inputParam !== '') {
+    rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);
+    rawPrompt = rawPrompt.replace("<<STYLE>>", styleParam);
+  }
 
   const completion = getNewOutputCompletion(rawPrompt);
   return completion;
