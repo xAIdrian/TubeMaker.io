@@ -35,9 +35,9 @@
                 </button>
               </div>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleLoading"
+                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleOptimizing"
                   (click)="optimizeTitle()">
-                  <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
+                  <c-spinner *ngIf="isTitleOptimizing" size="sm"></c-spinner>
                   Optimize
                 </button>
               </div>
@@ -54,14 +54,14 @@
               <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isDescLoading"
                   (click)="rerollDescription()">
-                  <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
+                  <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
                   New
                 </button>
               </div>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isDescLoading"
+                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isDescOptimizing"
                   (click)="optimizeDesc()">
-                  <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
+                  <c-spinner *ngIf="isDescOptimizing" size="sm"></c-spinner>
                   Optimize
                 </button>
               </div>
@@ -83,9 +83,9 @@
                 </button>
               </div>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleLoading"
+                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTagsOptimizing"
                   (click)="optimizeTags()">
-                  <c-spinner *ngIf="isTagsLoading" size="sm"></c-spinner>
+                  <c-spinner *ngIf="isTagsOptimizing" size="sm"></c-spinner>
                   Optimize
                 </button>
               </div>
@@ -99,44 +99,9 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="scriptFormGroup" *ngIf="!isLoading">
-        <h4>Improve Your Script With AI</h4>
-        <strong>{{ currentVideoDuration.name }}</strong>
-        <p class="text-medium-emphasis">{{ currentVideoDuration.description }}</p>
-        <form [formGroup]="scriptFormGroup">
-          <ng-template>Script</ng-template>
-
-          <div *ngFor="let section in currentVideoDuration.sections">
-            <h5>{{ section.name }}</h5>
-            <div class="row">
-              <div class="col-8">
-                <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="{{ section.name }}">
-            </textarea>
-              </div>
-              <div class="col-2">
-                <div style="display: flex; align-items: center; padding: 0; margin:0">
-                  <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isSectionLoading"
-                    (click)="rerollSection(section.name)">
-                    <c-spinner *ngIf="isSectionLoading" size="sm"></c-spinner>
-                    New
-                  </button>
-                </div>
-                <div style="display: flex; align-items: center; padding: 0; margin:0">
-                  <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isSectionLoading"
-                    (click)="optimizeSection()">
-                    <c-spinner *ngIf="isSectionLoading" size="sm"></c-spinner>
-                    Optimize
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <br />
-          <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button cButton variant="outline" color="dark" matStepperPrevious>Go Back</button>
-            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
-          </div>
-        </form>
+      <mat-step [stepControl]="scriptFormGroup" >
+        <ng-template matStepLabel>Script</ng-template>
+        <video-script (scriptFormGroupEvent)="onScriptFormGroupChange($event)"></video-script>
       </mat-step>
 
       <mat-step [stepControl]="audioFormGroup" *ngIf="!isLoading">

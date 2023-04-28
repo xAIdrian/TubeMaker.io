@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { VideoListComponent } from "./videolist/videolist.component";
 import { VideoCreateComponent } from "./videocreate/videocreate.component";
-import { VideoResultComponent } from "./videoresult/videoresult.component";
+import { VideoDetailsComponent } from "./videoresult/videodetails/videodetails.component";
 import { VideoUploadComponent } from "./videoupload/videoupload.component";
 
 const routes: Routes = [
@@ -21,10 +21,10 @@ const routes: Routes = [
         }
     },
     {
-        path: "results",
-        component: VideoResultComponent,
+        path: "details",
+        component: VideoDetailsComponent,
         data: {
-            title: "Results"
+            title: "Details"
         }
     },
     {

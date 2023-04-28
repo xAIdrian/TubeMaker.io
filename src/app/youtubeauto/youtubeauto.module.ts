@@ -38,10 +38,11 @@ import { YoutubeAutoRoutingModule } from './youtubeauto-routing.module';
 import { VideoListComponent } from './videolist/videolist.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './videocreate/videocreate.component';
-import { VideoResultComponent } from './videoresult/videoresult.component';
+import { VideoDetailsComponent } from './videoresult/videodetails/videodetails.component';
 import { VideoUploadComponent } from './videoupload/videoupload.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './service/domain/cors.interceptor';
+import { VideoScriptComponent } from './videoresult/videoscript/videoscript.component';
 
 @NgModule({
     providers: [{
@@ -52,8 +53,9 @@ import { CorsInterceptor } from './service/domain/cors.interceptor';
     declarations: [
         VideoListComponent,
         VideoCreateComponent,
-        VideoResultComponent,
+        VideoDetailsComponent,
         VideoUploadComponent,
+        VideoScriptComponent
     ],
     imports: [
         MatStepperModule,

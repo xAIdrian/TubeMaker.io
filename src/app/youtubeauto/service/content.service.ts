@@ -13,9 +13,9 @@ import { Observable, of, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class MediaService {
+export class ContentService {
 
-  contentSubjectObserver = new Subject<GptGeneratedVideo>();
+  generateVideoSubjectObserver = new Subject<GptGeneratedVideo>();
   mediaSubjectObserver = new Subject<Media>();
   
   exampleVideos: ListVideo[] = [];
@@ -38,8 +38,14 @@ export class MediaService {
       file: ''
     }
   };
-
-  contentHolder: GptGeneratedVideo;
+  
+  private currentSubject: string;
+  private currentStyle: VideoStyle;
+  private currentDuration: VideoDuration;
+  private currentMonetization: string;
+  private currentProductName: string;
+  private currentProductDescription: string;
+  private currentLinks: string[];
 
   constructor(
     private http: HttpClient, 
@@ -63,12 +69,34 @@ export class MediaService {
     return of(this.youtubeVideoDurations);
   }
 
+  getCurrentVideoDuration(): VideoDuration {
+    return this.currentDuration;
+  }
+
   getContentObserver(): Observable<GptGeneratedVideo> {
-    return this.contentSubjectObserver.asObservable();
+    return this.generateVideoSubjectObserver.asObservable();
   }
 
   getMediaObserver(): Observable<Media> {
     return this.mediaSubjectObserver.asObservable();
+  }
+
+  submitInputs(
+    subject: string, 
+    videoStyle: VideoStyle, 
+    videoDuration: VideoDuration, 
+    monetization: string, 
+    productName: string, 
+    productDescription: string, 
+    links: string[]
+  ) {
+    this.currentSubject = subject, 
+    this.currentStyle = videoStyle, 
+    this.currentDuration = videoDuration, 
+    this.currentMonetization = monetization, 
+    this.currentProductName = productName, 
+    this.currentProductDescription = productDescription,
+    this.currentLinks = links
   }
 
   updateAudioFile(audio: File) {
@@ -78,11 +106,11 @@ export class MediaService {
 
   updateVideoFile(video: File) {
     if (!video.type.match(/video\/*/) || !['mp4', 'webm', 'mov'].includes(video.type.split('/')[1])) {
-      console.log("🚀 ~ file: media.service.ts:143 ~ MediaService ~ updateVideoFile ~ video.type:", video.type)
+      console.log("🚀 ~ file: media.service.ts:143 ~ ContentService ~ updateVideoFile ~ video.type:", video.type)
       console.error('Invalid video format.');
       return;
     }
-    console.log("🚀 ~ file: media.service.ts:143 ~ MediaService ~ updateVideoFile ~ video.type:", video.type)
+    console.log("🚀 ~ file: media.service.ts:143 ~ ContentService ~ updateVideoFile ~ video.type:", video.type)
     const videoBlob = new Blob([video], { type: video.type });
     this.mediaholder.video.file = URL.createObjectURL(videoBlob);
     this.mediaholder.video.title = video.name;
@@ -93,9 +121,9 @@ export class MediaService {
     this.mediaholder.image.title = image.name;
   }
 
-  getLatest() {
-    this.contentHolder = this.gptService.generatedVideo
-    this.contentSubjectObserver.next(this.contentHolder);
-    this.mediaSubjectObserver.next(this.mediaholder);
-  }  
+  // getLatest() {
+  //   this.contentHolder = this.gptService.generatedVideo
+  //   this.generateVideoSubjectObserver.next(this.contentHolder);
+  //   this.mediaSubjectObserver.next(this.mediaholder);
+  // }  
 }

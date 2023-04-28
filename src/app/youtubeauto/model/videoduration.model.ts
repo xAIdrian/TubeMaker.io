@@ -2,11 +2,15 @@ export interface VideoDuration {
   name: string;
   header: string;
   description: string;
-  sections: {
-    name: string;
-    points: string[];
-    isLoading?: boolean;
-  }[];
+  sections: DurationSection[];
+}
+
+export interface DurationSection {
+  name: string;
+  controlName: string;
+  points: string[];
+  isLoading?: boolean;
+  isOptimizing?: boolean;
 }
 
 export const defaultVideoDurations: VideoDuration[] = [
@@ -17,6 +21,7 @@ export const defaultVideoDurations: VideoDuration[] = [
     sections: [
       {
         name: 'Introduction',
+        controlName: 'introduction',
         points: [
           'Quick attention-grabbing hook',
           'Very briefly introduce the topic or problem being addressed',
@@ -24,6 +29,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Main Content',
+        controlName: 'mainContent',
         points: [
           'Concise explanation of the key point or main idea',
           'Focus on the most important aspect of the topic',
@@ -31,6 +37,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Conclusion',
+        controlName: 'conclusion',
         points: [
           'Rapid recap of the main point',
           'Quick call-to-action (e.g., subscribe, like, or comment)',
@@ -45,6 +52,7 @@ export const defaultVideoDurations: VideoDuration[] = [
     sections: [
       {
         name: 'Introduction',
+        controlName: 'introduction',
         points: [
           'Attention-grabbing hook',
           'Briefly introduce the topic or problem being addressed',
@@ -52,6 +60,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Main Content',
+        controlName: 'mainContent',
         points: [
           'Brief explanation of the topic or problem',
           'Provide necessary context and background information',
@@ -60,6 +69,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Conclusion',
+        controlName: 'conclusion',
         points: [
           'Recap of the main points covered',
           'Call-to-action (e.g., subscribe, like, or comment)',
@@ -74,6 +84,7 @@ export const defaultVideoDurations: VideoDuration[] = [
     sections: [
       {
         name: 'Introduction',
+        controlName: 'introduction',
         points: [
           'Attention-grabbing hook',
           'Introduce the topic or problem being addressed',
@@ -81,6 +92,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Main Content',
+        controlName: 'mainContent',
         points: [
           'Detailed explanation of the topic or problem',
           'Use examples and evidence to support your points',
@@ -89,12 +101,14 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Actionable Takeaway',
+        controlName: 'actionables',
         points: [
           'Provide a practical tip or insight that viewers can apply in their own lives',
         ],
       },
       {
         name: 'Conclusion',
+        controlName: 'conclusion',
         points: [
           'Recap of the main points and takeaways',
           'Call-to-action (e.g., subscribe, like, or comment)',
@@ -109,6 +123,7 @@ export const defaultVideoDurations: VideoDuration[] = [
     sections: [
       {
         name: 'Introduction',
+        controlName: 'introduction',
         points: [
           'Attention-grabbing hook',
           'Introduce the topic or problem being addressed',
@@ -116,6 +131,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Main Content',
+        controlName: 'mainContent',
         points: [
           'Comprehensive overview of the topic or problem',
           'Multiple examples and evidence to support your points',
@@ -125,6 +141,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Conclusion',
+        controlName: 'conclusion',
         points: [
           'Summarize the main points covered',
           'Recap the actionable takeaways',
@@ -140,6 +157,7 @@ export const defaultVideoDurations: VideoDuration[] = [
     sections: [
       {
         name: 'Introduction',
+        controlName: 'introduction',
         points: [
           'Attention-grabbing hook',
           'Introduce the topic or problem being addressed',
@@ -148,6 +166,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Main Content',
+        controlName: 'mainContent',
         points: [
           'In-depth exploration of the topic or problem',
           'Multiple examples and evidence to support your points',
@@ -157,6 +176,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Case Studies or Real-life Examples',
+        controlName: 'caseStudies',
         points: [
           'Present relevant case studies or real-life examples to illustrate your points',
           'Show the practical application of the concepts discussed',
@@ -164,6 +184,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Q&A or Frequently Asked Questions',
+        controlName: 'questions',
         points: [
           'Address common questions or misconceptions related to the topic',
           'Clarify any points that might be confusing for viewers',
@@ -171,6 +192,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Conclusion',
+        controlName: 'conclusion',
         points: [
           'Summarize the main points covered',
           'Recap the actionable takeaways',
@@ -186,6 +208,7 @@ export const defaultVideoDurations: VideoDuration[] = [
     sections: [
       {
         name: 'Introduction',
+        controlName: 'introduction',
         points: [
           'Attention-grabbing hook',
           'Introduce the topic or problem being addressed',
@@ -194,6 +217,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Main Content',
+        controlName: 'mainContent',
         points: [
           'Comprehensive exploration of the topic or problem',
           'Multiple examples and evidence to support your points',
@@ -203,6 +227,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Case Studies or Real-life Examples',
+        controlName: 'caseStudies',
         points: [
           'Present relevant case studies or real-life examples to illustrate your points',
           'Show the practical application of the concepts discussed',
@@ -210,12 +235,14 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Expert Opinions or Interviews',
+        controlName: 'opinions',
         points: [
           'Include insights from experts in the field or conduct interviews to provide additional perspectives',
         ],
       },
       {
         name: 'Q&A or Frequently Asked Questions',
+        controlName: 'questions',
         points: [
           'Address common questions or misconceptions related to the topic',
           'Clarify any points that might be confusing for viewers',
@@ -223,6 +250,7 @@ export const defaultVideoDurations: VideoDuration[] = [
       },
       {
         name: 'Conclusion',
+        controlName: 'conclusion',
         points: [
           'Summarize the main points covered',
           'Recap the actionable takeaways',

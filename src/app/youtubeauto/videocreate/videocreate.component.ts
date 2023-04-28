@@ -6,7 +6,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { GptService } from '../service/gpt.service';
-import { Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -15,7 +14,7 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
-import { MediaService } from '../service/media.service';
+import { ContentService } from '../service/content.service';
 import { VideoStyle } from '../model/videostyle.model';
 import { VideoDuration } from '../model/videoduration.model';
 
@@ -48,7 +47,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   constructor(
     private gptService: GptService,
-    private mediaService: MediaService,
+    private contentService: ContentService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -98,10 +97,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
         topic: response.replace('"', '').trim()
       })
     });
-    this.mediaService.getVideoOptionsObserver().subscribe((response) => {
+    this.contentService.getVideoOptionsObserver().subscribe((response) => {
       this.videoStyles = response;
     });
-    this.mediaService.getDurationOptionsObserver().subscribe((response) => {
+    this.contentService.getDurationOptionsObserver().subscribe((response) => {
       this.durationOptions = response;
     });
   }
@@ -129,7 +128,6 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.selectedDurationOption = option;
   }
 
-
   onMoneyOptionSelected(selectedOption: string) {
     this.selectedMonitizationOption = selectedOption
   }
@@ -143,7 +141,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
       this.hasInputError = true;
     } else {
       this.hasInputError = false;
-      this.gptService.submitInputs(
+      this.contentService.submitInputs(
         this.topicFormGroup.value.subject,
         this.styleFormGroup.value.selectedStyle,
         this.durationFormGroup.value.selectedDuration,

@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationService } from '../service/navigation.service';
-import { MediaService } from '../service/media.service';
+import { ContentService } from '../service/content.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { YoutubeService } from '../service/youtube.service';
@@ -29,7 +29,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   audioUrlPath: SafeUrl;
   
   constructor(
-    private videoService: MediaService,
+    private contentService: ContentService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -50,7 +50,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-    this.videoService.getLatest();
+    // this.contentService.getLatest();
   }
 
   setupFormGroups() {
@@ -69,7 +69,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   }
 
   setupObservers() {
-    this.videoService.getContentObserver().subscribe((content) => {
+    this.contentService.getContentObserver().subscribe((content) => {
       this.resultsFormGroup.setValue({
         title: content.title,
         description: content.description,
@@ -77,7 +77,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
         tags: content.tags,
       });
     });
-    this.videoService.getMediaObserver().subscribe((media) => {
+    this.contentService.getMediaObserver().subscribe((media) => {
       this.imageUrlPath = this.sanitizer.bypassSecurityTrustUrl(
         media.image.file
       );
