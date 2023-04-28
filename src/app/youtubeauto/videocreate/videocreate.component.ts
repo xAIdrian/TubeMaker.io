@@ -15,6 +15,8 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
 import { MediaService } from '../service/media.service';
+import { VideoStyle } from '../model/videostyle.model';
+import { VideoDuration } from '../model/videoduration.model';
 
 @Component({
   selector: 'video-create',
@@ -28,16 +30,18 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   gptResponse: string = 'Waiting for response...';
 
   isLinear: any;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
+  topicFormGroup: FormGroup;
+  styleFormGroup: FormGroup;
+  durationFormGroup: FormGroup;
+  moneyFormGroup: FormGroup;
 
-  videoStyles: { name: string, header: string, description: string }[] = [];
-  selectedVideoOption: { name: string, header: string, description: string };
-  durationOptions: { name: string, header: string, description: string }[] = [];
-  selectedDurationOption: { name: string, header: string, description: string };
+  videoStyles: VideoStyle[] = [];
+  selectedVideoOption: VideoStyle;
+  durationOptions: VideoDuration[] = [];
+  selectedDurationOption: VideoDuration;
   
   topicLoading: boolean = false;
+
 
   constructor(
     private gptService: GptService,
@@ -50,24 +54,26 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.setupObservers();
 
-    this.selectedVideoOption = { 
+    this.selectedVideoOption  = { 
       name: '',
       header: 'Select The Style For Your Video',
-      description: 'Each video needs a specific style and tone to present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche'
+      description: 'Each video needs a specific style and tone to present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche',
+      channelExamples: []
     }
     this.selectedDurationOption = { 
       name: '',
       header: 'Select The Duration For Your Video',
-      description: 'Each video needs a specific duration present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche'
+      description: 'Each video needs a specific duration present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche',
+      sections: []
     }
 
-    this.firstFormGroup = this._formBuilder.group({
-      subject: ['', Validators.required],
+    this.topicFormGroup = this._formBuilder.group({
+      topic: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.styleFormGroup = this._formBuilder.group({
       selectedStyle: ['', Validators.required],
     });
-    this.thirdFormGroup = this._formBuilder.group({
+    this.moneyFormGroup = this._formBuilder.group({
       selectedDuration: ['', Validators.required]
     });
   }
@@ -79,7 +85,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   setupObservers() {
     this.gptService.getTopicSubjectObserver().subscribe((response) => {
       this.topicLoading = false;
-      this.firstFormGroup.setValue({
+      this.topicFormGroup.setValue({
         subject: response.replace('"', '').trim()
       })
     });
@@ -96,19 +102,19 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.gptService.getIsolatedTopic() 
   }
 
-  onVideoOptionSelected(option: { name: string; header: string; description: string; }) {
+  onVideoOptionSelected(option: VideoStyle) {
     this.selectedVideoOption = option;
   }
 
-  onVideoDurationSelected(option: { name: string; header: string; description: string; }) {
+  onVideoDurationSelected(option: VideoDuration) {
     this.selectedDurationOption = option;
   }
 
   onSubmit() {
     this.gptService.submitInputs(
-        this.firstFormGroup.value.subject,
-        this.secondFormGroup.value.selectedStyle,
-        this.thirdFormGroup.value.selectedDuration
+        this.topicFormGroup.value.subject,
+        this.styleFormGroup.value.selectedStyle,
+        this.moneyFormGroup.value.selectedDuration
     );
     this.navigationService.navigateToResults();
   }

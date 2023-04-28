@@ -25,7 +25,13 @@
             <div style="display: flex; align-items: center; padding: 0; margin:0">
               <button cButton variant="outline" color="dark" [disabled]="isTitleLoading" (click)="rerollTitle()">
                 <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
-                Re-Roll
+                New
+              </button>
+            </div>
+            <div style="display: flex; align-items: center; padding: 0; margin:0">
+              <button cButton variant="outline" color="dark" [disabled]="isTitleLoading" (click)="rerollTitle()">
+                <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
+                Optimize
               </button>
             </div>
           </div>

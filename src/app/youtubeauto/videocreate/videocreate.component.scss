@@ -8,7 +8,7 @@
 
 .mat-input-element {
   background-color: #fff;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 .flex-grow-1 {
@@ -20,6 +20,7 @@
 }
 
 mat-button-toggle-group {
+  padding-top: 2rem;
   display: flex;
   flex-wrap: wrap;
   margin: 1rem;
@@ -30,7 +31,7 @@ mat-button-toggle-group {
   mat-button-toggle {
     margin: 0.5rem;
     margin-top: 5px; // add a margin to the top of each button
-    border-radius: 0px;
+    border-radius: 10px;
     color: #333;
     font-size: 1rem;
     display: block;  
@@ -66,4 +67,34 @@ mat-button-toggle-group {
 .col-4 {
   flex-basis: calc(33.33333% - 20px);
   max-width: calc(33.33333% - 20px);
+}
+
+h4 {
+  padding-top: 2rem;
+}
+
+.channel-stats {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 1rem;
+  display: flex;
+  margin: 0;
+}
+
+.name {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.stat {
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
 }
