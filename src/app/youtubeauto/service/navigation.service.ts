@@ -9,7 +9,7 @@ export class NavigationService {
   constructor(private router: Router) {}
 
   navigateToResults() {
-    this.router.navigate(['/youtubeauto/results']);
+    this.router.navigate(['/youtubeauto/details']);
   }
 
   navigateToCreateVideo() {

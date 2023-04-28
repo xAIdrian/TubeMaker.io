@@ -1,0 +1,48 @@
+<div *ngIf="!parentIsLoading">
+  <h4>Improve Your Script With AI</h4>
+  <strong>{{ currentVideoDuration.name }}</strong>
+  <p class="text-medium-emphasis">{{ currentVideoDuration.description }}</p>
+  <form [formGroup]="scriptFormGroup">
+
+    <div *ngFor="let section of currentVideoDuration.sections">
+      <h5>{{ section.name }}</h5>
+      <div class="row">
+        <div class="col-8">
+          <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="{{ section.controlName }}">
+      </textarea>
+        </div>
+        <div class="col-2">
+          <div style="display: flex; align-items: center; padding: 0; margin:0">
+            <button 
+              cButton 
+              class="col-btn" 
+              variant="outline" 
+              color="dark" 
+              [disabled]="section.isLoading"
+              (click)="onRerollSection(section)">
+              <c-spinner *ngIf="section.isLoading" size="sm"></c-spinner>
+              New
+            </button>
+          </div>
+          <div style="display: flex; align-items: center; padding: 0; margin:0">
+            <button 
+              cButton 
+              class="col-btn" 
+              variant="outline" 
+              color="dark" 
+              [disabled]="section.isOptimizing"
+              (click)="onOptimizeSection(section)">
+              <c-spinner *ngIf="section.isOptimizing" size="sm"></c-spinner>
+              Optimize
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+      <button cButton variant="outline" color="dark" matStepperPrevious>Go Back</button>
+      <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
+    </div>
+  </form>
+</div>

@@ -1,25 +1,26 @@
 <c-card class="mb-4">
-  <c-card-body>
-    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <c-card-body  style="min-height: 80vh">
+    <mat-horizontal-stepper [linear]="isLinear" #stepper style="padding: 1rem;">
 
-      <mat-step [stepControl]="firstFormGroup">
-        <strong>Pick Your Video Subject</strong>
-        <p class="text-medium-emphasis small">
+      <mat-step [stepControl]="topicFormGroup">
+        <h4>Pick Your Video Subject</h4>
+        <p class="text-medium-emphasis">
           Simply enter your video topic into the box below, or our AI will a topic for you!
         </p>
-        <form [formGroup]="firstFormGroup" class="d-flex align-items-center">
-          <ng-template matStepLabel>Subject</ng-template>
+        <form [formGroup]="topicFormGroup" class="d-flex align-items-center">
+          <ng-template matStepLabel>Topic</ng-template>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-info" style="padding-right: 2rem; padding-left: 2rem; margin-right: 1rem;;" [disabled]="topicLoading" (click)="reRollTopic()">
+            <button class="btn btn-info" style="padding-right: 2rem; padding-left: 2rem; margin-right: 1rem;;"
+              [disabled]="topicLoading" (click)="reRollTopic()">
               <c-spinner *ngIf="topicLoading" size="sm" color="white"></c-spinner>
-              Generate Topic
+              Get an Idea
             </button>
           </div>
           <div class="flex-grow-1">
-            <input matInput placeholder="Type your idea or let us pick one for you" formControlName="subject"
-              required aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
+            <input matInput placeholder="Type your idea or let us pick one for you" formControlName="topic" required
+              aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
           </div>
-          <br/>
+          <br />
         </form>
         <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
           <button variant="outline" color="dark" cButton>Need Help?</button>
@@ -27,52 +28,123 @@
         </div>
       </mat-step>
 
-      <mat-step [stepControl]="secondFormGroup">
-          <form [formGroup]="secondFormGroup">
-            <ng-template matStepLabel>Style</ng-template>
-            <div class="row">
-              <div class="col-4">
-                <mat-button-toggle-group formControlName="selectedStyle">
-                  <mat-button-toggle *ngFor="let videoOption of videoStyles" [value]="videoOption" (click)="onVideoOptionSelected(videoOption)">{{ videoOption.name }}</mat-button-toggle>
-                </mat-button-toggle-group>
-              </div>
-              <div class="col-8">
-                <strong>{{ selectedVideoOption.header }}</strong>
-                <p class="text-medium-emphasis small" style="margin-top: 1rem;">{{ selectedVideoOption.description }}</p>
+      <mat-step [stepControl]="styleFormGroup">
+        <form [formGroup]="styleFormGroup">
+          <ng-template matStepLabel>Style</ng-template>
+          <div class="row">
+            <div class="col-4">
+              <mat-button-toggle-group formControlName="selectedStyle">
+                <mat-button-toggle *ngFor="let videoOption of videoStyles" [value]="videoOption"
+                  (click)="onVideoOptionSelected(videoOption)">{{ videoOption.name }}</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div class="col-8">
+              <h4>{{ selectedVideoOption.header }}</h4>
+              <p class="text-medium-emphasis" style="margin-top: 2rem;">{{ selectedVideoOption.description }}</p>
+              <h5 *ngIf="selectedVideoOption.channelExamples.length > 0" style="padding-top: 1rem;">Similar Channels:</h5>
+              <div class="channel-stats" *ngFor="let channel of selectedVideoOption.channelExamples" style="padding: 0.5rem;">
+                <strong class="name">{{channel.name}}</strong>
+                <div class="stats">
+                  <div class="stat">
+                    <span class="subscribers">{{channel.subscriptions}} subscribers</span>
+                  </div>
+                  <div class="stat">
+                    <span class="views">{{channel.views}} views</span>
+                  </div>
+                  <div class="stat">
+                    <span class="earnings">{{channel.earns}}</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <br />
-            <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-              <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
-              <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
-            </div>
-          </form>
-        
+          </div>
+          <br />
+          <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+            <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
+          </div>
+        </form>
+
       </mat-step>
 
-      <mat-step [stepControl]="thirdFormGroup">
-        <form [formGroup]="thirdFormGroup">
+      <mat-step [stepControl]="durationFormGroup">
+        <form [formGroup]="durationFormGroup">
           <ng-template matStepLabel>Length</ng-template>
           <div class="row">
-              <div class="col-4">
-                <mat-button-toggle-group formControlName="selectedDuration">
-                  <mat-button-toggle *ngFor="let durationOption of durationOptions" [value]="durationOption" (click)="onVideoDurationSelected(durationOption)">{{ durationOption.name }}</mat-button-toggle>
-                </mat-button-toggle-group>
-              </div>
-              <div class="col-8">
-                <strong>{{ selectedDurationOption.header }}</strong>
-                <p class="text-medium-emphasis small" style="margin-top: 1rem;">{{ selectedDurationOption.description }}</p>
+            <div class="col-4">
+              <mat-button-toggle-group formControlName="selectedDuration">
+                <mat-button-toggle *ngFor="let durationOption of durationOptions" [value]="durationOption"
+                  (click)="onVideoDurationSelected(durationOption)">{{ durationOption.name }}</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div class="col-8">
+              <h4>{{ selectedDurationOption.header }}</h4>
+              <p class="text-medium-emphasis" style="margin-top: 1rem;">{{ selectedDurationOption.description }}</p>
+              <h5 *ngIf="selectedDurationOption.sections.length > 0" style="padding-top: 1rem;">Script Outline:</h5>
+              <div *ngFor="let section of selectedDurationOption.sections" style="padding: 1rem;">
+                <strong>{{section.name}}</strong>
+                <ul>
+                  <li *ngFor="let item of section.points">{{item}}</li>
+                </ul>
               </div>
             </div>
-        <br />
-
-        <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-          <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
-          <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">GENERATE My Video Script, Title, & Everything Else!</button>
-        </div>
+            </div>
+          <br />
+          <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+            <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
+          </div>
         </form>
       </mat-step>
 
+      <mat-step [stepControl]="moneyFormGroup">
+        <form [formGroup]="moneyFormGroup">
+          <ng-template matStepLabel>Monetization</ng-template>
+          <div class="row">
+            <div class="col-4">
+              <mat-button-toggle-group formControlName="selectedMonetization">
+                <mat-button-toggle *ngFor="let moneyOption of moneyOptions" [value]="moneyOption"
+                  (click)="onMoneyOptionSelected(moneyOption)">{{ moneyOption }}</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div class="col-8">
+              <h4 *ngIf="selectedMonitizationOption === ''">Choose How You Want To Earn With Your Video</h4>
+              <p class="text-medium-emphasis">(Optional)</p>
+              <p class="text-medium-emphasis" *ngIf="selectedMonitizationOption === ''">With ads, creators earn money by allowing ads to run on their videos. These ads are served by YouTube and creators receive a portion of the revenue generated by these ads. With affiliate links, creators include links to products or services in their video descriptions or in the video itself. If a viewer clicks on one of these links and makes a purchase, the creator earns a commission on that sale.</p>
+              <p class="text-medium-emphasis small" *ngIf="selectedMonitizationOption !== ''">The following information will be formatted into a Call To Action at the end of your video description.  Be sure to include links to improve engagement or drive traffic to other offers.</p>
+              <div *ngIf="selectedMonitizationOption === 'Affiliate'">
+                <strong>Product Name</strong>
+                <div class="mb-3 flex-grow-1" style="margin-bottom: 1rem;">
+                  <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" formControlName="productName">
+                  </textarea>
+                </div>
+                <strong>Product Description</strong>
+                <div class="mb-3 flex-grow-1" style="margin-bottom: 1rem;">
+                  <textarea cFormControl style=" margin-top: 1rem; margin-bottom: 1rem;" formControlName="productDescription">
+                  </textarea>
+                </div>
+              </div>
+              <strong *ngIf="selectedMonitizationOption !== ''">Links to affliliate offers or new videos</strong>
+              <div formArrayName="links" *ngIf="selectedMonitizationOption !== ''">
+                <div *ngFor="let link of links.controls; let i = index">
+                  <input cFormControl style="margin-top: 0.25rem;" type="text" formControlName="{{i}}">
+                </div>
+                <button cButton style="margin-top: 0.5rem;" variant="outline" color="dark" (click)="addLink()">Add Link</button>
+              </div>
+            </div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+              <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
+              <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">GENERATE My Video Script,
+                Title, & Everything Else!</button>
+            </div>
+        </form>
+      </mat-step>
     </mat-horizontal-stepper>
+    <c-card class="container" *ngIf="hasInputError" style="margin-bottom: 1rem;">
+      <div class="text-area">
+          <p>There are fields you must enter to generate your video.  Please check your topic, style, and duration fields.</p>
+      </div>
+  </c-card>
   </c-card-body>
 </c-card>

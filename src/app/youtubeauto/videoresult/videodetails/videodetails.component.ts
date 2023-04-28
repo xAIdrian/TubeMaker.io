@@ -4,9 +4,10 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
+  ViewChild,
 } from '@angular/core';
-import { VoiceService } from '../service/voice.service';
-import { NavigationService } from '../service/navigation.service';
+import { VoiceService } from '../../service/voice.service';
+import { NavigationService } from '../../service/navigation.service';
 import {
   FormBuilder,
   FormGroup,
@@ -14,18 +15,26 @@ import {
 } from '@angular/forms';
 import { saveAs } from 'file-saver';
 
-import { GptGeneratedVideo } from '../model/gpt/gptgeneratedvideo.model';
-import { GptService } from '../service/gpt.service';
+import { GptGeneratedVideo } from '../../model/gpt/gptgeneratedvideo.model';
+import { GptService } from '../../service/gpt.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { MediaService } from '../service/media.service';
+import { ContentService } from '../../service/content.service';
+import { VideoDuration } from '../../model/videoduration.model';
+import { VideoScriptComponent } from '../videoscript/videoscript.component';
 
 @Component({
   selector: 'video-result',
-  templateUrl: './videoresult.component.html',
-  styleUrls: ['./videoresult.component.scss'],
+  templateUrl: './videodetails.component.html',
+  styleUrls: ['./videodetails.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoResultComponent implements OnInit, AfterContentInit {
+export class VideoDetailsComponent implements OnInit, AfterContentInit {
+
+  @ViewChild('video-script') videoScriptStep: VideoScriptComponent
+  
+  scriptFormGroup: FormGroup;
+  currentVideoDuration: VideoDuration;
+
   //debug variable to be removed
   isInDebugMode: boolean = true;
   ////////////////////////////
@@ -35,10 +44,18 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
 
   isLinear: any;
   isLoading: boolean = !this.isInDebugMode //should be set to true in production;
+
   isTitleLoading: boolean = false;
+  isTitleOptimizing: boolean = false;
+
   isDescLoading: boolean = false;
+  isDescOptimizing: boolean = false;
+
   isScriptLoading: boolean = false;
+  isScriptOptimizing: boolean = false;
+
   isTagsLoading: boolean = false;
+  isTagsOptimizing: boolean = false;
 
   resultsFormGroup: FormGroup;
   audioFormGroup: FormGroup;
@@ -61,7 +78,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
   constructor(
     private gptService: GptService,
     private voiceService: VoiceService,
-    private videoService: MediaService,
+    private contentService: ContentService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -98,8 +115,10 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     this.gptService.getCompleteResultsSubjectObserver().subscribe(
       (response: GptGeneratedVideo) => setTimeout(() => {
         this.isLoading = false;
+        this.videoScriptStep.parentIsLoading = this?.isLoading;
+
         console.log(
-          '🚀 ~ file: videoresult.component.ts:40 ~ VideoResultComponent ~ this.posterService.getResultsObserver.subscribe ~ response:',
+          '🚀 ~ file: videoresult.component.ts:40 ~ VideoDetailsComponent ~ this.posterService.getResultsObserver.subscribe ~ response:',
           response
         );
         this.resultsFormGroup.setValue({
@@ -118,19 +137,11 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       this.isDescLoading = false;
       this.resultsFormGroup.patchValue({ description: response.trim() })
     });
-    this.gptService.getScriptSubjectObserver().subscribe((response) => {
-      this.isScriptLoading = false;
-      this.resultsFormGroup.patchValue({ script: response.trim() })
-    });
     this.gptService.getTagsSubjectObserver().subscribe((response) => {  
       this.isTagsLoading = false;
       this.resultsFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
     this.voiceService.getVoiceOptionsObserver().subscribe((response) => {
-      console.log(
-        '🚀 ~ file: videocreate.component.ts:47 ~ VideoCreateComponent ~ this.videoService.getVideoOptionsObserver ~ response:',
-        response
-      );
       this.voiceOptions = response;
     });
     this.voiceService.getTextToSpeechObserver().subscribe((response) => {
@@ -157,6 +168,19 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
       videoFile: ['', Validators.required],
       imageFile: ['', Validators.required],
      });
+     this.scriptFormGroup = this._formBuilder.group({
+      introduction: ['', Validators.required],
+      mainContent: ['', Validators.required],
+      conclusion: ['', Validators.required],
+      questions: [''],
+      opinions: [''],
+      caseStudies: [''],
+      actionables: [''],
+    });
+  }
+
+  onScriptFormGroupChange(childFormGroup: FormGroup) {
+    this.scriptFormGroup = childFormGroup;
   }
 
   rerollTitle() {
@@ -165,22 +189,28 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
     this.gptService.getIsolatedTitle();
   }
 
+  optimizeTitle() {
+    throw new Error('Method not implemented.');
+  }
+
   rerollDescription() {
     this.isDescLoading = true;
     this.resultsFormGroup.patchValue({ description: 'Please wait...' })
     this.gptService.getIsolatedDescription();
   }
-
-  rerollScript() {
-    this.isScriptLoading = true;
-    this.resultsFormGroup.patchValue({ script: 'Please wait...'  })
-    this.gptService.getIsolatedScript();
+  
+  optimizeDesc() {
+    throw new Error('Method not implemented.');
   }
 
   rerollTags() {
     this.isTagsLoading = true;
     this.resultsFormGroup.patchValue({ tags: 'Please wait...' })
     this.gptService.getIsolatedTags();
+  }
+
+  optimizeTags() {
+    throw new Error('Method not implemented.');
   }
 
   downloadTextFile() {
@@ -196,7 +226,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
         const file = htmlTarget.files[0]
         this.audioFormGroup.patchValue({ audioFile: file.name });
         this.audioFileName = file.name;
-        this.videoService.updateAudioFile(file);
+        this.contentService.updateAudioFile(file);
       }
     }
   }  
@@ -208,7 +238,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
         const file = htmlTarget.files[0]
         this.videoFormGroup.patchValue({ videoFile: file.name });
         this.videoFileName = file.name;
-        this.videoService.updateVideoFile(file);
+        this.contentService.updateVideoFile(file);
       }
     }
   }
@@ -220,7 +250,7 @@ export class VideoResultComponent implements OnInit, AfterContentInit {
         const file = htmlTarget.files[0]
         this.videoFormGroup.patchValue({ imageFile: file.name });
         this.imageFileName = file.name;
-        this.videoService.updateImageFile(file);
+        this.contentService.updateImageFile(file);
       }
     }
   }

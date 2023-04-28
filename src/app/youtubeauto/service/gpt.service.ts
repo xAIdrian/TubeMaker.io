@@ -141,14 +141,6 @@ export class GptService {
     });
   }
 
-  submitInputs(promptQuery: string, videoStyle: string, videoDuration: string) {
-    this.sourcesVideo = {
-      prompt: promptQuery,
-      videoStyle: videoStyle,
-      videoDuration: videoDuration,
-    };
-  }
-
   generateVideoFromSources(): void {
     if (this.sourcesVideo === undefined) {
       throw new Error('Sources video is undefined');
