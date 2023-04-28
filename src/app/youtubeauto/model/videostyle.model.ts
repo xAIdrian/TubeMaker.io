@@ -35,10 +35,10 @@ export const defaultVideoStyles: VideoStyle[] = [
     ],
   },
   {
-    name: 'Top 10',
-    header: 'Top 5 / Top 10 Videos',
+    name: 'Top 5',
+    header: 'Top 5 Videos',
     description:
-      'People love binge-watching the Top5, and Top10 videos. Be it the Top5 best mobile games for kids or the Top10 ways to earn money online. These videos are a perfect mix of education and entertainment. The usual list starts in ascending order to make sure the user watches the entire video anticipating what’s the top item on the list.',
+      'People love binge-watching the Top5 videos. Be it the Top5 best mobile games for kids or the Top10 ways to earn money online. These videos are a perfect mix of education and entertainment. The usual list starts in ascending order to make sure the user watches the entire video anticipating what’s the top item on the list.',
     channelExamples: [
       {
         name: 'Top5Gaming',

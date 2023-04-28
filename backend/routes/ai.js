@@ -14,12 +14,15 @@ router.get("/topic", async (req, res, next) => {
   console.log('🔥🔥🔥🔥🔥🔥🔥')
   rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_topic.txt");
   try {
+    /**
+     * put in its own function
+     */
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: rawPrompt,
       temperature: 1.2,
-      max_tokens: 2000,
-      top_p: 1,
+      max_tokens: 3000,
+      top_p: 1
     });
     response = completion.data.choices[0].text;
     res.status(200).json({
@@ -130,24 +133,49 @@ router.post("/tags", async (req, res, next) => {
   });
 });
 
-async function getCompletion(prompt) {
+async function getNewOutputCompletion(prompt) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 3000,
       top_p: 1,
     });
     return completion.data.choices[0].text;
     
   } catch (error) {
     if (error.response) {
-      console.log("🚀 ~ file: ai.js:56 ~ getCompletion ~ error")
+      console.log("🚀 ~ file: ai.js:56 ~ getNewOutputCompletion ~ error")
       console.log(error.response.status);
       console.log(error.response.data);
     } else {
-      console.log("🚀 ~ file: ai.js:61 ~ getCompletion ~ else")
+      console.log("🚀 ~ file: ai.js:61 ~ getNewOutputCompletion ~ else")
+      console.log(error.message);
+    }
+  }
+}
+
+async function getOptimizedOutputCompletion(prompt) {
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: prompt,
+      temperature: 0.7,
+      max_tokens: 3000,
+      top_p: 1,
+      presence_penalty: 0.6,
+      frequency_penalty: 0.6
+    });
+    return completion.data.choices[0].text;
+    
+  } catch (error) {
+    if (error.response) {
+      console.log("🔥 ~ file: ai.js:56 ~ getOptimizedOutputCompletion ~ error")
+      console.log(error.response.status);
+      console.log(error.response.data);
+    } else {
+      console.log("🔥 ~ file: ai.js:61 ~ getOptimizedOutputCompletion ~ else")
       console.log(error.message);
     }
   }
@@ -157,7 +185,7 @@ async function summaryPromptCompletion(inputParam) {
   summaryPrompt = readTextFileToPrompt("backend/routes/inputprompts/summary.txt"); 
   summaryPrompt = summaryPrompt.replace("<<FEED>>", inputParam);
   
-  const completion = getCompletion(summaryPrompt);
+  const completion = getNewOutputCompletion(summaryPrompt);
   return completion;
 }
 
@@ -166,7 +194,7 @@ function scriptPromptCompletion(inputParam, styleParam, durationParam) {
   scriptPrompt = scriptPrompt.replace("<<FEED>>", inputParam);
   scriptPrompt = scriptPrompt.replace("<<STYLE>>", styleParam);
 
-  const completion = getCompletion(scriptPrompt);
+  const completion = getNewOutputCompletion(scriptPrompt);
   return completion;
 }
 
@@ -174,7 +202,7 @@ function paramPromptCompletion(filename, inputParam) {
   rawPrompt = readTextFileToPrompt(filename);
   if (inputParam !== '') {rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);}
 
-  const completion = getCompletion(rawPrompt);
+  const completion = getNewOutputCompletion(rawPrompt);
   return completion;
 }
 
