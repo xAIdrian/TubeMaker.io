@@ -20,7 +20,7 @@ router.get("/topic", async (req, res, next) => {
       model: "text-davinci-003",
       prompt: rawPrompt,
       temperature: 1.2,
-      max_tokens: 3000,
+      max_tokens: 1500,
       top_p: 1,
       presence_penalty: 0.7,
       frequency_penalty: 0.7
@@ -224,7 +224,7 @@ async function getNewOutputCompletion(prompt) {
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.7,
-      max_tokens: 3000,
+      max_tokens: 2000,
       top_p: 1,
       presence_penalty: 0.6,
       frequency_penalty: 0.6
@@ -249,7 +249,7 @@ async function getOptimizedOutputCompletion(prompt) {
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.7,
-      max_tokens: 3000,
+      max_tokens: 2000,
       top_p: 1,
     });
     return completion.data.choices[0].text;
