@@ -56,7 +56,33 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
      */
     this.gptService.getScriptSectionObserver().subscribe((response) => {
       this.isScriptLoading = false;
-      // this.scriptFormGroup.patchValue({ script: response.trim() })
+      
+      switch (response.sectionControl) {
+        case 'introduction':
+          this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
+          break;
+        case 'mainContent':
+          this.scriptFormGroup.patchValue({ mainContent: response.scriptSection })
+          break;
+        case 'conclusion':
+          this.scriptFormGroup.patchValue({ conclusion: response.scriptSection })
+          break;
+        case 'questions':
+          this.scriptFormGroup.patchValue({ questions: response.scriptSection })
+          break;
+        case 'opinions':
+          this.scriptFormGroup.patchValue({ opinions: response.scriptSection })
+          break;
+        case 'caseStudies':
+          this.scriptFormGroup.patchValue({ caseStudies: response.scriptSection })
+          break;
+        case 'actionables':
+          this.scriptFormGroup.patchValue({ actionables: response.scriptSection })
+          break;
+        default:
+          console.log("🚀 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ default:")
+          break;
+      }
     });
   }
 
@@ -84,16 +110,6 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
     const controlName = section.controlName
     this.scriptFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
     this.scriptFormGroupEvent.emit(this.scriptFormGroup);
-  }
-
-  rerollScript() {
-    this.isScriptLoading = true;
-    this.scriptFormGroup.patchValue({ script: 'Please wait...'  })
-    this.gptService.getNewScriptSection();
-  }
-
-  optimizeScript() {
-    let scar = this.currentVideoDuration.sections[0].points[0] + '\n\n';
   }
 }
 

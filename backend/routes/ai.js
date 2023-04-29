@@ -137,26 +137,29 @@ router.post("/improve/description", async (req, res, next) => {
   });
 });
 
-// router.post("/new/script", async (req, res, next) => {
-//   let summary = req.body.summary;
-//   let style = req.body.style;
-//   let point = req.body.point;
-//   if (summary === "") {
-//     res.status(403).json({
-//       message: "summary is required",
-//     });
-//   }
+/**
+ * Keep in mind this is processing Script Sections
+ */
+router.post("/new/script", async (req, res, next) => {
+  let summary = req.body.summary;
+  let style = req.body.style;
+  let point = req.body.point;
+  if (summary === "") {
+    res.status(403).json({
+      message: "summary is required",
+    });
+  }
 
-//   let gptScript = await scriptPromptCompletion(summary, style, point);
-//   console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
+  let gptScript = await scriptPromptCompletion(summary, style, point);
+  console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
 
-//   res.status(200).json({
-//     message: "success",
-//     result: { script: gptScript },
-//   });
-// });
+  res.status(200).json({
+    message: "success",
+    result: { script: gptScript },
+  });
+});
 
-// router.post("/new/script", async (req, res, next) => {
+// router.post("/improve/script", async (req, res, next) => {
 //   let summary = req.body.summary;
 //   let style = req.body.style;
 //   let point = req.body.point;
@@ -270,7 +273,7 @@ function summaryPromptCompletion(inputParam) {
 }
 
 function scriptPromptCompletion(inputParam, styleParam, durationPoint) {
-  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_script.txt"); 
+  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_script_section.txt"); 
   scriptPrompt = rawPrompt
     .replace("<<FEED>>", inputParam)
     .replace("<<STYLE>>", styleParam)

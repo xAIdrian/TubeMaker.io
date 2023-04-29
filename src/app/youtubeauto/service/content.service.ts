@@ -44,6 +44,8 @@ export class ContentService {
   private currentProductDescription: string;
   private currentLinks: string[];
 
+  private scriptTotalNumberOfPoints: number = 0;
+
   constructor(
     private http: HttpClient, 
     private voiceService: VoiceService
@@ -56,6 +58,10 @@ export class ContentService {
   //     return of(this.exampleVideos);
   //   }
   // }
+
+  getTotalNumberOfPoints(): number {
+    return this.scriptTotalNumberOfPoints;
+  }
 
   getVideoOptionsObserver(): Observable<VideoStyle[]> {
     return of(this.youtubeVideoStyles);
@@ -113,6 +119,13 @@ export class ContentService {
     this.currentProductName = productName, 
     this.currentProductDescription = productDescription,
     this.currentLinks = links
+
+    this.currentDuration.sections.forEach(section => {
+      section.points.forEach(point => {
+        this.scriptTotalNumberOfPoints ++;
+      }
+    )});
+
   }
 
   updateAudioFile(audio: File) {

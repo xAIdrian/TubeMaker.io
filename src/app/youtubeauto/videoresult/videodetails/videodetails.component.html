@@ -1,18 +1,26 @@
 <c-card class="mb-4">
   <c-card-body>
 
-    <div style="display: flex; align-items: center;" *ngIf="isLoading">
+    <div style="display: flex; align-items: center;" *ngIf="contentGenerationIsLoading">
       <c-progress class="mb-3" style="width: 100%">
-        <c-progress-bar [value]="progressValue"></c-progress-bar>
+        <c-progress-bar [value]="contentProgressValue"></c-progress-bar>
       </c-progress>
     </div>
-    <p *ngIf="isLoading" style="margin-top: 1rem;" class="text-medium-emphasis">
-      {{ progressLabel }}
+    <p *ngIf="contentGenerationIsLoading" style="margin: 1rem;" class="text-medium-emphasis">
+      {{ contentProgressLabel }}
+    </p>
+    <div style="display: flex; align-items: center;" *ngIf="contentGenerationIsLoading">
+      <c-progress class="mb-3" style="width: 100%">
+        <c-progress-bar [value]="scriptProgressValue"></c-progress-bar>
+      </c-progress>
+    </div>
+    <p *ngIf="contentGenerationIsLoading" style="margin: 1rem;" class="text-medium-emphasis">
+      {{ scriptProgressLabel }}
     </p>
 
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
-      <mat-step [stepControl]="resultsFormGroup" *ngIf="!isLoading">
+      <mat-step [stepControl]="resultsFormGroup" *ngIf="!contentGenerationIsLoading">
         <h4>Let's Make The Video Your Own</h4>
         <p class="text-medium-emphasis small">
           Go through your new video context and make any edits to create your script!
@@ -99,12 +107,12 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="scriptFormGroup" *ngIf="!isLoading">
+      <mat-step [stepControl]="scriptFormGroup" *ngIf="!contentGenerationIsLoading">
         <ng-template matStepLabel>Script</ng-template>
         <video-script (scriptFormGroupEvent)="onScriptFormGroupChange($event)"></video-script>
       </mat-step>
 
-      <mat-step [stepControl]="audioFormGroup" *ngIf="!isLoading">
+      <mat-step [stepControl]="audioFormGroup" *ngIf="!contentGenerationIsLoading">
         <h4>Let's Finish Your Audio & Start The Video</h4>
         <p></p>
         <form [formGroup]="audioFormGroup">
@@ -153,7 +161,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="videoFormGroup" *ngIf="!isLoading">
+      <mat-step [stepControl]="videoFormGroup" *ngIf="!contentGenerationIsLoading">
         <strong>Almost Done, Put It All Together With Descript</strong><br />
         <p class="text-medium-emphasis small">
           Now that you have downloaded your AI narration or created your own, it's time to put it all together with

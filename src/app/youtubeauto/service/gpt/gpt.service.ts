@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, of, Subject } from 'rxjs';
+import { from, map, Observable, of, Subject } from 'rxjs';
 import { GptGeneratedMetaData, GptGeneratedScript as GptGeneratedScriptData } from '../../model/gpt/gptgeneratedvideo.model';
 import { GptVideoReqBody } from '../../model/gpt/gptvideoreqbody.model';
 import { GptResponse } from '../../model/gpt/gptresponse.model';
-import { catchError } from 'rxjs/operators';
+import { catchError, concatMap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ContentService } from '../content.service';
 import { GptObservers } from './gpt.observers';
+import { DurationSection } from '../../model/videoduration.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GptService {
   //state observables
-  private progressSubject = new Subject<number>();
+  private contentProgressSubject = new Subject<number>();
+  private scriptProgressSubject = new Subject<{
+    increment: number,
+    label: string
+  }>();
   private completeDetailsSubject = new Subject<{
     meta: GptGeneratedMetaData,
     // script: GptGeneratedScriptData
@@ -25,7 +30,10 @@ export class GptService {
   private topicSubject = new Subject<String>();
   private titleSubject = new Subject<String>();
   private descriptionSubject = new Subject<String>();
-  private scriptSubject = new Subject<String>();
+  private scriptSectionSubject = new Subject<{
+    sectionControl: string,
+    scriptSection: string
+  }>();
   private tagsSubject = new Subject<String[]>();
 
   private gptGeneratedSummary: string = ''
@@ -36,16 +44,19 @@ export class GptService {
   ) {}
 
   getErrorObserver(): Observable<string> { return this.errorSubject.asObservable() }
-  getProgressObserver(): Observable<number> { return this.progressSubject.asObservable();  }
+  getContentProgressObserver(): Observable<number> { return this.contentProgressSubject.asObservable();  }
+  getScriptProgressObserver(): Observable<{
+    increment: number,
+    label: string
+  }> { return this.scriptProgressSubject.asObservable();  }
   getCompleteResultsObserver(): Observable<{
-    meta: GptGeneratedMetaData,
-    // script: GptGeneratedScriptData
+    meta: GptGeneratedMetaData
   }> { return this.completeDetailsSubject.asObservable();  }
 
   getTopicObserver() { return this.topicSubject.asObservable(); }
   getTitleObserver() { return this.titleSubject.asObservable(); }
   getDescriptionObserver() { return this.descriptionSubject.asObservable(); }
-  getScriptSectionObserver() {  return this.scriptSubject.asObservable(); }
+  getScriptSectionObserver() {  return this.scriptSectionSubject.asObservable(); }
   getTagsObserver() { return this.tagsSubject.asObservable(); }
 
   updateNewTopic() {
@@ -128,26 +139,6 @@ export class GptService {
     });
   }
 
-  getNewScriptSection() {
-    //improve error being sent back here
-    if (this.gptGeneratedSummary === '') {
-      this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
-      return;
-    }
-
-    // this.postNewScriptObservable().subscribe((response) => {
-    //   if (response.message !== 'success') {
-    //     this.scriptObserverSubject.next("How to make money with faceless youtube automation");
-    //     return;
-    //   }
-    //   this.scriptObserverSubject.next(response.result.script);
-    // });
-  }
-
-  getOptimizedScriptSection(script: any) {
-    throw new Error('Method not implemented.');
-  }
-
   updateNewTags() {
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
@@ -198,12 +189,6 @@ export class GptService {
       description: '',
       tags: [],
     };
-    let completeScriptData: GptGeneratedScriptData = {
-      id: '',
-      introduction: '',
-      mainContent: '',
-      conclusion: ''
-    };
 
     this.gptObservers.getSummaryObservable({
       prompt: this.contentService.getCurrentTopic()
@@ -218,7 +203,7 @@ export class GptService {
         compeleteMetaData.id = response.result.id;
         compeleteMetaData.summary = requestSummary;
         this.gptGeneratedSummary = requestSummary;
-        this.progressSubject.next(20);
+        this.contentProgressSubject.next(25);
         
         this.gptObservers.postNewTitleObservable({
           summary: requestSummary,
@@ -230,7 +215,7 @@ export class GptService {
             return;
           } else {
             compeleteMetaData.title = response.result.title;
-            this.progressSubject.next(20);
+            this.contentProgressSubject.next(25);
             this.checkForCompleteResultsCompletion(compeleteMetaData);
           }
         });
@@ -245,29 +230,10 @@ export class GptService {
             return;
           } else {
             compeleteMetaData.description = response.result.description;
-            this.progressSubject.next(20);
+            this.contentProgressSubject.next(25);
             this.checkForCompleteResultsCompletion(compeleteMetaData);
           }
         });
-
-        /**
-         * we need a chained for loop to complete all of these synchronously
-         */
-        // this.postNewScriptObservable({
-        //   summary: requestSummary,
-        //   style: this.contentService.getCurrentVideoStyle().name,
-        //   // point: Selection.point
-        // }).subscribe((response) => {
-        //   console.log("🚀 ~ file: gpt.service.ts:136 ~ GptService ~ generateVideoFromSources ~ response:", response)
-        //   if (response.message !== 'success') {
-        //     console.error('Failed to generate video', response.message);
-        //     //todo error response to view
-        //   } else {
-        //     compeleteResults.script = response.result.script;
-        //     this.progressObserverSubject.next(20);
-        //     this.checkForCompleteResultsCompletion(compeleteResults);
-        //   }
-        // });
 
         this.gptObservers.postNewTagsObservable({
           summary: requestSummary,
@@ -279,7 +245,7 @@ export class GptService {
             return;
           } else {
             compeleteMetaData.tags = response.result.tags.split(',');
-            this.progressSubject.next(20);
+            this.contentProgressSubject.next(25);
             this.checkForCompleteResultsCompletion(compeleteMetaData);
           }
         });
@@ -293,21 +259,69 @@ export class GptService {
    * @returns 
    */
   checkForCompleteResultsCompletion(
-    completedMetaData: GptGeneratedMetaData,
-    // completedScriptData: GptGeneratedScriptData
+    completedMetaData: GptGeneratedMetaData
   ) {
     if (
       completedMetaData.id !== '' 
       && completedMetaData.title !== '' 
       && completedMetaData.description !== ''
       && completedMetaData.tags.length > 0
-      // && completedScriptData.introduction !== ''
-      // && completedScriptData.mainContent !== ''
-      // && completedScriptData.conclusion !== ''
+
     ) {
       console.log("🚀 ~ file: gpt.service.ts:206 ~ GptService ~ checkForCompleteResultsCompletion ~ generatedVideo:", completedMetaData)
       this.completeDetailsSubject.next({ meta: completedMetaData});
+      
+      this.contentService.getCurrentVideoDuration().sections.forEach((section) => {
+        this.getNewScriptSection(section);
+      });
     }
+  }
+
+  getNewScriptSection(section: DurationSection) {
+    console.log("🚀 ~ file: gpt.service.ts:136 ~ GptService ~ getNewScriptSection ~ section:", section)
+    //improve error being sent back here
+    if (this.gptGeneratedSummary === '') {
+      this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
+      return;
+    }
+    let compiledPoints = '';
+    let pointsCount = 0;
+    let currentPoint = 
+
+    from(section.points).pipe(
+      concatMap((sectionPoint) => {
+        console.log("🚀 ~ file: gpt.service.ts:146 ~ GptService ~ concatMap ~ sectionPoint:", sectionPoint)
+        return this.gptObservers.postNewScriptSectionObservable({
+          summary: this.gptGeneratedSummary,
+          style: this.contentService.getCurrentVideoStyle().name,
+          point: sectionPoint,
+        });
+      })
+    ).subscribe((response) => {
+      if (response.message !== 'success') {
+        this.errorSubject.next(response.message);
+        return;
+      }
+      pointsCount++;
+      compiledPoints += '\n' + response.result.script;
+
+      if (pointsCount === section.points.length) {
+        // emit just the view value of the section
+        this.scriptSectionSubject.next({
+          sectionControl: section.controlName,
+          scriptSection: compiledPoints.trim()
+        });
+      }
+      //here we are managing the loading state of the view and the final nav point
+      this.scriptProgressSubject.next({
+        increment: 100 / this.contentService.getTotalNumberOfPoints(),
+        label: this.generateLoadingMessage(),
+      });
+    });
+  }
+
+  getOptimizedScriptSection(script: any) {
+    throw new Error('Method not implemented.');
   }
 
   // getScriptForDownload(): Observable<{ blob: Blob; filename: string }> {
@@ -325,4 +339,24 @@ export class GptService {
   //         .replace('"', '') + '.txt',
   //   });
   // }
+
+  generateLoadingMessage(): string {
+    const messages = [
+      'Processing neural data...',
+      'Optimizing deep learning models...',
+      'Training artificial intelligence...',
+      'Analyzing data sets...',
+      'Generating synthetic samples...',
+      'Improving machine learning algorithms...',
+      'Simulating neural networks...',
+      'Building intelligent agents...',
+      'Modeling data with artificial neural nets...',
+      'Designing natural language processing systems...',
+      'Extracting features from images...',
+      'Creating intelligent decision systems...'
+    ];
+    const index = Math.floor(Math.random() * messages.length);
+    return messages[index];
+  }
+  
 }

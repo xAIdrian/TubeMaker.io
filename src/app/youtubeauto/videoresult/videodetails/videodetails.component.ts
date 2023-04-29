@@ -17,7 +17,6 @@ import { saveAs } from 'file-saver';
 
 import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../../service/gpt/gpt.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ContentService } from '../../service/content.service';
 import { VideoDuration } from '../../model/videoduration.model';
 import { VideoScriptComponent } from '../videoscript/videoscript.component';
@@ -39,11 +38,13 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   isInDebugMode: boolean = false;
   ////////////////////////////
 
-  progressValue: number = 0;
-  progressLabel: string = 'Searching the web...';
+  contentProgressValue: number = 0;
+  contentProgressLabel: string = 'Please wait...';
+  scriptProgressValue: number = 0;
+  scriptProgressLabel: string = 'Waking up your AI...';
 
   isLinear: any;
-  isLoading: boolean = !this.isInDebugMode //should be set to true in production;
+  contentGenerationIsLoading: boolean = !this.isInDebugMode //should be set to true in production;
 
   isTitleLoading: boolean = false;
   isTitleOptimizing: boolean = false;
@@ -103,28 +104,36 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   }
 
   setupObservers() {
-    this.gptService.getProgressObserver().subscribe((response) => {
-      this.progressValue = this.progressValue + response;
-      if (this.progressValue === 20) {
-        this.progressLabel = 'Researching the competition...';
-      } else if (this.progressValue === 40) {
-        this.progressLabel = 'Analyzing the market...';
-      } else if (this.progressValue === 60) {
-        this.progressLabel = 'Predicting trends...';
-      } else if (this.progressValue === 80) {
-        this.progressLabel = 'Writing the script...';
-      } else if (this.progressValue === 100) {
-        this.progressLabel = 'Done!';
+    this.gptService.getContentProgressObserver().subscribe((response) => {
+      this.contentProgressValue = this.contentProgressValue + response;
+      if (this.contentProgressValue === 0) {
+        this.contentProgressLabel = 'Researching the competition...';
+      } else if (this.contentProgressValue === 25) {
+        this.contentProgressLabel = 'Analyzing the market...';
+      } else if (this.contentProgressValue === 50) {
+        this.contentProgressLabel = 'Predicting trends...';
+      } else if (this.contentProgressValue === 75) {
+        this.contentProgressLabel = 'Searching youtube...';
+      } else if (this.contentProgressValue === 100) {
+        this.contentProgressLabel = 'Done!';
       }
     });
+    this.gptService.getScriptProgressObserver().subscribe((response) => {
+      this.scriptProgressValue = this.scriptProgressValue + response.increment;
+      console.log("🚀 ~ file: videodetails.component.ts:123 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ scriptProgressValue:", this.scriptProgressValue)
+      this.scriptProgressLabel = response.label;
+      console.log("🚀 ~ file: videodetails.component.ts:125 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ scriptProgressLabel:", this.scriptProgressLabel)
+
+      if (this.scriptProgressValue >= 100) {
+        this.scriptProgressLabel = 'Done!';
+        setTimeout(() => {
+          this.contentGenerationIsLoading = false;
+        }, 1000);
+      }
+    });
+
     this.gptService.getCompleteResultsObserver().subscribe(
       (response: { meta: GptGeneratedMetaData }) => setTimeout(() => {
-        this.isLoading = false;
-
-        console.log(
-          '🚀 ~ file: videoresult.component.ts:40 ~ VideoDetailsComponent ~ this.posterService.getResultsObserver.subscribe ~ response:',
-          response
-        );
         this.resultsFormGroup.setValue({
           title: response.meta.title.replace('"', '').trim(),
           description: response.meta.description.trim(),
@@ -174,15 +183,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
       videoFile: ['', Validators.required],
       imageFile: ['', Validators.required],
      });
-     this.scriptFormGroup = this._formBuilder.group({
-      introduction: ['', Validators.required],
-      mainContent: ['', Validators.required],
-      conclusion: ['', Validators.required],
-      questions: [''],
-      opinions: [''],
-      caseStudies: [''],
-      actionables: [''],
-    });
   }
 
   onScriptFormGroupChange(childFormGroup: FormGroup) {
