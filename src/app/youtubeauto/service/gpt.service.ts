@@ -108,43 +108,43 @@ export class GptService {
   }
 
   getNewTitle() {
-    this.postNewTitleObservable().subscribe((response) => {
-      if (response.message !== 'success') {
-        this.titleObserverSubject.next("How to make money with faceless youtube automation");
-        return;
-      }
-      this.titleObserverSubject.next(response.result.title);
-    });
+    // this.postNewTitleObservable().subscribe((response) => {
+    //   if (response.message !== 'success') {
+    //     this.titleObserverSubject.next("How to make money with faceless youtube automation");
+    //     return;
+    //   }
+    //   this.titleObserverSubject.next(response.result.title);
+    // });
   }
 
   getNewDescription() {
-    this.postNewDescriptionObservable().subscribe((response) => {
-      if (response.message !== 'success') {
-        this.descriptionObserverSubject.next("How to make money with faceless youtube automation");
-        return;
-      }
-      this.descriptionObserverSubject.next(response.result.description);
-    });
+    // this.postNewDescriptionObservable().subscribe((response) => {
+    //   if (response.message !== 'success') {
+    //     this.descriptionObserverSubject.next("How to make money with faceless youtube automation");
+    //     return;
+    //   }
+    //   this.descriptionObserverSubject.next(response.result.description);
+    // });
   }
 
   getNewScriptSection() {
-    this.postNewScriptObservable().subscribe((response) => {
-      if (response.message !== 'success') {
-        this.scriptObserverSubject.next("How to make money with faceless youtube automation");
-        return;
-      }
-      this.scriptObserverSubject.next(response.result.script);
-    });
+    // this.postNewScriptObservable().subscribe((response) => {
+    //   if (response.message !== 'success') {
+    //     this.scriptObserverSubject.next("How to make money with faceless youtube automation");
+    //     return;
+    //   }
+    //   this.scriptObserverSubject.next(response.result.script);
+    // });
   }
 
   getNewTags() {
-    this.postNewTagsObservable().subscribe((response) => {
-      if (response.message !== 'success') {
-        this.tagsObserverSubject.next(["How", "to", "make", "money", "with", "faceless", "youtube", "automation"]);
-        return;
-      }
-      this.tagsObserverSubject.next(response.result.tags.split(','));
-    });
+    // this.postNewTagsObservable().subscribe((response) => {
+    //   if (response.message !== 'success') {
+    //     this.tagsObserverSubject.next(["How", "to", "make", "money", "with", "faceless", "youtube", "automation"]);
+    //     return;
+    //   }
+    //   this.tagsObserverSubject.next(response.result.tags.split(','));
+    // });
   }
 
   generateVideoFromSources(): void {
@@ -212,21 +212,21 @@ export class GptService {
         /**
          * we need a chained for loop to complete all of these synchronously
          */
-        this.postNewScriptObservable({
-          summary: requestSummary,
-          style: this.contentService.getCurrentVideoStyle().name,
-          // point: Selection.point
-        }).subscribe((response) => {
-          console.log("🚀 ~ file: gpt.service.ts:136 ~ GptService ~ generateVideoFromSources ~ response:", response)
-          if (response.message !== 'success') {
-            console.error('Failed to generate video', response.message);
-            //todo error response to view
-          } else {
-            compeleteResults.script = response.result.script;
-            this.progressObserverSubject.next(20);
-            this.checkForCompleteResultsCompletion(compeleteResults);
-          }
-        });
+        // this.postNewScriptObservable({
+        //   summary: requestSummary,
+        //   style: this.contentService.getCurrentVideoStyle().name,
+        //   // point: Selection.point
+        // }).subscribe((response) => {
+        //   console.log("🚀 ~ file: gpt.service.ts:136 ~ GptService ~ generateVideoFromSources ~ response:", response)
+        //   if (response.message !== 'success') {
+        //     console.error('Failed to generate video', response.message);
+        //     //todo error response to view
+        //   } else {
+        //     compeleteResults.script = response.result.script;
+        //     this.progressObserverSubject.next(20);
+        //     this.checkForCompleteResultsCompletion(compeleteResults);
+        //   }
+        // });
 
         this.postNewTagsObservable({
           summary: requestSummary,
@@ -267,19 +267,19 @@ export class GptService {
     return this.generateVideoFromSources();
   }
 
-  getScriptForDownload(): Observable<{ blob: Blob; filename: string }> {
-    if (!this.generatedVideo || !this.generatedVideo.script) {
-      return throwError('Script not available');
-    }
-    const blob = new Blob([this.generatedVideo.script], { type: 'text/plain' });
-    return of({
-      blob: blob,
-      filename:
-        this.generatedVideo.title
-          .replace(' ', '_')
-          .replace(':', '')
-          .replace("'", '')
-          .replace('"', '') + '.txt',
-    });
-  }
+  // getScriptForDownload(): Observable<{ blob: Blob; filename: string }> {
+  //   if (!this.generatedVideo || !this.generatedVideo.script) {
+  //     return throwError('Script not available');
+  //   }
+  //   const blob = new Blob([this.generatedVideo.script], { type: 'text/plain' });
+  //   return of({
+  //     blob: blob,
+  //     filename:
+  //       this.generatedVideo.title
+  //         .replace(' ', '_')
+  //         .replace(':', '')
+  //         .replace("'", '')
+  //         .replace('"', '') + '.txt',
+  //   });
+  // }
 }

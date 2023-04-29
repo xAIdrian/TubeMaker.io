@@ -214,9 +214,9 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   }
 
   downloadTextFile() {
-    this.gptService.getScriptForDownload().subscribe((blobItem) => {
-      saveAs(blobItem.blob, blobItem.filename);
-    });
+    // this.gptService.getScriptForDownload().subscribe((blobItem) => {
+    //   saveAs(blobItem.blob, blobItem.filename);
+    // });
   }
   
   onAudioPicked(event: Event) {
