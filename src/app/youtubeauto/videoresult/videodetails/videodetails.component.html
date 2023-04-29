@@ -47,7 +47,7 @@
           <h5>Description</h5>
           <div class="row">
             <div class="col-8">
-              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="description">
+              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="description" rows="12">
             </textarea>
             </div>
             <div class="col-2">
@@ -71,7 +71,7 @@
           <h5>Tags</h5>
           <div class="row">
             <div class="col-8">
-              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags">
+              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags" rows="5">
             </textarea>
             </div>
             <div class="col-2">
@@ -99,7 +99,7 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="scriptFormGroup" >
+      <mat-step [stepControl]="scriptFormGroup" *ngIf="!isLoading">
         <ng-template matStepLabel>Script</ng-template>
         <video-script (scriptFormGroupEvent)="onScriptFormGroupChange($event)"></video-script>
       </mat-step>

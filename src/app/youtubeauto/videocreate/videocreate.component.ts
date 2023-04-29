@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { GptService } from '../service/gpt.service';
+import { GptService } from '../service/gpt/gpt.service';
 import {
   FormBuilder,
   FormGroup,
@@ -91,7 +91,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   setupObservers() {
-    this.gptService.getTopicSubjectObserver().subscribe((response) => {
+    this.gptService.getTopicObserver().subscribe((response) => {
       this.topicLoading = false;
       this.topicFormGroup.setValue({
         topic: response.replace('"', '').trim()
@@ -117,7 +117,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   reRollTopic() { 
     this.topicLoading = true;
-    this.gptService.getNewTopic() 
+    this.gptService.updateNewTopic() 
   }
 
   onVideoOptionSelected(option: VideoStyle) {
@@ -142,7 +142,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     } else {
       this.hasInputError = false;
       this.contentService.submitInputs(
-        this.topicFormGroup.value.subject,
+        this.topicFormGroup.value.topic,
         this.styleFormGroup.value.selectedStyle,
         this.durationFormGroup.value.selectedDuration,
         this.moneyFormGroup.value.selectedMonetization,

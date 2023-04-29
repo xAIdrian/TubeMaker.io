@@ -15,8 +15,8 @@ import {
 } from '@angular/forms';
 import { saveAs } from 'file-saver';
 
-import { GptGeneratedVideo } from '../../model/gpt/gptgeneratedvideo.model';
-import { GptService } from '../../service/gpt.service';
+import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
+import { GptService } from '../../service/gpt/gpt.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ContentService } from '../../service/content.service';
 import { VideoDuration } from '../../model/videoduration.model';
@@ -36,7 +36,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   currentVideoDuration: VideoDuration;
 
   //debug variable to be removed
-  isInDebugMode: boolean = true;
+  isInDebugMode: boolean = false;
   ////////////////////////////
 
   progressValue: number = 0;
@@ -85,6 +85,11 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.contentService.getCurrentTopic() === undefined) {
+      this.navigationService.navigateToCreateVideo();
+      return
+    }
+
     this.setupObservers();
     this.setupFormGroups();
     
@@ -94,11 +99,11 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     
-    if (!this.isInDebugMode) { this.gptService.getGptContent(); }
+    if (!this.isInDebugMode) { this.gptService.generateVideoContentWithAI(); }
   }
 
   setupObservers() {
-    this.gptService.getProgressSubjectObserver().subscribe((response) => {
+    this.gptService.getProgressObserver().subscribe((response) => {
       this.progressValue = this.progressValue + response;
       if (this.progressValue === 20) {
         this.progressLabel = 'Researching the competition...';
@@ -112,35 +117,37 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.progressLabel = 'Done!';
       }
     });
-    this.gptService.getCompleteResultsSubjectObserver().subscribe(
-      (response: GptGeneratedVideo) => setTimeout(() => {
+    this.gptService.getCompleteResultsObserver().subscribe(
+      (response: { meta: GptGeneratedMetaData }) => setTimeout(() => {
         this.isLoading = false;
-        this.videoScriptStep.parentIsLoading = this?.isLoading;
 
         console.log(
           '🚀 ~ file: videoresult.component.ts:40 ~ VideoDetailsComponent ~ this.posterService.getResultsObserver.subscribe ~ response:',
           response
         );
         this.resultsFormGroup.setValue({
-          title: response.title.replace('"', '').trim(),
-          description: response.description.trim(),
-          script: response.script.trim(),
-          tags: response.tags.join(', ').trim(),
+          title: response.meta.title.replace('"', '').trim(),
+          description: response.meta.description.trim(),
+          tags: response.meta.tags.join(', ').trim(),
         });
       }, 1000)
     );
-    this.gptService.getTitleSubjectObserver().subscribe((response) => {
+    this.gptService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
+      this.isTitleOptimizing = false;
       this.resultsFormGroup.patchValue({ title: response.replace('"', '').trim() })
     });
-    this.gptService.getDescriptionSubjectObserver().subscribe((response) => {
+    this.gptService.getDescriptionObserver().subscribe((response) => {
       this.isDescLoading = false;
+      this.isDescOptimizing = false;
       this.resultsFormGroup.patchValue({ description: response.trim() })
     });
-    this.gptService.getTagsSubjectObserver().subscribe((response) => {  
+    this.gptService.getTagsObserver().subscribe((response) => {  
       this.isTagsLoading = false;
+      this.isTagsOptimizing = false;
       this.resultsFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
+
     this.voiceService.getVoiceOptionsObserver().subscribe((response) => {
       this.voiceOptions = response;
     });
@@ -156,7 +163,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
     this.resultsFormGroup = this._formBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      script: ['', Validators.required],
       tags: ['', Validators.required],
     });
     this.audioFormGroup = this._formBuilder.group({
@@ -186,31 +192,55 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   rerollTitle() {
     this.isTitleLoading = true;
     this.resultsFormGroup.patchValue({ title: 'Please wait...' })
-    this.gptService.getNewTitle();
+    this.gptService.updateNewTitle();
   }
 
   optimizeTitle() {
-    throw new Error('Method not implemented.');
+    if (this.resultsFormGroup.value.title === '') {
+      this.resultsFormGroup.patchValue({ title: 'Please input a value to optimize' })
+      return
+    }
+    this.isTitleOptimizing = true;
+    this.gptService.optimizeTitle(
+      this.resultsFormGroup.value.title,
+    );
+    this.resultsFormGroup.patchValue({ title: 'Please wait...' })
   }
 
   rerollDescription() {
     this.isDescLoading = true;
     this.resultsFormGroup.patchValue({ description: 'Please wait...' })
-    this.gptService.getNewDescription();
+    this.gptService.updateNewDescription();
   }
   
   optimizeDesc() {
-    throw new Error('Method not implemented.');
+    if (this.resultsFormGroup.value.description === '') {
+      this.resultsFormGroup.patchValue({ description: 'Please input a value to optimize' })
+      return
+    }
+    this.isDescOptimizing = true;
+    this.gptService.optimizeDescription(
+      this.resultsFormGroup.value.description,
+    );
+    this.resultsFormGroup.patchValue({ description: 'Please wait...' })
   }
 
   rerollTags() {
     this.isTagsLoading = true;
     this.resultsFormGroup.patchValue({ tags: 'Please wait...' })
-    this.gptService.getNewTags();
+    this.gptService.updateNewTags();
   }
 
   optimizeTags() {
-    throw new Error('Method not implemented.');
+    if (this.resultsFormGroup.value.tags === '') {
+      this.resultsFormGroup.patchValue({ tags: 'Please input a value to optimize' })
+      return
+    }
+    this.isTagsOptimizing = true;
+    this.gptService.optimizeTags(
+      this.resultsFormGroup.value.tags,
+    );
+    this.resultsFormGroup.patchValue({ tags: 'Please wait...' })
   }
 
   downloadTextFile() {

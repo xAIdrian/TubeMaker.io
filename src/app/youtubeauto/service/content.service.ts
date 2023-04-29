@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { VoiceService } from './voice.service';
 import { defaultVideoStyles, VideoStyle } from '../model/videostyle.model';
 import { defaultVideoDurations, VideoDuration } from '../model/videoduration.model';
-import { GptService } from './gpt.service';
 import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({
@@ -47,8 +46,7 @@ export class ContentService {
 
   constructor(
     private http: HttpClient, 
-    private voiceService: VoiceService,
-    private gptService: GptService
+    private voiceService: VoiceService
   ) {}
 
   // getVideos(): Observable<ListVideo[]> {
@@ -128,7 +126,6 @@ export class ContentService {
       console.error('Invalid video format.');
       return;
     }
-    console.log("🚀 ~ file: media.service.ts:143 ~ ContentService ~ updateVideoFile ~ video.type:", video.type)
     const videoBlob = new Blob([video], { type: video.type });
     this.mediaholder.video.file = URL.createObjectURL(videoBlob);
     this.mediaholder.video.title = video.name;

@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { GptService } from "../../service/gpt.service";
+import { GptService } from "../../service/gpt/gpt.service";
 import { ContentService } from "../../service/content.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../model/videoduration.model";
@@ -14,8 +14,6 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
 
   @Output() scriptFormGroupEvent = new EventEmitter<FormGroup>();
   
-  public parentIsLoading = false;
-
   isScriptLoading: boolean = false;
   scriptFormGroup: FormGroup;
 
@@ -56,7 +54,7 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
     /**
      * This needs to be updated to use the new multiple sections that make up our script
      */
-    this.gptService.getScriptSubjectObserver().subscribe((response) => {
+    this.gptService.getScriptSectionObserver().subscribe((response) => {
       this.isScriptLoading = false;
       // this.scriptFormGroup.patchValue({ script: response.trim() })
     });
