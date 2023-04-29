@@ -13,7 +13,6 @@ import { DurationSection, VideoDuration } from "../../model/videoduration.model"
 export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges {
 
   @Input() parentFormGroup: FormGroup;
-  childparentFormGroup: FormGroup;
   
   isScriptLoading: boolean = false;
 
@@ -35,7 +34,6 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
   constructor(
     private gptService: GptService,
     private contentService: ContentService,
-    private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
     this.currentVideoDuration = contentService.getCurrentVideoDuration();
@@ -45,13 +43,7 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
     console.log("🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ ngOnChanges ~ changes:", changes)
     if (changes["parentFormGroup"] && this.parentFormGroup) {
       console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentFormGroup)
-      // Get the FormGroup data and update the child component's view
       
-
-      // Update the child component's view with the FormGroup data
-      // For example:
-      // this.firstNameControl.setValue(firstName);
-      // this.lastNameControl.setValue(lastName);
     }
   }
 
@@ -62,25 +54,26 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-    console.log("🚀 ~ file: videoscript.component.ts:66 ~ VideoScriptComponent ~ ngAfterContentInit ~ this.currentVideoDuration", this.parentFormGroup)
   }
 
   setupObservers() {
-    
   }
 
   setupFormGroups() {
   }
 
   onRerollSection(section: DurationSection) {
-    section.isLoading = true;
     const controlName = section.controlName
     this.parentFormGroup.patchValue({ controlName: 'Please wait...' })
+    this.gptService.getNewScriptSection(section, false)
   }
 
   onOptimizeSection(section: DurationSection) {
-    section.isLoading = true;
     const controlName = section.controlName
+    this.gptService.optimizeScriptSection(
+      section,
+      this.parentFormGroup.get(section.controlName)?.value
+    )
     this.parentFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
   }
 }

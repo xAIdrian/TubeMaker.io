@@ -270,7 +270,7 @@ export class GptService {
     }
   }
 
-  getNewScriptSection(section: DurationSection) {
+  getNewScriptSection(section: DurationSection, updateProgress = true) {
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
@@ -295,25 +295,54 @@ export class GptService {
       pointsCount++;
       compiledPoints += '\n' + response.result.script;
 
-      if (pointsCount === section.points.length) {
-        console.log("🚀 ~ file: gpt.service.ts:309 ~ GptService ~ ).subscribe ~ pointsCount:", pointsCount)
-        
+      if (pointsCount === section.points.length) {        
         // emit just the view value of the section
         this.scriptSectionSubject.next({
           sectionControl: section.controlName,
           scriptSection: compiledPoints.trim()
         });
       }
-      //here we are managing the loading state of the view and the final nav point
-      this.scriptProgressSubject.next({
-        increment: 100 / this.contentService.getTotalNumberOfPoints(),
-        label: this.generateLoadingMessage(),
-      });
+      if (updateProgress) {
+        //here we are managing the loading state of the view and the final nav point
+        this.scriptProgressSubject.next({
+          increment: 100 / this.contentService.getTotalNumberOfPoints(),
+          label: this.generateLoadingMessage(),
+        });
+      }
     });
   }
 
-  getOptimizedScriptSection(script: any) {
-    throw new Error('Method not implemented.');
+  optimizeScriptSection(section: DurationSection, currentSection: string) {
+    //improve error being sent back here
+    // if (this.currentSection === '') {
+    //   this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
+    //   return;
+    // }
+    let compiledPoints = '';
+    let pointsCount = 0;
+
+    from(currentSection.split('\n\n')).pipe(
+      concatMap((section) => {
+        return this.gptObservers.postOptimizeScriptSectionObservable({
+          current: section
+        });
+      })
+    ).subscribe((response) => {
+      if (response.message !== 'success') {
+        this.errorSubject.next(response.message);
+        return;
+      }
+      pointsCount++;
+      compiledPoints += '\n' + response.result.script;
+
+      if (pointsCount === currentSection.length) {        
+        // emit just the view value of the section
+        this.scriptSectionSubject.next({
+          sectionControl: section.controlName,
+          scriptSection: compiledPoints.trim()
+        });
+      }
+    });
   }
 
   // getScriptForDownload(): Observable<{ blob: Blob; filename: string }> {

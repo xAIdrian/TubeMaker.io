@@ -69,12 +69,12 @@ export class GptObservers {
     );
   }
 
-//   postOptimizeScriptSectionObservable(reqBody: { current: string}): Observable<{ message: string, result: { script: string } }> {
-//     return this.http.post<{ message: string, result: { script: string } }>(
-//       'http://localhost:3000/api/openai/new/script',
-//       reqBody
-//     );
-//   }
+  postOptimizeScriptSectionObservable(reqBody: { current: string }): Observable<{ message: string, result: { script: string } }> {
+    return this.http.post<{ message: string, result: { script: string } }>(
+      'http://localhost:3000/api/openai/improve/script',
+      reqBody
+    );
+  }
 
   postNewTagsObservable(reqBody: {
     summary: string;
