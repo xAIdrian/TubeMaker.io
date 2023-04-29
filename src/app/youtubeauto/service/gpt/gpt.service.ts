@@ -166,7 +166,6 @@ export class GptService {
     this.gptObservers.postOptimizedTagsObservable({
       current: tags,
     }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:178 ~ GptService ~ optimizeTags ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -193,7 +192,6 @@ export class GptService {
     this.gptObservers.getSummaryObservable({
       prompt: this.contentService.getCurrentTopic()
     }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:96 ~ GptService ~ generateVideoFromSources ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -209,7 +207,6 @@ export class GptService {
           summary: requestSummary,
           style: this.contentService.getCurrentVideoStyle().name
         }).subscribe((response) => {
-          console.log("🚀 ~ file: gpt.service.ts:108 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
             return;
@@ -224,7 +221,6 @@ export class GptService {
           summary: requestSummary,
           style: this.contentService.getCurrentVideoStyle().name
         }).subscribe((response) => {
-          console.log("🚀 ~ file: gpt.service.ts:122 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
             return;
@@ -239,7 +235,6 @@ export class GptService {
           summary: requestSummary,
           style: this.contentService.getCurrentVideoStyle().name
         }).subscribe((response) => {
-          console.log("🚀 ~ file: gpt.service.ts:150 ~ GptService ~ generateVideoFromSources ~ response:", response)
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
             return;
@@ -266,9 +261,7 @@ export class GptService {
       && completedMetaData.title !== '' 
       && completedMetaData.description !== ''
       && completedMetaData.tags.length > 0
-
     ) {
-      console.log("🚀 ~ file: gpt.service.ts:206 ~ GptService ~ checkForCompleteResultsCompletion ~ generatedVideo:", completedMetaData)
       this.completeDetailsSubject.next({ meta: completedMetaData});
       
       this.contentService.getCurrentVideoDuration().sections.forEach((section) => {
@@ -278,7 +271,6 @@ export class GptService {
   }
 
   getNewScriptSection(section: DurationSection) {
-    console.log("🚀 ~ file: gpt.service.ts:136 ~ GptService ~ getNewScriptSection ~ section:", section)
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
@@ -286,11 +278,9 @@ export class GptService {
     }
     let compiledPoints = '';
     let pointsCount = 0;
-    let currentPoint = 
 
     from(section.points).pipe(
       concatMap((sectionPoint) => {
-        console.log("🚀 ~ file: gpt.service.ts:146 ~ GptService ~ concatMap ~ sectionPoint:", sectionPoint)
         return this.gptObservers.postNewScriptSectionObservable({
           summary: this.gptGeneratedSummary,
           style: this.contentService.getCurrentVideoStyle().name,
@@ -306,6 +296,8 @@ export class GptService {
       compiledPoints += '\n' + response.result.script;
 
       if (pointsCount === section.points.length) {
+        console.log("🚀 ~ file: gpt.service.ts:309 ~ GptService ~ ).subscribe ~ pointsCount:", pointsCount)
+        
         // emit just the view value of the section
         this.scriptSectionSubject.next({
           sectionControl: section.controlName,

@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GptService } from "../../service/gpt/gpt.service";
 import { ContentService } from "../../service/content.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -10,12 +10,12 @@ import { DurationSection, VideoDuration } from "../../model/videoduration.model"
   styleUrls: ['./videoscript.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoScriptComponent implements OnInit, AfterContentInit {
+export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges {
 
-  @Output() scriptFormGroupEvent = new EventEmitter<FormGroup>();
+  @Input() parentFormGroup: FormGroup;
+  childparentFormGroup: FormGroup;
   
   isScriptLoading: boolean = false;
-  scriptFormGroup: FormGroup;
 
   currentVideoDuration: VideoDuration = {
     name: 'please wait',
@@ -41,6 +41,20 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
     this.currentVideoDuration = contentService.getCurrentVideoDuration();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ ngOnChanges ~ changes:", changes)
+    if (changes["parentFormGroup"] && this.parentFormGroup) {
+      console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentFormGroup)
+      // Get the FormGroup data and update the child component's view
+      
+
+      // Update the child component's view with the FormGroup data
+      // For example:
+      // this.firstNameControl.setValue(firstName);
+      // this.lastNameControl.setValue(lastName);
+    }
+  }
+
   ngOnInit(): void {
     this.setupObservers();
     this.setupFormGroups();
@@ -48,68 +62,26 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
+    console.log("🚀 ~ file: videoscript.component.ts:66 ~ VideoScriptComponent ~ ngAfterContentInit ~ this.currentVideoDuration", this.parentFormGroup)
   }
 
   setupObservers() {
-    /**
-     * This needs to be updated to use the new multiple sections that make up our script
-     */
-    this.gptService.getScriptSectionObserver().subscribe((response) => {
-      this.isScriptLoading = false;
-      
-      switch (response.sectionControl) {
-        case 'introduction':
-          this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
-          break;
-        case 'mainContent':
-          this.scriptFormGroup.patchValue({ mainContent: response.scriptSection })
-          break;
-        case 'conclusion':
-          this.scriptFormGroup.patchValue({ conclusion: response.scriptSection })
-          break;
-        case 'questions':
-          this.scriptFormGroup.patchValue({ questions: response.scriptSection })
-          break;
-        case 'opinions':
-          this.scriptFormGroup.patchValue({ opinions: response.scriptSection })
-          break;
-        case 'caseStudies':
-          this.scriptFormGroup.patchValue({ caseStudies: response.scriptSection })
-          break;
-        case 'actionables':
-          this.scriptFormGroup.patchValue({ actionables: response.scriptSection })
-          break;
-        default:
-          console.log("🚀 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ default:")
-          break;
-      }
-    });
+    
   }
 
   setupFormGroups() {
-    this.scriptFormGroup = this._formBuilder.group({
-      introduction: ['', Validators.required],
-      mainContent: ['', Validators.required],
-      conclusion: ['', Validators.required],
-      questions: [''],
-      opinions: [''],
-      caseStudies: [''],
-      actionables: [''],
-    });
   }
 
   onRerollSection(section: DurationSection) {
     section.isLoading = true;
     const controlName = section.controlName
-    this.scriptFormGroup.patchValue({ controlName: 'Please wait...' })
-    this.scriptFormGroupEvent.emit(this.scriptFormGroup);
+    this.parentFormGroup.patchValue({ controlName: 'Please wait...' })
   }
 
   onOptimizeSection(section: DurationSection) {
     section.isLoading = true;
     const controlName = section.controlName
-    this.scriptFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
-    this.scriptFormGroupEvent.emit(this.scriptFormGroup);
+    this.parentFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
   }
 }
 

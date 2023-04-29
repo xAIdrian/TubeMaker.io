@@ -109,7 +109,7 @@
 
       <mat-step [stepControl]="scriptFormGroup" *ngIf="!contentGenerationIsLoading">
         <ng-template matStepLabel>Script</ng-template>
-        <video-script (scriptFormGroupEvent)="onScriptFormGroupChange($event)"></video-script>
+        <video-script [parentFormGroup]="scriptFormGroup"></video-script>
       </mat-step>
 
       <mat-step [stepControl]="audioFormGroup" *ngIf="!contentGenerationIsLoading">

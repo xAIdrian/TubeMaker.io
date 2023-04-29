@@ -120,9 +120,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
     });
     this.gptService.getScriptProgressObserver().subscribe((response) => {
       this.scriptProgressValue = this.scriptProgressValue + response.increment;
-      console.log("🚀 ~ file: videodetails.component.ts:123 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ scriptProgressValue:", this.scriptProgressValue)
       this.scriptProgressLabel = response.label;
-      console.log("🚀 ~ file: videodetails.component.ts:125 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ scriptProgressLabel:", this.scriptProgressLabel)
 
       if (this.scriptProgressValue >= 100) {
         this.scriptProgressLabel = 'Done!';
@@ -133,13 +131,13 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
     });
 
     this.gptService.getCompleteResultsObserver().subscribe(
-      (response: { meta: GptGeneratedMetaData }) => setTimeout(() => {
+      (response: { meta: GptGeneratedMetaData }) => {
         this.resultsFormGroup.setValue({
           title: response.meta.title.replace('"', '').trim(),
           description: response.meta.description.trim(),
           tags: response.meta.tags.join(', ').trim(),
         });
-      }, 1000)
+      }
     );
     this.gptService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
@@ -166,6 +164,37 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.generatedAudioIsVisible = true;
       }
     });
+
+    this.gptService.getScriptSectionObserver().subscribe((response) => {
+      console.log("♟ ~ file: videoscript.component.ts:58 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ response:", response)
+      
+      switch (response.sectionControl) {
+        case 'introduction':
+          this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
+          break;
+        case 'mainContent':
+          this.scriptFormGroup.patchValue({ mainContent: response.scriptSection })
+          break;
+        case 'conclusion':
+          this.scriptFormGroup.patchValue({ conclusion: response.scriptSection })
+          break;
+        case 'questions':
+          this.scriptFormGroup.patchValue({ questions: response.scriptSection })
+          break;
+        case 'opinions':
+          this.scriptFormGroup.patchValue({ opinions: response.scriptSection })
+          break;
+        case 'caseStudies':
+          this.scriptFormGroup.patchValue({ caseStudies: response.scriptSection })
+          break;
+        case 'actionables':
+          this.scriptFormGroup.patchValue({ actionables: response.scriptSection })
+          break;
+        default:
+          console.log("🚀 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ default:")
+          break;
+      }
+    });
   }
 
   setupFormGroups() {
@@ -183,6 +212,15 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
       videoFile: ['', Validators.required],
       imageFile: ['', Validators.required],
      });
+     this.scriptFormGroup = this._formBuilder.group({
+        introduction: ['', Validators.required],
+        mainContent: ['', Validators.required],
+        conclusion: ['', Validators.required],
+        questions: [''],
+        opinions: [''],
+        caseStudies: [''],
+        actionables: [''],
+      });
   }
 
   onScriptFormGroupChange(childFormGroup: FormGroup) {
