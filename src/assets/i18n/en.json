@@ -1,0 +1,104 @@
+{
+  "video-list": {
+    "welcome": "Welcome",
+    "publish_videos_title": "Published Youtube Videos",
+    "create_new_video": "Select a video from the list to edit or create a new one by clicking the 'New Video' button.",
+    "published": "Published:",
+    "input": {
+      "video_title": "",
+      "video_channel_title": "",
+      "video_published_at": ""
+    }
+  },
+  "video_wizard": {
+    "pick_your_video_subject": "Pick Your Video Subject",
+    "enter_topic_instructions": "Simply enter your video topic into the box below, or our AI will a topic for you!",
+    "get_an_idea": "Get an Idea",
+    "type_your_idea": "Type your idea or let us pick one for you",
+    "need_help": "Need Help?",
+    "go_to_next_step": "Go To Next Step",
+    "style": "Style",
+    "length": "Length",
+    "choose_monetization": "Choose How You Want To Earn With Your Video",
+    "optional": "(Optional)",
+    "generate_video_script": "GENERATE My Video Script, Title, & Everything Else!",
+    "input": {
+      "topic": "",
+      "selected_style": "",
+      "selected_duration": "",
+      "selected_monetization": "",
+      "product_name": "",
+      "product_description": "",
+      "links": []
+    }
+  },
+  "video-editor": {
+    "make_video_your_own_title": "Let's Make The Video Your Own",
+    "edit_video_context": "Go through your new video context and make any edits to create your script!",
+    "title_label": "Title",
+    "description_label": "Description",
+    "tags_label": "Tags",
+    "reset_content_button": "Reset Content",
+    "next_step_button": "Go To Next Step",
+    "input": {
+      "title": " {{  }}",
+      "description": "{{  }}",
+      "tags": "{{  }}",
+      "content_progress_label": "{{  }}",
+      "script_progress_label": "{{  }}"
+    },
+    "error_message": {
+      "complete_forms": "Please complete these forms before you move on."
+    }
+  },
+  "improve_script_with_ai": {
+    "title": "Improve Your Script With AI",
+    "input": {
+      "section_control_name": "",
+      "current_video_duration_name": "{{  }}",
+      "current_video_duration_description": "{{  }}",
+      "section_name": "{{  }}"
+    },
+    "go_back_button": "Go Back",
+    "next_step_button": "Go To Next Step"
+  },
+  "media_selection_form": {
+    "video_option": {
+      "title": "Use Our AI Generated Voice or Record Your Own",
+      "description": "Pick a voice. We'll take care of the audio for you or you can upload your own below.",
+      "generate_ai_narration_button": "Generate Your AI Narration",
+      "audio_not_supported_message": "Your browser does not support the audio element.",
+      "download_script_button": "Download Your Scipt",
+      "edit_in_descript_title": "Almost Done, Put It All Together With Descript",
+      "edit_in_descript_button": "Edit In Descript"
+    },
+    "thumbnail_option": {
+      "edit_thumbnail_buttons": "Click to Edit Above Thumbnail"
+    },
+    "input": {
+      "media_options": "{{ mediaOption }}"
+    },
+    "go_back_button": "Go Back",
+    "review_video_button": "Review Your Video & Post To Youtube"
+  },
+  "voice_selection_dropdown": {
+    "click_to_play_text": "Click Here To Play",
+    "audio_not_supported_message": "Your browser does not support the audio element.",
+    "input": {
+      "dropdown_button": "{{  }}",
+      "voice_options_loop": "{{  }}"
+    }
+  },
+  "video_review_card": {
+    "review_video_details": "Review Video Details",
+    "publish_to_youtube_button": "Publish to Youtube",
+    "title_label": "Title",
+    "description_label": "Description",
+    "tags_label": "Tags",
+    "script_label": "Script",
+    "copy_button": "Copy",
+    "copied_badge": "Copied!",
+    "reset_media_button": "Reset Media",
+    "reset_content_button": "Reset Content"
+  }
+}
