@@ -20,18 +20,21 @@
 
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
-      <mat-step [stepControl]="resultsFormGroup" *ngIf="!contentGenerationIsLoading">
+      <mat-step [stepControl]="infoFormGroup" *ngIf="!contentGenerationIsLoading">
         <h4>Let's Make The Video Your Own</h4>
         <p class="text-medium-emphasis small">
           Go through your new video context and make any edits to create your script!
         </p>
-        <form [formGroup]="resultsFormGroup">
+        <form [formGroup]="infoFormGroup">
           <ng-template matStepLabel>Text</ng-template>
 
           <h5>Title</h5>
           <div class="row">
             <div class="col-8">
-              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="title">
+              <textarea 
+                style="height: 100%; margin-bottom: 0.5rem;" 
+                cFormControl 
+                formControlName="title">
             </textarea>
             </div>
             <div class="col-2">
@@ -55,7 +58,12 @@
           <h5>Description</h5>
           <div class="row">
             <div class="col-8">
-              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="description" oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
+              <textarea 
+                style="height: 100%; margin-bottom: 0.5rem;" 
+                cFormControl 
+                formControlName="description" 
+                oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'
+                rows="10">
             </textarea>
             </div>
             <div class="col-2">
@@ -79,7 +87,7 @@
           <h5>Tags</h5>
           <div class="row">
             <div class="col-8">
-              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags" oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
+              <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags" rows="5" oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
             </textarea>
             </div>
             <div class="col-2">
@@ -102,7 +110,13 @@
 
           <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
             <button cButton variant="outline" color="dark" (click)="onReset()">Reset Content</button>
-            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
+            <button 
+              class="btn btn-primary" 
+              style="margin-left: 1rem;" 
+              matStepperNext 
+              (click)="onInfoSectionClick()">
+              Go To Next Step
+              </button>
           </div>
         </form>
       </mat-step>
@@ -118,5 +132,12 @@
       </mat-step>
 
     </mat-horizontal-stepper>
+
+    <c-card class="container" *ngIf="hasInputError" style="margin-bottom: 1rem;">
+      <div class="text-area">
+          <p>Please complete these forms before you move on.</p>
+      </div>
+  </c-card>
+
   </c-card-body>
 </c-card>

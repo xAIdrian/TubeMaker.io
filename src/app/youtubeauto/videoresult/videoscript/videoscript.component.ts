@@ -40,6 +40,19 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
     this.changeDetectorRef.detectChanges();
   }
 
+  onScriptSectionClick() {
+    console.log("🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ onScriptSectionClick ~ onScriptSectionClick:", this.parentScriptFormGroup)
+    
+    this.contentService.submitScriptSections(
+      this.parentScriptFormGroup.value.introduction,
+      this.parentScriptFormGroup.value.mainContent,
+      this.parentScriptFormGroup.value.caseStudies,
+      this.parentScriptFormGroup.value.opinions,
+      this.parentScriptFormGroup.value.actionables,
+      this.parentScriptFormGroup.value.conclusion
+    )
+  }
+
   onRerollSection(section: DurationSection) {
     const controlName = section.controlName
     this.parentScriptFormGroup.patchValue({ controlName: 'Please wait...' })

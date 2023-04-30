@@ -63,6 +63,10 @@ mat-button-toggle-group {
   flex-wrap: wrap;
 }
 
+::ng-deep .mat-horizontal-stepper-header{
+  pointer-events: none !important;
+}
+
 .col-8 {
   flex-basis: calc(66.66667% - 20px);
   max-width: calc(66.66667% - 20px);

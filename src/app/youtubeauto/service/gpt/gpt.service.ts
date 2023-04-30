@@ -314,7 +314,6 @@ export class GptService {
           increment: 100 / this.contentService.getTotalNumberOfPoints(),
           label: this.generateLoadingMessage(),
         }
-        console.log("🚀 ~ file: gpt.service.ts:315 ~ GptService ~ ).subscribe ~ progressItem:", progressItem)
         this.scriptProgressSubject.next(progressItem);
       }
     });

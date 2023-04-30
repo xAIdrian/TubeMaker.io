@@ -16,28 +16,13 @@ import { Observable, of, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class ContentService {
+  
   mediaSubjectObserver = new Subject<Media>();
 
   exampleVideos: ListVideo[] = [];
 
   private youtubeVideoStyles = defaultVideoStyles;
   private youtubeVideoDurations = defaultVideoDurations;
-
-  mediaholder: Media = {
-    id: '',
-    audio: {
-      title: '',
-      file: '',
-    },
-    video: {
-      title: '',
-      file: '',
-    },
-    image: {
-      title: '',
-      file: '',
-    },
-  };
 
   private currentTopic: string;
   private currentStyle: VideoStyle;
@@ -70,6 +55,12 @@ export class ContentService {
     ['questions', ''],
     ['actionables', ''],
     ['conclusion', ''],
+  ]);
+
+  private contentMap: Map<string, string> = new Map<string, string>([
+    ['title', ''],
+    ['description', ''],
+    ['tags', '']
   ]);
 
   constructor(private http: HttpClient) {}
@@ -157,10 +148,10 @@ export class ContentService {
     (this.currentTopic = topic),
       (this.currentStyle = videoStyle),
       (this.currentDuration = videoDuration),
-      (this.currentMonetization = monetization),
-      (this.currentProductName = productName),
-      (this.currentProductDescription = productDescription),
-      (this.currentLinks = links);
+      // (this.currentMonetization = monetization),
+      // (this.currentProductName = productName),
+      // (this.currentProductDescription = productDescription),
+      // (this.currentLinks = links);
 
     this.currentDuration.sections.forEach((section) => {
       section.points.forEach((point) => {
@@ -169,31 +160,28 @@ export class ContentService {
     });
   }
 
-  updateAudioFile(audio: File) {
-    this.mediaholder.audio.file = URL.createObjectURL(audio);
-    this.mediaholder.audio.title = audio.name;
+  submitInfos(title: string, description: string, tags: string) {
+    this.contentMap.set('title', title);
+    this.contentMap.set('description', description);
+    this.contentMap.set('tags', tags);
   }
 
-  updateVideoFile(video: File) {
-    if (
-      !video.type.match(/video\/*/) ||
-      !['mp4', 'webm', 'mov'].includes(video.type.split('/')[1])
-    ) {
-      console.log(
-        '🚀 ~ file: media.service.ts:143 ~ ContentService ~ updateVideoFile ~ video.type:',
-        video.type
-      );
-      console.error('Invalid video format.');
-      return;
-    }
-    const videoBlob = new Blob([video], { type: video.type });
-    this.mediaholder.video.file = URL.createObjectURL(videoBlob);
-    this.mediaholder.video.title = video.name;
-  }
-
-  updateImageFile(image: File) {
-    this.mediaholder.image.file = URL.createObjectURL(image);
-    this.mediaholder.image.title = image.name;
+  submitScriptSections(
+    introduction: string,
+    mainContent: string,
+    caseStudies: string = '',
+    opinions: string = '',
+    questions: string = '',
+    actionables: string = '',
+    conclusion: string = ''
+  ) {
+    this.scriptMap.set('introduction', introduction);
+    this.scriptMap.set('mainContent', mainContent);
+    this.scriptMap.set('caseStudies', caseStudies);
+    this.scriptMap.set('opinions', opinions);
+    this.scriptMap.set('questions', questions);
+    this.scriptMap.set('actionables', actionables);
+    this.scriptMap.set('conclusion', conclusion);
   }
 
   getScriptForDownload(): Observable<{ blob: Blob; filename: string }> {

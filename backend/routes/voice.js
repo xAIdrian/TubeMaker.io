@@ -32,7 +32,7 @@ router.get("/voices", async (req, res) => {
 });
 
 router.post("/generate", async (req, res) => {
-  let reqContent = req.body.content.split('\n').trim();
+  let reqContent = req.body.content.split('\n');
   let reqVoice = req.body.voice;
   const updateBody = {
     content: reqContent,
