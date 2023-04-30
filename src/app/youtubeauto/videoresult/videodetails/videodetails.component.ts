@@ -21,6 +21,7 @@ import { GptService } from '../../service/gpt/gpt.service';
 import { ContentService } from '../../service/content.service';
 import { VideoDuration } from '../../model/create/videoduration.model';
 import { VideoScriptComponent } from '../videoscript/videoscript.component';
+import { VideoMediaComponent } from '../videomedia/videomedia.component';
 
 @Component({
   selector: 'video-result',
@@ -29,8 +30,6 @@ import { VideoScriptComponent } from '../videoscript/videoscript.component';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
-
-  @ViewChild('video-script') videoScriptStep: VideoScriptComponent
   
   scriptFormGroup: FormGroup;
   currentVideoDuration: VideoDuration;
@@ -60,8 +59,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   isTagsOptimizing: boolean = false;
 
   resultsFormGroup: FormGroup;
-  mediaFormGroup: FormGroup;
-
 
   gptResponseTitle: string = 'Waiting for title...';
   gptResponseDescription: string = 'Waiting for desc...';
@@ -70,7 +67,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   constructor(
     private gptService: GptService,
-    private voiceService: VoiceService,
     private contentService: ContentService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
@@ -78,15 +74,13 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   ) {}
 
   ngOnInit(): void {
-    if (this.contentService.getCurrentTopic() === undefined) {
+    if (this.contentService.getCurrentTopic() === undefined && !this.isInDebugMode) {
       this.navigationService.navigateToCreateVideo();
       return
     }
 
     this.setupObservers();
     this.setupFormGroups();
-    
-    if (!this.isInDebugMode) { this.voiceService.getVoiceOptions() }
   }
 
   ngAfterContentInit(): void {
@@ -96,7 +90,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   }
 
   ngAfterViewInit(): void {
-    console.log("💵 ~ file: videodetails.component.ts:107 ~ VideoDetailsComponent ~ ngAfterViewInit ~ ngAfterViewInit:")
     this.contentProgressValue = 0;
     this.scriptProgressValue = 0;
   }
@@ -117,7 +110,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       }
     });
     this.gptService.getScriptProgressObserver().subscribe((response) => {
-      console.log("🚀 ~ file: videodetails.component.ts:122 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ response:", response)
       this.scriptProgressValue = this.scriptProgressValue + response.increment;
       console.log("🚀 ~ file: videodetails.component.ts:124 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ scriptProgressValue:", this.scriptProgressValue)
       this.scriptProgressLabel = response.label;
@@ -154,9 +146,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       this.isTagsOptimizing = false;
       this.resultsFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
-    this.gptService.getScriptSectionObserver().subscribe((response) => {
-      console.log("♟ ~ file: videoscript.component.ts:58 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ response:", response)
-      
+    this.gptService.getScriptSectionObserver().subscribe((response) => {      
       switch (response.sectionControl) {
         case 'introduction':
           this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
@@ -180,7 +170,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
           this.scriptFormGroup.patchValue({ actionables: response.scriptSection })
           break;
         default:
-          console.log("🚀 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ default:")
+          console.log("🔥 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ default:")
           break;
       }
     });
@@ -191,10 +181,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       title: ['', Validators.required],
       description: ['', Validators.required],
       tags: ['', Validators.required],
-    });
-    this.mediaFormGroup = this._formBuilder.group({
-      selectedVoice: [''],
-      selectedMedia: [''],
     });
      this.scriptFormGroup = this._formBuilder.group({
         introduction: ['', Validators.required],
@@ -263,12 +249,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       this.resultsFormGroup.value.tags,
     );
     this.resultsFormGroup.patchValue({ tags: 'Please wait...' })
-  }
-
-  downloadTextFile() {
-    // this.gptService.getScriptForDownload().subscribe((blobItem) => {
-    //   saveAs(blobItem.blob, blobItem.filename);
-    // });
   }
 
   goToReview() {

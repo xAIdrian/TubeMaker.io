@@ -16,20 +16,7 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
   
   isScriptLoading: boolean = false;
 
-  currentVideoDuration: VideoDuration = {
-    name: 'please wait',
-    header: "",
-    description: "",
-    sections: [
-      {
-        name: '',
-        controlName: '',
-        isLoading: false,
-        isOptimizing: false,
-        points: []
-      }
-    ]
-  }
+  currentVideoDuration: VideoDuration; 
 
   constructor(
     private gptService: GptService,

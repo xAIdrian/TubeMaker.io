@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 interface DropdownItem {
   id: number;
@@ -10,24 +9,25 @@ interface DropdownItem {
 
 @Component({
   selector: 'audio-dropdown',
-  templateUrl: './audio-dropdown.component.html',
-  styleUrls: ['./audio-dropdown.component.scss'],
+  templateUrl: './audiodropdown.component.html',
+  styleUrls: ['./audiodropdown.component.scss'],
 })
 export class AudioDropdownComponent implements OnInit {
-  
+  @Output() voiceSelected = new EventEmitter<{ name: string; sampleUrl: string }>();
+
   isOpen = false;
-  selectedItem: { name: string, sampleUrl: string };
-  voiceOptions: { name: string, sampleUrl: string }[] = [];
+  selectedItem: { name: string; sampleUrl: string };
+  voiceOptions: { name: string; sampleUrl: string }[] = [];
 
-    mediaFormGroup: FormGroup;
-
-  constructor() {}
+  constructor() {
+    /** */
+  }
 
   ngOnInit() {
     // Set the default selected item
     this.selectedItem = {
-        name: 'Select a voice',
-        sampleUrl: 'https://www.youtube.com/watch?v=QH2-TGUlwu4',
+      name: 'Select a voice',
+      sampleUrl: 'https://www.youtube.com/watch?v=QH2-TGUlwu4',
     };
   }
 
@@ -35,20 +35,24 @@ export class AudioDropdownComponent implements OnInit {
     this.isOpen = !this.isOpen;
   }
 
-  selectItem(item: { name: string, sampleUrl: string }) {
+  onItemSelect(event: Event, item: { name: string; sampleUrl: string }) {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.selectedItem = item;
     this.isOpen = false;
+    this.voiceSelected.emit(item);
 
-    this.mediaFormGroup.patchValue({
-        selectedVoice: item.sampleUrl,
-    });
+    // this.mediaFormGroup.patchValue({
+    //     selectedVoice: item.sampleUrl,
+    // });
   }
 
-  populateList(response: { name: string; sampleUrl: string; }[]) {
+  onItemPlay(audioPlayer: HTMLAudioElement) {
+    audioPlayer.play();
+  }
+
+  populateList(response: { name: string; sampleUrl: string }[]) {
     this.voiceOptions = response;
-  }
-
-  setMediaGroup(refMediaFormFroup: FormGroup) {
-    this.mediaFormGroup = refMediaFormFroup
   }
 }

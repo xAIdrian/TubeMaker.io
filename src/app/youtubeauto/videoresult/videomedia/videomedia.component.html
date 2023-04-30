@@ -1,39 +1,28 @@
 <div>
-  <h4>Create With Media</h4>
-  <form [formGroup]="parentMediaFormGroup">
+  <form>
     <div class="row">
       <div class="col-4">
-        <mat-button-toggle-group formControlName="selectedMedia">
+        <mat-button-toggle-group value="Video">
           <mat-button-toggle *ngFor="let mediaOption of mediaOptions" [value]="mediaOption"
             (click)="onMediaOptionSelected(mediaOption)">{{ mediaOption }}</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
       <div class="col-8">
-        <h4 *ngIf="selectedMediaOption === ''">Audio, Video, Thumbnail</h4>
-        <p class="text-medium-emphasis" *ngIf="selectedMediaOption === ''">With your script done, all that is left is
-          creating your video. We have provided AI tools for you to do this in less than one hour. First create an audio
-          track or have an AI generated voice do it for you. Then, move onto editing your video with our partner and
-          selecting an attractive thumbnail.</p>
-
-        <div *ngIf="selectedMediaOption === 'Audio'">
-          <strong>Use Our AI Generated Voice</strong>
-          <p class="text-medium-emphasis small">
+        <div *ngIf="selectedMediaOption === 'Video'">
+          <h4>Use Our AI Generated Voice</h4>
+          <p class="text-medium-emphasis">
             Pick a voice. We'll take care of the audio for you or you can upload your own below.
           </p>
-          <mat-button-toggle-group formControlName="selectedVoice">
-            <mat-button-toggle *ngFor="let voice of voiceOptions" [value]="voice">
-              {{ voice.name }}
-              <audio controls>
-                <source [src]="voice.sampleUrl" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
+          <audio-dropdown #audiochild (voiceSelected)="onVoiceSelected($event)"></audio-dropdown>
           <p></p>
-          <div class="container">
-            <button class="btn flex-grow-1" style="width: 100%"
-              variant="outline" color="dark"
-              [disabled]="!audioFormGroup.get('selectedVoice')?.value" (click)="generateTextToSpeech()">
+          <div >
+            <button 
+              cButton
+              variant="outline" 
+              style="width: 100%" 
+              variant="outline" 
+              color="primary"
+              (click)="generateTextToSpeech()">
               Generate Your AI Narration
             </button>
             <audio *ngIf="generatedAudioIsVisible" class="flex-grow-1" style="width: 100%;" controls>
@@ -42,15 +31,19 @@
             </audio>
           </div>
           <br />
-        </div>
-
-        <div *ngIf="selectedMediaOption === 'Video'">
-          <strong>Almost Done, Put It All Together With Descript</strong><br />
-          <p class="text-medium-emphasis small">
+          <h4>Almost Done, Put It All Together With Descript</h4><br />
+          <p class="text-medium-emphasis">
             Now that you have downloaded your AI narration or created your own, it's time to put it all together with
             video.
           </p>
-          <button variant="outline" color="dark" class="btn flex-grow-1" (click)="descriptButtonClicked()">Edit In Descript</button>
+          <button 
+            cButton
+            variant="outline"  
+            color="primary"
+            style="width: 100%" 
+            (click)="descriptButtonClicked()">
+            Edit In Descript
+          </button>
         </div>
 
         <div *ngIf="selectedMediaOption === 'Thumbnail'">
@@ -61,7 +54,7 @@
                   frameborder="0"></iframe>
               </div>
               <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="dark"  
+                variant="outline" color="primary"
                 href="https://www.canva.com/design/DAFg0g7iFaU/r17BFd44EDBdpayWyKrnQg/edit?utm_content=DAFg0g7iFaU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                 target="_blank">Click to Edit Above Thumbnail</a>
             </div>
@@ -71,7 +64,7 @@
                   frameborder="0"></iframe>
               </div>
               <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="dark"  
+                variant="outline" color="primary"
                 href="https://www.canva.com/design/DAFg0qAz46Q/L4M5HjasBM6H2yQIYEUsfg/edit?utm_content=DAFg0qAz46Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                 target="_blank">Click to Edit Above Thumbnail</a>
             </div>
@@ -81,7 +74,7 @@
                   frameborder="0"></iframe>
               </div>
               <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="dark"  
+                variant="outline" color="primary"
                 href="https://www.canva.com/design/DAFg0qpS228/HC7MUiBXS9Q1PJocqzOTNg/edit?utm_content=DAFg0qpS228&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                 target="_blank">Click to Edit Above Thumbnail</a>
             </div>
@@ -91,7 +84,7 @@
                   frameborder="0"></iframe>
               </div>
               <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="dark"  
+                variant="outline" color="primary"
                 href="https://www.canva.com/design/DAFg0jHKpT0/NzysEvkx0ORQTe5fzkDh4w/edit?utm_content=DAFg0jHKpT0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                 target="_blank">Click to Edit Above Thumbnail</a>
             </div>
@@ -101,7 +94,7 @@
                   frameborder="0"></iframe>
               </div>
               <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="dark"
+                variant="outline" color="primary"
                 href="https://www.canva.com/design/DAFg08A6ApE/RB29GcwLgd6W0GpkvjkNxA/edit?utm_content=DAFg08A6ApE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                 target="_blank">Click to Edit Above Thumbnail</a>
             </div>
@@ -111,7 +104,7 @@
                   frameborder="0"></iframe>
               </div>
               <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="dark"
+                variant="outline" color="primary"
                 href="https://www.canva.com/design/DAFg0_bcsik/whqApc5ek7brC7nYuZWN0w/edit?utm_content=DAFg0_bcsik&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                 target="_blank">Click to Edit Above Thumbnail</a>
             </div>

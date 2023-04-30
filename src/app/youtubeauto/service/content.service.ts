@@ -38,7 +38,20 @@ export class ContentService {
   
   private currentTopic: string;
   private currentStyle: VideoStyle;
-  private currentDuration: VideoDuration;
+  private currentDuration: VideoDuration = {
+    name: 'please wait',
+    header: "",
+    description: "",
+    sections: [
+      {
+        name: 'please wait',
+        controlName: 'introduction',
+        isLoading: false,
+        isOptimizing: false,
+        points: []
+      }
+    ]
+  }
   private currentMonetization: string;
   private currentProductName: string;
   private currentProductDescription: string;

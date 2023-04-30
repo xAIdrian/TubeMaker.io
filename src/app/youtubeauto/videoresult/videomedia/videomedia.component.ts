@@ -1,9 +1,18 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GptService } from "../../service/gpt/gpt.service";
-import { ContentService } from "../../service/content.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DurationSection, VideoDuration } from "../../model/create/videoduration.model";
-import { VoiceService } from "../../service/voice.service";
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import { ContentService } from '../../service/content.service';
+import { FormGroup } from '@angular/forms';
+import { VoiceService } from '../../service/voice.service';
+import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 
 @Component({
   selector: 'video-media',
@@ -11,28 +20,43 @@ import { VoiceService } from "../../service/voice.service";
   styleUrls: ['./videomedia.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges {
+export class VideoMediaComponent
+  implements OnInit, AfterContentInit, OnChanges
+{
+  private audioDropdown: AudioDropdownComponent;
+  @ViewChild('audiochild', { static: false }) set content(
+    content: AudioDropdownComponent
+  ) {
+    console.log(
+      '🚀 ~ file: videomedia.component.ts:17 ~ VideoMediaComponent ~ @ViewChild ~ content:',
+      content
+    );
+    if (content) {
+      // initially setter gets called with undefined
+      this.audioDropdown = content;
+    }
+  }
 
-  @Input() parentMediaFormGroup: FormGroup;
   audioFormGroup: FormGroup;
-  
+
   generatedAudioIsVisible = false;
   generatedAudio: string;
 
-  voiceOptions: { name: string, sampleUrl: string }[] = [];
-  mediaOptions = ['Video', 'Audio', 'Thumbnail'];
-  selectedMediaOption = '';
-  
+  voiceOptions: { name: string; sampleUrl: string }[] = [];
+  selectedVoice: { name: string; sampleUrl: string };
+  mediaOptions = ['Video', 'Thumbnail'];
+  selectedMediaOption = 'Video';
 
   constructor(
     private contentService: ContentService,
     private voiceService: VoiceService,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) { }
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.voiceService.getVoiceOptionsObserver().subscribe((response) => {
-      this.voiceOptions = response;
+      this.audioDropdown.populateList(response);
+      this.changeDetectorRef.detectChanges();
     });
     this.voiceService.getTextToSpeechObserver().subscribe((response) => {
       if (response !== '') {
@@ -41,41 +65,61 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
       }
     });
   }
-
+  //
+  // this.changeDetector.detectChanges();
   /**
    * Where we receive updates from our parent FormControl
-   * @param changes 
+   * @param changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["parentMediaFormGroup"] && this.parentMediaFormGroup) {
-      console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentMediaFormGroup)
-      this.parentMediaFormGroup.get('selectedMedia')?.valueChanges.subscribe((value: string) => {
-        this.selectedMediaOption = value;
-      });
-      this.parentMediaFormGroup.get('selectedVoice')?.valueChanges.subscribe((value: string) => {
-        /** */
-      });
-    }
+    // if (changes['parentMediaFormGroup'] && this.parentMediaFormGroup) {
+    //   console.log(
+    //     '🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:',
+    //     this.parentMediaFormGroup
+    //   );
+    //   this.parentMediaFormGroup
+    //     .get('selectedVoice')
+    //     ?.valueChanges.subscribe((value: string) => {
+    //       /** */
+    //     });
+    // }
   }
 
   ngAfterContentInit(): void {
+    this.voiceService.getVoiceOptions();
+    console.log(
+      '🚀 ~ file: videomedia.component.ts:64 ~ VideoMediaComponent ~ ngAfterContentInit ~ ngAfterContentInit:'
+    );
     this.changeDetectorRef.detectChanges();
   }
 
+  onVoiceSelected(voice: { name: string, sampleUrl: string }) {
+    this.selectedVoice = voice;
+  }
+
+  downloadTextFile() {
+    // this.gptService.getScriptForDownload().subscribe((blobItem) => {
+    //   saveAs(blobItem.blob, blobItem.filename);
+    // });
+  }
+
   generateTextToSpeech() {
+    if (this.selectedVoice === null || this.selectedVoice === undefined) {
+      alert('Please select a voice before generating audio');
+      return;
+    }
     // const scriptValue = this.resultsFormGroup.get('script')?.value;
-    const scriptValue = ''
+    const scriptValue = '';
     if (scriptValue === null || scriptValue === '') {
       alert('Please enter a script before generating audio');
       return;
     }
-    
-    this.generatedAudio = "";
+
+    this.generatedAudio = '';
     this.generatedAudioIsVisible = false;
 
-    const selectedVoiceControl = this.parentMediaFormGroup.get('selectedVoice')?.value;
     this.voiceService.generateTextToSpeech(
-      selectedVoiceControl.value, 
+      this.selectedVoice.name,
       scriptValue
     );
   }
@@ -86,10 +130,10 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
   }
 
   onMediaOptionSelected(option: string) {
-    this.selectedMediaOption = option
+    this.selectedMediaOption = option;
   }
+  
   goToReview() {
     throw new Error('Method not implemented.');
   }
 }
-

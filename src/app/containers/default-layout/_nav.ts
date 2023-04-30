@@ -218,4 +218,27 @@ export const navItems: INavData[] = [
       // }
     ]
   },
+  {
+    name: 'Icons',
+    iconComponent: { name: 'cil-star' },
+    url: '/icons',
+    children: [
+      {
+        name: 'Recommended',
+        url: '/icons/coreui-icons',
+        badge: {
+          color: 'success',
+          text: 'FREE'
+        }
+      },
+      {
+        name: 'Most Viewed',
+        url: '/icons/flags'
+      },
+      {
+        name: 'Highest Earning',
+        url: '/icons/brands'
+      }
+    ]
+  }
 ];

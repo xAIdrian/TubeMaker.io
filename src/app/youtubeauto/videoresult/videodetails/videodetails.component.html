@@ -112,9 +112,9 @@
         <video-script [parentScriptFormGroup]="scriptFormGroup"></video-script>
       </mat-step>
 
-      <mat-step [stepControl]="mediaFormGroup" *ngIf="!contentGenerationIsLoading">
+      <mat-step *ngIf="!contentGenerationIsLoading">
         <ng-template matStepLabel>Media</ng-template>
-        <video-media [parentMediaFormGroup]="mediaFormGroup"></video-media>
+        <video-media></video-media>
       </mat-step>
 
     </mat-horizontal-stepper>
