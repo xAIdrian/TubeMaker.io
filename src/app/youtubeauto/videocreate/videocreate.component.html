@@ -42,17 +42,17 @@
               <h4>{{ selectedVideoOption.header }}</h4>
               <p class="text-medium-emphasis" style="margin-top: 2rem;">{{ selectedVideoOption.description }}</p>
               <h5 *ngIf="selectedVideoOption.channelExamples.length > 0" style="padding-top: 1rem;">Similar Channels:</h5>
-              <div class="channel-stats" *ngFor="let channel of selectedVideoOption.channelExamples" style="padding: 0.5rem;">
-                <strong class="name">{{channel.name}}</strong>
-                <div class="stats">
-                  <div class="stat">
-                    <span class="subscribers">{{channel.subscriptions}} subscribers</span>
+              
+              <div class="video-list" *ngFor="let channel of selectedVideoOption.channelExamples" style="padding: 0.5rem;">
+                <div cListGroupItem>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="title-published">
+                      <strong class="mb-1">{{ channel.name }}</strong>
+                    </div>
                   </div>
-                  <div class="stat">
-                    <span class="views">{{channel.views}} views</span>
-                  </div>
-                  <div class="stat">
-                    <span class="earnings">{{channel.earns}}</span>
+                  <div class="description">
+                    <small>Monthly Views: {{ channel.views }}</small>
+                    <small class="published">Monthly Revenue: {{ channel.earns }}</small>
                   </div>
                 </div>
               </div>
@@ -91,13 +91,14 @@
             </div>
           <br />
           <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
-            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
-          </div>
+              <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
+              <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">GENERATE My Video Script,
+                Title, & Everything Else!</button>
+            </div>
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="moneyFormGroup">
+      <!-- <mat-step [stepControl]="moneyFormGroup">
         <form [formGroup]="moneyFormGroup">
           <ng-template matStepLabel>Monetization</ng-template>
           <div class="row">
@@ -139,7 +140,7 @@
                 Title, & Everything Else!</button>
             </div>
         </form>
-      </mat-step>
+      </mat-step> -->
     </mat-horizontal-stepper>
     <c-card class="container" *ngIf="hasInputError" style="margin-bottom: 1rem;">
       <div class="text-area">

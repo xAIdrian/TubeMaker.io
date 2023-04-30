@@ -44,6 +44,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './service/domain/cors.interceptor';
 import { VideoScriptComponent } from './videoresult/videoscript/videoscript.component';
 import { VideoMediaComponent } from './videoresult/videomedia/videomedia.component';
+import { AudioDropdownComponent } from './videoresult/videomedia/audiodropdown/audiodropdown.component';
 
 @NgModule({
     providers: [{
@@ -57,7 +58,8 @@ import { VideoMediaComponent } from './videoresult/videomedia/videomedia.compone
         VideoDetailsComponent,
         VideoUploadComponent,
         VideoScriptComponent,
-        VideoMediaComponent
+        VideoMediaComponent,
+        AudioDropdownComponent
     ],
     imports: [
         MatStepperModule,

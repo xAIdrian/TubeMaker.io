@@ -14,7 +14,13 @@
     <br />
     <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
       <button cButton variant="outline" color="dark" matStepperPrevious>Go Back</button>
-      <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
+      <button 
+        class="btn btn-primary" 
+        style="margin-left: 1rem;" 
+        matStepperNext
+        (click)="onScriptSectionClick()">
+          Go To Next Step
+        </button>
     </div>
   </form>
 </div>

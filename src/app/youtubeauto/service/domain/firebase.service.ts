@@ -12,6 +12,14 @@ import { environment } from '../../../../environments/environment'
 })
 export class FirebaseService {
 
+  // getVideos(): Observable<ListVideo[]> {
+  //   return this.firebaseService.getVideos().subscribe((data: ListVideo[]) => {
+  //     this.exampleVideos = data;
+  //   }).then(() => {
+  //     return of(this.exampleVideos);
+  //   }
+  // }
+
 //   // Initialize Firebase
 //   private app = initializeApp(environment.firebaseConfig);
 //   private analytics = getAnalytics(this.app);

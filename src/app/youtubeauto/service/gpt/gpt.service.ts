@@ -6,7 +6,7 @@ import { GptVideoReqBody } from '../../model/gpt/gptvideoreqbody.model';
 import { GptResponse } from '../../model/gpt/gptresponse.model';
 import { catchError, concatMap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { ContentService } from '../content.service';
+import { ContentService } from '../content/content.service';
 import { GptObservers } from './gpt.observers';
 import { DurationSection } from '../../model/create/videoduration.model';
 
@@ -300,8 +300,8 @@ export class GptService {
       pointsCount++;
       compiledPoints += '\n' + response.result.script;
 
-      if (pointsCount === section.points.length) {  
-        console.log("💵 ~ file: gpt.service.ts:306 ~ GptService ~ ).subscribe ~ compiledPoints:", compiledPoints)      
+      if (pointsCount === section.points.length) { 
+        this.contentService.updateScriptMap(section.controlName, compiledPoints.trim()); 
         // emit just the view value of the section
         this.scriptSectionSubject.next({
           sectionControl: section.controlName,
@@ -314,7 +314,6 @@ export class GptService {
           increment: 100 / this.contentService.getTotalNumberOfPoints(),
           label: this.generateLoadingMessage(),
         }
-        console.log("🚀 ~ file: gpt.service.ts:315 ~ GptService ~ ).subscribe ~ progressItem:", progressItem)
         this.scriptProgressSubject.next(progressItem);
       }
     });
@@ -350,22 +349,6 @@ export class GptService {
   //         scriptSection: compiledPoints.trim()
   //       });
   //     }
-  //   });
-  // }
-
-  // getScriptForDownload(): Observable<{ blob: Blob; filename: string }> {
-  //   if (!this.generatedVideo || !this.generatedVideo.script) {
-  //     return throwError('Script not available');
-  //   }
-  //   const blob = new Blob([this.generatedVideo.script], { type: 'text/plain' });
-  //   return of({
-  //     blob: blob,
-  //     filename:
-  //       this.generatedVideo.title
-  //         .replace(' ', '_')
-  //         .replace(':', '')
-  //         .replace("'", '')
-  //         .replace('"', '') + '.txt',
   //   });
   // }
 

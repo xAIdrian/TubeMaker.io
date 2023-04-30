@@ -52,10 +52,6 @@
     border-radius: 10px;
   }
   
-  .flex-grow-1 {
-    padding-right: 1rem;
-  }
-  
   .d-flex {
     padding-top: 1rem;
   }
@@ -97,13 +93,13 @@
   .col-8 {
     flex-basis: calc(66.66667% - 20px);
     max-width: calc(66.66667% - 20px);
-    margin: 1rem;
   }
   
   .col-4 {
     flex-basis: calc(33.33333% - 20px);
     max-width: calc(33.33333% - 20px);
   }
+  
   h4 {
     padding-top: 2rem;
   }

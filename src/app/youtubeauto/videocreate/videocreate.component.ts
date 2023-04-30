@@ -14,7 +14,7 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
-import { ContentService } from '../service/content.service';
+import { ContentService } from '../service/content/content.service';
 import { VideoStyle } from '../model/create/videostyle.model';
 import { VideoDuration } from '../model/create/videoduration.model';
 

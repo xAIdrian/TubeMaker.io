@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GptService } from "../../service/gpt/gpt.service";
-import { ContentService } from "../../service/content.service";
+import { ContentService } from "../../service/content/content.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../model/create/videoduration.model";
 
@@ -16,20 +16,7 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
   
   isScriptLoading: boolean = false;
 
-  currentVideoDuration: VideoDuration = {
-    name: 'please wait',
-    header: "",
-    description: "",
-    sections: [
-      {
-        name: '',
-        controlName: '',
-        isLoading: false,
-        isOptimizing: false,
-        points: []
-      }
-    ]
-  }
+  currentVideoDuration: VideoDuration; 
 
   constructor(
     private gptService: GptService,
@@ -51,6 +38,19 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
+  }
+
+  onScriptSectionClick() {
+    console.log("🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ onScriptSectionClick ~ onScriptSectionClick:", this.parentScriptFormGroup)
+    
+    this.contentService.submitScriptSections(
+      this.parentScriptFormGroup.value.introduction,
+      this.parentScriptFormGroup.value.mainContent,
+      this.parentScriptFormGroup.value.caseStudies,
+      this.parentScriptFormGroup.value.opinions,
+      this.parentScriptFormGroup.value.actionables,
+      this.parentScriptFormGroup.value.conclusion
+    )
   }
 
   onRerollSection(section: DurationSection) {

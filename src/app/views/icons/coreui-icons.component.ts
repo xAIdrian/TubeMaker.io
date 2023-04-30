@@ -24,13 +24,7 @@ export class CoreUIIconsComponent implements OnInit {
     if (path === 'coreui-icons') {
       this.title = `${this.title} - Free`;
       prefix = 'cil';
-    } else if (path === 'brands') {
-      this.title = `${this.title} - Brands`;
-      prefix = 'cib';
-    } else if (path === 'flags') {
-      this.title = `${this.title} - Flags`;
-      prefix = 'cif';
-    }
+    } 
     this.icons = this.getIconsView(prefix);
   }
 
