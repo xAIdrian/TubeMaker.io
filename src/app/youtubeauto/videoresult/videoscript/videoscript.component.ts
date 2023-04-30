@@ -12,10 +12,9 @@ import { DurationSection, VideoDuration } from "../../model/create/videoduration
 })
 export class VideoScriptComponent implements AfterContentInit, OnChanges {
 
-  @Input() parentFormGroup: FormGroup;
+  @Input() parentScriptFormGroup: FormGroup;
   
   isScriptLoading: boolean = false;
-  liveDemoVisible = false;
 
   currentVideoDuration: VideoDuration = {
     name: 'please wait',
@@ -45,8 +44,8 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
    * @param changes 
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["parentFormGroup"] && this.parentFormGroup) {
-      console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentFormGroup)
+    if (changes["parentFormGroup"] && this.parentScriptFormGroup) {
+      console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentScriptFormGroup)
     }
   }
 
@@ -54,17 +53,9 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
     this.changeDetectorRef.detectChanges();
   }
 
-  toggleLiveDemo() {
-    this.liveDemoVisible = !this.liveDemoVisible;
-  }
-
-  handleLiveDemoChange(event: boolean) {
-    this.liveDemoVisible = event;
-  }
-
   onRerollSection(section: DurationSection) {
     const controlName = section.controlName
-    this.parentFormGroup.patchValue({ controlName: 'Please wait...' })
+    this.parentScriptFormGroup.patchValue({ controlName: 'Please wait...' })
     this.gptService.getNewScriptSection(section, false)
   }
 

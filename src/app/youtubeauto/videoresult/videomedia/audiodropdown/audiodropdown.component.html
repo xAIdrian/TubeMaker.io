@@ -1,0 +1,14 @@
+<c-dropdown>
+    <button cButton cDropdownToggle  color="info" style="width: 100%; margin-left: 1rem; margin-right: 1rem;">{{ selectedItem.name }}</button>
+    <ul cDropdownMenu class="dropdown-list">
+        <li *ngFor="let item of voiceOptions" (click)="selectItem(item)">
+            <div class="dropdown-item">
+                <div class="item-name">{{ item.name }}</div>
+                <audio controls>
+                    <source [src]="item.sampleUrl" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </li>
+    </ul>
+</c-dropdown>

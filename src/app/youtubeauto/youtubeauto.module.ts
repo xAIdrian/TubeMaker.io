@@ -43,6 +43,7 @@ import { VideoUploadComponent } from './videoupload/videoupload.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './service/domain/cors.interceptor';
 import { VideoScriptComponent } from './videoresult/videoscript/videoscript.component';
+import { VideoMediaComponent } from './videoresult/videomedia/videomedia.component';
 
 @NgModule({
     providers: [{
@@ -55,7 +56,8 @@ import { VideoScriptComponent } from './videoresult/videoscript/videoscript.comp
         VideoCreateComponent,
         VideoDetailsComponent,
         VideoUploadComponent,
-        VideoScriptComponent
+        VideoScriptComponent,
+        VideoMediaComponent
     ],
     imports: [
         MatStepperModule,

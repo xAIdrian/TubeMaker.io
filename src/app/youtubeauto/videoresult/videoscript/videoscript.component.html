@@ -2,7 +2,7 @@
   <h4>Improve Your Script With AI</h4>
   <strong>{{ currentVideoDuration.name }}</strong>
   <p class="text-medium-emphasis">{{ currentVideoDuration.description }}</p>
-  <form [formGroup]="parentFormGroup">
+  <form [formGroup]="parentScriptFormGroup">
 
     <div *ngFor="let section of currentVideoDuration.sections">
       <h5>{{ section.name }}</h5>

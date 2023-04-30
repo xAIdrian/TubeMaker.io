@@ -60,22 +60,13 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   isTagsOptimizing: boolean = false;
 
   resultsFormGroup: FormGroup;
-  audioFormGroup: FormGroup;
-  videoFormGroup: FormGroup;
+  mediaFormGroup: FormGroup;
 
-  voiceOptions: { name: string, sampleUrl: string }[] = [];
 
   gptResponseTitle: string = 'Waiting for title...';
   gptResponseDescription: string = 'Waiting for desc...';
   gptResponseScript: string = 'Waiting for script...';
   gptResponseTags: string = 'Waiting for tags...';
-
-  generatedAudio: string;
-  generatedAudioIsVisible = false;
-
-  audioFileName: string;
-  videoFileName: string;
-  imageFileName: string;
 
   constructor(
     private gptService: GptService,
@@ -163,17 +154,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       this.isTagsOptimizing = false;
       this.resultsFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
-
-    this.voiceService.getVoiceOptionsObserver().subscribe((response) => {
-      this.voiceOptions = response;
-    });
-    this.voiceService.getTextToSpeechObserver().subscribe((response) => {
-      if (response !== '') {
-        this.generatedAudio = response;
-        this.generatedAudioIsVisible = true;
-      }
-    });
-
     this.gptService.getScriptSectionObserver().subscribe((response) => {
       console.log("♟ ~ file: videoscript.component.ts:58 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ response:", response)
       
@@ -212,15 +192,10 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       description: ['', Validators.required],
       tags: ['', Validators.required],
     });
-    this.audioFormGroup = this._formBuilder.group({
+    this.mediaFormGroup = this._formBuilder.group({
       selectedVoice: [''],
-      audioFile: ['']
+      selectedMedia: [''],
     });
-    //TODO we will neeed this to be updated for our uploaded files held across services
-    this.videoFormGroup = this._formBuilder.group({ 
-      videoFile: ['', Validators.required],
-      imageFile: ['', Validators.required],
-     });
      this.scriptFormGroup = this._formBuilder.group({
         introduction: ['', Validators.required],
         mainContent: ['', Validators.required],
@@ -294,63 +269,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     // this.gptService.getScriptForDownload().subscribe((blobItem) => {
     //   saveAs(blobItem.blob, blobItem.filename);
     // });
-  }
-  
-  onAudioPicked(event: Event) {
-    const htmlTarget = (event?.target as HTMLInputElement)
-    if (htmlTarget !== null) {
-      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
-        const file = htmlTarget.files[0]
-        this.audioFormGroup.patchValue({ audioFile: file.name });
-        this.audioFileName = file.name;
-        this.contentService.updateAudioFile(file);
-      }
-    }
-  }  
-
-  onVideoPicked(event: Event) {
-    const htmlTarget = (event?.target as HTMLInputElement)
-    if (htmlTarget !== null) {
-      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
-        const file = htmlTarget.files[0]
-        this.videoFormGroup.patchValue({ videoFile: file.name });
-        this.videoFileName = file.name;
-        this.contentService.updateVideoFile(file);
-      }
-    }
-  }
-
-  onImagePicked(event: Event) {
-    const htmlTarget = (event?.target as HTMLInputElement)
-    if (htmlTarget !== null) {
-      if (htmlTarget.files !== null && htmlTarget.files.length > 0) {
-        const file = htmlTarget.files[0]
-        this.videoFormGroup.patchValue({ imageFile: file.name });
-        this.imageFileName = file.name;
-        this.contentService.updateImageFile(file);
-      }
-    }
-  }
-
-  generateTextToSpeech() {
-    const scriptValue = this.resultsFormGroup.get('script')?.value;
-    if (scriptValue === null || scriptValue === '') {
-      alert('Please enter a script before generating audio');
-      return;
-    }
-    this.generatedAudio = "";
-    this.generatedAudioIsVisible = false;
-
-    const selectedVoiceControl = this.audioFormGroup.get('selectedVoice')?.value;
-    this.voiceService.generateTextToSpeech(
-      selectedVoiceControl.value, 
-      scriptValue
-    );
-  }
-
-  descriptButtonClicked() {
-    ///https://media.play.ht/full_-NTbzfZeyW_-qJQLq4Wg.mp3?generation=1682150707643372&alt=media
-    window.open('https://web.descript.com/', '_blank');
   }
 
   goToReview() {
