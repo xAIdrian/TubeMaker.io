@@ -107,3 +107,30 @@ h4 {
   flex-basis: 0;
   text-align: center;
 }
+
+.video-list {
+  margin-top: 0.5rem;
+
+  div {
+      border-radius: 0.25rem;
+
+      &:hover {
+          background-color: #f2f2f2;
+      }
+
+      .title-published {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+      }
+
+      .description {
+          padding-top: 0.5rem;
+
+          small {
+              display: block;
+          }
+      }
+  }
+}

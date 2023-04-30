@@ -14,6 +14,7 @@ import { FormGroup } from '@angular/forms';
 import { VoiceService } from '../../service/content/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 import * as saveAs from 'file-saver';
+import { NavigationService } from '../../service/navigation.service';
 
 @Component({
   selector: 'video-media',
@@ -49,6 +50,7 @@ export class VideoMediaComponent
   constructor(
     private contentService: ContentService,
     private voiceService: VoiceService,
+    private navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
@@ -135,6 +137,6 @@ export class VideoMediaComponent
   }
 
   goToReview() {
-    throw new Error('Method not implemented.');
+    this.navigationService.navigateToUploadVideo();
   }
 }

@@ -7,9 +7,8 @@ import {
 } from '@angular/core';
 import { NavigationService } from '../service/navigation.service';
 import { ContentService } from '../service/content/content.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { YoutubeService } from '../service/domain/youtube.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'video-upload',
@@ -21,73 +20,42 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
 
   isWindowLoaded = false;
 
-  resultsFormGroup: FormGroup;
-  uploadFormGroup: FormGroup;
-
-  videoUrlPath: SafeUrl;
-  imageUrlPath: SafeUrl;
-  audioUrlPath: SafeUrl;
+  title: string;
+  showTitleBadge = false;
+  description: string;
+  showDescriptionBadge = false;
+  tags: string;
+  showTagsBadge = false;
+  script: string;
+  showScriptBadge = false;
   
   constructor(
     private contentService: ContentService,
     private navigationService: NavigationService,
-    private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private sanitizer: DomSanitizer,
-    private youtubeService: YoutubeService
+    private youtubeService: YoutubeService,
+    private clipboard: Clipboard
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     // @ts-ignore
     window.onGoogleLibraryLoad = () => {
       console.log("🚀 ~ file: videoupload.component.ts:50 ~ VideoUploadComponent ~ ngOnInit ~ onGoogleLibraryLoad:")
       this.youtubeService.initTokenClient();
     };
-
     this.setupObservers();
-    this.setupFormGroups();
   }
 
-  ngAfterContentInit(): void {
+  ngAfterContentInit() {
+    this.title = this.contentService.getTitle();
+    this.description = this.contentService.getDescription();
+    this.tags = this.contentService.getTags();
+    this.script = this.contentService.getCompleteScript();
+
     this.changeDetectorRef.detectChanges();
-    // this.contentService.getLatest();
-  }
-
-  setupFormGroups() {
-    this.resultsFormGroup = this._formBuilder.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      script: ['', Validators.required],
-      tags: ['', Validators.required],
-    });
-    this.uploadFormGroup = this._formBuilder.group({
-      audioFile: ['', Validators.required],
-      videoFile: ['', Validators.required],
-      imageFile: ['', Validators.required],
-      isMadeForKids: [false],
-    });
   }
 
   setupObservers() {
-    // this.contentService.getContentObserver().subscribe((content) => {
-    //   this.resultsFormGroup.setValue({
-    //     title: content.title,
-    //     description: content.description,
-    //     script: content.script,
-    //     tags: content.tags,
-    //   });
-    // });
-    this.contentService.getMediaObserver().subscribe((media) => {
-      this.imageUrlPath = this.sanitizer.bypassSecurityTrustUrl(
-        media.image.file
-      );
-      this.videoUrlPath = this.sanitizer.bypassSecurityTrustUrl(
-        media.video.file
-      );
-      this.audioUrlPath = this.sanitizer.bypassSecurityTrustUrl(
-        media.audio.file
-      );
-    });
     this.youtubeService.getTokenSuccessObserver().subscribe((success) => {
       console.log("🚀 ~ file: videoupload.component.ts:123 ~ VideoUploadComponent ~ this.youtubeService.getTokenSuccessObserver ~ token", success)
       if (success) {
@@ -105,14 +73,28 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     this.youtubeService.requestAccessToken();
   }
 
-  onMadeForKidsClicked(isForKids: boolean) {
-    this.uploadFormGroup.patchValue({
-      isMadeForKids: isForKids,
-    });
+  copyTitle() { 
+    this.showTitleBadge = true;
+    this.clipboard.copy(this.title);
+    setTimeout(() => this.showTitleBadge = false, 5000);  
   }
 
-  copyTitle() {
-    throw new Error('Method not implemented.');
+  copyDescription() { 
+    this.showDescriptionBadge = true;
+    this.clipboard.copy(this.description); 
+    setTimeout(() => this.showDescriptionBadge = false, 5000); 
+  }
+
+  copyTags() { 
+    this.showTagsBadge = true;
+    this.clipboard.copy(this.tags); 
+    setTimeout(() => this.showTagsBadge = false, 5000); 
+  }
+
+  copyScript() { 
+    this.showScriptBadge = true;
+    this.clipboard.copy(this.script); 
+    setTimeout(() => this.showScriptBadge = false, 5000); 
   }
 
   onResetMedia() {

@@ -19,8 +19,6 @@ export class ContentService {
   
   mediaSubjectObserver = new Subject<Media>();
 
-  exampleVideos: ListVideo[] = [];
-
   private youtubeVideoStyles = defaultVideoStyles;
   private youtubeVideoDurations = defaultVideoDurations;
 
@@ -65,14 +63,6 @@ export class ContentService {
 
   constructor(private http: HttpClient) {}
 
-  // getVideos(): Observable<ListVideo[]> {
-  //   return this.firebaseService.getVideos().subscribe((data: ListVideo[]) => {
-  //     this.exampleVideos = data;
-  //   }).then(() => {
-  //     return of(this.exampleVideos);
-  //   }
-  // }
-
   updateScriptMap(controlName: string, script: string) {
     console.log("🚀 ~ file: content.service.ts:86 ~ ContentService ~ updateScriptMap ~ controlName:", controlName)
     console.log("🚀 ~ file: content.service.ts:86 ~ ContentService ~ updateScriptMap ~ script:", script)
@@ -90,6 +80,16 @@ export class ContentService {
       }
     });
     return script;
+  }
+
+  getTitle(): string {
+    return this.contentMap.get('title') ?? '';
+  }
+  getDescription(): string {
+    return this.contentMap.get('description') ?? '';
+  }
+  getTags(): string {
+    return this.contentMap.get('tags') ?? '';
   }
 
   getTotalNumberOfPoints(): number {
