@@ -69,14 +69,14 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   }
 
   setupObservers() {
-    this.contentService.getContentObserver().subscribe((content) => {
-      this.resultsFormGroup.setValue({
-        title: content.title,
-        description: content.description,
-        script: content.script,
-        tags: content.tags,
-      });
-    });
+    // this.contentService.getContentObserver().subscribe((content) => {
+    //   this.resultsFormGroup.setValue({
+    //     title: content.title,
+    //     description: content.description,
+    //     script: content.script,
+    //     tags: content.tags,
+    //   });
+    // });
     this.contentService.getMediaObserver().subscribe((media) => {
       this.imageUrlPath = this.sanitizer.bypassSecurityTrustUrl(
         media.image.file

@@ -1,0 +1,9 @@
+Your task is to optimize the following title of a YouTube video to make it more viral and eye-catching. 
+The optimized title should be attention-grabbing, engaging, and accurately reflect the content of the video.
+You may consider using action words, emotional language, numbers or statistics, questions, or other techniques to make the title more appealing to potential viewers.
+
+<<SOURCE>>
+
+Your task is to optimize the ABOVE title of a YouTube video to make it more viral and eye-catching. 
+The optimized title should be attention-grabbing, engaging, and accurately reflect the content of the video.
+You may consider using action words, emotional language, numbers or statistics, questions, or other techniques to make the title more appealing to potential viewers.

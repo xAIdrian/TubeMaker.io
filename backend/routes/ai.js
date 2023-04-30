@@ -11,15 +11,19 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.get("/topic", async (req, res, next) => {
-  console.log('🔥🔥🔥🔥🔥🔥🔥')
   rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_topic.txt");
   try {
+    /**
+     * put in its own function
+     */
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: rawPrompt,
       temperature: 1.2,
-      max_tokens: 2000,
+      max_tokens: 1000,
       top_p: 1,
+      presence_penalty: 0.7,
+      frequency_penalty: 0.7
     });
     response = completion.data.choices[0].text;
     res.status(200).json({
@@ -39,16 +43,12 @@ router.get("/topic", async (req, res, next) => {
 });
 
 router.post("/summary", async (req, res, next) => {
-  console.log("🚀 ~ file: openai.js:12 ~ router.post ~ req:", req.body);
-
   let prompt = req.body.prompt;
   if (prompt === "") {
     // this needs to be another GPT prompt
     prompt = "How to make money using faceless youtube channels.";
   }
-
   let gptSummary = await summaryPromptCompletion(prompt);
-  console.log("🚀 ~ file: ai.js:26 ~ router.post ~ gptSummary:", gptSummary)
 
   res.status(200).json({
     message: "success",
@@ -59,18 +59,20 @@ router.post("/summary", async (req, res, next) => {
   });
 });
 
-router.post("/title", async (req, res, next) => {
-
+router.post("/new/title", async (req, res, next) => {
   let summary = req.body.summary;
+  let style = req.body.style;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
-
-  let gptTitle = await paramPromptCompletion("backend/routes/inputprompts/youtube_title.txt", summary);
+  let gptTitle = await newPromptCompletion(
+    "backend/routes/inputprompts/youtube_title.txt",
+    summary,
+    style
+  );
   gptTitle = gptTitle.replace('"', '')
-  console.log("🚀 ~ file: ai.js:28 ~ router.post ~ gptTitle:", gptTitle)
 
   res.status(200).json({
     message: "success",
@@ -78,15 +80,38 @@ router.post("/title", async (req, res, next) => {
   });
 });
 
-router.post("/description", async (req, res, next) => {
+router.post("/improve/title", async (req, res, next) => {
+  let current = req.body.current;
+  if (current === "") {
+    res.status(403).json({
+      message: "current is required",
+    });
+  }
+  let gptTitle = await optimizePromptCompletion(
+    "backend/routes/inputprompts/youtube_optimizer_title.txt",
+    current
+  );
+  gptTitle = gptTitle.replace('"', '')
+
+  res.status(200).json({
+    message: "success",
+    result: { title: gptTitle },
+  });
+});
+
+router.post("/new/description", async (req, res, next) => {
   let summary = req.body.summary;
+  let style = req.body.style;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
-
-  let gptDescription = await paramPromptCompletion("backend/routes/inputprompts/youtube_description.txt", summary);
+  let gptDescription = await newPromptCompletion(
+    "backend/routes/inputprompts/youtube_description.txt",
+    summary,
+    style
+  );
 
   res.status(200).json({
     message: "success",
@@ -94,19 +119,40 @@ router.post("/description", async (req, res, next) => {
   });
 });
 
-router.post("/script", async (req, res, next) => {
+router.post("/improve/description", async (req, res, next) => {
+  let current = req.body.current;
+  if (current === "") {
+    res.status(403).json({
+      message: "current is required",
+    });
+  }
+  let gptDescription = await optimizePromptCompletion(
+    "backend/routes/inputprompts/youtube_optimizer_description.txt",
+    current
+  );
+
+  res.status(200).json({
+    message: "success",
+    result: { description: gptDescription },
+  });
+});
+
+/**
+ * Keep in mind this is processing Script Sections
+ */
+router.post("/new/script", async (req, res, next) => {
+  console.log("🛸 ~ file: ai.js:144 ~ router.post ~ req:", req.body)
   let summary = req.body.summary;
+  let style = req.body.style;
+  let point = req.body.point;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
 
-  const style = req.body.style;
-  const duration = req.body.duration;
-
-  let gptScript = await scriptPromptCompletion(summary, style, duration);
-  console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
+  let gptScript = await newScriptPromptCompletion(summary, style, point);
+  console.log("🛸 ~ file: ai.js:155 ~ router.post ~ gptScript:", gptScript)
 
   res.status(200).json({
     message: "success",
@@ -114,15 +160,39 @@ router.post("/script", async (req, res, next) => {
   });
 });
 
-router.post("/tags", async (req, res, next) => {
+// router.post("/improve/script", async (req, res, next) => {
+//   let current = req.body.current;
+//   if (current === "") {
+//     res.status(403).json({
+//       message: "current is required",
+//     });
+//   }
+
+//   let gptScript = await optimizePromptCompletion(
+//     'backend/routes/inputprompts/youtube_optimizer_script.txt',
+//     current
+//   );
+//   console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
+
+//   res.status(200).json({
+//     message: "success",
+//     result: { script: gptScript },
+//   });
+// });
+
+router.post("/new/tags", async (req, res, next) => {
   let summary = req.body.summary;
   if (summary === "") {
     res.status(403).json({
       message: "summary is required",
     });
   }
-
-  let gptTags = await paramPromptCompletion("backend/routes/inputprompts/youtube_tags.txt", summary);
+  let style = req.body.style;
+  let gptTags = await newPromptCompletion(
+    "backend/routes/inputprompts/youtube_tags.txt",
+    summary,
+    style
+  );
 
   res.status(200).json({
     message: "success",
@@ -130,52 +200,111 @@ router.post("/tags", async (req, res, next) => {
   });
 });
 
-async function getCompletion(prompt) {
+router.post("/improve/tags", async (req, res, next) => {
+  let current = req.body.current;
+  if (current === "") {
+    res.status(403).json({
+      message: "current is required",
+    });
+  }
+  let gptTags = await optimizePromptCompletion(
+    "backend/routes/inputprompts/youtube_optimizer_tags.txt",
+    current
+  );
+  console.log("🚀 ~ file: ai.js:212 ~ router.post ~ gptTags:", gptTags)
+
+  res.status(200).json({
+    message: "success",
+    result: { tags: gptTags },
+  });
+});
+
+async function getNewOutputCompletion(prompt) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 3000,
+      top_p: 1,
+      presence_penalty: 0.6,
+      frequency_penalty: 0.6
+    });
+    return completion.data.choices[0].text;
+    
+  } catch (error) {
+    if (error.response) {
+      console.log("🛸 ~ file: ai.js:56 ~ getNewOutputCompletion ~ error")
+      console.log(error.response.status);
+      console.log(error.response.data);
+    } else {
+      console.log("🛸 ~ file: ai.js:61 ~ getNewOutputCompletion ~ else")
+      console.log(error.message);
+    }
+  }
+}
+
+async function getOptimizedOutputCompletion(prompt) {
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: prompt,
+      temperature: 0.7,
+      max_tokens: 2500,
       top_p: 1,
     });
     return completion.data.choices[0].text;
     
   } catch (error) {
     if (error.response) {
-      console.log("🚀 ~ file: ai.js:56 ~ getCompletion ~ error")
+      console.log("🔥 ~ file: ai.js:56 ~ getOptimizedOutputCompletion ~ error")
       console.log(error.response.status);
       console.log(error.response.data);
     } else {
-      console.log("🚀 ~ file: ai.js:61 ~ getCompletion ~ else")
+      console.log("🔥 ~ file: ai.js:61 ~ getOptimizedOutputCompletion ~ else")
       console.log(error.message);
     }
   }
 }
 
-async function summaryPromptCompletion(inputParam) {
-  summaryPrompt = readTextFileToPrompt("backend/routes/inputprompts/summary.txt"); 
-  summaryPrompt = summaryPrompt.replace("<<FEED>>", inputParam);
+function summaryPromptCompletion(inputParam) {
+  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/summary.txt"); 
+  summaryPrompt = rawPrompt.replace("<<FEED>>", inputParam);
   
-  const completion = getCompletion(summaryPrompt);
-  return completion;
+  return getNewOutputCompletion(summaryPrompt);
 }
 
-function scriptPromptCompletion(inputParam, styleParam, durationParam) {
-  scriptPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_script.txt"); 
-  scriptPrompt = scriptPrompt.replace("<<FEED>>", inputParam);
-  scriptPrompt = scriptPrompt.replace("<<STYLE>>", styleParam);
+function newScriptPromptCompletion(inputParam, styleParam, durationPoint) {
+  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_script_section.txt"); 
+  scriptPrompt = rawPrompt
+    .replace("<<FEED>>", inputParam)
+    .replace("<<STYLE>>", styleParam)
+    .replace("<<POINT>>", durationPoint);
 
-  const completion = getCompletion(scriptPrompt);
-  return completion;
+  return getNewOutputCompletion(scriptPrompt);
 }
 
-function paramPromptCompletion(filename, inputParam) {
+function newPromptCompletion(filename, inputParam, styleParam) {
   rawPrompt = readTextFileToPrompt(filename);
-  if (inputParam !== '') {rawPrompt = rawPrompt.replace("<<FEED>>", inputParam);}
+  if (inputParam === '') {
+    console.log("🔥 ~ file: ai.js:80 ~ newPromptCompletion ~", filename, inputParam, styleParam)
+    return
+  }
+  properPrompt = rawPrompt.replace("<<FEED>>", inputParam).replace("<<STYLE>>", styleParam);
+  return getNewOutputCompletion(properPrompt);
+}
 
-  const completion = getCompletion(rawPrompt);
-  return completion;
+function optimizePromptCompletion(filename, inputParam) {
+  console.log("🚀 ~ file: ai.js:292 ~ optimizePromptCompletion ~ inputParam:", inputParam)
+  rawPrompt = readTextFileToPrompt(filename);
+  console.log("🚀 ~ file: ai.js:294 ~ optimizePromptCompletion ~ rawPrompt:", rawPrompt)
+  if (inputParam === '') {
+    console.log("🔥 ~ file: ai.js:296 ~ optimizePromptCompletion ~ inputParam:", inputParam)
+    return
+  }
+  properPrompt = rawPrompt.replace("<<SOURCE>>", inputParam);
+  console.log("🚀 ~ file: ai.js:300 ~ optimizePromptCompletion ~ properPrompt:", properPrompt)
+  return getOptimizedOutputCompletion(properPrompt);
 }
 
 function readTextFileToPrompt(filename) {

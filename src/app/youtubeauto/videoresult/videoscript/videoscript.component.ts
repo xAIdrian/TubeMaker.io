@@ -1,8 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { GptService } from "../../service/gpt.service";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { GptService } from "../../service/gpt/gpt.service";
 import { ContentService } from "../../service/content.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DurationSection, VideoDuration } from "../../model/videoduration.model";
+import { DurationSection, VideoDuration } from "../../model/create/videoduration.model";
 
 @Component({
   selector: 'video-script',
@@ -10,14 +10,11 @@ import { DurationSection, VideoDuration } from "../../model/videoduration.model"
   styleUrls: ['./videoscript.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoScriptComponent implements OnInit, AfterContentInit {
+export class VideoScriptComponent implements AfterContentInit, OnChanges {
 
-  @Output() scriptFormGroupEvent = new EventEmitter<FormGroup>();
+  @Input() parentScriptFormGroup: FormGroup;
   
-  public parentIsLoading = false;
-
   isScriptLoading: boolean = false;
-  scriptFormGroup: FormGroup;
 
   currentVideoDuration: VideoDuration = {
     name: 'please wait',
@@ -37,65 +34,38 @@ export class VideoScriptComponent implements OnInit, AfterContentInit {
   constructor(
     private gptService: GptService,
     private contentService: ContentService,
-    private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
     this.currentVideoDuration = contentService.getCurrentVideoDuration();
   }
 
-  ngOnInit(): void {
-    this.setupObservers();
-    this.setupFormGroups();
+  /**
+   * Where we receive updates from our parent FormControl
+   * @param changes 
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["parentFormGroup"] && this.parentScriptFormGroup) {
+      console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentScriptFormGroup)
+    }
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
   }
 
-  setupObservers() {
-    /**
-     * This needs to be updated to use the new multiple sections that make up our script
-     */
-    this.gptService.getScriptSubjectObserver().subscribe((response) => {
-      this.isScriptLoading = false;
-      // this.scriptFormGroup.patchValue({ script: response.trim() })
-    });
-  }
-
-  setupFormGroups() {
-    this.scriptFormGroup = this._formBuilder.group({
-      introduction: ['', Validators.required],
-      mainContent: ['', Validators.required],
-      conclusion: ['', Validators.required],
-      questions: [''],
-      opinions: [''],
-      caseStudies: [''],
-      actionables: [''],
-    });
-  }
-
   onRerollSection(section: DurationSection) {
-    section.isLoading = true;
     const controlName = section.controlName
-    this.scriptFormGroup.patchValue({ controlName: 'Please wait...' })
-    this.scriptFormGroupEvent.emit(this.scriptFormGroup);
+    this.parentScriptFormGroup.patchValue({ controlName: 'Please wait...' })
+    this.gptService.getNewScriptSection(section, false)
   }
 
-  onOptimizeSection(section: DurationSection) {
-    section.isLoading = true;
-    const controlName = section.controlName
-    this.scriptFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
-    this.scriptFormGroupEvent.emit(this.scriptFormGroup);
-  }
-
-  rerollScript() {
-    this.isScriptLoading = true;
-    this.scriptFormGroup.patchValue({ script: 'Please wait...'  })
-    this.gptService.getIsolatedScript();
-  }
-
-  optimizeScript() {
-    let scar = this.currentVideoDuration.sections[0].points[0] + '\n\n';
-  }
+  // onOptimizeSection(section: DurationSection) {
+  //   const controlName = section.controlName
+  //   this.gptService.optimizeScriptSection(
+  //     section,
+  //     this.parentFormGroup.get(section.controlName)?.value
+  //   )
+  //   this.parentFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
+  // }
 }
 

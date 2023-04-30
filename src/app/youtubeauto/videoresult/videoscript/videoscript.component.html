@@ -1,42 +1,14 @@
-<div *ngIf="!parentIsLoading">
+<div>
   <h4>Improve Your Script With AI</h4>
   <strong>{{ currentVideoDuration.name }}</strong>
   <p class="text-medium-emphasis">{{ currentVideoDuration.description }}</p>
-  <form [formGroup]="scriptFormGroup">
+  <form [formGroup]="parentScriptFormGroup">
 
     <div *ngFor="let section of currentVideoDuration.sections">
       <h5>{{ section.name }}</h5>
       <div class="row">
-        <div class="col-8">
-          <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="{{ section.controlName }}">
-      </textarea>
-        </div>
-        <div class="col-2">
-          <div style="display: flex; align-items: center; padding: 0; margin:0">
-            <button 
-              cButton 
-              class="col-btn" 
-              variant="outline" 
-              color="dark" 
-              [disabled]="section.isLoading"
-              (click)="onRerollSection(section)">
-              <c-spinner *ngIf="section.isLoading" size="sm"></c-spinner>
-              New
-            </button>
-          </div>
-          <div style="display: flex; align-items: center; padding: 0; margin:0">
-            <button 
-              cButton 
-              class="col-btn" 
-              variant="outline" 
-              color="dark" 
-              [disabled]="section.isOptimizing"
-              (click)="onOptimizeSection(section)">
-              <c-spinner *ngIf="section.isOptimizing" size="sm"></c-spinner>
-              Optimize
-            </button>
-          </div>
-        </div>
+        <textarea rows="10" style="height: auto; margin-bottom: 0.5rem;" cFormControl formControlName="{{ section.controlName }}" oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
+        </textarea>
       </div>
     </div>
     <br />

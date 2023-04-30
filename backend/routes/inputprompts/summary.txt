@@ -1,5 +1,15 @@
-As a communication expert, your task is to explain the following concept or idea in simple terms so that anyone can understand it. Provide a comprehensive yet easy-to-understand explanation of the following subject matter. Your response should be clear, concise, and free from jargon or technical language. Please keep in mind that your explanation should be tailored to someone without prior knowledge of the topic. You may use analogies or examples to help illustrate your points and make them more accessible. Additionally, please ensure that your response covers all key aspects of the following concept or idea:
+As a communication expert, your task is to expand the following text in simple terms so that anyone can understand it. 
+Provide a comprehensive yet easy-to-understand explanation of the following subject matter. 
+Your response should be clear, concise, and free from jargon or technical language. 
+Please keep in mind that your explanation should be tailored to someone without prior knowledge of the topic. 
+You may use analogies or examples to help illustrate your points and make them more accessible. 
+Additionally, please ensure that your response covers all key aspects of the following text:
 
 <<FEED>>
 
-As a communication expert, your task is to explain the above concept or idea in simple terms so that anyone can understand it. Provide a comprehensive yet easy-to-understand explanation of the above subject matter. Your response should be clear, concise, and free from jargon or technical language. Please keep in mind that your explanation should be tailored to someone without prior knowledge of the topic. You may use analogies or examples to help illustrate your points and make them more accessible. Additionally, please ensure that your response covers all key aspects of the above concept or idea:
+As a communication expert, your task is to expand the ABOVE text in simple terms so that anyone can understand it. 
+Provide a comprehensive yet easy-to-understand explanation of the above subject matter. 
+Your response should be clear, concise, and free from jargon or technical language. 
+Please keep in mind that your explanation should be tailored to someone without prior knowledge of the topic. 
+You may use analogies or examples to help illustrate your points and make them more accessible. 
+Additionally, please ensure that your response covers all key aspects of the ABOVE text:

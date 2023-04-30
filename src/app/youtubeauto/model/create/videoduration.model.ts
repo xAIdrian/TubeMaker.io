@@ -23,8 +23,7 @@ export const defaultVideoDurations: VideoDuration[] = [
         name: 'Introduction',
         controlName: 'introduction',
         points: [
-          'Quick attention-grabbing hook',
-          'Very briefly introduce the topic or problem being addressed',
+          'Quick attention-grabbing hook'
         ],
       },
       {
@@ -32,14 +31,12 @@ export const defaultVideoDurations: VideoDuration[] = [
         controlName: 'mainContent',
         points: [
           'Concise explanation of the key point or main idea',
-          'Focus on the most important aspect of the topic',
         ],
       },
       {
         name: 'Conclusion',
         controlName: 'conclusion',
         points: [
-          'Rapid recap of the main point',
           'Quick call-to-action (e.g., subscribe, like, or comment)',
         ],
       },
@@ -119,40 +116,6 @@ export const defaultVideoDurations: VideoDuration[] = [
   {
     name: 'Long',
     header: 'For videos over 10 minutes',
-    description: 'In-depth exploration of topics, suitable for comprehensive coverage and offering actionable takeaways throughout the video.',
-    sections: [
-      {
-        name: 'Introduction',
-        controlName: 'introduction',
-        points: [
-          'Attention-grabbing hook',
-          'Introduce the topic or problem being addressed',
-        ],
-      },
-      {
-        name: 'Main Content',
-        controlName: 'mainContent',
-        points: [
-          'Comprehensive overview of the topic or problem',
-          'Multiple examples and evidence to support your points',
-          'Break down the content into subtopics or sections',
-          'Include actionable takeaways throughout the video',
-        ],
-      },
-      {
-        name: 'Conclusion',
-        controlName: 'conclusion',
-        points: [
-          'Summarize the main points covered',
-          'Recap the actionable takeaways',
-          'Call-to-action (e.g., subscribe, like, or comment)',
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Very Long',
-    header: 'For videos at 20 minutes',
     description: 'Extended format with case studies and FAQs, ideal for deep dives into subjects and addressing common questions.',
     sections: [
       {
@@ -202,8 +165,8 @@ export const defaultVideoDurations: VideoDuration[] = [
     ],
   },
   {
-    name: 'Extended',
-    header: 'For videos at 30 minutes',
+    name: 'Very Long',
+    header: 'For videos at least 20 minutes',
     description: 'Thorough coverage of topics, incorporating expert opinions and interviews, great for educational or informative content.',
     sections: [
       {

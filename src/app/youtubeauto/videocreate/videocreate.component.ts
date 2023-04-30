@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { GptService } from '../service/gpt.service';
+import { GptService } from '../service/gpt/gpt.service';
 import {
   FormBuilder,
   FormGroup,
@@ -15,8 +15,8 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
 import { ContentService } from '../service/content.service';
-import { VideoStyle } from '../model/videostyle.model';
-import { VideoDuration } from '../model/videoduration.model';
+import { VideoStyle } from '../model/create/videostyle.model';
+import { VideoDuration } from '../model/create/videoduration.model';
 
 @Component({
   selector: 'video-create',
@@ -91,7 +91,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   setupObservers() {
-    this.gptService.getTopicSubjectObserver().subscribe((response) => {
+    this.gptService.getTopicObserver().subscribe((response) => {
       this.topicLoading = false;
       this.topicFormGroup.setValue({
         topic: response.replace('"', '').trim()
@@ -117,7 +117,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   reRollTopic() { 
     this.topicLoading = true;
-    this.gptService.getIsolatedTopic() 
+    this.gptService.updateNewTopic() 
   }
 
   onVideoOptionSelected(option: VideoStyle) {
@@ -142,7 +142,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     } else {
       this.hasInputError = false;
       this.contentService.submitInputs(
-        this.topicFormGroup.value.subject,
+        this.topicFormGroup.value.topic,
         this.styleFormGroup.value.selectedStyle,
         this.durationFormGroup.value.selectedDuration,
         this.moneyFormGroup.value.selectedMonetization,
