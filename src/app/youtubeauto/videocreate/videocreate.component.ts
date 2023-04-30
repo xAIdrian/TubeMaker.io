@@ -15,8 +15,8 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
 import { ContentService } from '../service/content.service';
-import { VideoStyle } from '../model/videostyle.model';
-import { VideoDuration } from '../model/videoduration.model';
+import { VideoStyle } from '../model/create/videostyle.model';
+import { VideoDuration } from '../model/create/videoduration.model';
 
 @Component({
   selector: 'video-create',

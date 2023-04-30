@@ -20,7 +20,7 @@ router.get("/topic", async (req, res, next) => {
       model: "text-davinci-003",
       prompt: rawPrompt,
       temperature: 1.2,
-      max_tokens: 1500,
+      max_tokens: 1000,
       top_p: 1,
       presence_penalty: 0.7,
       frequency_penalty: 0.7
@@ -141,6 +141,7 @@ router.post("/improve/description", async (req, res, next) => {
  * Keep in mind this is processing Script Sections
  */
 router.post("/new/script", async (req, res, next) => {
+  console.log("🛸 ~ file: ai.js:144 ~ router.post ~ req:", req.body)
   let summary = req.body.summary;
   let style = req.body.style;
   let point = req.body.point;
@@ -151,7 +152,7 @@ router.post("/new/script", async (req, res, next) => {
   }
 
   let gptScript = await newScriptPromptCompletion(summary, style, point);
-  console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
+  console.log("🛸 ~ file: ai.js:155 ~ router.post ~ gptScript:", gptScript)
 
   res.status(200).json({
     message: "success",
@@ -159,25 +160,25 @@ router.post("/new/script", async (req, res, next) => {
   });
 });
 
-router.post("/improve/script", async (req, res, next) => {
-  let current = req.body.current;
-  if (current === "") {
-    res.status(403).json({
-      message: "current is required",
-    });
-  }
+// router.post("/improve/script", async (req, res, next) => {
+//   let current = req.body.current;
+//   if (current === "") {
+//     res.status(403).json({
+//       message: "current is required",
+//     });
+//   }
 
-  let gptScript = await optimizePromptCompletion(
-    'backend/routes/inputprompts/youtube_optimizer_script.txt',
-    current
-  );
-  console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
+//   let gptScript = await optimizePromptCompletion(
+//     'backend/routes/inputprompts/youtube_optimizer_script.txt',
+//     current
+//   );
+//   console.log("🚀 ~ file: ai.js:34 ~ router.post ~ gptScript:", gptScript)
 
-  res.status(200).json({
-    message: "success",
-    result: { script: gptScript },
-  });
-});
+//   res.status(200).json({
+//     message: "success",
+//     result: { script: gptScript },
+//   });
+// });
 
 router.post("/new/tags", async (req, res, next) => {
   let summary = req.body.summary;
@@ -224,7 +225,7 @@ async function getNewOutputCompletion(prompt) {
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 3000,
       top_p: 1,
       presence_penalty: 0.6,
       frequency_penalty: 0.6
@@ -233,11 +234,11 @@ async function getNewOutputCompletion(prompt) {
     
   } catch (error) {
     if (error.response) {
-      console.log("🚀 ~ file: ai.js:56 ~ getNewOutputCompletion ~ error")
+      console.log("🛸 ~ file: ai.js:56 ~ getNewOutputCompletion ~ error")
       console.log(error.response.status);
       console.log(error.response.data);
     } else {
-      console.log("🚀 ~ file: ai.js:61 ~ getNewOutputCompletion ~ else")
+      console.log("🛸 ~ file: ai.js:61 ~ getNewOutputCompletion ~ else")
       console.log(error.message);
     }
   }
@@ -249,7 +250,7 @@ async function getOptimizedOutputCompletion(prompt) {
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 2500,
       top_p: 1,
     });
     return completion.data.choices[0].text;
@@ -280,7 +281,7 @@ function newScriptPromptCompletion(inputParam, styleParam, durationPoint) {
     .replace("<<STYLE>>", styleParam)
     .replace("<<POINT>>", durationPoint);
 
-  return getOptimizedOutputCompletion(scriptPrompt);
+  return getNewOutputCompletion(scriptPrompt);
 }
 
 function newPromptCompletion(filename, inputParam, styleParam) {

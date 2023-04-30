@@ -4,8 +4,8 @@ import { Media } from '../model/media/media.model';
 import { ListVideo } from '../model/media/video/listvideo.model';
 import { Router } from '@angular/router';
 import { VoiceService } from './voice.service';
-import { defaultVideoStyles, VideoStyle } from '../model/videostyle.model';
-import { defaultVideoDurations, VideoDuration } from '../model/videoduration.model';
+import { defaultVideoStyles, VideoStyle } from '../model/create/videostyle.model';
+import { defaultVideoDurations, VideoDuration } from '../model/create/videoduration.model';
 import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({

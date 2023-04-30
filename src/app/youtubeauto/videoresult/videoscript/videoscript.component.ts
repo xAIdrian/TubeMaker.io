@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { GptService } from "../../service/gpt/gpt.service";
 import { ContentService } from "../../service/content.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DurationSection, VideoDuration } from "../../model/videoduration.model";
+import { DurationSection, VideoDuration } from "../../model/create/videoduration.model";
 
 @Component({
   selector: 'video-script',
@@ -10,11 +10,12 @@ import { DurationSection, VideoDuration } from "../../model/videoduration.model"
   styleUrls: ['./videoscript.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges {
+export class VideoScriptComponent implements AfterContentInit, OnChanges {
 
   @Input() parentFormGroup: FormGroup;
   
   isScriptLoading: boolean = false;
+  liveDemoVisible = false;
 
   currentVideoDuration: VideoDuration = {
     name: 'please wait',
@@ -39,27 +40,26 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
     this.currentVideoDuration = contentService.getCurrentVideoDuration();
   }
 
+  /**
+   * Where we receive updates from our parent FormControl
+   * @param changes 
+   */
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ ngOnChanges ~ changes:", changes)
     if (changes["parentFormGroup"] && this.parentFormGroup) {
       console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentFormGroup)
-      
     }
-  }
-
-  ngOnInit(): void {
-    this.setupObservers();
-    this.setupFormGroups();
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
   }
 
-  setupObservers() {
+  toggleLiveDemo() {
+    this.liveDemoVisible = !this.liveDemoVisible;
   }
 
-  setupFormGroups() {
+  handleLiveDemoChange(event: boolean) {
+    this.liveDemoVisible = event;
   }
 
   onRerollSection(section: DurationSection) {
@@ -68,13 +68,13 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
     this.gptService.getNewScriptSection(section, false)
   }
 
-  onOptimizeSection(section: DurationSection) {
-    const controlName = section.controlName
-    this.gptService.optimizeScriptSection(
-      section,
-      this.parentFormGroup.get(section.controlName)?.value
-    )
-    this.parentFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
-  }
+  // onOptimizeSection(section: DurationSection) {
+  //   const controlName = section.controlName
+  //   this.gptService.optimizeScriptSection(
+  //     section,
+  //     this.parentFormGroup.get(section.controlName)?.value
+  //   )
+  //   this.parentFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
+  // }
 }
 

@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -18,7 +19,7 @@ import { saveAs } from 'file-saver';
 import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../../service/gpt/gpt.service';
 import { ContentService } from '../../service/content.service';
-import { VideoDuration } from '../../model/videoduration.model';
+import { VideoDuration } from '../../model/create/videoduration.model';
 import { VideoScriptComponent } from '../videoscript/videoscript.component';
 
 @Component({
@@ -27,7 +28,7 @@ import { VideoScriptComponent } from '../videoscript/videoscript.component';
   styleUrls: ['./videodetails.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoDetailsComponent implements OnInit, AfterContentInit {
+export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
 
   @ViewChild('video-script') videoScriptStep: VideoScriptComponent
   
@@ -35,7 +36,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   currentVideoDuration: VideoDuration;
 
   //debug variable to be removed
-  isInDebugMode: boolean = false;
+  isInDebugMode: boolean = true;
   ////////////////////////////
 
   contentProgressValue: number = 0;
@@ -103,6 +104,12 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
     if (!this.isInDebugMode) { this.gptService.generateVideoContentWithAI(); }
   }
 
+  ngAfterViewInit(): void {
+    console.log("💵 ~ file: videodetails.component.ts:107 ~ VideoDetailsComponent ~ ngAfterViewInit ~ ngAfterViewInit:")
+    this.contentProgressValue = 0;
+    this.scriptProgressValue = 0;
+  }
+
   setupObservers() {
     this.gptService.getContentProgressObserver().subscribe((response) => {
       this.contentProgressValue = this.contentProgressValue + response;
@@ -115,14 +122,16 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
       } else if (this.contentProgressValue === 75) {
         this.contentProgressLabel = 'Searching youtube...';
       } else if (this.contentProgressValue === 100) {
-        this.contentProgressLabel = 'Done!';
+        this.contentProgressLabel = 'Done. Moving to script.';
       }
     });
     this.gptService.getScriptProgressObserver().subscribe((response) => {
+      console.log("🚀 ~ file: videodetails.component.ts:122 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ response:", response)
       this.scriptProgressValue = this.scriptProgressValue + response.increment;
+      console.log("🚀 ~ file: videodetails.component.ts:124 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ scriptProgressValue:", this.scriptProgressValue)
       this.scriptProgressLabel = response.label;
 
-      if (this.scriptProgressValue >= 100) {
+      if (this.scriptProgressValue >= 97) {
         this.scriptProgressLabel = 'Done!';
         setTimeout(() => {
           this.contentGenerationIsLoading = false;
