@@ -202,48 +202,4 @@ export const defaultVideoStyles: VideoStyle[] = [
       },
     ],
   },
-  {
-    name: 'Bedtime Stories',
-    header: 'Bedtime Stories',
-    description:
-      'Sleepless nights are increasingly common among a large number of people. To help with this, people are eagerly listening to bedtime stories, be it for adults or kids. The beauty of a faceless YouTube channel is that you can gently lull your listeners to sleep if you have a lingering voice.',
-    channelExamples: [
-      {
-        name: 'relax for a while',
-        subscriptions: '210K',
-        url: 'https://www.youtube.com/c/relaxforawhile',
-        views: '19M',
-        earns: '1KUSD/month',
-      },
-      {
-        name: 'Soothing Pod - Sleep Meditation & Bedtime Stories',
-        subscriptions: '50K',
-        url: 'https://www.youtube.com/c/SoothingPod',
-        views: '5M',
-        earns: '4KUSD/month',
-      },
-    ],
-  },
-  {
-    name: 'Music',
-    header: 'Relaxing / Study Music',
-    description:
-      'If you’ve got a musical itch, then this one might be the perfect candidate. A large number of users listen to music without lyrics while studying, working, or meditating. Lofi Girl is a perfect example of how a cult of followers can grow with a faceless channel with one of the highest numbers of views. If you’re looking to create your own Music using AI tech, we recommend you check out Boomy.',
-    channelExamples: [
-      {
-        name: 'Lofi Girl',
-        subscriptions: '11.4M',
-        url: 'https://www.youtube.com/c/LofiGirl',
-        views: '1.34B',
-        earns: '116KUSD/month',
-      },
-      {
-        name: 'Quiet Quest - Study Music',
-        subscriptions: '400K',
-        url: 'https://www.youtube.com/c/QuietQuestStudyMusic',
-        views: '140M',
-        earns: '20KUSD/month',
-      },
-    ],
-  },
 ];

@@ -5,6 +5,8 @@ const router = express.Router();
 const playhtUserId = "Y0Yo31zn6ofKRyhNFyNj1gSxEJ63";
 const playhtSecret = "5992824d1a1b4779a76e4176ca0d1d07";
 
+// const elevenLabsApiKey = 'f0efaf9cb08bce89d11a04e70fc677f6'
+
 router.get("/voices", async (req, res) => {
   const url = "https://play.ht/api/v1/getVoices";
   const options = {
@@ -30,7 +32,7 @@ router.get("/voices", async (req, res) => {
 });
 
 router.post("/generate", async (req, res) => {
-  let reqContent = req.body.content.split(/\n\n/);
+  let reqContent = req.body.content.split('\n').trim();
   let reqVoice = req.body.voice;
   const updateBody = {
     content: reqContent,
@@ -118,19 +120,19 @@ async function handleResponse(fetchResponse, callback) {
 
     } else if (fetchResponse.status === 400) {
       console.log("🔥 ~ file: voice.js:133 ~ handleResponse ~ fetchResponse:", fetchResponse)
-      // res.status(400).json(jsonResponse);
+      res.status(400).json(jsonResponse);
 
     } else if (fetchResponse.status === 403) {
       console.log("🔥 ~ file: voice.js:138 ~ handleResponse ~ fetchResponse:", fetchResponse)
-      // res.status(403).send(jsonResponse);
+      res.status(403).send(jsonResponse);
 
     } else {
       console.log("🔥 ~ file: voice.js:143 ~ handleResponse ~ fetchResponse:", fetchResponse)
-      // res.status(500).send(jsonResponse);
+      res.status(500).send(jsonResponse);
     }
   } catch (error) {
     console.error("🔥 Error:", error.message);
-    // res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 

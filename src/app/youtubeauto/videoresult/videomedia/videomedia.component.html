@@ -9,7 +9,7 @@
       </div>
       <div class="col-8">
         <div *ngIf="selectedMediaOption === 'Video'">
-          <h4>Use Our AI Generated Voice</h4>
+          <h4>Use Our AI Generated Voice or Record Your Own</h4>
           <p class="text-medium-emphasis">
             Pick a voice. We'll take care of the audio for you or you can upload your own below.
           </p>
@@ -22,14 +22,26 @@
               style="width: 100%" 
               variant="outline" 
               color="primary"
+              [disabled]="generateAudioLoading"
               (click)="generateTextToSpeech()">
+              <c-spinner *ngIf="generateAudioLoading" size="sm"></c-spinner>
               Generate Your AI Narration
             </button>
-            <audio *ngIf="generatedAudioIsVisible" class="flex-grow-1" style="width: 100%;" controls>
+            <audio *ngIf="generatedAudioIsVisible" class="flex-grow-1" style="margin: 1rem; width: 100%;" controls>
               <source [src]="generatedAudio" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
           </div>
+          <p></p>
+          <button 
+              cButton
+              variant="outline" 
+              style="width: 100%" 
+              variant="outline" 
+              color="primary"
+              (click)="downloadTextFile()">
+              Download Your Scipt
+            </button>
           <br />
           <h4>Almost Done, Put It All Together With Descript</h4><br />
           <p class="text-medium-emphasis">

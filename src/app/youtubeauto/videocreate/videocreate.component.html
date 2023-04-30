@@ -92,12 +92,13 @@
           <br />
           <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
             <button variant="outline" color="dark" cButton matStepperPrevious>Go Back</button>
-            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>Go To Next Step</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">GENERATE My Video Script,
+              Title, & Everything Else!</button>
           </div>
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="moneyFormGroup">
+      <!-- <mat-step [stepControl]="moneyFormGroup">
         <form [formGroup]="moneyFormGroup">
           <ng-template matStepLabel>Monetization</ng-template>
           <div class="row">
@@ -139,7 +140,7 @@
                 Title, & Everything Else!</button>
             </div>
         </form>
-      </mat-step>
+      </mat-step> -->
     </mat-horizontal-stepper>
     <c-card class="container" *ngIf="hasInputError" style="margin-bottom: 1rem;">
       <div class="text-area">

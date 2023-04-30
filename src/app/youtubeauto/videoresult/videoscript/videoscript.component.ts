@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GptService } from "../../service/gpt/gpt.service";
-import { ContentService } from "../../service/content.service";
+import { ContentService } from "../../service/content/content.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../model/create/videoduration.model";
 

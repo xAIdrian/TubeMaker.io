@@ -9,10 +9,11 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ContentService } from '../../service/content.service';
+import { ContentService } from '../../service/content/content.service';
 import { FormGroup } from '@angular/forms';
-import { VoiceService } from '../../service/voice.service';
+import { VoiceService } from '../../service/content/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
+import * as saveAs from 'file-saver';
 
 @Component({
   selector: 'video-media',
@@ -24,13 +25,10 @@ export class VideoMediaComponent
   implements OnInit, AfterContentInit, OnChanges
 {
   private audioDropdown: AudioDropdownComponent;
+
   @ViewChild('audiochild', { static: false }) set content(
     content: AudioDropdownComponent
   ) {
-    console.log(
-      '🚀 ~ file: videomedia.component.ts:17 ~ VideoMediaComponent ~ @ViewChild ~ content:',
-      content
-    );
     if (content) {
       // initially setter gets called with undefined
       this.audioDropdown = content;
@@ -39,6 +37,7 @@ export class VideoMediaComponent
 
   audioFormGroup: FormGroup;
 
+  generateAudioLoading = false;
   generatedAudioIsVisible = false;
   generatedAudio: string;
 
@@ -59,6 +58,7 @@ export class VideoMediaComponent
       this.changeDetectorRef.detectChanges();
     });
     this.voiceService.getTextToSpeechObserver().subscribe((response) => {
+      this.generateAudioLoading = false;
       if (response !== '') {
         this.generatedAudio = response;
         this.generatedAudioIsVisible = true;
@@ -98,9 +98,9 @@ export class VideoMediaComponent
   }
 
   downloadTextFile() {
-    // this.gptService.getScriptForDownload().subscribe((blobItem) => {
-    //   saveAs(blobItem.blob, blobItem.filename);
-    // });
+    this.contentService.getScriptForDownload().subscribe((blobItem) => {
+      saveAs(blobItem.blob, blobItem.filename);
+    });
   }
 
   generateTextToSpeech() {
@@ -108,8 +108,8 @@ export class VideoMediaComponent
       alert('Please select a voice before generating audio');
       return;
     }
-    // const scriptValue = this.resultsFormGroup.get('script')?.value;
-    const scriptValue = '';
+
+    const scriptValue = this.contentService.getCompleteScript();
     if (scriptValue === null || scriptValue === '') {
       alert('Please enter a script before generating audio');
       return;
@@ -117,6 +117,7 @@ export class VideoMediaComponent
 
     this.generatedAudio = '';
     this.generatedAudioIsVisible = false;
+    this.generateAudioLoading = true;
 
     this.voiceService.generateTextToSpeech(
       this.selectedVoice.name,
@@ -132,7 +133,7 @@ export class VideoMediaComponent
   onMediaOptionSelected(option: string) {
     this.selectedMediaOption = option;
   }
-  
+
   goToReview() {
     throw new Error('Method not implemented.');
   }

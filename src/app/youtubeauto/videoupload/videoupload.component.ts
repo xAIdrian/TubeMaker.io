@@ -6,10 +6,10 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationService } from '../service/navigation.service';
-import { ContentService } from '../service/content.service';
+import { ContentService } from '../service/content/content.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
-import { YoutubeService } from '../service/youtube.service';
+import { YoutubeService } from '../service/domain/youtube.service';
 
 @Component({
   selector: 'video-upload',

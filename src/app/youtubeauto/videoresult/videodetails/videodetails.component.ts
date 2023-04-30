@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { VoiceService } from '../../service/voice.service';
+import { VoiceService } from '../../service/content/voice.service';
 import { NavigationService } from '../../service/navigation.service';
 import {
   FormBuilder,
@@ -18,7 +18,7 @@ import { saveAs } from 'file-saver';
 
 import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../../service/gpt/gpt.service';
-import { ContentService } from '../../service/content.service';
+import { ContentService } from '../../service/content/content.service';
 import { VideoDuration } from '../../model/create/videoduration.model';
 import { VideoScriptComponent } from '../videoscript/videoscript.component';
 import { VideoMediaComponent } from '../videomedia/videomedia.component';
