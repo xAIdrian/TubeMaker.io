@@ -86,3 +86,8 @@ p {
   margin: 0;
   flex: 1;
 }
+
+pre {
+  white-space: pre-wrap;
+  overflow: auto;
+}

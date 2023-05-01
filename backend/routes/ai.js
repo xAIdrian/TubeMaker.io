@@ -11,7 +11,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.get("/topic/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:14 ~ router.get ~ req:", req)
+  console.log("🚀 ~ file: ai.js:14 ~ router.get ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_topic.txt";
@@ -56,7 +56,7 @@ router.get("/topic/:language", async (req, res, next) => {
 });
 
 router.post("/summary/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:57 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:57 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/summary.txt";
@@ -86,8 +86,7 @@ router.post("/summary/:language", async (req, res, next) => {
 });
 
 router.post("/new/title/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:85 ~ router.post ~ req:", req)
-  console.log("🚀 ~ file: ai.js:85 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:85 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_title.txt";
@@ -117,7 +116,7 @@ router.post("/new/title/:language", async (req, res, next) => {
 });
 
 router.post("/improve/title/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:114 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:114 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_optimizer_title.txt";
@@ -146,7 +145,7 @@ router.post("/improve/title/:language", async (req, res, next) => {
 });
 
 router.post("/new/description/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:149 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:149 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_description.txt";
@@ -176,7 +175,7 @@ router.post("/new/description/:language", async (req, res, next) => {
 });
 
 router.post("/improve/description/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:179 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:179 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_optimizer_description.txt";
@@ -208,7 +207,7 @@ router.post("/improve/description/:language", async (req, res, next) => {
  * Keep in mind this is processing Script Sections
  */
 router.post("/new/script/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:211 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:211 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_script_section.txt";
@@ -239,12 +238,12 @@ router.post("/new/script/:language", async (req, res, next) => {
 });
 
 router.post("/new/tags/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:242 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:242 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
-    inputFile = "backend/routes/inputprompts/en/youtube_script_section.txt";
+    inputFile = "backend/routes/inputprompts/en/youtube_tags.txt";
   } else if (language === 'fr') {
-    inputFile ="backend/routes/inputprompts/fr/youtube_script_section.txt";
+    inputFile ="backend/routes/inputprompts/fr/youtube_tags.txt";
   } else {
     res.status(403).json({
       message: "language is required",
@@ -268,7 +267,7 @@ router.post("/new/tags/:language", async (req, res, next) => {
 });
 
 router.post("/improve/tags/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:271 ~ router.post ~ req:", req)
+  console.log("🚀 ~ file: ai.js:271 ~ router.post ~ req:", req.url, req.body)
   let language = req.params.language;
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_optimizer_tags.txt";
