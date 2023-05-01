@@ -53,11 +53,11 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
     )
   }
 
-  onRerollSection(section: DurationSection) {
-    const controlName = section.controlName
-    this.parentScriptFormGroup.patchValue({ controlName: 'Please wait...' })
-    this.gptService.getNewScriptSection(section, false)
-  }
+  // onRerollSection(section: DurationSection) {
+  //   const controlName = section.controlName
+  //   this.parentScriptFormGroup.patchValue({ controlName: 'Please wait...' })
+  //   this.gptService.getNewScriptSection(section, false)
+  // }
 
   // onOptimizeSection(section: DurationSection) {
   //   const controlName = section.controlName

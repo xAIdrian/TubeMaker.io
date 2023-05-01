@@ -1,4 +1,13 @@
 {
+  "dashboard": {
+    "traffic": "Traffic",
+    "dates_placeholder": "January - December 2021",
+    "translate_lang": "Translate Language",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "main_chart": " Main Chart"
+  },
   "video_list": {
     "welcome": "Welcome",
     "publish_videos_title": "Create a New Video",

@@ -61,6 +61,8 @@ router.post("/generate", async (req, res) => {
         return res.status(403).json(error.message);
       });
     }
+  }, (status, response) => {
+    res.status(status).json(response);
   });
 });
 
@@ -103,6 +105,8 @@ async function pollForStatus(res, transcriptionId) {
         pollForStatus(res, transcriptionId)
       }, 5000);
     }
+  }, (status, response) => {
+    res.status(status).json(response);
   });
 }
 
@@ -112,7 +116,7 @@ async function pollForStatus(res, transcriptionId) {
    * @param {Function | Promise<any>} callback 
    * @returns Promise<any>
    */
-async function handleResponse(fetchResponse, callback) {
+async function handleResponse(fetchResponse, callback, errorCallback) {
   try {
     if (fetchResponse.ok) {
       const jsonResponse = await fetchResponse.json();
@@ -120,19 +124,17 @@ async function handleResponse(fetchResponse, callback) {
 
     } else if (fetchResponse.status === 400) {
       console.log("🔥 ~ file: voice.js:133 ~ handleResponse ~ fetchResponse:", fetchResponse)
-      res.status(400).json(jsonResponse);
-
+      errorCallback(400, jsonResponse)
     } else if (fetchResponse.status === 403) {
       console.log("🔥 ~ file: voice.js:138 ~ handleResponse ~ fetchResponse:", fetchResponse)
-      res.status(403).send(jsonResponse);
-
+      errorCallback(403, jsonResponse)
     } else {
       console.log("🔥 ~ file: voice.js:143 ~ handleResponse ~ fetchResponse:", fetchResponse)
-      res.status(500).send(jsonResponse);
+      errorCallback(500, jsonResponse)
     }
   } catch (error) {
     console.error("🔥 Error:", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    errorCallback(500, jsonResponse)
   }
 }
 
