@@ -1,7 +1,7 @@
 {
-  "video-list": {
+  "video_list": {
     "welcome": "Bienvenue",
-    "publish_videos_title": "Vidéos publiées sur Youtube",
+    "publish_videos_title": "Créer une nouvelle vidéo",
     "create_new_video": "Sélectionnez une vidéo de la liste pour la modifier ou créez-en une nouvelle en cliquant sur le bouton 'Nouvelle vidéo'.",
     "published": "Publié:",
     "input": {
@@ -11,6 +11,10 @@
     }
   },
   "video_wizard": {
+    "script_outline": "Plan du script",
+    "similar_channels": "Chaînes similaires",
+    "monthly_reveneu": "Revenu mensuel",
+    "topic": "Titre",
     "pick_your_video_subject": "Choisissez le sujet de votre vidéo",
     "enter_topic_instructions": "Entrez simplement le sujet de votre vidéo dans la case ci-dessous, ou notre IA choisira un sujet pour vous !",
     "get_an_idea": "Trouver une idée",
@@ -32,7 +36,7 @@
       "links": []
     }
   },
-  "video-editor": {
+  "video_editor": {
     "make_video_your_own_title": "Personnalisons votre vidéo",
     "edit_video_context": "Parcourez le contexte de votre nouvelle vidéo et apportez des modifications pour créer votre script!",
     "title_label": "Titre",

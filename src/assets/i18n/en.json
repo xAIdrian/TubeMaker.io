@@ -1,7 +1,7 @@
 {
-  "video-list": {
+  "video_list": {
     "welcome": "Welcome",
-    "publish_videos_title": "Published Youtube Videos",
+    "publish_videos_title": "Create a New Video",
     "create_new_video": "Select a video from the list to edit or create a new one by clicking the 'New Video' button.",
     "published": "Published:",
     "input": {
@@ -11,6 +11,10 @@
     }
   },
   "video_wizard": {
+    "script_outline": "Script Outline",
+    "similar_channels": "Similar Channels",
+    "monthly_revenue": "Monthly Revenue",
+    "topic": "topic",
     "pick_your_video_subject": "Pick Your Video Subject",
     "enter_topic_instructions": "Simply enter your video topic into the box below, or our AI will a topic for you!",
     "get_an_idea": "Get an Idea",
@@ -32,7 +36,7 @@
       "links": []
     }
   },
-  "video-editor": {
+  "video_editor": {
     "make_video_your_own_title": "Let's Make The Video Your Own",
     "edit_video_context": "Go through your new video context and make any edits to create your script!",
     "title_label": "Title",

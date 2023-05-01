@@ -33,11 +33,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
     });
     this.translate.onLangChange.subscribe(() => {
       this.updateNavItems(this.translate);
-      this.changeDetectorRef.detectChanges();
     });
   }
 
   ngAfterContentInit(): void {
+    this.updateNavItems(this.translate);
     this.changeDetectorRef.detectChanges();
   }
 

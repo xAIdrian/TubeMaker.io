@@ -4,17 +4,17 @@
       <c-col md="6">
         <span class="clearfix">
           <h1 class="float-start display-3 me-4">500</h1>
-          <h4 class="pt-3">Houston, we have a problem!</h4>
+          <h4 class="pt-3">{{ 'pages.houston_problem' | translate }}</h4>
           <p class="text-medium-emphasis float-start">
-            The page you are looking for is temporarily unavailable.
+            {{ 'pages.page_temporarily_unavailable' | translate }}
           </p>
         </span>
         <c-input-group class="input-prepend">
           <span cInputGroupText>
             <svg cIcon name="cilMagnifyingGlass"></svg>
           </span>
-          <input cFormControl placeholder="What are you looking for?" type="text" />
-          <button cButton color="info">Search</button>
+          <input cFormControl [placeholder]="'pages.search_placeholder' | translate" type="text" />
+          <button cButton [innerHTML]="'pages.search_button' | translate" color="info"></button>
         </c-input-group>
       </c-col>
     </c-row>
