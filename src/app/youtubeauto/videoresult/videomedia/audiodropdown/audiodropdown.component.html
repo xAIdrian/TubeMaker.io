@@ -4,12 +4,12 @@
         <li *ngFor="let item of voiceOptions" (click)="onItemSelect($event, item)">
             <div class="dropdown-item d-flex justify-content-between align-items-center">
                 <div class="item-name">{{ item.name }}</div>
-                <svg cIcon name="cilMediaPlay"></svg>
+                <!-- <svg cIcon name="cilMediaPlay"></svg> -->
                 <p 
                 class="text-medium-emphasis small" 
                 style="display: flex; height:100%; align-self: center;"
                 (click)="onItemPlay(audioPlayer)">
-                    {{ 'voice_selection_dropdown.click_here_to_play_text' | translate }}
+                {{ 'voice_selection_dropdown.click_to_play_text' | translate }}
                 </p>
                 <audio #audioPlayer controls hidden="true">
                     <source [src]="item.sampleUrl" type="audio/mpeg">
