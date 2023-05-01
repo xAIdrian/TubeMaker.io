@@ -1,9 +1,16 @@
-Your task is to optimize the following title of a YouTube video to make it more viral and eye-catching. 
-The optimized title should be attention-grabbing, engaging, and accurately reflect the content of the video.
-You may consider using action words, emotional language, numbers or statistics, questions, or other techniques to make the title more appealing to potential viewers.
+Votre tâche consiste à optimiser le titre suivant d'une vidéo YouTube pour le rendre plus viral et accrocheur.
+Le titre optimisé doit être captivant, engageant et refléter avec précision le contenu de la vidéo.
+Vous pouvez envisager d'utiliser des mots d'action, un langage émotionnel, des chiffres ou des statistiques, des questions ou d'autres techniques pour rendre le titre plus attrayant pour les spectateurs potentiels.
 
 <<SOURCE>>
 
-Your task is to optimize the ABOVE title of a YouTube video to make it more viral and eye-catching. 
-The optimized title should be attention-grabbing, engaging, and accurately reflect the content of the video.
-You may consider using action words, emotional language, numbers or statistics, questions, or other techniques to make the title more appealing to potential viewers.
+Votre tâche consiste à optimiser le titre CI-DESSUS d'une vidéo YouTube pour le rendre plus viral et accrocheur.
+Le titre optimisé doit être captivant, engageant et refléter avec précision le contenu de la vidéo.
+Vous pouvez envisager d'utiliser des mots d'action, un langage émotionnel, des chiffres ou des statistiques, des questions ou d'autres techniques pour rendre le titre plus attrayant pour les spectateurs potentiels.
+
+<<SOURCE>>
+
+
+Votre tâche consiste à optimiser le titre de la vidéo YouTube mentionné ci-dessus pour le rendre plus viral et accrocheur.
+Le titre optimisé doit être captivant, engageant et refléter avec précision le contenu de la vidéo.
+Vous pouvez envisager d'utiliser des mots d'action, un langage émotionnel, des chiffres ou des statistiques, des questions ou d'autres techniques pour rendre le titre plus attrayant pour les spectateurs potentiels.

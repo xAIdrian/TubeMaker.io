@@ -1,9 +1,9 @@
-Your task is to craft a compelling and attention-grabbing title for a YouTube video that focuses on the following text in the style of <<STYLE>>.
-Your title should capture the essence of the text while also being unique and creative enough to stand out among other videos. 
-It should entice viewers to click on the video and watch it in its entirety by using persuasive language, humor, or a sense of urgency.
+Votre tâche consiste à créer un titre accrocheur et captivant pour une vidéo YouTube qui se concentre sur le texte suivant dans le style de <<STYLE>>.
+Votre titre doit saisir l'essence du texte tout en étant suffisamment unique et créatif pour se démarquer des autres vidéos.
+Il devrait inciter les spectateurs à cliquer sur la vidéo et à la regarder en entier en utilisant un langage persuasif, de l'humour ou un sentiment d'urgence.
 
 <<FEED>>
 
-Your task is to craft a compelling and attention-grabbing title for a YouTube video that focuses on the ABOVE text in the style of <<STYLE>>. 
-Your title should capture the essence of the text while also being unique and creative enough to stand out among other videos. 
-It should entice viewers to click on the video and watch it in its entirety by using persuasive language, humor, or a sense of urgency.
+Votre tâche consiste à créer un titre accrocheur et captivant pour une vidéo YouTube qui se concentre sur le texte CI-DESSUS dans le style de <<STYLE>>.
+Votre titre doit saisir l'essence du texte tout en étant suffisamment unique et créatif pour se démarquer des autres vidéos.
+Il devrait inciter les spectateurs à cliquer sur la vidéo et à la regarder en entier en utilisant un langage persuasif, de l'humour ou un sentiment d'urgence.

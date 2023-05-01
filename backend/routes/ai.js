@@ -10,8 +10,19 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-router.get("/topic", async (req, res, next) => {
-  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_topic.txt");
+router.get("/topic/:language", async (req, res, next) => {
+  let language = req.params.language;
+  if (language === 'en') {
+    inputFile = "backend/routes/inputprompts/en/youtube_topic.txt";
+  } else if (language === 'fr') {
+    inputFile ="backend/routes/inputprompts/fr/youtube_topic.txt";
+  } else {
+    res.status(403).json({
+      message: "language is required",
+    });
+  }
+
+  rawPrompt = readTextFileToPrompt(inputFile);
   try {
     /**
      * put in its own function
@@ -42,7 +53,18 @@ router.get("/topic", async (req, res, next) => {
   }
 });
 
-router.post("/summary", async (req, res, next) => {
+router.post("/summary/:language", async (req, res, next) => {
+  let language = req.params.language;
+  if (language === 'en') {
+    inputFile = "backend/routes/inputprompts/en/youtube_summary.txt";
+  } else if (language === 'fr') {
+    inputFile = "backend/routes/inputprompts/fr/youtube_summary.txt";
+  } else {
+    res.status(403).json({
+      message: "language is required",
+    });
+  }
+
   let prompt = req.body.prompt;
   if (prompt === "") {
     // this needs to be another GPT prompt
@@ -59,7 +81,18 @@ router.post("/summary", async (req, res, next) => {
   });
 });
 
-router.post("/new/title", async (req, res, next) => {
+router.post("/new/title/:language", async (req, res, next) => {
+  let language = req.params.language;
+  if (language === 'en') {
+    inputFile = "backend/routes/inputprompts/en/youtube_title.txt";
+  } else if (language === 'fr') {
+    inputFile ="backend/routes/inputprompts/fr/youtube_title.txt";
+  } else {
+    res.status(403).json({
+      message: "language is required",
+    });
+  }
+
   let summary = req.body.summary;
   let style = req.body.style;
   if (summary === "") {
@@ -67,11 +100,8 @@ router.post("/new/title", async (req, res, next) => {
       message: "summary is required",
     });
   }
-  let gptTitle = await newPromptCompletion(
-    "backend/routes/inputprompts/youtube_title.txt",
-    summary,
-    style
-  );
+
+  let gptTitle = await newPromptCompletion(inputFile, summary, style);
   gptTitle = gptTitle.replace('"', '')
 
   res.status(200).json({
@@ -80,17 +110,26 @@ router.post("/new/title", async (req, res, next) => {
   });
 });
 
-router.post("/improve/title", async (req, res, next) => {
+router.post("/improve/title/:language", async (req, res, next) => {
+  let language = req.params.language;
+  if (language === 'en') {
+    inputFile = "backend/routes/inputprompts/en/youtube_optimizer_title.txt";
+  } else if (language === 'fr') {
+    inputFile ="backend/routes/inputprompts/fr/youtube_optimizer_title.txt";
+  } else {
+    res.status(403).json({
+      message: "language is required",
+    });
+  }
+
   let current = req.body.current;
   if (current === "") {
     res.status(403).json({
       message: "current is required",
     });
   }
-  let gptTitle = await optimizePromptCompletion(
-    "backend/routes/inputprompts/youtube_optimizer_title.txt",
-    current
-  );
+
+  let gptTitle = await optimizePromptCompletion(inputFile, current);
   gptTitle = gptTitle.replace('"', '')
 
   res.status(200).json({
@@ -99,7 +138,18 @@ router.post("/improve/title", async (req, res, next) => {
   });
 });
 
-router.post("/new/description", async (req, res, next) => {
+router.post("/new/description/:language", async (req, res, next) => {
+  let language = req.params.language;
+  if (language === 'en') {
+    inputFile = "backend/routes/inputprompts/en/youtube_description.txt";
+  } else if (language === 'fr') {
+    inputFile ="backend/routes/inputprompts/fr/youtube_description.txt";
+  } else {
+    res.status(403).json({
+      message: "language is required",
+    });
+  }
+
   let summary = req.body.summary;
   let style = req.body.style;
   if (summary === "") {
@@ -107,11 +157,8 @@ router.post("/new/description", async (req, res, next) => {
       message: "summary is required",
     });
   }
-  let gptDescription = await newPromptCompletion(
-    "backend/routes/inputprompts/youtube_description.txt",
-    summary,
-    style
-  );
+
+  let gptDescription = await newPromptCompletion(inputFile, summary, style);
 
   res.status(200).json({
     message: "success",
@@ -119,17 +166,26 @@ router.post("/new/description", async (req, res, next) => {
   });
 });
 
-router.post("/improve/description", async (req, res, next) => {
+router.post("/improve/description/:language", async (req, res, next) => {
+  let language = req.params.language;
+  if (language === 'en') {
+    inputFile = "backend/routes/inputprompts/en/youtube_optimizer_description.txt";
+  } else if (language === 'fr') {
+    inputFile ="backend/routes/inputprompts/fr/youtube_optimizer_description.txt";
+  } else {
+    res.status(403).json({
+      message: "language is required",
+    });
+  }
+
   let current = req.body.current;
   if (current === "") {
     res.status(403).json({
       message: "current is required",
     });
   }
-  let gptDescription = await optimizePromptCompletion(
-    "backend/routes/inputprompts/youtube_optimizer_description.txt",
-    current
-  );
+
+  let gptDescription = await optimizePromptCompletion(inputFile, current);
 
   res.status(200).json({
     message: "success",
@@ -140,8 +196,18 @@ router.post("/improve/description", async (req, res, next) => {
 /**
  * Keep in mind this is processing Script Sections
  */
-router.post("/new/script", async (req, res, next) => {
-  console.log("🛸 ~ file: ai.js:144 ~ router.post ~ req:", req.body)
+router.post("/new/script/:language", async (req, res, next) => {
+  let language = req.params.language;
+  if (language === 'en') {
+    inputFile = "backend/routes/inputprompts/en/youtube_script_section.txt";
+  } else if (language === 'fr') {
+    inputFile ="backend/routes/inputprompts/fr/youtube_script_section.txt";
+  } else {
+    res.status(403).json({
+      message: "language is required",
+    });
+  }
+
   let summary = req.body.summary;
   let style = req.body.style;
   let point = req.body.point;
@@ -151,7 +217,7 @@ router.post("/new/script", async (req, res, next) => {
     });
   }
 
-  let gptScript = await newScriptPromptCompletion(summary, style, point);
+  let gptScript = await newScriptPromptCompletion(inputFile, summary, style, point);
   console.log("🛸 ~ file: ai.js:155 ~ router.post ~ gptScript:", gptScript)
 
   res.status(200).json({
@@ -267,15 +333,15 @@ async function getOptimizedOutputCompletion(prompt) {
   }
 }
 
-function summaryPromptCompletion(inputParam) {
-  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/summary.txt"); 
+function summaryPromptCompletion(inputFile, inputParam) {
+  rawPrompt = readTextFileToPrompt(inputFile); 
   summaryPrompt = rawPrompt.replace("<<FEED>>", inputParam);
   
   return getNewOutputCompletion(summaryPrompt);
 }
 
-function newScriptPromptCompletion(inputParam, styleParam, durationPoint) {
-  rawPrompt = readTextFileToPrompt("backend/routes/inputprompts/youtube_script_section.txt"); 
+function newScriptPromptCompletion(inputFile, inputParam, styleParam, durationPoint) {
+  rawPrompt = readTextFileToPrompt(inputFile); 
   scriptPrompt = rawPrompt
     .replace("<<FEED>>", inputParam)
     .replace("<<STYLE>>", styleParam)

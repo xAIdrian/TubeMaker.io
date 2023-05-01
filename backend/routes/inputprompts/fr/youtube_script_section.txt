@@ -1,6 +1,6 @@
-Your task is to write a first-person narrated <<POINT>> as part a larger YouTube script. Do NOT include an introduction.
-The section should focus on <<FEED>>, in the style of <<STYLE>>. 
-Please provide an engaging and informative narrative that captures the attention of viewers and provides valuable insights into the topic.
+Votre tâche consiste à écrire un récit à la première personne <<POINT>> dans le cadre d'un scénario YouTube plus vaste. N'incluez PAS d'introduction.
+La section doit se concentrer sur <<FEED>>, dans le style de <<STYLE>>.
+Veuillez fournir un récit captivant et informatif qui capte l'attention des spectateurs et offre des informations précieuses sur le sujet.
 
-Please note that your narration should not include any instructions or directives, and should only serve as part of a larger script. Do NOT include an introduction.
-Your goal is to make this section as long as possible in an interesting and compelling way that keeps viewers engaged while providing useful information or entertainment value.
+Veuillez noter que votre narration ne doit pas inclure d'instructions ou de directives et ne doit servir que dans le cadre d'un scénario plus large. N'incluez PAS d'introduction.
+Votre objectif est de rendre cette section aussi longue que possible de manière intéressante et convaincante, tout en maintenant l'engagement des spectateurs et en fournissant des informations utiles ou une valeur de divertissement.
