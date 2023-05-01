@@ -3,14 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Media } from '../../model/media/media.model';
 import { ListVideo } from '../../model/media/video/listvideo.model';
 import {
-  defaultVideoStyles,
+  getDefaultVideoStyles,
   VideoStyle,
 } from '../../model/create/videostyle.model';
 import {
-  defaultVideoDurations,
+  getDefaultVideoDurations,
   VideoDuration,
 } from '../../model/create/videoduration.model';
 import { Observable, of, Subject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +20,8 @@ export class ContentService {
   
   mediaSubjectObserver = new Subject<Media>();
 
-  private youtubeVideoStyles = defaultVideoStyles;
-  private youtubeVideoDurations = defaultVideoDurations;
+  private youtubeVideoStyles: VideoStyle[];
+  private youtubeVideoDurations: VideoDuration[];
 
   private currentTopic: string;
   private currentStyle: VideoStyle;
@@ -61,12 +62,15 @@ export class ContentService {
     ['tags', '']
   ]);
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private translate: TranslateService
+  ) {
+    this.youtubeVideoStyles = getDefaultVideoStyles(this.translate);
+    this.youtubeVideoDurations = getDefaultVideoDurations(this.translate);
+  }
 
   updateScriptMap(controlName: string, script: string) {
-    console.log("🚀 ~ file: content.service.ts:86 ~ ContentService ~ updateScriptMap ~ controlName:", controlName)
-    console.log("🚀 ~ file: content.service.ts:86 ~ ContentService ~ updateScriptMap ~ script:", script)
-    this.scriptMap.set(controlName, script);
+     this.scriptMap.set(controlName, script);
   }
 
   getCompleteScript(): string {
@@ -139,19 +143,11 @@ export class ContentService {
   submitInputs(
     topic: string,
     videoStyle: VideoStyle,
-    videoDuration: VideoDuration,
-    monetization: string,
-    productName: string,
-    productDescription: string,
-    links: string[]
+    videoDuration: VideoDuration
   ) {
     (this.currentTopic = topic),
       (this.currentStyle = videoStyle),
-      (this.currentDuration = videoDuration),
-      // (this.currentMonetization = monetization),
-      // (this.currentProductName = productName),
-      // (this.currentProductDescription = productDescription),
-      // (this.currentLinks = links);
+      (this.currentDuration = videoDuration)
 
     this.currentDuration.sections.forEach((section) => {
       section.points.forEach((point) => {

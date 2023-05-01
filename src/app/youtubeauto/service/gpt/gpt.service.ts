@@ -60,7 +60,9 @@ export class GptService {
   getTagsObserver() { return this.tagsSubject.asObservable(); }
 
   updateNewTopic() {
+    console.log("🚀 ~ file: gpt.service.ts:63 ~ GptService ~ updateNewTopic ~ updateNewTopic:")
     this.gptObservers.postNewTopicObservable().subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:65 ~ GptService ~ this.gptObservers.postNewTopicObservable ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -70,6 +72,7 @@ export class GptService {
   }
 
   updateNewTitle() {
+    console.log("🚀 ~ file: gpt.service.ts:73 ~ GptService ~ updateNewTitle ~ updateNewTitle:")
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
@@ -80,6 +83,7 @@ export class GptService {
       summary: this.gptGeneratedSummary,
       style: this.contentService.getCurrentVideoStyle().name,
     }).subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:84 ~ GptService ~ updateNewTitle ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -89,6 +93,7 @@ export class GptService {
   }
 
   optimizeTitle(title: string) {
+    console.log("🚀 ~ file: gpt.service.ts:96 ~ GptService ~ optimizeTitle ~ optimizeTitle:")
     if (title === '') {
       this.errorSubject.next('Please enter a title');
       return;
@@ -96,6 +101,7 @@ export class GptService {
     this.gptObservers.postOptimizedTitleObservable({
       current: title,
     }).subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:104 ~ GptService ~ optimizeTitle ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -105,6 +111,7 @@ export class GptService {
   }
 
   updateNewDescription() {
+    console.log("🚀 ~ file: gpt.service.ts:114 ~ GptService ~ updateNewDescription ~ updateNewDescription:")
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
@@ -115,6 +122,7 @@ export class GptService {
       summary: this.gptGeneratedSummary,
       style: this.contentService.getCurrentVideoStyle().name,
     }).subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:125 ~ GptService ~ updateNewDescription ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -124,6 +132,7 @@ export class GptService {
   }
 
   optimizeDescription(description: string) {
+    console.log("🚀 ~ file: gpt.service.ts:135 ~ GptService ~ optimizeDescription ~ optimizeDescription:")
     if (description === '') {
       this.errorSubject.next('Please enter a description');
       return;
@@ -131,6 +140,7 @@ export class GptService {
     this.gptObservers.postOptimizedDescriptionObservable({
       current: description,
     }).subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:143 ~ GptService ~ optimizeDescription ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -140,6 +150,7 @@ export class GptService {
   }
 
   updateNewTags() {
+    console.log("🚀 ~ file: gpt.service.ts:153 ~ GptService ~ updateNewTags ~ updateNewTags:")
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
@@ -150,6 +161,7 @@ export class GptService {
       summary: this.gptGeneratedSummary,
       style: this.contentService.getCurrentVideoStyle().name,
     }).subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:164 ~ GptService ~ updateNewTags ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -159,6 +171,7 @@ export class GptService {
   }
 
   optimizeTags(tags: string) {
+    console.log("🚀 ~ file: gpt.service.ts:174 ~ GptService ~ optimizeTags ~ optimizeTags:")
     if (tags === '') {
       this.errorSubject.next('Please enter a description');
       return;
@@ -166,6 +179,7 @@ export class GptService {
     this.gptObservers.postOptimizedTagsObservable({
       current: tags,
     }).subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:182 ~ GptService ~ optimizeTags ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -175,6 +189,7 @@ export class GptService {
   }
 
   generateVideoContentWithAI() {
+    console.log("🚀 ~ file: gpt.service.ts:192 ~ GptService ~ generateVideoContentWithAI ~ generateVideoContentWithAI:")
     if (
       this.contentService.getCurrentTopic() === undefined
       || this.contentService.getCurrentVideoStyle() === undefined

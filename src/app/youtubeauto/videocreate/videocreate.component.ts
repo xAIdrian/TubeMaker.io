@@ -17,6 +17,7 @@ import { NavigationService } from '../service/navigation.service';
 import { ContentService } from '../service/content/content.service';
 import { VideoStyle } from '../model/create/videostyle.model';
 import { VideoDuration } from '../model/create/videoduration.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'video-create',
@@ -48,6 +49,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   constructor(
     private gptService: GptService,
     private contentService: ContentService,
+    private translate: TranslateService,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -144,11 +146,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
       this.contentService.submitInputs(
         this.topicFormGroup.value.topic,
         this.styleFormGroup.value.selectedStyle,
-        this.durationFormGroup.value.selectedDuration,
-        this.moneyFormGroup.value.selectedMonetization,
-        this.moneyFormGroup.value.productName,
-        this.moneyFormGroup.value.productDescription,
-        this.moneyFormGroup.value.links
+        this.durationFormGroup.value.selectedDuration
       );
       this.navigationService.navigateToResults();
     }
