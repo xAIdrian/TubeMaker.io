@@ -31,7 +31,7 @@ router.get("/topic/:language", async (req, res, next) => {
       model: "text-davinci-003",
       prompt: rawPrompt,
       temperature: 1.2,
-      max_tokens: 1000,
+      max_tokens: 500,
       top_p: 1,
       presence_penalty: 0.7,
       frequency_penalty: 0.7

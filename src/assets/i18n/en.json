@@ -37,6 +37,11 @@
     }
   },
   "video_editor": {
+    "text": "Text",
+    "new": "New",
+    "optimize": "Optimize",
+    "script": "Script",
+    "media": "Media",
     "make_video_your_own_title": "Let's Make The Video Your Own",
     "edit_video_context": "Go through your new video context and make any edits to create your script!",
     "title_label": "Title",
@@ -74,6 +79,7 @@
       "audio_not_supported_message": "Your browser does not support the audio element.",
       "download_script_button": "Download Your Scipt",
       "edit_in_descript_title": "Almost Done, Put It All Together With Descript",
+      "edit_in_descript_description": "Now that you have downloaded your AI narration or created your own, it's time to put it all together with video.",
       "edit_in_descript_button": "Edit In Descript"
     },
     "thumbnail_option": {

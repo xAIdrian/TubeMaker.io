@@ -1,5 +1,5 @@
 <div>
-  <h4>Improve Your Script With AI</h4>
+  <h4>{{ 'improve_script_with_ai.title' | translate }}</h4>
   <strong>{{ currentVideoDuration.name }}</strong>
   <p class="text-medium-emphasis">{{ currentVideoDuration.description }}</p>
   <form [formGroup]="parentScriptFormGroup">
@@ -7,19 +7,30 @@
     <div *ngFor="let section of currentVideoDuration.sections">
       <h5>{{ section.name }}</h5>
       <div class="row">
-        <textarea rows="10" style="height: auto; margin-bottom: 0.5rem;" cFormControl formControlName="{{ section.controlName }}" oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
+        <textarea 
+          rows="10" 
+          style="height: auto; margin-bottom: 0.5rem;" 
+          cFormControl 
+          formControlName="{{ section.controlName }}" 
+          oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
         </textarea>
       </div>
     </div>
     <br />
     <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-      <button cButton variant="outline" color="dark" matStepperPrevious>Go Back</button>
+      <button 
+        cButton 
+        variant="outline" 
+        color="dark" 
+        matStepperPrevious>
+        {{ 'improve_script_with_ai.go_back_button' | translate }}
+      </button>
       <button 
         class="btn btn-primary" 
         style="margin-left: 1rem;" 
         matStepperNext
         (click)="onScriptSectionClick()">
-          Go To Next Step
+          {{ 'improve_script_with_ai.next_step_button' | translate }}
         </button>
     </div>
   </form>

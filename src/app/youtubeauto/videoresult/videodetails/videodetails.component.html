@@ -21,14 +21,14 @@
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
 
       <mat-step [stepControl]="infoFormGroup" *ngIf="!contentGenerationIsLoading">
-        <h4>Let's Make The Video Your Own</h4>
+        <h4>{{ 'video_editor.make_video_your_own_title' | translate }}</h4>
         <p class="text-medium-emphasis small">
-          Go through your new video context and make any edits to create your script!
+          {{ 'video_editor.edit_video_context' | translate }}
         </p>
         <form [formGroup]="infoFormGroup">
-          <ng-template matStepLabel>Text</ng-template>
+          <ng-template matStepLabel>{{ 'video_editor.text' | translate }}</ng-template>
 
-          <h5>Title</h5>
+          <h5>{{ 'video_editor.title_label' | translate }}</h5>
           <div class="row">
             <div class="col-8">
               <textarea 
@@ -42,20 +42,20 @@
                 <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleLoading"
                   (click)="rerollTitle()">
                   <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
-                  New
+                  {{ 'video_editor.new' | translate }}
                 </button>
               </div>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleOptimizing"
                   (click)="optimizeTitle()">
                   <c-spinner *ngIf="isTitleOptimizing" size="sm"></c-spinner>
-                  Optimize
+                  {{ 'video_editor.optimize' | translate }}
                 </button>
               </div>
             </div>
           </div>
 
-          <h5>Description</h5>
+          <h5>{{ 'video_editor.description_label' | translate }}</h5>
           <div class="row">
             <div class="col-8">
               <textarea 
@@ -71,20 +71,20 @@
                 <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isDescLoading"
                   (click)="rerollDescription()">
                   <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
-                  New
+                  {{ 'video_editor.new' | translate }}
                 </button>
               </div>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isDescOptimizing"
                   (click)="optimizeDesc()">
                   <c-spinner *ngIf="isDescOptimizing" size="sm"></c-spinner>
-                  Optimize
+                  {{ 'video_editor.optimize' | translate }}
                 </button>
               </div>
             </div>
           </div>
 
-          <h5>Tags</h5>
+          <h5>{{ 'video_editor.tags_label' | translate }}</h5>
           <div class="row">
             <div class="col-8">
               <textarea style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags" rows="5" oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
@@ -95,39 +95,39 @@
                 <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTagsLoading"
                   (click)="rerollTags()">
                   <c-spinner *ngIf="isTagsLoading" size="sm"></c-spinner>
-                  New
+                  {{ 'video_editor.new' | translate }}
                 </button>
               </div>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTagsOptimizing"
                   (click)="optimizeTags()">
                   <c-spinner *ngIf="isTagsOptimizing" size="sm"></c-spinner>
-                  Optimize
+                  {{ 'video_editor.optimize' | translate }}
                 </button>
               </div>
             </div>
           </div>
 
           <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button cButton variant="outline" color="dark" (click)="onReset()">Reset Content</button>
+            <button cButton variant="outline" color="dark" (click)="onReset()">{{ 'video_editor.reset_content_button' | translate }}</button>
             <button 
               class="btn btn-primary" 
               style="margin-left: 1rem;" 
               matStepperNext 
               (click)="onInfoSectionClick()">
-              Go To Next Step
+              {{ 'video_editor.next_step_button' | translate }}
               </button>
           </div>
         </form>
       </mat-step>
 
       <mat-step [stepControl]="scriptFormGroup" *ngIf="!contentGenerationIsLoading">
-        <ng-template matStepLabel>Script</ng-template>
+        <ng-template matStepLabel>{{ 'video_editor.script' | translate }}</ng-template>
         <video-script [parentScriptFormGroup]="scriptFormGroup"></video-script>
       </mat-step>
 
       <mat-step *ngIf="!contentGenerationIsLoading">
-        <ng-template matStepLabel>Media</ng-template>
+        <ng-template matStepLabel>{{ 'video_editor.media' | translate }}</ng-template>
         <video-media></video-media>
       </mat-step>
 
@@ -135,7 +135,7 @@
 
     <c-card class="container" *ngIf="hasInputError" style="margin-bottom: 1rem;">
       <div class="text-area">
-          <p>Please complete these forms before you move on.</p>
+          <p>{{ 'video_editor.error_message.complete_forms' | translate }}</p>
       </div>
   </c-card>
 

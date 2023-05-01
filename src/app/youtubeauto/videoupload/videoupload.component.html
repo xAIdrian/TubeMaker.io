@@ -10,7 +10,7 @@
             <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton variant="outline" color="primary" (click)="copyTitle()">{{
                     'video_review_card.copy_button' | translate }}</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill"
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
                     [ngClass]="{'d-none': !showTitleBadge}">
                     {{ 'video_review_card.copied_badge' | translate }}
                 </c-badge>
@@ -27,7 +27,7 @@
             <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton variant="outline" color="primary" (click)="copyDescription()">{{
                     'video_review_card.copy_button' | translate }}</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill"
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
                     [ngClass]="{'d-none': !showDescriptionBadge}">
                     {{ 'video_review_card.copied_badge' | translate }}
                 </c-badge>
@@ -44,7 +44,7 @@
             <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton variant="outline" color="primary" (click)="copyTags()">{{
                     'video_review_card.copy_button' | translate }}</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill"
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
                     [ngClass]="{'d-none': !showTagsBadge}">
                     {{ 'video_review_card.copied_badge' | translate }}
                 </c-badge>
@@ -61,7 +61,7 @@
             <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton variant="outline" color="primary" (click)="copyScript()">{{
                     'video_review_card.copy_button' | translate }}</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill"
+                <c-badge color="danger" position="absolute" style="margin-left: 6px;" shape="rounded-pill"
                     [ngClass]="{'d-none': !showScriptBadge}">
                     {{ 'video_review_card.copied_badge' | translate }}
                 </c-badge>
@@ -73,11 +73,12 @@
         </pre>
         </div>
 
-        <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button cButton variant="outline" color="primary" (click)="onResetMedia()">{{
-                'video_review_card.reset_media_button' | translate }}</button>
-            <button cButton variant="outline" color="primary" style="margin-left: 1rem;" (click)="onResetContent()">
+        <div style="margin-top: 2rem; width: 100%; display: flex; justify-content: flex-end;">
+            <button cButton variant="outline" color="primary" style="margin-right: 1rem;" (click)="onResetContent()">
                 {{ 'video_review_card.reset_content_button' | translate }}
+            </button>
+            <button cButton variant="outline" color="primary" (click)="onResetMedia()">{{
+                'video_review_card.reset_media_button' | translate }}
             </button>
         </div>
     </div>

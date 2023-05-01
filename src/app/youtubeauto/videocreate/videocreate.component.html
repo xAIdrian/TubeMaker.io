@@ -17,8 +17,16 @@
             </button>
           </div>
           <div class="flex-grow-1">
-            <input matInput placeholder="{{ 'video_wizard.type_your_idea' | translate }}" formControlName="topic" required
-              aria-label="lg input example" cFormControl sizing="lg" type="text" class="mat-input-element" />
+            <textarea 
+              matInput 
+              placeholder="{{ 'video_wizard.type_your_idea' | translate }}" 
+              formControlName="topic" required
+              aria-label="lg input example" 
+              cFormControl sizing="md" 
+              type="text" 
+              class="mat-input-element" 
+              rows="2"
+              oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'></textarea>
           </div>
           <br />
         </form>
@@ -61,7 +69,7 @@
           <br />
           <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
             <button variant="outline" color="dark" cButton matStepperPrevious>{{ 'improve_script_with_ai.go_back_button' | translate }}</button>
-            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>{{ 'improve_your_script_with_ai.go_back_button' | translate }}</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>{{ 'improve_script_with_ai.next_step_button' | translate }}</button>
           </div>
         </form>
 

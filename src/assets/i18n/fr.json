@@ -37,6 +37,11 @@
     }
   },
   "video_editor": {
+    "text": "Texte",
+    "new": "Nouveau",
+    "optimize": "Optimiser",
+    "script": "Script",
+    "media": "Médias",
     "make_video_your_own_title": "Personnalisons votre vidéo",
     "edit_video_context": "Parcourez le contexte de votre nouvelle vidéo et apportez des modifications pour créer votre script!",
     "title_label": "Titre",
@@ -74,6 +79,7 @@
       "audio_not_supported_message": "Votre navigateur ne prend pas en charge l'élément audio.",
       "download_script_button": "Télécharger votre script",
       "edit_in_descript_title": "Presque terminé, rassemblez tout avec Descript",
+      "edit_in_descript_description": "Descript est un éditeur de texte et audio qui vous permet de modifier votre script et votre audio en même temps. C'est gratuit et facile à utiliser.",
       "edit_in_descript_button": "Modifier dans Descript"
     },
     "thumbnail_option": {
