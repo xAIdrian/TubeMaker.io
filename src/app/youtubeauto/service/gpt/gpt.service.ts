@@ -315,6 +315,13 @@ export class GptService {
       pointsCount++;
       compiledPoints += '\n' + response.result.script;
 
+      //here we are managing the loading state of the view and the final nav point
+      const progressItem = {
+        increment: 100 / this.contentService.getTotalNumberOfPoints(),
+        label: this.generateLoadingMessage(),
+      }
+      this.scriptProgressSubject.next(progressItem);
+
       if (pointsCount === section.points.length) { 
         this.contentService.updateScriptMap(section.controlName, compiledPoints.trim()); 
         // emit just the view value of the section
@@ -322,14 +329,6 @@ export class GptService {
           sectionControl: section.controlName,
           scriptSection: compiledPoints.trim()
         });
-      }
-      if (updateProgress) {
-        //here we are managing the loading state of the view and the final nav point
-        const progressItem = {
-          increment: 100 / this.contentService.getTotalNumberOfPoints(),
-          label: this.generateLoadingMessage(),
-        }
-        this.scriptProgressSubject.next(progressItem);
       }
     });
   }

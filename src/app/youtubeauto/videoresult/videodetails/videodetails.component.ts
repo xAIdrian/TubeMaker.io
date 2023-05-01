@@ -110,6 +110,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       } else if (this.contentProgressValue === 100) {
         this.contentProgressLabel = 'Done. Moving to script.';
       }
+      this.changeDetectorRef.detectChanges();
     });
     this.gptService.getScriptProgressObserver().subscribe((response) => {
       this.scriptProgressValue = this.scriptProgressValue + response.increment;
@@ -152,6 +153,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       this.infoFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
     this.gptService.getScriptSectionObserver().subscribe((response) => {      
+      console.log("🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.gptService.getScriptSectionObserver ~ response:", response)
       switch (response.sectionControl) {
         case 'introduction':
           this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
