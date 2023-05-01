@@ -100,5 +100,27 @@
     "copied_badge": "Copié!",
     "reset_media_button": "Réinitialiser les médias",
     "reset_content_button": "Réinitialiser le contenu"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "create": "Créer",
+    "youtube_video": "Vidéo Youtube",
+    "members_only": "Membres uniquement",
+    "courses": "Cours",
+    "lander": "Lander",
+    "register": "S'inscrire",
+    "error_404": "Erreur 404",
+    "error_500": "Erreur 500",
+    "new": "NOUVELLE"
+  },
+  "pages": {
+    "error_404_heading": "404",
+    "oops_lost": "Oups ! Vous êtes perdu.",
+    "page_not_found": "La page que vous recherchez n'a pas été trouvée.",
+    "error_500_heading": "500",
+    "houston_problem": "Houston, nous avons un problème !",
+    "page_temporarily_unavailable": "La page que vous recherchez est temporairement indisponible.",
+    "search_placeholder": "Que recherchez-vous ?",
+    "search_button": "Recherche"
   }
 }

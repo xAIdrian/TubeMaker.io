@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
+import { TranslateService } from '@ngx-translate/core';
 
 interface IUser {
   name: string;
@@ -22,8 +22,11 @@ interface IUser {
   styleUrls: ['dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  constructor(private chartsData: DashboardChartsData) {
-  }
+
+  constructor(
+    private chartsData: DashboardChartsData,
+    private translate: TranslateService
+  ) { /** */ }
 
   public users: IUser[] = [
     {
@@ -123,5 +126,35 @@ export class DashboardComponent implements OnInit {
     this.trafficRadioGroup.setValue({ trafficRadio: value });
     this.chartsData.initMainChart(value);
     this.initCharts();
+  }
+
+  onTranslationClick() {
+    console.log("🚀 ~ file: dashboard.component.ts:132 ~ DashboardComponent ~ onTranslationClick ~ onTranslationClick:")
+    this.toggleLanguage();
+  }
+
+  private switchLanguageToFrench() {
+    this.translate.use('fr');
+  }
+
+  private switchLanguageToEnglish() {
+    this.translate.use('en');
+  }
+
+  toggleLanguage() {
+    if (this.getCurrentLanguage() === 'en') {
+      console.log("🚀 ~ file: dashboard.component.ts:146 ~ DashboardComponent ~ toggleLanguage ~ getCurrentLanguage:", this.getCurrentLanguage)
+      this.switchLanguageToFrench();
+    } else if (this.getCurrentLanguage() === 'fr') {
+      console.log("🚀 ~ file: dashboard.component.ts:149 ~ DashboardComponent ~ toggleLanguage ~ this.getCurrentLanguage():", this.getCurrentLanguage())
+      this.switchLanguageToEnglish();
+    } else {
+      throw new Error('Language not supported')
+    }
+  }
+
+  getCurrentLanguage() {
+    console.log(this.translate.currentLang)
+    return this.translate.currentLang;
   }
 }

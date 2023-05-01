@@ -7,8 +7,9 @@
         <div class="small text-medium-emphasis">January - December 2021</div>
       </c-col>
       <c-col class="d-none d-md-block" sm="7">
-        <button cButton class="float-end" color="primary">
-          <svg cIcon name="cilCloudDownload"></svg>
+        <button cButton class="float-end" color="primary" (click)="onTranslationClick()">
+          <svg cIcon name="cilCode"></svg>
+          Translate Language
         </button>
         <form [formGroup]="trafficRadioGroup">
           <c-button-group class="float-end me-3" role="group">

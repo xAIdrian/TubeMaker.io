@@ -100,5 +100,27 @@
     "copied_badge": "Copied!",
     "reset_media_button": "Reset Media",
     "reset_content_button": "Reset Content"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "create": "Create",
+    "youtube_video": "Youtube Video",
+    "members_only": "Members Only",
+    "courses": "Courses",
+    "lander": "Lander",
+    "register": "Register",
+    "error_404": "Error 404",
+    "error_500": "Error 500",
+    "new": "NEW"
+  },
+  "pages": {
+    "error_404_heading": "404",
+    "oops_lost": "Oops! You're lost.",
+    "page_not_found": "The page you are looking for was not found.",
+    "error_500_heading": "500",
+    "houston_problem": "Houston, we have a problem!",
+    "page_temporarily_unavailable": "The page you are looking for is temporarily unavailable.",
+    "search_placeholder": "What are you looking for?",
+    "search_button": "Search"
   }
 }

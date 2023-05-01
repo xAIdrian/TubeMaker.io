@@ -9,6 +9,7 @@ import { Page500Component } from './page500/page500.component';
 import { ButtonModule, CardModule, FormModule, GridModule } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { FirebaseUIModule } from 'firebaseui-angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FirebaseUIModule } from 'firebaseui-angular';
     GridModule,
     IconModule,
     FormModule,
-    FirebaseUIModule
+    FirebaseUIModule,
+    TranslateModule
   ]
 })
 export class PagesModule {
