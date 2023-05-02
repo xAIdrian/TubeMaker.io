@@ -33,11 +33,10 @@ export class VoiceRepository {
     }
     const currLang = this.translate.currentLang;
     const reqBody = {
-      text: scriptValue,
-      voice_id: voiceId,
+      'text': scriptValue
     }
     const headers = new HttpHeaders({
-      'Content-Type': 'audio/mpeg',
+      'Content-Type': 'application/json',
       'Accept': 'audio/mpeg'
     });
     const options = {

@@ -42,6 +42,7 @@ router.get('', async (req, res) => {
 });
 
 router.post('/:id/:language', async (req, res) => {
+  console.log("🚀 ~ file: elevenlabs.js:45 ~ router.post ~ req:", req.body)
   const voiceId = req.params.id;
   const language = req.params.language
   if (language === 'en') {
@@ -58,6 +59,7 @@ router.post('/:id/:language', async (req, res) => {
     text: req.body.text,
     model_id: modelId
   }
+  console.log("🚀 ~ file: elevenlabs.js:61 ~ router.post ~ reqBody:", reqBody)
 
   const url = `${ELEVEN_BASE_URL}/v1/text-to-speech/${voiceId}`;
   fetch(url, {
