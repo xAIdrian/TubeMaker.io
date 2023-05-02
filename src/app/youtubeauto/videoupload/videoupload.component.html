@@ -1,74 +1,84 @@
 <c-card class="mb-4">
     <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
-        <strong>Review Video Details</strong>
-        <button type="button" class="btn btn-danger" cTextColor="white" (click)="loginOnClick()">Publish to
-            Youtube</button>
+        <strong>{{ 'video_review_card.review_video_details' | translate }}</strong>
+        <button type="button" class="btn btn-danger" cTextColor="white" (click)="loginOnClick()">{{
+            'video_review_card.publish_to_youtube_button' | translate }}</button>
     </div>
     <div class="row">
         <div class="d-flex justify-content-between align-items-center">
-            <h5>Title</h5>
+            <h5>{{ 'video_review_card.title_label' | translate }}</h5>
             <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton variant="outline" color="primary" (click)="copyTitle()">Copy</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill" [ngClass]="{'d-none': !showTitleBadge}">
-                    Copied!
+                <button cButton variant="outline" color="primary" (click)="copyTitle()">{{
+                    'video_review_card.copy_button' | translate }}</button>
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
+                    [ngClass]="{'d-none': !showTitleBadge}">
+                    {{ 'video_review_card.copied_badge' | translate }}
                 </c-badge>
             </div>
         </div>
         <div class="mb-3 flex-grow-1" style="margin-bottom: 1rem;">
-            <p cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" class="text-medium-emphasis small">
+            <pre cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" class="text-medium-emphasis small">
                 {{ title }}
-            </p>
+            </pre>
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
-            <h5>Description</h5>
+            <h5>{{ 'video_review_card.description_label' | translate }}</h5>
             <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton variant="outline" color="primary" (click)="copyDescription()">Copy</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill" [ngClass]="{'d-none': !showDescriptionBadge}">
-                    Copied!
-                </c-badge>
-            </div>
-        </div>
-        <div class="mb-3" style="margin-bottom: 1rem;">
-            <p cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" class="text-medium-emphasis small">
-                {{ description }}
-            </p>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center">
-            <h5>Tags</h5>
-            <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton variant="outline" color="primary" (click)="copyTags()">Copy</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill" [ngClass]="{'d-none': !showTagsBadge}">
-                    Copied!
-                </c-badge>
-            </div>
-        </div>
-        <div class="mb-3" style="margin-bottom: 1rem;">
-            <p cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" class="text-medium-emphasis small">
-                {{ tags }}
-            </p>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center">
-            <h5>Script</h5>
-            <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton variant="outline" color="primary" (click)="copyScript()">Copy</button>
-                <c-badge color="danger" position="top-start" shape="rounded-pill" [ngClass]="{'d-none': !showScriptBadge}">
-                    Copied!
+                <button cButton variant="outline" color="primary" (click)="copyDescription()">{{
+                    'video_review_card.copy_button' | translate }}</button>
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
+                    [ngClass]="{'d-none': !showDescriptionBadge}">
+                    {{ 'video_review_card.copied_badge' | translate }}
                 </c-badge>
             </div>
         </div>
         <div class="mb-3" style="margin-bottom: 1rem;">
             <pre cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" class="text-medium-emphasis small">
-                {{ script }}
+                {{ description }}
             </pre>
         </div>
 
-        <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button cButton variant="outline" color="primary" (click)="onResetMedia()">Reset Media</button>
-            <button cButton variant="outline" color="primary" style="margin-left: 1rem;" (click)="onResetContent()">
-                Reset Content
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>{{ 'video_review_card.tags_label' | translate }}</h5>
+            <div style="display: flex; align-items: center; padding: 0; margin:0">
+                <button cButton variant="outline" color="primary" (click)="copyTags()">{{
+                    'video_review_card.copy_button' | translate }}</button>
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
+                    [ngClass]="{'d-none': !showTagsBadge}">
+                    {{ 'video_review_card.copied_badge' | translate }}
+                </c-badge>
+            </div>
+        </div>
+        <div class="mb-3" style="margin-bottom: 1rem;">
+            <pre cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" class="text-medium-emphasis small">
+                {{ tags }}
+            </pre>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>{{ 'video_review_card.script_label' | translate }}</h5>
+            <div style="display: flex; align-items: center; padding: 0; margin:0">
+                <button cButton variant="outline" color="primary" (click)="copyScript()">{{
+                    'video_review_card.copy_button' | translate }}</button>
+                <c-badge color="danger" position="absolute" style="margin-left: 6px;" shape="rounded-pill"
+                    [ngClass]="{'d-none': !showScriptBadge}">
+                    {{ 'video_review_card.copied_badge' | translate }}
+                </c-badge>
+            </div>
+        </div>
+        <div class="mb-3" style="margin-bottom: 1rem;">
+            <pre cFormControl style="margin-top: 1rem; margin-bottom: 1rem;" class="text-medium-emphasis small">
+            {{ script }}
+        </pre>
+        </div>
+
+        <div style="margin-top: 2rem; width: 100%; display: flex; justify-content: flex-end;">
+            <button cButton variant="outline" color="primary" style="margin-right: 1rem;" (click)="onResetContent()">
+                {{ 'video_review_card.reset_content_button' | translate }}
+            </button>
+            <button cButton variant="outline" color="primary" (click)="onResetMedia()">{{
+                'video_review_card.reset_media_button' | translate }}
             </button>
         </div>
     </div>

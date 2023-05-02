@@ -1,0 +1,15 @@
+Veuillez optimiser et améliorer la description de la vidéo YouTube suivante.
+Votre tâche consiste à créer une description claire, concise et attrayante qui représente fidèlement le contenu de la vidéo tout en encourageant les spectateurs à la regarder.
+Votre description optimisée doit inclure des mots-clés et des expressions pertinents qui sont susceptibles d'attirer votre public cible.
+Elle doit être bien organisée et facile à lire, avec une grammaire et une orthographe correctes.
+De plus, vous pouvez envisager d'inclure un appel à l'action ou d'autres éléments persuasifs qui encouragent les spectateurs à interagir avec la vidéo.
+Veuillez noter que votre réponse doit être suffisamment flexible pour permettre diverses descriptions pertinentes et créatives :
+
+<<SOURCE>>
+
+Veuillez optimiser et améliorer la description de la vidéo YouTube CI-DESSUS.
+Votre tâche consiste à créer une description claire, concise et attrayante qui représente fidèlement le contenu de la vidéo tout en encourageant les spectateurs à la regarder.
+Votre description optimisée doit inclure des mots-clés et des expressions pertinents qui sont susceptibles d'attirer votre public cible.
+Elle doit être bien organisée et facile à lire, avec une grammaire et une orthographe correctes.
+De plus, vous pouvez envisager d'inclure un appel à l'action ou d'autres éléments persuasifs qui encouragent les spectateurs à interagir avec la vidéo.
+Veuillez noter que votre réponse doit être suffisamment flexible pour permettre diverses descriptions pertinentes et créatives :

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-page404',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
 })
 export class Page404Component {
 
-  constructor() { }
+  constructor(
+  ) { }
 
 }

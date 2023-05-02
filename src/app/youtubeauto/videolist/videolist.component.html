@@ -1,15 +1,13 @@
 <c-card class="mb-4">
   <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
-    <strong>Published Youtube Videos</strong>
-    <button type="button" class="btn btn-primary" (click)="newVideoOnClick()">Click To Create a New Video</button>
+    <strong>{{ 'video_list.welcome' | translate }}</strong>
+    <button type="button" class="btn btn-primary" (click)="newVideoOnClick()">{{ 'video_list.publish_videos_title' | translate }}</button>
   </div>
-
   <c-card-body>
     <p class="text-medium-emphasis small">
-      Select a video from the list to edit or create a new one by clicking the 'New Video' button.
+      {{ 'video_list.create_new_video' | translate }}
     </p>
-
-    <div class="video-list" cListGroup *ngFor="let video of videos">
+    <div class="video_list" cListGroup *ngFor="let video of videos">
       <div cListGroupItem>
         <div class="d-flex justify-content-between align-items-center">
           <div class="title-published">
@@ -18,9 +16,9 @@
         </div>
         <div class="description">
           <small>{{ video.channelTitle }}</small>
-          <small class="published">Published: {{ video.publishedAt }}</small>
+          <small class="published">{{ 'video_list.published' | translate }}: {{ video.publishedAt }}</small>
         </div>
       </div>
     </div>
   </c-card-body>
-</c-card>
+</c-card>    

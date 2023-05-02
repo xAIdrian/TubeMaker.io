@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { TranslateModule } from '@ngx-translate/core';
 
 import {
     AccordionModule,
@@ -96,7 +97,8 @@ import { AudioDropdownComponent } from './videoresult/videomedia/audiodropdown/a
         MatListModule,
         MatButtonToggleModule,
         ModalModule,
-        ButtonGroupComponent
+        ButtonGroupComponent,
+        TranslateModule
     ]
 })
 export class YoutubeAutoModule {/* */}

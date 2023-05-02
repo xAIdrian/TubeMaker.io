@@ -76,25 +76,25 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   copyTitle() { 
     this.showTitleBadge = true;
     this.clipboard.copy(this.title);
-    setTimeout(() => this.showTitleBadge = false, 5000);  
+    setTimeout(() => this.showTitleBadge = false, 1000);  
   }
 
   copyDescription() { 
     this.showDescriptionBadge = true;
     this.clipboard.copy(this.description); 
-    setTimeout(() => this.showDescriptionBadge = false, 5000); 
+    setTimeout(() => this.showDescriptionBadge = false, 1000); 
   }
 
   copyTags() { 
     this.showTagsBadge = true;
     this.clipboard.copy(this.tags); 
-    setTimeout(() => this.showTagsBadge = false, 5000); 
+    setTimeout(() => this.showTagsBadge = false, 1000); 
   }
 
   copyScript() { 
     this.showScriptBadge = true;
     this.clipboard.copy(this.script); 
-    setTimeout(() => this.showScriptBadge = false, 5000); 
+    setTimeout(() => this.showScriptBadge = false, 1000); 
   }
 
   onResetMedia() {

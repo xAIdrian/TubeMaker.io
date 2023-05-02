@@ -15,7 +15,7 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
 import { ContentService } from '../service/content/content.service';
-import { VideoStyle } from '../model/create/videostyle.model';
+import { VideoNiche as VideoNiche } from '../model/create/videoniche.model';
 import { VideoDuration } from '../model/create/videoduration.model';
 
 @Component({
@@ -35,10 +35,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   durationFormGroup: FormGroup;
   moneyFormGroup: FormGroup;
 
-  videoStyles: VideoStyle[] = [];
-  selectedVideoOption: VideoStyle;
-  durationOptions: VideoDuration[] = [];
-  selectedDurationOption: VideoDuration;
+  videoNiches: VideoNiche[] = [];
+  selectedVideoNiche: VideoNiche;
+  videoDurations: VideoDuration[] = [];
+  selectedVideoDuration: VideoDuration;
   moneyOptions = [ 'Ad Sense',  'Affiliate' ]
   selectedMonitizationOption = '';
 
@@ -56,18 +56,12 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.setupObservers();
 
-    this.selectedVideoOption  = { 
-      name: '',
-      header: 'Select The Style For Your Video',
-      description: 'Each video needs a specific style and tone to present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche',
-      channelExamples: []
-    }
-    this.selectedDurationOption = { 
-      name: '',
-      header: 'Select The Duration For Your Video',
-      description: 'Each video needs a specific duration present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche',
-      sections: []
-    }
+    this.contentService.getInitVideoNiche().subscribe((response) => {
+      this.selectedVideoNiche = response;
+    });
+    this.contentService.getInitVideoDuration().subscribe((response) => {
+      this.selectedVideoDuration = response;
+    });
 
     this.topicFormGroup = this._formBuilder.group({
       topic: ['', Validators.required],
@@ -87,6 +81,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
+    // this.contentService.getDurationOptionsObserver();
     this.changeDetectorRef.detectChanges();
   }
 
@@ -98,10 +93,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
       })
     });
     this.contentService.getVideoOptionsObserver().subscribe((response) => {
-      this.videoStyles = response;
+      this.videoNiches = response;
     });
     this.contentService.getDurationOptionsObserver().subscribe((response) => {
-      this.durationOptions = response;
+      this.videoDurations = response;
     });
   }
 
@@ -120,12 +115,12 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.gptService.updateNewTopic() 
   }
 
-  onVideoOptionSelected(option: VideoStyle) {
-    this.selectedVideoOption = option;
+  onVideoOptionSelected(option: VideoNiche) {
+    this.selectedVideoNiche = option;
   }
 
   onVideoDurationSelected(option: VideoDuration) {
-    this.selectedDurationOption = option;
+    this.selectedVideoDuration = option;
   }
 
   onMoneyOptionSelected(selectedOption: string) {
@@ -144,11 +139,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
       this.contentService.submitInputs(
         this.topicFormGroup.value.topic,
         this.styleFormGroup.value.selectedStyle,
-        this.durationFormGroup.value.selectedDuration,
-        this.moneyFormGroup.value.selectedMonetization,
-        this.moneyFormGroup.value.productName,
-        this.moneyFormGroup.value.productDescription,
-        this.moneyFormGroup.value.links
+        this.durationFormGroup.value.selectedDuration
       );
       this.navigationService.navigateToResults();
     }

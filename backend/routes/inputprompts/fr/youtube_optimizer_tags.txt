@@ -1,0 +1,9 @@
+Veuillez optimiser la liste suivante de balises pour notre vidéo YouTube afin d'améliorer son référencement (SEO).
+Les balises doivent refléter avec précision le contenu et le thème de la vidéo, tout en intégrant des mots-clés pertinents que les utilisateurs peuvent rechercher.
+Enfin, veuillez fournir une liste claire et concise de balises séparées uniquement par des virgules qui reflète avec précision le texte suivant :
+
+<<SOURCE>>
+
+Veuillez optimiser la liste CI-DESSUS de balises pour notre vidéo YouTube afin d'améliorer son référencement (SEO).
+Les balises doivent refléter avec précision le contenu et le thème de la vidéo, tout en intégrant des mots-clés pertinents que les utilisateurs peuvent rechercher.
+Enfin, veuillez fournir une liste claire et concise de balises séparées uniquement par des virgules qui reflète avec précision le texte CI-DESSUS :

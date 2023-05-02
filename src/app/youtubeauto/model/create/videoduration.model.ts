@@ -1,3 +1,5 @@
+import { TranslateService } from '@ngx-translate/core';
+
 export interface VideoDuration {
   name: string;
   header: string;
@@ -13,213 +15,218 @@ export interface DurationSection {
   isOptimizing?: boolean;
 }
 
-export const defaultVideoDurations: VideoDuration[] = [
-  {
-    name: 'Very Short',
-    header: 'For videos at 1 minute',
-    description: 'Ultra-concise format focusing on a single key point, perfect for rapid consumption and easy sharing.',
-    sections: [
-      {
-        name: 'Introduction',
-        controlName: 'introduction',
-        points: [
-          'Quick attention-grabbing hook'
-        ],
-      },
-      {
-        name: 'Main Content',
-        controlName: 'mainContent',
-        points: [
-          'Concise explanation of the key point or main idea',
-        ],
-      },
-      {
-        name: 'Conclusion',
-        controlName: 'conclusion',
-        points: [
-          'Quick call-to-action (e.g., subscribe, like, or comment)',
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Short',
-    header: 'For videos under 5 minutes',
-    description: 'Quick, engaging content that\'s easy to consume, ideal for viewers with short attention spans or seeking fast information.',
-    sections: [
-      {
-        name: 'Introduction',
-        controlName: 'introduction',
-        points: [
-          'Attention-grabbing hook',
-          'Briefly introduce the topic or problem being addressed',
-        ],
-      },
-      {
-        name: 'Main Content',
-        controlName: 'mainContent',
-        points: [
-          'Brief explanation of the topic or problem',
-          'Provide necessary context and background information',
-          'Highlight key points or steps',
-        ],
-      },
-      {
-        name: 'Conclusion',
-        controlName: 'conclusion',
-        points: [
-          'Recap of the main points covered',
-          'Call-to-action (e.g., subscribe, like, or comment)',
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Medium',
-    header: 'For videos between 5-10 minutes',
-    description: 'Provides a balance between depth and brevity, allowing for detailed explanations without overwhelming the audience.',
-    sections: [
-      {
-        name: 'Introduction',
-        controlName: 'introduction',
-        points: [
-          'Attention-grabbing hook',
-          'Introduce the topic or problem being addressed',
-        ],
-      },
-      {
-        name: 'Main Content',
-        controlName: 'mainContent',
-        points: [
-          'Detailed explanation of the topic or problem',
-          'Use examples and evidence to support your points',
-          'Break down the content into subtopics or steps, if applicable',
-        ],
-      },
-      {
-        name: 'Actionable Takeaway',
-        controlName: 'actionables',
-        points: [
-          'Provide a practical tip or insight that viewers can apply in their own lives',
-        ],
-      },
-      {
-        name: 'Conclusion',
-        controlName: 'conclusion',
-        points: [
-          'Recap of the main points and takeaways',
-          'Call-to-action (e.g., subscribe, like, or comment)',
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Long',
-    header: 'For videos over 10 minutes',
-    description: 'Extended format with case studies and FAQs, ideal for deep dives into subjects and addressing common questions.',
-    sections: [
-      {
-        name: 'Introduction',
-        controlName: 'introduction',
-        points: [
-          'Attention-grabbing hook',
-          'Introduce the topic or problem being addressed',
-          'Provide an overview of the sections to be covered',
-        ],
-      },
-      {
-        name: 'Main Content',
-        controlName: 'mainContent',
-        points: [
-          'In-depth exploration of the topic or problem',
-          'Multiple examples and evidence to support your points',
-          'Break down the content into subtopics or sections',
-          'Include actionable takeaways throughout the video',
-        ],
-      },
-      {
-        name: 'Case Studies or Real-life Examples',
-        controlName: 'caseStudies',
-        points: [
-          'Present relevant case studies or real-life examples to illustrate your points',
-          'Show the practical application of the concepts discussed',
-        ],
-      },
-      {
-        name: 'Q&A or Frequently Asked Questions',
-        controlName: 'questions',
-        points: [
-          'Address common questions or misconceptions related to the topic',
-          'Clarify any points that might be confusing for viewers',
-        ],
-      },
-      {
-        name: 'Conclusion',
-        controlName: 'conclusion',
-        points: [
-          'Summarize the main points covered',
-          'Recap the actionable takeaways',
-          'Call-to-action (e.g., subscribe, like, or comment)',
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Very Long',
-    header: 'For videos at least 20 minutes',
-    description: 'Thorough coverage of topics, incorporating expert opinions and interviews, great for educational or informative content.',
-    sections: [
-      {
-        name: 'Introduction',
-        controlName: 'introduction',
-        points: [
-          'Attention-grabbing hook',
-          'Introduce the topic or problem being addressed',
-          'Provide an overview of the sections to be covered',
-        ],
-      },
-      {
-        name: 'Main Content',
-        controlName: 'mainContent',
-        points: [
-          'Comprehensive exploration of the topic or problem',
-          'Multiple examples and evidence to support your points',
-          'Break down the content into subtopics or sections',
-          'Include actionable takeaways throughout the video',
-        ],
-      },
-      {
-        name: 'Case Studies or Real-life Examples',
-        controlName: 'caseStudies',
-        points: [
-          'Present relevant case studies or real-life examples to illustrate your points',
-          'Show the practical application of the concepts discussed',
-        ],
-      },
-      {
-        name: 'Expert Opinions or Interviews',
-        controlName: 'opinions',
-        points: [
-          'Include insights from experts in the field or conduct interviews to provide additional perspectives',
-        ],
-      },
-      {
-        name: 'Q&A or Frequently Asked Questions',
-        controlName: 'questions',
-        points: [
-          'Address common questions or misconceptions related to the topic',
-          'Clarify any points that might be confusing for viewers',
-        ],
-      },
-      {
-        name: 'Conclusion',
-        controlName: 'conclusion',
-        points: [
-          'Summarize the main points covered',
-          'Recap the actionable takeaways',
-          'Call-to-action (e.g., subscribe, like, or comment)',
-        ],
-      },
-    ],
-  },
-];
+export function getDefaultVideoDurations(
+  translate: TranslateService
+): VideoDuration[] {
+  return [
+    {
+      name: translate.instant('video_duration.very_short'),
+      header: translate.instant('video_duration.very_short_header'),
+      description: translate.instant('video_duration.very_short_description'),
+      sections: [
+        {
+          name: translate.instant('video_duration.introduction'),
+          controlName: 'introduction',
+          points: [
+            translate.instant('video_duration.attention_grabbing_hook'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.main_content'),
+          controlName: 'mainContent',
+          points: [
+            translate.instant('video_duration.brief_introduction'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.conclusion'),
+          controlName: 'conclusion',
+          points: [
+            translate.instant('video_duration.call_to_action'),
+          ],
+        },
+      ],
+    },
+    {
+      name: translate.instant('video_duration.short'),
+      header: translate.instant('video_duration.short_header'),
+      description: translate.instant('video_duration.short_description'),
+      sections: [
+        {
+          name: translate.instant('video_duration.introduction'),
+          controlName: 'introduction',
+          points: [
+            translate.instant('video_duration.attention_grabbing_hook'),
+            translate.instant('video_duration.brief_introduction'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.main_content'),
+          controlName: 'mainContent',
+          points: [
+            translate.instant('video_duration.concise_explanation'),
+            translate.instant('video_duration.deliver_context'),
+            translate.instant('video_duration.highlight_key_steps'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.conclusion'),
+          controlName: 'conclusion',
+          points: [
+            translate.instant('video_duration.summarize'),
+            translate.instant('video_duration.call_to_action'),
+          ],
+        },
+      ],
+    },
+    {
+      name: translate.instant('video_duration.medium'),
+      header: translate.instant('video_duration.medium_header'),
+      description: translate.instant('video_duration.medium_description'),
+      sections: [
+        {
+          name: translate.instant('video_duration.introduction'),
+          controlName: 'introduction',
+          points: [
+            translate.instant('video_duration.attention_grabbing_hook'),
+            translate.instant('video_duration.brief_introduction'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.main_content'),
+          controlName: 'mainContent',
+          points: [
+            translate.instant('video_duration.concise_explanation'),
+            translate.instant('video_duration.use_examples'),
+            translate.instant('video_duration.organize_subtext'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.actionable_takeaway'),
+          controlName: 'actionables',
+          points: [
+            translate.instant('video_duration.practical_tip'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.conclusion'),
+          controlName: 'conclusion',
+          points: [
+            translate.instant('video_duration.summarize'),
+            translate.instant('video_duration.call_to_action'),
+          ],
+        },
+      ],
+    },
+    {
+      name: translate.instant('video_duration.long'),
+      header: translate.instant('video_duration.long_header'),
+      description: translate.instant('video_duration.long_description'),
+      sections: [
+        {
+          name: translate.instant('video_duration.introduction'),
+          controlName: 'introduction',
+          points: [
+            translate.instant('video_duration.attention_grabbing_hook'),
+            translate.instant('video_duration.brief_introduction'),
+            translate.instant('video_duration.preview_key_points'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.main_content'),
+          controlName: 'mainContent',
+          points: [
+            translate.instant('video_duration.in_depth_explanation'),
+            translate.instant('video_duration.multiple_examples'),
+            translate.instant('video_duration.organize_subtext'),
+            translate.instant('video_duration.practical_tip'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.case_studies'),
+          controlName: 'caseStudies',
+          points: [
+            translate.instant('video_duration.relevant_cases'),
+            translate.instant('video_duration.relevant_application'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.questions'),
+          controlName: 'questions',
+          points: [
+            translate.instant('video_duration.address_questions'),
+            translate.instant('video_duration.clairfy'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.conclusion'),
+          controlName: 'conclusion',
+          points: [
+            translate.instant('video_duration.summarize'),
+            translate.instant('video_duration.takeaway'),
+            translate.instant('video_duration.call_to_action'),
+          ],
+        },
+      ],
+    },
+    {
+      name: translate.instant('video_duration.very_long'),
+      header: translate.instant('video_duration.very_long_header'),
+      description: translate.instant('video_duration.very_long_description'),
+      sections: [
+        {
+          name: translate.instant('video_duration.introduction'),
+          controlName: 'introduction',
+          points: [
+            translate.instant('video_duration.attention_grabbing_hook'),
+            translate.instant('video_duration.brief_introduction'),
+            translate.instant('video_duration.preview_key_points'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.main_content'),
+          controlName: 'mainContent',
+          points: [
+            translate.instant('video_duration.organize_subtext'),
+            translate.instant('video_duration.in_depth_explanation'),
+            translate.instant('video_duration.multiple_examples'),
+            translate.instant('video_duration.organize_subtext'),
+            translate.instant('video_duration.practical_tip'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.case_studies'),
+          controlName: 'caseStudies',
+          points: [
+            translate.instant('video_duration.relevant_cases'),
+            translate.instant('video_duration.relevant_application'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.expert_insights'),
+          controlName: 'opinions',
+          points: [ 
+            translate.instant('video_duration.include_insights'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.questions'),
+          controlName: 'questions',
+          points: [
+            translate.instant('video_duration.address_questions'),
+            translate.instant('video_duration.clairfy'),
+          ],
+        },
+        {
+          name: translate.instant('video_duration.conclusion'),
+          controlName: 'conclusion',
+          points: [
+            translate.instant('video_duration.summarize'),
+            translate.instant('video_duration.takeaway'),
+            translate.instant('video_duration.call_to_action'),
+          ],
+        },
+      ],
+    },
+  ];
+}

@@ -1,0 +1,230 @@
+{
+  "dashboard": {
+    "traffic": "Traffic",
+    "dates_placeholder": "January - December 2021",
+    "translate_lang": "Translate Language",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "main_chart": " Main Chart"
+  },
+  "video_list": {
+    "welcome": "Welcome",
+    "publish_videos_title": "Create a New Video",
+    "create_new_video": "Select a video from the list to edit or create a new one by clicking the 'New Video' button.",
+    "published": "Published:",
+    "input": {
+      "video_title": "",
+      "video_channel_title": "",
+      "video_published_at": ""
+    }
+  },
+  "video_wizard": {
+    "script_outline": "Script Outline",
+    "similar_channels": "Similar Channels",
+    "monthly_revenue": "Monthly Revenue",
+    "topic": "topic",
+    "pick_your_video_subject": "Pick Your Video Subject",
+    "enter_topic_instructions": "Simply enter your video topic into the box below, or our AI will a topic for you!",
+    "get_an_idea": "Get an Idea",
+    "type_your_idea": "Type your idea or let us pick one for you",
+    "need_help": "Need Help?",
+    "go_to_next_step": "Go To Next Step",
+    "style": "Style",
+    "length": "Length",
+    "choose_monetization": "Choose How You Want To Earn With Your Video",
+    "optional": "(Optional)",
+    "generate_video_script": "GENERATE My Video Script, Title, & Everything Else!",
+    "input": {
+      "topic": "",
+      "selected_style": "",
+      "selected_duration": "",
+      "selected_monetization": "",
+      "product_name": "",
+      "product_description": "",
+      "links": []
+    }
+  },
+  "video_editor": {
+    "text": "Text",
+    "new": "New",
+    "optimize": "Optimize",
+    "script": "Script",
+    "media": "Media",
+    "make_video_your_own_title": "Let's Make The Video Your Own",
+    "edit_video_context": "Go through your new video context and make any edits to create your script!",
+    "title_label": "Title",
+    "description_label": "Description",
+    "tags_label": "Tags",
+    "reset_content_button": "Reset Content",
+    "next_step_button": "Go To Next Step",
+    "input": {
+      "title": " {{  }}",
+      "description": "{{  }}",
+      "tags": "{{  }}",
+      "content_progress_label": "{{  }}",
+      "script_progress_label": "{{  }}"
+    },
+    "error_message": {
+      "complete_forms": "Please complete these forms before you move on."
+    }
+  },
+  "improve_script_with_ai": {
+    "title": "Improve Your Script With AI",
+    "input": {
+      "section_control_name": "",
+      "current_video_duration_name": "{{  }}",
+      "current_video_duration_description": "{{  }}",
+      "section_name": "{{  }}"
+    },
+    "go_back_button": "Go Back",
+    "next_step_button": "Go To Next Step"
+  },
+  "media_selection_form": {
+    "video_option": {
+      "title": "Use Our AI Generated Voice or Record Your Own",
+      "description": "Pick a voice. We'll take care of the audio for you or you can upload your own below.",
+      "generate_ai_narration_button": "Generate Your AI Narration",
+      "audio_not_supported_message": "Your browser does not support the audio element.",
+      "download_script_button": "Download Your Scipt",
+      "edit_in_descript_title": "Almost Done, Put It All Together With Descript",
+      "edit_in_descript_description": "Now that you have downloaded your AI narration or created your own, it's time to put it all together with video.",
+      "edit_in_descript_button": "Edit In Descript"
+    },
+    "thumbnail_option": {
+      "edit_thumbnail_buttons": "Click to Edit Above Thumbnail"
+    },
+    "input": {
+      "media_options": "{{ mediaOption }}"
+    },
+    "go_back_button": "Go Back",
+    "review_video_button": "Review Your Video & Post To Youtube"
+  },
+  "voice_selection_dropdown": {
+    "click_to_play_text": "Click Here To Play",
+    "audio_not_supported_message": "Your browser does not support the audio element.",
+    "input": {
+      "dropdown_button": "{{  }}",
+      "voice_options_loop": "{{  }}"
+    }
+  },
+  "video_review_card": {
+    "review_video_details": "Review Video Details",
+    "publish_to_youtube_button": "Publish to Youtube",
+    "title_label": "Title",
+    "description_label": "Description",
+    "tags_label": "Tags",
+    "script_label": "Script",
+    "copy_button": "Copy",
+    "copied_badge": "Copied!",
+    "reset_media_button": "Reset Media",
+    "reset_content_button": "Reset Content"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "create": "Create",
+    "youtube_video": "Youtube Video",
+    "members_only": "Members Only",
+    "courses": "Courses",
+    "lander": "Lander",
+    "register": "Register",
+    "error_404": "Error 404",
+    "error_500": "Error 500",
+    "new": "NEW"
+  },
+  "pages": {
+    "error_404_heading": "404",
+    "oops_lost": "Oops! You're lost.",
+    "page_not_found": "The page you are looking for was not found.",
+    "error_500_heading": "500",
+    "houston_problem": "Houston, we have a problem!",
+    "page_temporarily_unavailable": "The page you are looking for is temporarily unavailable.",
+    "search_placeholder": "What are you looking for?",
+    "search_button": "Search"
+  },
+  "video_duration": {
+    "very_short": "Very Short",
+    "very_short_header": "For videos up to 1 minute",
+    "very_short_description": "Ultra-concise format focusing on a single key point, perfect for rapid consumption and easy sharing.",
+    "short": "Short",
+    "short_header": "For videos up to 5 minutes",
+    "short_description": "Quick, engaging content that's easy to consume, ideal for viewers with short attention spans or seeking fast information. Short format focusing on a single key point, perfect for rapid consumption and easy sharing.",
+    "medium": "Medium",
+    "medium_header": "For videos between 5-10 minutes",
+    "medium_description": "A more in-depth look at a topic, ideal for viewers seeking more information or a deeper understanding of a topic.  Provides a balance between depth and brevity, allowing for detailed explanations without overwhelming the audience.",
+    "long": "Long",
+    "long_header": "For videos between 10-20 minutes",
+    "long_description": "A deep dive into a topic, ideal for viewers seeking a comprehensive understanding of a topic.  Provides a balance between depth and brevity, allowing for detailed explanations without overwhelming the audience.",
+    "very_long": "Very Long",
+    "very_long_header": "For videos over 20 minutes",
+    "very_long_description": "A comprehensive look at a topic, ideal for viewers seeking a comprehensive understanding of a topic.  Provides a balance between depth and brevity, allowing for detailed explanations without overwhelming the audience. ",  
+
+    "introduction": "Introduction",
+    "attention_grabbing_hook": "Create a compelling, curiosity-piquing hook",
+    "brief_introduction": "Set the stage for the problem or topic",
+    "preview_key_points": "Preview the sections and key points to be covered",
+    
+    "main_content": "Main Content",
+    "concise_explanation" : "Concise explanation of the key point or main idea",
+    "deliver_context": "Deliver context and background for understanding",
+    "highlight_key_steps": "Highlight the most critical points or steps",
+    "use_examples": "Support your argument with examples and evidence",
+    "organize_subtext": "Organize content into relevant subtopics or steps",
+    "in_depth_explanation": "Explore the topic or problem in-depth",
+    "multiple_examples": "Present multiple examples and supporting evidence",
+    
+    "actionable_takeaway": "Actionable Takeaway",
+    "practical_tip": "Share a practical, valuable tip or insight for viewers",
+
+    "case_studies": "Case Studies or Real-Life Examples",
+    "relevant_cases": "Share pertinent case studies or real-life examples to reinforce your points",
+    "relevant_application": "Demonstrate the practical application of the concepts discussed",
+
+    "expert_insights": "Expert Insights",
+    "include_insights": "Give samples of insights from experts in the field to provide additional perspectives",
+
+    "questions": "Q&A or FAQs",
+    "address_questions": "Address common questions or misconceptions related to the topic",
+    "clarify": "Simplify any points for viewers",
+
+    "conclusion": "Conclusion",
+    "summarize": "Summarize the central theme",
+    "takeaway": "Review the actionable takeaways",
+    "call_to_action": "Prompt engagement with a call-to-action (e.g., subscribe, like, or comment)",
+
+    "init_header": "Select The Duration For Your Video",
+    "init_description": "Each video needs a specific duration present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche"
+  },
+  "video_style": {
+    "top_5": "Top 5",
+    "top_5_header": "Top 5 Countdowns",
+    "top_5_description": "This niche involves creating videos that present interesting, surprising, or obscure information in a list format. The content can span various topics, such as history, science, or pop culture. Faceless videos work well in this niche since the focus is on the information and visuals rather than the presenter. Creators can monetize through advertising, sponsorships, and affiliate marketing.",
+
+    "tech": "Tech",
+    "tech_header": "Tech Reviews",
+    "tech_description": "This niche involves creating videos that review tech products, such as smartphones, laptops, and cameras. The content can span various topics, such as history, science, or pop culture. Faceless videos work well in this niche since the focus is on the information and visuals rather than the presenter. Creators can monetize through advertising, sponsorships, and affiliate marketing.",
+
+    "story_telling": "Story Telling",
+    "story_telling_header": "Captivating and Engaging Narratives",
+    "story_telling_description": "This niche involves creating videos that tell a story. The content can span various topics, such as history, science, or pop culture. Faceless videos work well in this niche since the focus is on the information and visuals rather than the presenter. Creators can monetize through advertising, sponsorships, and affiliate marketing.",
+
+    "cooking": "Cooking",
+    "cooking_header": "Cooking and Recipe Tutorials",
+    "cooking_description": "This niche involves creating videos that teach viewers how to cook or bake. The content can span various topics, such as history, science, or pop culture. Faceless videos work well in this niche since the focus is on the information and visuals rather than the presenter. Creators can monetize through advertising, sponsorships, and affiliate marketing.",
+
+    "hacks": "Hacks",
+    "hacks_header": "DIY Hacks",
+    "hacks_description": "This niche involves creating videos that teach viewers how to do something more efficiently. The content can span various topics, such as history, science, or pop culture. Faceless videos work well in this niche since the focus is on the information and visuals rather than the presenter. Creators can monetize through advertising, sponsorships, and affiliate marketing.",
+
+    "movie_recap": "Movie Recap",
+    "movie_recap_header": "Movie & Video Game Recaps",
+    "movie_recap_description": "Summarize films and games from various genres using an AI-generated voice, providing engaging and informative content. Explore deeper themes, motifs, and symbolism, enhancing viewers' understanding and appreciation of the message.",
+
+    "language": "Language",
+    "language_header": "Teach Language Learning",
+    "language_description": "Use AI to create lessons and translate foreign langugages. Millions of users tune in every day to learn new languages. This could start off with basic phrases, pronunciation, words, and grammar. Lessons can be bite-sized 2-5 mins clips. To take it a little more outside the box body language is also technically a language.",
+
+    "init_header": "Select The Niche For Your Video",
+    "init_description": "Each video needs a specific style and tone to present the information.  It needs to be captivating and engaging.  Remember to align the style of your video with proven trends in your selected niche"
+  }
+}

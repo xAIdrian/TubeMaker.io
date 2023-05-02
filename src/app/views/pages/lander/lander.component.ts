@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
-import  { UserAuthService } from '../../../youtubeauto/service/auth/userauth.service';
+import  { FireAuthService } from '../../../youtubeauto/service/user/fireauth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ export class LanderComponent {
 
   constructor(
     private router: Router,
-    private authService: UserAuthService
+    private authService: FireAuthService
   ) { }
 
   uiShownCallback() {

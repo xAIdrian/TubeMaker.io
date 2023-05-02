@@ -1,0 +1,222 @@
+{
+  "translate_language": "Traduire la langue",
+  "video_list": {
+    "welcome": "Bienvenue",
+    "publish_videos_title": "Créer une nouvelle vidéo",
+    "create_new_video": "Sélectionnez une vidéo de la liste pour la modifier ou créez-en une nouvelle en cliquant sur le bouton 'Nouvelle vidéo'.",
+    "published": "Publié:",
+    "input": {
+      "video_title": "",
+      "video_channel_title": "",
+      "video_published_at": ""
+    }
+  },
+  "video_wizard": {
+    "script_outline": "Plan du script",
+    "similar_channels": "Chaînes similaires",
+    "monthly_reveneu": "Revenu mensuel",
+    "topic": "Titre",
+    "pick_your_video_subject": "Choisissez le sujet de votre vidéo",
+    "enter_topic_instructions": "Entrez simplement le sujet de votre vidéo dans la case ci-dessous, ou notre IA choisira un sujet pour vous !",
+    "get_an_idea": "Trouver une idée",
+    "type_your_idea": "Tapez votre idée ou laissez-nous en choisir une pour vous",
+    "need_help": "Besoin d'aide?",
+    "go_to_next_step": "Passer à l'étape suivante",
+    "style": "Style",
+    "length": "Durée",
+    "choose_monetization": "Choisissez comment gagner de l'argent avec votre vidéo",
+    "optional": "(Facultatif)",
+    "generate_video_script": "GÉNÉRER mon script vidéo, titre et tout le reste!",
+    "input": {
+      "topic": "",
+      "selected_style": "",
+      "selected_duration": "",
+      "selected_monetization": "",
+      "product_name": "",
+      "product_description": "",
+      "links": []
+    }
+  },
+  "video_editor": {
+    "text": "Texte",
+    "new": "Nouveau",
+    "optimize": "Optimiser",
+    "script": "Script",
+    "media": "Médias",
+    "make_video_your_own_title": "Personnalisons votre vidéo",
+    "edit_video_context": "Parcourez le contexte de votre nouvelle vidéo et apportez des modifications pour créer votre script!",
+    "title_label": "Titre",
+    "description_label": "Description",
+    "tags_label": "Tags",
+    "reset_content_button": "Réinitialiser le contenu",
+    "next_step_button": "Passer à l'étape suivante",
+    "input": {
+      "title": " {{ }}",
+      "description": "{{ }}",
+      "tags": "{{ }}",
+      "content_progress_label": "{{ }}",
+      "script_progress_label": "{{ }}"
+    },
+    "error_message": {
+      "complete_forms": "Veuillez remplir ces formulaires avant de continuer."
+    }
+  },
+  "improve_script_with_ai": {
+    "title": "Améliorez votre script avec l'IA",
+    "input": {
+      "section_control_name": "",
+      "current_video_duration_name": "{{ }}",
+      "current_video_duration_description": "{{ }}",
+      "section_name": "{{ }}"
+    },
+    "go_back_button": "Retour",
+    "next_step_button": "Passer à l'étape suivante"
+  },
+  "media_selection_form": {
+    "video_option": {
+      "title": "Utilisez notre voix générée par IA ou enregistrez la vôtre",
+      "description": "Choisissez une voix. Nous nous occuperons de l'audio pour vous ou vous pouvez télécharger le vôtre ci-dessous.",
+      "generate_ai_narration_button": "Générer votre narration IA",
+      "audio_not_supported_message": "Votre navigateur ne prend pas en charge l'élément audio.",
+      "download_script_button": "Télécharger votre script",
+      "edit_in_descript_title": "Presque terminé, rassemblez tout avec Descript",
+      "edit_in_descript_description": "Descript est un éditeur de texte et audio qui vous permet de modifier votre script et votre audio en même temps. C'est gratuit et facile à utiliser.",
+      "edit_in_descript_button": "Modifier dans Descript"
+    },
+    "thumbnail_option": {
+      "edit_thumbnail_buttons": "Cliquez pour modifier la miniature ci-dessus"
+    },
+    "input": {
+      "media_options": "{{ mediaOption }}"
+    },
+    "go_back_button": "Retour",
+    "review_video_button": "Examiner votre vidéo et la poster sur Youtube"
+  },
+  "voice_selection_dropdown": {
+    "click_to_play_text": "Cliquez ici pour jouer",
+    "audio_not_supported_message": "Votre navigateur ne prend pas en charge l'élément audio.",
+    "input": {
+      "dropdown_button": "{{ }}",
+      "voice_options_loop": "{{ }}"
+    }
+  },
+  "video_review_card": {
+    "review_video_details": "Examiner les détails de la vidéo",
+    "publish_to_youtube_button": "Publier sur Youtube",
+    "title_label": "Titre",
+    "description_label": "Description",
+    "tags_label": "Tags",
+    "script_label": "Script",
+    "copy_button": "Copier",
+    "copied_badge": "Copié!",
+    "reset_media_button": "Réinitialiser les médias",
+    "reset_content_button": "Réinitialiser le contenu"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "create": "Créer",
+    "youtube_video": "Vidéo Youtube",
+    "members_only": "Membres uniquement",
+    "courses": "Cours",
+    "lander": "Lander",
+    "register": "S'inscrire",
+    "error_404": "Erreur 404",
+    "error_500": "Erreur 500",
+    "new": "NOUVELLE"
+  },
+  "pages": {
+    "error_404_heading": "404",
+    "oops_lost": "Oups ! Vous êtes perdu.",
+    "page_not_found": "La page que vous recherchez n'a pas été trouvée.",
+    "error_500_heading": "500",
+    "houston_problem": "Houston, nous avons un problème !",
+    "page_temporarily_unavailable": "La page que vous recherchez est temporairement indisponible.",
+    "search_placeholder": "Que recherchez-vous ?",
+    "search_button": "Recherche"
+  },
+  "video_duration": {
+    "very_short": "Très court",
+    "very_short_header": "Pour des vidéos jusqu'à 1 minute",
+    "very_short_description": "Format ultra-concis axé sur un seul point clé, parfait pour une consommation rapide et un partage facile.",
+    "short": "Court",
+    "short_header": "Pour des vidéos jusqu'à 5 minutes",
+    "short_description": "Contenu rapide et attrayant, facile à consommer, idéal pour les spectateurs ayant une courte durée d'attention ou recherchant des informations rapides. Format court axé sur un seul point clé, parfait pour une consommation rapide et un partage facile.",
+    "medium": "Moyen",
+    "medium_header": "Pour des vidéos entre 5 et 10 minutes",
+    "medium_description": "Un regard plus approfondi sur un sujet, idéal pour les spectateurs recherchant plus d'informations ou une compréhension plus approfondie d'un sujet. Offre un équilibre entre profondeur et brièveté, permettant des explications détaillées sans submerger le public.",
+    "long": "Long",
+    "long_header": "Pour des vidéos entre 10 et 20 minutes",
+    "long_description": "Une plongée profonde dans un sujet, idéale pour les spectateurs recherchant une compréhension complète d'un sujet. Offre un équilibre entre profondeur et brièveté, permettant des explications détaillées sans submerger le public.",
+    "very_long": "Très long",
+    "very_long_header": "Pour des vidéos de plus de 20 minutes",
+    "very_long_description": "Un regard complet sur un sujet, idéal pour les spectateurs recherchant une compréhension complète d'un sujet. Offre un équilibre entre profondeur et brièveté, permettant des explications détaillées sans submerger le public.",
+
+    "introduction": "Introduction",
+    "attention_grabbing_hook": "Créer un crochet accrocheur et intrigant",
+    "brief_introduction": "Présentez brièvement le problème ou le sujet",
+    "preview_key_points": "Donnez un aperçu des sections et des points clés à aborder",
+
+    "main_content": "Contenu principal",
+    "concise_explanation": "Explication concise du point clé ou de l'idée principale",
+    "deliver_context": "Fournir le contexte et les informations de base pour la compréhension",
+    "highlight_key_steps": "Mettez en évidence les points ou étapes les plus critiques",
+    "use_examples": "Soutenez votre argument avec des exemples et des preuves",
+    "organize_subtext": "Organisez le contenu en sous-thèmes ou étapes pertinents",
+    "in_depth_explanation": "Explorez le sujet ou le problème en profondeur",
+    "multiple_examples": "Présentez plusieurs exemples et éléments de preuve à l'appui",
+
+    "actionable_takeaway": "Conseil pratique",
+    "practical_tip": "Partagez un conseil ou un aperçu pratique et précieux pour les spectateurs",
+
+    "case_studies": "Études de cas ou exemples concrets",
+    "relevant_cases": "Partagez des études de cas ou des exemples concrets pertinents pour renforcer vos arguments",
+
+    "relevant_application": "Démontrer l'application pratique des concepts abordés",
+
+    "expert_insights": "Avis d'experts",
+    "include_insights": "Inclure des exemples d'avis d'experts dans le domaine pour fournir des perspectives supplémentaires",
+
+    "questions": "Q&A ou FAQ",
+    "address_questions": "Répondez aux questions courantes ou aux idées fausses liées au sujet",
+    "clarify": "Clarifiez les points pour les spectateurs",
+
+    "conclusion": "Conclusion",
+    "summarize": "Résumez le thème central",
+    "takeaway": "Passez en revue les conseils pratiques",
+    "call_to_action": "Incitez à l'engagement avec un appel à l'action (par exemple, s'abonner, aimer ou commenter)",
+
+    "init_header": "Sélectionnez la durée de votre vidéo",
+    "init_description": "Chaque vidéo nécessite une durée spécifique pour présenter l'information. Elle doit être captivante et engageante. N'oubliez pas d'aligner le style de votre vidéo avec les tendances éprouvées dans la niche choisie."
+  },
+  "video_style": {
+    "top_5": "Top 5",
+    "top_5_header": "Top 5 des compte-à-rebours",
+    "top_5_description": "Cette niche consiste à créer des vidéos présentant des informations intéressantes, surprenantes ou obscures sous forme de liste. Le contenu peut couvrir divers sujets tels que l'histoire, la science ou la culture populaire. Les vidéos sans visage fonctionnent bien dans cette niche car l'accent est mis sur l'information et les visuels plutôt que sur le présentateur. Les créateurs peuvent monétiser grâce à la publicité, aux parrainages et au marketing d'affiliation.",
+    "tech": "Tech",
+    "tech_header": "Avis sur la technologie",
+    "tech_description": "Cette niche consiste à créer des vidéos qui passent en revue des produits technologiques, tels que les smartphones, les ordinateurs portables et les appareils photo. Le contenu peut couvrir divers sujets tels que l'histoire, la science ou la culture populaire. Les vidéos sans visage fonctionnent bien dans cette niche car l'accent est mis sur l'information et les visuels plutôt que sur le présentateur. Les créateurs peuvent monétiser grâce à la publicité, aux parrainages et au marketing d'affiliation.",
+
+    "story_telling": "Récits",
+    "story_telling_header": "Récits captivants et engageants",
+    "story_telling_description": "Cette niche consiste à créer des vidéos qui racontent une histoire. Le contenu peut couvrir divers sujets tels que l'histoire, la science ou la culture populaire. Les vidéos sans visage fonctionnent bien dans cette niche car l'accent est mis sur l'information et les visuels plutôt que sur le présentateur. Les créateurs peuvent monétiser grâce à la publicité, aux parrainages et au marketing d'affiliation.",
+
+    "cooking": "Cuisine",
+    "cooking_header": "Tutoriels de cuisine et de recettes",
+    "cooking_description": "Cette niche consiste à créer des vidéos qui enseignent aux spectateurs comment cuisiner ou cuire au four. Le contenu peut couvrir divers sujets tels que l'histoire, la science ou la culture populaire. Les vidéos sans visage fonctionnent bien dans cette niche car l'accent est mis sur l'information et les visuels plutôt que sur le présentateur. Les créateurs peuvent monétiser grâce à la publicité, aux parrainages et au marketing d'affiliation.",
+
+    "hacks": "Astuces",
+    "hacks_header": "Astuces de bricolage",
+    "hacks_description": "Cette niche consiste à créer des vidéos qui enseignent aux spectateurs comment faire quelque chose de manière plus efficace. Le contenu peut couvrir divers sujets tels que l'histoire, la science ou la culture populaire. Les vidéos sans visage fonctionnent bien dans cette niche car l'accent est mis sur l'information et les visuels plutôt que sur le présentateur. Les créateurs peuvent monétiser grâce à la publicité, aux parrainages et au marketing d'affiliation.",
+
+    "movie_recap": "Récapitulatif de film",
+    "movie_recap_header": "Récapitulatifs de films et de jeux vidéo",
+    "movie_recap_description": "Résumez des films et des jeux de différents genres en utilis ant une voix générée par IA, fournissant un contenu engageant et informatif. Explorez des thèmes, motifs et symboliques plus profonds, améliorant la compréhension et l'appréciation du message par les spectateurs.",
+
+    "language": "Langue",
+    "language_header": "Enseignement des langues",
+    "language_description": "Utilisez l'IA pour créer des leçons et traduire des langues étrangères. Des millions d'utilisateurs se connectent chaque jour pour apprendre de nouvelles langues. Cela peut commencer par des phrases de base, la prononciation, les mots et la grammaire. Les leçons peuvent être des clips de 2 à 5 minutes. Pour sortir un peu des sentiers battus, le langage corporel est aussi techniquement une langue.",
+
+    "init_header": "Sélectionnez la niche pour votre vidéo",
+    "init_description": "Chaque vidéo nécessite un style et un ton spécifiques pour présenter l'information. Elle doit être captivante et engageante. N'oubliez pas d'aligner le style de votre vidéo avec les tendances éprouvées dans la niche choisie."
+  }
+}
