@@ -28,7 +28,7 @@
               {{ 'media_selection_form.video_option.generate_ai_narration_button' | translate }}
             </button>
             <audio *ngIf="generatedAudioIsVisible" class="flex-grow-1" style="margin: 1rem; width: 100%;" controls>
-              <source [src]="generatedAudio" type="audio/mpeg">
+              <source [src]="generatedAudioUrl" type="audio/mpeg">
               {{ 'media_selection_form.video_option.audio_not_supported_message' | translate }}
             </audio>
           </div>

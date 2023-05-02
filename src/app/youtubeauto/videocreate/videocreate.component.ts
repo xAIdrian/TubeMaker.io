@@ -36,9 +36,18 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   moneyFormGroup: FormGroup;
 
   videoNiches: VideoNiche[] = [];
-  selectedVideoNiche: VideoNiche;
+  selectedVideoNiche: VideoNiche = {
+    name: '',
+    header: '',
+    description: '',
+  }
   videoDurations: VideoDuration[] = [];
-  selectedVideoDuration: VideoDuration;
+  selectedVideoDuration: VideoDuration = {
+    name: '',
+    header: '',
+    description: '',
+    sections: []
+  }
   moneyOptions = [ 'Ad Sense',  'Affiliate' ]
   selectedMonitizationOption = '';
 

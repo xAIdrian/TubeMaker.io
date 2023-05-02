@@ -179,9 +179,11 @@ export class ContentRepository {
     videoStyle: VideoNiche,
     videoDuration: VideoDuration
   ) {
-    (this.currentTopic = topic),
-      (this.currentStyle = videoStyle),
-      (this.currentDuration = videoDuration)
+    this.scriptTotalNumberOfPoints = 0;
+
+    this.currentTopic = topic
+    this.currentStyle = videoStyle
+    this.currentDuration = videoDuration
 
     this.currentDuration.sections.forEach((section) => {
       section.points.forEach((point) => {

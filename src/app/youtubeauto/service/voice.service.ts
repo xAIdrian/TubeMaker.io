@@ -7,6 +7,8 @@ import {
   Subject,
   catchError,
   map,
+  concatMap,
+  of,
 } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -49,26 +51,24 @@ export class VoiceService {
    * @param name 
    * @param scriptValue 
    */
-  generateTextToSpeech(name: string, scriptValue: string) {
-    this.voiceRepository.getListOfVoices().subscribe((response: { message: string, result: { name: string, id: string }[]}) => {
-      console.log("🚀 ~ file: voice.service.ts:54 ~ VoiceService ~ this.voiceRepository.getListOfVoices ~ voices:", response)
+  generateTextToSpeech(name: string, scriptValue: string): Observable<Blob> {
+    return this.voiceRepository.getListOfVoices().pipe(
+      map((response: { message: string, result: { name: string, id: string }[]}) => {
+        console.log("🚀 ~ file: voice.service.ts:54 ~ VoiceService ~ this.voiceRepository.getListOfVoices ~ voices:", response)
 
-      if (response.message !== 'success') {
-        this.erroSubject.next('Error getting voices');
-        return
-      }
+        if (response.message !== 'success') {
+          this.erroSubject.next('Error getting voices');
+          return
+        }
 
-      const voice = response.result.find((voice) => {
-        return voice.name === name
+        const voiceObj = response.result.find((voice) => {
+          return voice.name === name
+        })
+        return voiceObj?.id
+      }),
+      concatMap((voice) => {
+        return this.voiceRepository.getTextToSpeechSteam(voice ?? '', scriptValue)
       })
-      console.log("🚀 ~ file: voice.service.ts:56 ~ VoiceService ~ this.voiceRepository.getListOfVoices ~ voice:", voice)
-      if (voice) {
-        // this.voiceRepository.generateTextToSpeech(voice.id, scriptValue).subscribe((url: string) => {
-        //   this.textToSpeechObserverSubject.next(url);
-        // });
-      } else {
-        this.erroSubject.next('Voice not found');
-      }
-    });
+    );
   }
 }

@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input,
+  ElementRef,
   OnChanges,
   OnInit,
   SimpleChanges,
@@ -22,9 +22,9 @@ import { NavigationService } from '../../service/navigation.service';
   styleUrls: ['./videomedia.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoMediaComponent
-  implements OnInit, AfterContentInit, OnChanges
-{
+export class VideoMediaComponent implements OnInit, AfterContentInit {
+
+  @ViewChild('audioPlayer', {static: false}) audioPlayer: ElementRef;
   private audioDropdown: AudioDropdownComponent;
 
   @ViewChild('audiochild', { static: false }) set content(
@@ -40,7 +40,7 @@ export class VideoMediaComponent
 
   generateAudioLoading = false;
   generatedAudioIsVisible = false;
-  generatedAudio: string;
+  generatedAudioUrl: string;
 
   voiceOptions: { name: string; sampleUrl: string }[] = [];
   selectedVoice: { name: string; sampleUrl: string };
@@ -60,24 +60,9 @@ export class VideoMediaComponent
       alert(response);
     });
     this.voiceService.getVoiceSamplesObserver().subscribe((response) => {
-      console.log("🚀 ~ file: videomedia.component.ts:59 ~ this.voiceService.getVoiceSamplesObserver ~ response:", response)
       this.audioDropdown.populateList(response);
       this.changeDetectorRef.detectChanges();
     });
-    this.voiceService.getTextToSpeechObserver().subscribe((response) => {
-      this.generateAudioLoading = false;
-      if (response !== '') {
-        this.generatedAudio = response;
-        this.generatedAudioIsVisible = true;
-      }
-    });
-  }
-  
-  /**
-   * Where we receive updates from our parent FormControl
-   * @param changes
-   */
-  ngOnChanges(changes: SimpleChanges): void {
   }
 
   ngAfterContentInit(): void {
@@ -105,19 +90,27 @@ export class VideoMediaComponent
     }
 
     const scriptValue = this.contentRepo.getCompleteScript();
-    // if (scriptValue === null || scriptValue === '') {
-    //   alert('Please enter a script before generating audio');
-    //   return;
-    // }
+    if (scriptValue === null || scriptValue === '') {
+      alert('Please enter a script before generating audio');
+      return;
+    }
 
-    this.generatedAudio = '';
     this.generatedAudioIsVisible = false;
     this.generateAudioLoading = true;
 
     this.voiceService.generateTextToSpeech(
       this.selectedVoice.name,
       scriptValue
-    );
+    ).subscribe((blobStream) => {
+      this.generatedAudioIsVisible = true;
+      this.generatedAudioUrl = URL.createObjectURL(blobStream);
+
+      this.audioPlayer.nativeElement.load();
+      this.audioPlayer.nativeElement.play();
+    },
+    (error) => {
+      console.error(error);
+    });
   }
 
   descriptButtonClicked() {
