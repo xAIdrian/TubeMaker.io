@@ -9,9 +9,9 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ContentService } from '../../service/content/content.service';
+import { ContentRepository } from '../../repository/content.repo';
 import { FormGroup } from '@angular/forms';
-import { VoiceService } from '../../service/content/voice.service';
+import { VoiceService } from '../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 import * as saveAs from 'file-saver';
 import { NavigationService } from '../../service/navigation.service';
@@ -48,14 +48,19 @@ export class VideoMediaComponent
   selectedMediaOption = 'Video';
 
   constructor(
-    private contentService: ContentService,
+    private contentRepo: ContentRepository,
     private voiceService: VoiceService,
     private navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.voiceService.getVoiceOptionsObserver().subscribe((response) => {
+    this.voiceService.getErrorObserver().subscribe((response) => {
+      this.generateAudioLoading = false;
+      alert(response);
+    });
+    this.voiceService.getVoiceSamplesObserver().subscribe((response) => {
+      console.log("🚀 ~ file: videomedia.component.ts:59 ~ this.voiceService.getVoiceSamplesObserver ~ response:", response)
       this.audioDropdown.populateList(response);
       this.changeDetectorRef.detectChanges();
     });
@@ -67,28 +72,16 @@ export class VideoMediaComponent
       }
     });
   }
-  //
-  // this.changeDetector.detectChanges();
+  
   /**
    * Where we receive updates from our parent FormControl
    * @param changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['parentMediaFormGroup'] && this.parentMediaFormGroup) {
-    //   console.log(
-    //     '🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:',
-    //     this.parentMediaFormGroup
-    //   );
-    //   this.parentMediaFormGroup
-    //     .get('selectedVoice')
-    //     ?.valueChanges.subscribe((value: string) => {
-    //       /** */
-    //     });
-    // }
   }
 
   ngAfterContentInit(): void {
-    this.voiceService.getVoiceOptions();
+    this.voiceService.getVoices();
     console.log(
       '🚀 ~ file: videomedia.component.ts:64 ~ VideoMediaComponent ~ ngAfterContentInit ~ ngAfterContentInit:'
     );
@@ -100,7 +93,7 @@ export class VideoMediaComponent
   }
 
   downloadTextFile() {
-    this.contentService.getScriptForDownload().subscribe((blobItem) => {
+    this.contentRepo.getScriptForDownload().subscribe((blobItem) => {
       saveAs(blobItem.blob, blobItem.filename);
     });
   }
@@ -111,11 +104,11 @@ export class VideoMediaComponent
       return;
     }
 
-    const scriptValue = this.contentService.getCompleteScript();
-    if (scriptValue === null || scriptValue === '') {
-      alert('Please enter a script before generating audio');
-      return;
-    }
+    const scriptValue = this.contentRepo.getCompleteScript();
+    // if (scriptValue === null || scriptValue === '') {
+    //   alert('Please enter a script before generating audio');
+    //   return;
+    // }
 
     this.generatedAudio = '';
     this.generatedAudioIsVisible = false;

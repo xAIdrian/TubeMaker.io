@@ -6,8 +6,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationService } from '../service/navigation.service';
-import { ContentService } from '../service/content/content.service';
-import { YoutubeService } from '../service/domain/youtube.service';
+import { ContentRepository } from '../repository/content.repo';
+import { YoutubeService } from '../service/youtube.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -30,7 +30,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   showScriptBadge = false;
   
   constructor(
-    private contentService: ContentService,
+    private contentRepo: ContentRepository,
     private navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef,
     private youtubeService: YoutubeService,
@@ -47,10 +47,10 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.title = this.contentService.getTitle();
-    this.description = this.contentService.getDescription();
-    this.tags = this.contentService.getTags();
-    this.script = this.contentService.getCompleteScript();
+    this.title = this.contentRepo.getTitle();
+    this.description = this.contentRepo.getDescription();
+    this.tags = this.contentRepo.getTags();
+    this.script = this.contentRepo.getCompleteScript();
 
     this.changeDetectorRef.detectChanges();
   }

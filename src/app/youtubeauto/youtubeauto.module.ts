@@ -42,7 +42,7 @@ import { VideoCreateComponent } from './videocreate/videocreate.component';
 import { VideoDetailsComponent } from './videoresult/videodetails/videodetails.component';
 import { VideoUploadComponent } from './videoupload/videoupload.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CorsInterceptor } from './service/domain/cors.interceptor';
+import { CorsInterceptor } from './repository/cors.interceptor';
 import { VideoScriptComponent } from './videoresult/videoscript/videoscript.component';
 import { VideoMediaComponent } from './videoresult/videomedia/videomedia.component';
 import { AudioDropdownComponent } from './videoresult/videomedia/audiodropdown/audiodropdown.component';

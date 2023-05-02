@@ -19,6 +19,8 @@ export class AudioDropdownComponent implements OnInit {
   selectedItem: { name: string; sampleUrl: string };
   voiceOptions: { name: string; sampleUrl: string }[] = [];
 
+  currentPlayingAudio: HTMLAudioElement;
+
   constructor() {
     /** */
   }
@@ -33,6 +35,9 @@ export class AudioDropdownComponent implements OnInit {
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;
+    if (!this.isOpen) {
+      this.currentPlayingAudio?.pause();
+    }
   }
 
   onItemSelect(event: Event, item: { name: string; sampleUrl: string }) {
@@ -49,6 +54,9 @@ export class AudioDropdownComponent implements OnInit {
   }
 
   onItemPlay(audioPlayer: HTMLAudioElement) {
+    this.currentPlayingAudio?.pause();
+    
+    this.currentPlayingAudio = audioPlayer;
     audioPlayer.play();
   }
 

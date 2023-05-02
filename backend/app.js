@@ -5,8 +5,8 @@ var cors = require('cors')
 
 const app = express();
 const openaiRoutes = require('./routes/ai')
-const voiceRoutes = require('./routes/voice')
-const youtubeRoutes = require('./routes/youtube')
+const playhtRoutes = require('./routes/playht')
+const voiceRoutes = require('./routes/elevenlabs')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/openai", openaiRoutes)
-app.use("/api/voice", voiceRoutes)
+app.use("/api/playht", playhtRoutes)
+app.use("/api/voices", voiceRoutes)
 
 module.exports = app;

@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { GptService } from '../service/gpt/gpt.service';
+import { GptService } from '../service/gpt.service';
 import {
   FormBuilder,
   FormGroup,
@@ -14,7 +14,7 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NavigationService } from '../service/navigation.service';
-import { ContentService } from '../service/content/content.service';
+import { ContentRepository } from '../repository/content.repo';
 import { VideoNiche as VideoNiche } from '../model/create/videoniche.model';
 import { VideoDuration } from '../model/create/videoduration.model';
 
@@ -47,7 +47,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   constructor(
     private gptService: GptService,
-    private contentService: ContentService,
+    private contentRepo: ContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -56,10 +56,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.setupObservers();
 
-    this.contentService.getInitVideoNiche().subscribe((response) => {
+    this.contentRepo.getInitVideoNiche().subscribe((response) => {
       this.selectedVideoNiche = response;
     });
-    this.contentService.getInitVideoDuration().subscribe((response) => {
+    this.contentRepo.getInitVideoDuration().subscribe((response) => {
       this.selectedVideoDuration = response;
     });
 
@@ -81,7 +81,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    // this.contentService.getDurationOptionsObserver();
+    // this.contentRepo.getDurationOptionsObserver();
     this.changeDetectorRef.detectChanges();
   }
 
@@ -92,10 +92,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
         topic: response.replace('"', '').trim()
       })
     });
-    this.contentService.getVideoOptionsObserver().subscribe((response) => {
+    this.contentRepo.getVideoOptionsObserver().subscribe((response) => {
       this.videoNiches = response;
     });
-    this.contentService.getDurationOptionsObserver().subscribe((response) => {
+    this.contentRepo.getDurationOptionsObserver().subscribe((response) => {
       this.videoDurations = response;
     });
   }
@@ -136,7 +136,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
       this.hasInputError = true;
     } else {
       this.hasInputError = false;
-      this.contentService.submitInputs(
+      this.contentRepo.submitInputs(
         this.topicFormGroup.value.topic,
         this.styleFormGroup.value.selectedStyle,
         this.durationFormGroup.value.selectedDuration
