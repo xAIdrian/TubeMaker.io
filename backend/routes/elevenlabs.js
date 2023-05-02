@@ -61,7 +61,7 @@ router.post('/:id/:language', async (req, res) => {
   }
   console.log("🚀 ~ file: elevenlabs.js:61 ~ router.post ~ reqBody:", reqBody)
 
-  const url = `${ELEVEN_BASE_URL}/v1/text-to-speech/${voiceId}`;
+  const url = `${ELEVEN_BASE_URL}/v1/text-to-speech/${voiceId}/stream`;
   fetch(url, {
     headers: {
       'Accept': 'audio/mpeg',
