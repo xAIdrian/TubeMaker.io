@@ -3,10 +3,11 @@ const router = express.Router();
 const fs = require("fs");
 const shortid = require('shortid');
 const { Configuration, OpenAIApi } = require("openai");
+const { OPEN_AI_API_KEY } = require("../../appsecrets");
 
 const configuration = new Configuration({
   //   apiKey: process.env.OPENAI_API_KEY,
-  apiKey: "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",
+  apiKey: OPEN_AI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 

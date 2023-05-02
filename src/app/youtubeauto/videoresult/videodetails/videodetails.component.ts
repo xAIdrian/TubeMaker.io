@@ -36,7 +36,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   currentVideoDuration: VideoDuration;
 
   //debug variable to be removed
-  isInDebugMode: boolean = false;
+  isInDebugMode: boolean = true;
   ////////////////////////////
 
   contentProgressValue: number = 0;
