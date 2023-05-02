@@ -101,15 +101,22 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
     this.voiceService.generateTextToSpeech(
       this.selectedVoice.name,
       scriptValue
-    ).subscribe((blobStream) => {
-      this.generatedAudioIsVisible = true;
-      this.generatedAudioUrl = URL.createObjectURL(blobStream);
+    ).subscribe({
+      next: (response) => {
+        console.log(response)
+        this.generatedAudioIsVisible = true;
+        this.generatedAudioUrl = URL.createObjectURL(response);
 
-      this.audioPlayer.nativeElement.load();
-      this.audioPlayer.nativeElement.play();
-    },
-    (error) => {
-      console.error(error);
+        this.audioPlayer.nativeElement.load();
+        this.audioPlayer.nativeElement.play();
+      },
+      error: (error) => {
+        console.log('error', error)
+      },
+      complete: () => {
+        console.log('complete')
+        this.generateAudioLoading = false;
+      }
     });
   }
 

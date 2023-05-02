@@ -1,5 +1,6 @@
 const express = require('express');
 const axios = require('axios');
+const { pipeline } = require('stream');
 const { ELEVEN_LABS_API_KEY } = require("../../appsecrets");
 
 const router = express.Router();
@@ -44,9 +45,9 @@ router.post('/:id/:language', async (req, res) => {
   const voiceId = req.params.id;
   const language = req.params.language
   if (language === 'en') {
-    modelId =  "eleven_monolingual_v1"
+    modelId = "eleven_monolingual_v1"
   } else if (language === 'fr') {
-    modelId =  "eleven_multilingual_v1"
+    modelId = "eleven_multilingual_v1"
   } else {
     res.status(422).json({
       "message": "language not supported"
@@ -54,53 +55,82 @@ router.post('/:id/:language', async (req, res) => {
   }
 
   const reqBody = {
-    text: 'set string',
+    text: req.body.text,
     model_id: modelId
   }
 
-  try {
-    const url = `${ELEVEN_BASE_URL}/v1/text-to-speech/${voiceId}`;
-    fetch(url, {
-      headers: {
-        'Accept': 'audio/mpeg',
-        'xi-api-key': ELEVEN_LABS_API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(reqBody),
-      method: 'POST',
-    }).then(response => {
-      if (response.ok) {
-        console.log("🚀 ~ file: elevenlabs.js:75 ~ router.post ~ jsonResponse:", response)
-
-        // handle the successful response here
-        // the response body will be a stream of audio/mpeg data
-      } else {
-        console.log("🔥 ~ file: elevenlabs.js:77 ~ router.post ~ response:", response.data)
-
-        // handle the error response here
-      }
+  const url = `${ELEVEN_BASE_URL}/v1/text-to-speech/${voiceId}`;
+  fetch(url, {
+    headers: {
+      'Accept': 'audio/mpeg',
+      'xi-api-key': ELEVEN_LABS_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(reqBody),
+    method: 'POST',
+  }).then(response => {
+    handleResponse(response, async (streamResponse) => {
+      res.set({
+        'Content-Type': 'audio/mpeg'
+      })
+      const stream = await streamResponse.body
+      await pipeline(stream, res, (err) => {
+        if (err) {
+          console.error('Pipeline failed.', err);
+          res.status(500).json({
+            "message": "pipeline failed",
+            "result": err
+          })
+        } else {
+          console.log('Pipeline succeeded.');
+        }
+      })
+      // streamResponse.body.pipe(res)
+    }, (errorStatus, response) => {
+      res.status(errorStatus).json(response)
     })
-    .catch(error => {
-      // handle any errors that occurred during the request here
-      console.log("🚀 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error)
-    });
-
-    // if (response.ok) {
-    //   const jsonResponse = await response.json();
-    //   console.log("🚀 ~ file: elevenlabs.js:75 ~ router.post ~ jsonResponse:", jsonResponse)
-    // } else {
-    //   console.log("🔥 ~ file: elevenlabs.js:77 ~ router.post ~ response:", response.data)
-    // }
-    // // Return the audio stream to the client
-    // res.status(200).contentType('audio/mpeg');
-    // response.data.pipe(res);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      "message": error.message,
-    });
-  }
+  }).catch(error => {
+    // handle any errors that occurred during the request here
+    console.log("🚀 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error)
+    res.status(500).json({
+      "message": "pipeline failed",
+      "result": err
+    })
+  });
 });
+
+/**
+   * Just a nifty wrapper for error handling
+   * @param {Response} fetchResponse 
+   * @param {Function | Promise<any>} callback 
+   * @returns Promise<any>
+   */
+async function handleResponse(
+  fetchResponse,
+  callback,
+  errorCallback
+) {
+  try {
+    if (fetchResponse.ok) {
+      return callback(fetchResponse);
+
+    } else if (fetchResponse.status === 400) {
+      console.log("🔥 ~ file: voice.js:133 ~ handleResponse ~ fetchResponse:", fetchResponse)
+      errorCallback(400, fetchResponse.json())
+    } else if (fetchResponse.status === 403) {
+      console.log("🔥 ~ file: voice.js:138 ~ handleResponse ~ fetchResponse:", fetchResponse)
+      errorCallback(403, fetchResponse.json())
+    } else {
+      console.log("🔥 ~ file: voice.js:143 ~ handleResponse ~ fetchResponse:", fetchResponse)
+      errorCallback(500, fetchResponse.json())
+    }
+  } catch (error) {
+    console.error("🔥 Error:", error.message);
+    errorCallback(500, fetchResponse.json())
+  }
+}
+
+
 
 
 module.exports = router;

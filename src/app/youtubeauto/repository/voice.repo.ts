@@ -36,9 +36,18 @@ export class VoiceRepository {
       text: scriptValue,
       voice_id: voiceId,
     }
-    return this.http.post<Blob>(
+    const headers = new HttpHeaders({
+      'Content-Type': 'audio/mpeg',
+      'Accept': 'audio/mpeg'
+    });
+    const options = {
+      headers: headers,
+      responseType: 'blob' as const
+    }
+    return this.http.post(
       `http://localhost:3000/api/voices/${voiceId}/${currLang}`,
-      reqBody
+      reqBody,
+      options
     );
   }
 }
