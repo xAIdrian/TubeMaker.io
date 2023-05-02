@@ -14,7 +14,6 @@ router.get('', async (req, res) => {
         'xi-api-key': ELEVEN_LABS_API_KEY,
       },
     });
-    console.log("🚀 ~ file: elevenlabs.js:13 ~ router.get ~ response:", response)
 
     if ("voices" in response.data) {
       const mappedVoices = response.data.voices.map(voice => {
@@ -55,24 +54,46 @@ router.post('/:id/:language', async (req, res) => {
   }
 
   const reqBody = {
-    "text": req.body.text,
-    "model_id": modelId
+    text: 'set string',
+    model_id: modelId
   }
 
   try {
-    const url = `${ELEVEN_BASE_URL}/v1/text-to-speech/${voiceId}/stream`;
-    const response = await axios.post(url, {
+    const url = `${ELEVEN_BASE_URL}/v1/text-to-speech/${voiceId}`;
+    fetch(url, {
       headers: {
-        'accept': 'application/json',
+        'Accept': 'audio/mpeg',
         'xi-api-key': ELEVEN_LABS_API_KEY,
+        'Content-Type': 'application/json',
       },
-      data: reqBody,
-      method: 'post',
-      responseType: 'stream',
+      body: JSON.stringify(reqBody),
+      method: 'POST',
+    }).then(response => {
+      if (response.ok) {
+        console.log("🚀 ~ file: elevenlabs.js:75 ~ router.post ~ jsonResponse:", response)
+
+        // handle the successful response here
+        // the response body will be a stream of audio/mpeg data
+      } else {
+        console.log("🔥 ~ file: elevenlabs.js:77 ~ router.post ~ response:", response.data)
+
+        // handle the error response here
+      }
+    })
+    .catch(error => {
+      // handle any errors that occurred during the request here
+      console.log("🚀 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error)
     });
-    // Return the audio stream to the client
-    res.status(200).contentType('audio/mpeg');
-    response.data.pipe(res);
+
+    // if (response.ok) {
+    //   const jsonResponse = await response.json();
+    //   console.log("🚀 ~ file: elevenlabs.js:75 ~ router.post ~ jsonResponse:", jsonResponse)
+    // } else {
+    //   console.log("🔥 ~ file: elevenlabs.js:77 ~ router.post ~ response:", response.data)
+    // }
+    // // Return the audio stream to the client
+    // res.status(200).contentType('audio/mpeg');
+    // response.data.pipe(res);
   } catch (error) {
     console.error(error);
     res.status(500).send({
