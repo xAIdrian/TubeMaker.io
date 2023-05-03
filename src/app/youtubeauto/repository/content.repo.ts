@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Media } from '../../model/media/media.model';
-import { ListVideo } from '../../model/media/video/listvideo.model';
+import { Media } from '../model/media/media.model';
+import { ListVideo } from '../model/media/video/listvideo.model';
 import {
   getDefaultVideoNiches,
   VideoNiche,
-} from '../../model/create/videoniche.model';
+} from '../model/create/videoniche.model';
 import {
   getDefaultVideoDurations,
   VideoDuration,
-} from '../../model/create/videoduration.model';
+} from '../model/create/videoduration.model';
 import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContentService {
+export class ContentRepository {
   
   mediaSubjectObserver = new Subject<Media>();
 
@@ -179,9 +179,11 @@ export class ContentService {
     videoStyle: VideoNiche,
     videoDuration: VideoDuration
   ) {
-    (this.currentTopic = topic),
-      (this.currentStyle = videoStyle),
-      (this.currentDuration = videoDuration)
+    this.scriptTotalNumberOfPoints = 0;
+
+    this.currentTopic = topic
+    this.currentStyle = videoStyle
+    this.currentDuration = videoDuration
 
     this.currentDuration.sections.forEach((section) => {
       section.points.forEach((point) => {

@@ -13,11 +13,9 @@
       ></svg>
     </button>
     <c-header-nav class="d-none d-lg-flex me-auto">
-      <c-nav-item>
-        <a cNavLink routerLink="/dashboard" routerLinkActive="active">
-          Dashboard
-        </a>
-      </c-nav-item>
+      <button cButton class="float-end" color="primary" (click)="onTranslationClick()">
+        {{ 'translate' | translate }}
+      </button>
     </c-header-nav>
 
     <c-header-nav class="d-none d-lg-flex">

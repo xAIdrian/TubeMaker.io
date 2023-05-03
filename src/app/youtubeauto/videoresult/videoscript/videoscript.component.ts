@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GptService } from "../../service/gpt/gpt.service";
-import { ContentService } from "../../service/content/content.service";
+import { GptService } from "../../service/gpt.service";
+import { ContentRepository } from "../../repository/content.repo";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../model/create/videoduration.model";
 
@@ -20,10 +20,10 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
 
   constructor(
     private gptService: GptService,
-    private contentService: ContentService,
+    private contentRepo: ContentRepository,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
-    this.currentVideoDuration = contentService.getCurrentVideoDuration();
+    this.currentVideoDuration = contentRepo.getCurrentVideoDuration();
   }
 
   /**
@@ -43,7 +43,7 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
   onScriptSectionClick() {
     console.log("🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ onScriptSectionClick ~ onScriptSectionClick:", this.parentScriptFormGroup)
     
-    this.contentService.submitScriptSections(
+    this.contentRepo.submitScriptSections(
       this.parentScriptFormGroup.value.introduction,
       this.parentScriptFormGroup.value.mainContent,
       this.parentScriptFormGroup.value.caseStudies,

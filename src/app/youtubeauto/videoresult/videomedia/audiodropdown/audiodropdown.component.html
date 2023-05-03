@@ -2,15 +2,9 @@
     <button cButton cDropdownToggle color="info" style="width: 100%; ">{{ selectedItem.name }}</button>
     <ul cDropdownMenu class="dropdown-list">
         <li *ngFor="let item of voiceOptions" (click)="onItemSelect($event, item)">
-            <div class="dropdown-item d-flex justify-content-between align-items-center">
-                <div class="item-name">{{ item.name }}</div>
-                <!-- <svg cIcon name="cilMediaPlay"></svg> -->
-                <p 
-                class="text-medium-emphasis small" 
-                style="display: flex; height:100%; align-self: center;"
-                (click)="onItemPlay(audioPlayer)">
-                {{ 'voice_selection_dropdown.click_to_play_text' | translate }}
-                </p>
+            <div class="dropdown-item d-flex align-items-center" (click)="onItemPlay(audioPlayer)">
+                <svg cIcon name="cilMediaPlay"></svg>
+                <p class="item-name text-medium-emphasis">{{ item.name }}</p>
                 <audio #audioPlayer controls hidden="true">
                     <source [src]="item.sampleUrl" type="audio/mpeg">
                         {{ 'voice_selection_dropdown.audio_not_supported_message' | translate }}

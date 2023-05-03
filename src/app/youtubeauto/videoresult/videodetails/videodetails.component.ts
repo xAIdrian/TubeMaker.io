@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { VoiceService } from '../../service/content/voice.service';
+import { VoiceService } from '../../service/voice.service';
 import { NavigationService } from '../../service/navigation.service';
 import {
   FormBuilder,
@@ -18,11 +18,9 @@ import {
 import { saveAs } from 'file-saver';
 
 import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
-import { GptService } from '../../service/gpt/gpt.service';
-import { ContentService } from '../../service/content/content.service';
+import { GptService } from '../../service/gpt.service';
+import { ContentRepository } from '../../repository/content.repo';
 import { VideoDuration } from '../../model/create/videoduration.model';
-import { VideoScriptComponent } from '../videoscript/videoscript.component';
-import { VideoMediaComponent } from '../videomedia/videomedia.component';
 
 @Component({
   selector: 'video-result',
@@ -69,14 +67,14 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   constructor(
     private gptService: GptService,
-    private contentService: ContentService,
+    private contentRepo: ContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    if (this.contentService.getCurrentTopic() === undefined && !this.isInDebugMode) {
+    if (this.contentRepo.getCurrentTopic() === undefined && !this.isInDebugMode) {
       this.navigationService.navigateToCreateVideo();
       return
     }
@@ -259,7 +257,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   }
 
   onInfoSectionClick() {
-    this.contentService.submitInfos(
+    this.contentRepo.submitInfos(
       this.infoFormGroup.value.title,
       this.infoFormGroup.value.description,
       this.infoFormGroup.value.tags,

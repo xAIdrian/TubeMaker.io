@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root',
 })
-export class GptObservers {
+export class GptRepository {
 
   constructor(
     private http: HttpClient,

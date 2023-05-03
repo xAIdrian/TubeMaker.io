@@ -3,3 +3,13 @@
     overflow-y: scroll;
     width: 100%;
 }
+
+.dropdown-item {
+    justify-content: center;
+    /* center contents horizontally */
+}
+
+.item-name {
+    margin-left: 1rem;
+    /* add space between the icon and the text */
+}

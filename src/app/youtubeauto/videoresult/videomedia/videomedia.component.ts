@@ -3,18 +3,19 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input,
+  ElementRef,
   OnChanges,
   OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ContentService } from '../../service/content/content.service';
+import { ContentRepository } from '../../repository/content.repo';
 import { FormGroup } from '@angular/forms';
-import { VoiceService } from '../../service/content/voice.service';
+import { VoiceService } from '../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 import * as saveAs from 'file-saver';
 import { NavigationService } from '../../service/navigation.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'video-media',
@@ -22,9 +23,9 @@ import { NavigationService } from '../../service/navigation.service';
   styleUrls: ['./videomedia.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoMediaComponent
-  implements OnInit, AfterContentInit, OnChanges
-{
+export class VideoMediaComponent implements OnInit, AfterContentInit {
+
+  @ViewChild('audioPlayer', {static: false}) audioPlayer: ElementRef;
   private audioDropdown: AudioDropdownComponent;
 
   @ViewChild('audiochild', { static: false }) set content(
@@ -40,7 +41,7 @@ export class VideoMediaComponent
 
   generateAudioLoading = false;
   generatedAudioIsVisible = false;
-  generatedAudio: string;
+  generatedAudioUrl: string;
 
   voiceOptions: { name: string; sampleUrl: string }[] = [];
   selectedVoice: { name: string; sampleUrl: string };
@@ -48,47 +49,29 @@ export class VideoMediaComponent
   selectedMediaOption = 'Video';
 
   constructor(
-    private contentService: ContentService,
+    private contentRepo: ContentRepository,
     private voiceService: VoiceService,
     private navigationService: NavigationService,
+    private translate: TranslateService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.voiceService.getVoiceOptionsObserver().subscribe((response) => {
+    this.voiceService.getErrorObserver().subscribe((response) => {
+      this.generateAudioLoading = false;
+      alert(response);
+    });
+    this.voiceService.getVoiceSamplesObserver().subscribe((response) => {
       this.audioDropdown.populateList(response);
       this.changeDetectorRef.detectChanges();
     });
-    this.voiceService.getTextToSpeechObserver().subscribe((response) => {
-      this.generateAudioLoading = false;
-      if (response !== '') {
-        this.generatedAudio = response;
-        this.generatedAudioIsVisible = true;
-      }
+    this.translate.onLangChange.subscribe(() => {
+      this.voiceService.getVoices();
     });
-  }
-  //
-  // this.changeDetector.detectChanges();
-  /**
-   * Where we receive updates from our parent FormControl
-   * @param changes
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['parentMediaFormGroup'] && this.parentMediaFormGroup) {
-    //   console.log(
-    //     '🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:',
-    //     this.parentMediaFormGroup
-    //   );
-    //   this.parentMediaFormGroup
-    //     .get('selectedVoice')
-    //     ?.valueChanges.subscribe((value: string) => {
-    //       /** */
-    //     });
-    // }
   }
 
   ngAfterContentInit(): void {
-    this.voiceService.getVoiceOptions();
+    this.voiceService.getVoices();
     console.log(
       '🚀 ~ file: videomedia.component.ts:64 ~ VideoMediaComponent ~ ngAfterContentInit ~ ngAfterContentInit:'
     );
@@ -100,7 +83,7 @@ export class VideoMediaComponent
   }
 
   downloadTextFile() {
-    this.contentService.getScriptForDownload().subscribe((blobItem) => {
+    this.contentRepo.getScriptForDownload().subscribe((blobItem) => {
       saveAs(blobItem.blob, blobItem.filename);
     });
   }
@@ -111,20 +94,35 @@ export class VideoMediaComponent
       return;
     }
 
-    const scriptValue = this.contentService.getCompleteScript();
+    const scriptValue = this.contentRepo.getCompleteScript();
     if (scriptValue === null || scriptValue === '') {
       alert('Please enter a script before generating audio');
       return;
     }
 
-    this.generatedAudio = '';
     this.generatedAudioIsVisible = false;
     this.generateAudioLoading = true;
 
     this.voiceService.generateTextToSpeech(
       this.selectedVoice.name,
       scriptValue
-    );
+    ).subscribe({
+      next: (response) => {
+        console.log(response)
+        this.generatedAudioIsVisible = true;
+        this.generatedAudioUrl = URL.createObjectURL(response);
+
+        this.audioPlayer.nativeElement.load();
+        this.audioPlayer.nativeElement.play();
+      },
+      error: (error) => {
+        console.log('error', error)
+      },
+      complete: () => {
+        console.log('complete')
+        this.generateAudioLoading = false;
+      }
+    });
   }
 
   descriptButtonClicked() {

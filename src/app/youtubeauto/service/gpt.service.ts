@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { from, map, Observable, of, Subject } from 'rxjs';
-import { GptGeneratedMetaData, GptGeneratedScript as GptGeneratedScriptData } from '../../model/gpt/gptgeneratedvideo.model';
-import { GptVideoReqBody } from '../../model/gpt/gptvideoreqbody.model';
-import { GptResponse } from '../../model/gpt/gptresponse.model';
+import { GptGeneratedMetaData, GptGeneratedScript as GptGeneratedScriptData } from '../model/gpt/gptgeneratedvideo.model';
+import { GptVideoReqBody } from '../model/gpt/gptvideoreqbody.model';
+import { GptResponse } from '../model/gpt/gptresponse.model';
 import { catchError, concatMap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { ContentService } from '../content/content.service';
-import { GptObservers } from './gpt.observers';
-import { DurationSection } from '../../model/create/videoduration.model';
+import { ContentRepository } from '../repository/content.repo';
+import { GptRepository } from '../repository/gpt.repo';
+import { DurationSection } from '../model/create/videoduration.model';
 
 @Injectable({
   providedIn: 'root',
@@ -39,8 +39,8 @@ export class GptService {
   private gptGeneratedSummary: string = ''
 
   constructor(
-    private gptObservers: GptObservers,
-    private contentService: ContentService
+    private gptRepo: GptRepository,
+    private contentRepo: ContentRepository
   ) {}
 
   getErrorObserver(): Observable<string> { return this.errorSubject.asObservable() }
@@ -61,8 +61,8 @@ export class GptService {
 
   updateNewTopic() {
     console.log("🚀 ~ file: gpt.service.ts:63 ~ GptService ~ updateNewTopic ~ updateNewTopic:")
-    this.gptObservers.postNewTopicObservable().subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:65 ~ GptService ~ this.gptObservers.postNewTopicObservable ~ response:", response)
+    this.gptRepo.postNewTopicObservable().subscribe((response) => {
+      console.log("🚀 ~ file: gpt.service.ts:65 ~ GptService ~ this.gptRepo.postNewTopicObservable ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -79,9 +79,9 @@ export class GptService {
       return;
     }
 
-    this.gptObservers.postNewTitleObservable({
+    this.gptRepo.postNewTitleObservable({
       summary: this.gptGeneratedSummary,
-      style: this.contentService.getCurrentVideoStyle().name,
+      style: this.contentRepo.getCurrentVideoStyle().name,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:84 ~ GptService ~ updateNewTitle ~ response:", response)
       if (response.message !== 'success') {
@@ -98,7 +98,7 @@ export class GptService {
       this.errorSubject.next('Please enter a title');
       return;
     }
-    this.gptObservers.postOptimizedTitleObservable({
+    this.gptRepo.postOptimizedTitleObservable({
       current: title,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:104 ~ GptService ~ optimizeTitle ~ response:", response)
@@ -118,9 +118,9 @@ export class GptService {
       return;
     }
 
-    this.gptObservers.postNewDescriptionObservable({
+    this.gptRepo.postNewDescriptionObservable({
       summary: this.gptGeneratedSummary,
-      style: this.contentService.getCurrentVideoStyle().name,
+      style: this.contentRepo.getCurrentVideoStyle().name,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:125 ~ GptService ~ updateNewDescription ~ response:", response)
       if (response.message !== 'success') {
@@ -137,7 +137,7 @@ export class GptService {
       this.errorSubject.next('Please enter a description');
       return;
     }
-    this.gptObservers.postOptimizedDescriptionObservable({
+    this.gptRepo.postOptimizedDescriptionObservable({
       current: description,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:143 ~ GptService ~ optimizeDescription ~ response:", response)
@@ -157,9 +157,9 @@ export class GptService {
       return;
     }
 
-    this.gptObservers.postNewTagsObservable({
+    this.gptRepo.postNewTagsObservable({
       summary: this.gptGeneratedSummary,
-      style: this.contentService.getCurrentVideoStyle().name,
+      style: this.contentRepo.getCurrentVideoStyle().name,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:164 ~ GptService ~ updateNewTags ~ response:", response)
       if (response.message !== 'success') {
@@ -176,7 +176,7 @@ export class GptService {
       this.errorSubject.next('Please enter a description');
       return;
     }
-    this.gptObservers.postOptimizedTagsObservable({
+    this.gptRepo.postOptimizedTagsObservable({
       current: tags,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:182 ~ GptService ~ optimizeTags ~ response:", response)
@@ -191,9 +191,9 @@ export class GptService {
   generateVideoContentWithAI() {
     console.log("🚀 ~ file: gpt.service.ts:192 ~ GptService ~ generateVideoContentWithAI ~ generateVideoContentWithAI:")
     if (
-      this.contentService.getCurrentTopic() === undefined
-      || this.contentService.getCurrentVideoStyle() === undefined
-      || this.contentService.getCurrentVideoDuration() === undefined
+      this.contentRepo.getCurrentTopic() === undefined
+      || this.contentRepo.getCurrentVideoStyle() === undefined
+      || this.contentRepo.getCurrentVideoDuration() === undefined
     ) { throw new Error('Sources video is undefined'); }
 
     let compeleteMetaData: GptGeneratedMetaData = {
@@ -204,8 +204,8 @@ export class GptService {
       tags: [],
     };
 
-    this.gptObservers.getSummaryObservable({
-      prompt: this.contentService.getCurrentTopic()
+    this.gptRepo.getSummaryObservable({
+      prompt: this.contentRepo.getCurrentTopic()
     }).subscribe((response) => {
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
@@ -218,9 +218,9 @@ export class GptService {
         this.gptGeneratedSummary = requestSummary;
         this.contentProgressSubject.next(25);
         
-        this.gptObservers.postNewTitleObservable({
+        this.gptRepo.postNewTitleObservable({
           summary: requestSummary,
-          style: this.contentService.getCurrentVideoStyle().name
+          style: this.contentRepo.getCurrentVideoStyle().name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -232,9 +232,9 @@ export class GptService {
           }
         });
 
-        this.gptObservers.postNewDescriptionObservable({
+        this.gptRepo.postNewDescriptionObservable({
           summary: requestSummary,
-          style: this.contentService.getCurrentVideoStyle().name
+          style: this.contentRepo.getCurrentVideoStyle().name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -246,9 +246,9 @@ export class GptService {
           }
         });
 
-        this.gptObservers.postNewTagsObservable({
+        this.gptRepo.postNewTagsObservable({
           summary: requestSummary,
-          style: this.contentService.getCurrentVideoStyle().name
+          style: this.contentRepo.getCurrentVideoStyle().name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -280,8 +280,8 @@ export class GptService {
       this.completeDetailsSubject.next({ meta: completedMetaData});
       console.log("🚀 ~ file: gpt.service.ts:266 ~ GptService ~ completedMetaData:", completedMetaData)
       
-      this.contentService.getCurrentVideoDuration().sections.forEach((section) => {
-        console.log("💵 ~ file: gpt.service.ts:271 ~ GptService ~ this.contentService.getCurrentVideoDuration ~ section:", section)
+      this.contentRepo.getCurrentVideoDuration().sections.forEach((section) => {
+        console.log("💵 ~ file: gpt.service.ts:271 ~ GptService ~ this.contentRepo.getCurrentVideoDuration ~ section:", section)
         this.getNewScriptSection(section);
       });
     }
@@ -300,9 +300,9 @@ export class GptService {
       concatMap((sectionPoint) => {
         console.log("💵 ~ file: gpt.service.ts:284 ~ GptService ~ concatMap ~ sectionPoint:", sectionPoint)
         
-        return this.gptObservers.postNewScriptSectionObservable({
+        return this.gptRepo.postNewScriptSectionObservable({
           summary: this.gptGeneratedSummary,
-          style: this.contentService.getCurrentVideoStyle().name,
+          style: this.contentRepo.getCurrentVideoStyle().name,
           point: sectionPoint,
         });
       })
@@ -317,13 +317,13 @@ export class GptService {
 
       //here we are managing the loading state of the view and the final nav point
       const progressItem = {
-        increment: 100 / this.contentService.getTotalNumberOfPoints(),
+        increment: 100 / this.contentRepo.getTotalNumberOfPoints(),
         label: this.generateLoadingMessage(),
       }
       this.scriptProgressSubject.next(progressItem);
 
       if (pointsCount === section.points.length) { 
-        this.contentService.updateScriptMap(section.controlName, compiledPoints.trim()); 
+        this.contentRepo.updateScriptMap(section.controlName, compiledPoints.trim()); 
         // emit just the view value of the section
         this.scriptSectionSubject.next({
           sectionControl: section.controlName,
@@ -344,7 +344,7 @@ export class GptService {
 
   //   from(currentSection.split('\n\n')).pipe(
   //     concatMap((section) => {
-  //       return this.gptObservers.postOptimizeScriptSectionObservable({
+  //       return this.gptRepo.postOptimizeScriptSectionObservable({
   //         current: section
   //       });
   //     })
