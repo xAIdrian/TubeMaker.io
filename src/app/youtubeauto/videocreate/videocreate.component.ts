@@ -64,14 +64,15 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.setupObservers();
+    this.setupForms()
+  }
 
-    this.contentRepo.getInitVideoNiche().subscribe((response) => {
-      this.selectedVideoNiche = response;
-    });
-    this.contentRepo.getInitVideoDuration().subscribe((response) => {
-      this.selectedVideoDuration = response;
-    });
+  ngAfterContentInit(): void {
+    // this.contentRepo.getDurationOptionsObserver();
+    this.changeDetectorRef.detectChanges();
+  }
 
+  private setupForms() {
     this.topicFormGroup = this._formBuilder.group({
       topic: ['', Validators.required],
     });
@@ -89,12 +90,13 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     });
   }
 
-  ngAfterContentInit(): void {
-    // this.contentRepo.getDurationOptionsObserver();
-    this.changeDetectorRef.detectChanges();
-  }
-
-  setupObservers() {
+  private setupObservers() {
+    this.contentRepo.getInitVideoNiche().subscribe((response) => {
+      this.selectedVideoNiche = response;
+    });
+    this.contentRepo.getInitVideoDuration().subscribe((response) => {
+      this.selectedVideoDuration = response;
+    });
     this.gptService.getTopicObserver().subscribe((response) => {
       this.topicLoading = false;
       this.topicFormGroup.setValue({
@@ -107,16 +109,6 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.contentRepo.getDurationOptionsObserver().subscribe((response) => {
       this.videoDurations = response;
     });
-  }
-
-  // Helper method to get links FormArray
-  get links(): FormArray {
-    return this.moneyFormGroup.get('links') as FormArray;
-  }
-
-  // Method to add a new input to links FormArray
-  addLink() {
-    this.links.push(this._formBuilder.control(''));
   }
 
   reRollTopic() { 

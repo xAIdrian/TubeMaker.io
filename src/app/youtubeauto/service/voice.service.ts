@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { VoiceRepository } from '../repository/voice.repo';
-import { FirebaseRepository } from '../repository/firebase.repo';
+import { FirebaseStorageRepository } from '../repository/firebase/firestorage.repo';
 import {
   Observable,
   throwError,
@@ -20,7 +20,7 @@ export class VoiceService {
   private textToSpeechObserverSubject = new Subject<string>();
 
   constructor(
-    private firebaseRepository: FirebaseRepository,
+    private firebaseRepository: FirebaseStorageRepository,
     private voiceRepository: VoiceRepository
   ) {}
 

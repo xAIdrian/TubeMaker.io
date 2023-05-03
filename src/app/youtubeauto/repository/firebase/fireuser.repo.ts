@@ -20,7 +20,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class FireAuthService { 
+export class FirebaseUserRepository { 
 
   private app = initializeApp(environment.firebaseConfig);
   private firebaseAuth = getAuth();
