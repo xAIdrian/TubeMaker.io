@@ -35,17 +35,17 @@ import {
 } from '@coreui/angular';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IconModule } from '@coreui/icons-angular';
-import { YoutubeAutoRoutingModule } from './youtubeauto-routing.module';
-import { VideoListComponent } from './videolist/videolist.component';
+import { LegionRoutingModule } from './legion-routing.module';
+import { VideoListComponent } from './views/youtubeauto/videolist/videolist.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
-import { VideoCreateComponent } from './videocreate/videocreate.component';
-import { VideoDetailsComponent } from './videoresult/videodetails/videodetails.component';
-import { VideoUploadComponent } from './videoupload/videoupload.component';
+import { VideoCreateComponent } from './views/youtubeauto/videocreate/videocreate.component';
+import { VideoDetailsComponent } from './views/youtubeauto/videoresult/videodetails/videodetails.component';
+import { VideoUploadComponent } from './views/youtubeauto/videoupload/videoupload.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './repository/cors.interceptor';
-import { VideoScriptComponent } from './videoresult/videoscript/videoscript.component';
-import { VideoMediaComponent } from './videoresult/videomedia/videomedia.component';
-import { AudioDropdownComponent } from './videoresult/videomedia/audiodropdown/audiodropdown.component';
+import { VideoScriptComponent } from './views/youtubeauto/videoresult/videoscript/videoscript.component';
+import { VideoMediaComponent } from './views/youtubeauto/videoresult/videomedia/videomedia.component';
+import { AudioDropdownComponent } from './views/youtubeauto/videoresult/videomedia/audiodropdown/audiodropdown.component';
 
 @NgModule({
     providers: [{
@@ -90,7 +90,7 @@ import { AudioDropdownComponent } from './videoresult/videomedia/audiodropdown/a
         TabsModule,
         TooltipModule,
         UtilitiesModule,
-        YoutubeAutoRoutingModule,
+        LegionRoutingModule,
         DocsComponentsModule,
         MatInputModule,
         MatButtonModule,
@@ -101,4 +101,4 @@ import { AudioDropdownComponent } from './videoresult/videomedia/audiodropdown/a
         TranslateModule
     ]
 })
-export class YoutubeAutoModule {/* */}
+export class LegionModule {/* */}

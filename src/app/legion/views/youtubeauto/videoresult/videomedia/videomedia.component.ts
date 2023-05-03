@@ -9,12 +9,12 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ContentRepository } from '../../repository/content.repo';
+import { AutoContentRepository } from '../../../../model/youtubeauto/autocontent.repo';
 import { FormGroup } from '@angular/forms';
-import { VoiceService } from '../../service/voice.service';
+import { VoiceService } from '../../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 import * as saveAs from 'file-saver';
-import { NavigationService } from '../../service/navigation.service';
+import { NavigationService } from '../../../../service/navigation.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -49,7 +49,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   selectedMediaOption = 'Video';
 
   constructor(
-    private contentRepo: ContentRepository,
+    private contentRepo: AutoContentRepository,
     private voiceService: VoiceService,
     private navigationService: NavigationService,
     private translate: TranslateService,

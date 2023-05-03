@@ -7,8 +7,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { VoiceService } from '../../service/voice.service';
-import { NavigationService } from '../../service/navigation.service';
+import { VoiceService } from '../../../../service/voice.service';
+import { NavigationService } from '../../../../service/navigation.service';
 import {
   FormBuilder,
   FormControl,
@@ -17,10 +17,10 @@ import {
 } from '@angular/forms';
 import { saveAs } from 'file-saver';
 
-import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
-import { GptService } from '../../service/gpt.service';
-import { ContentRepository } from '../../repository/content.repo';
-import { VideoDuration } from '../../model/create/videoduration.model';
+import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
+import { GptService } from '../../../../service/gpt.service';
+import { AutoContentRepository } from '../../../../model/youtubeauto/autocontent.repo';
+import { VideoDuration } from '../../../../model/youtubeauto/create/videoduration.model';
 
 @Component({
   selector: 'video-result',
@@ -67,7 +67,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   constructor(
     private gptService: GptService,
-    private contentRepo: ContentRepository,
+    private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,

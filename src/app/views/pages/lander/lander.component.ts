@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/youtubeauto/service/shared/auth.service';
+import { AuthService } from 'src/app/legion/service/auth/auth.service';
 
 @Component({
   selector: 'app-login',

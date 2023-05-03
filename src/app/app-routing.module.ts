@@ -67,9 +67,9 @@ const routes: Routes = [
           import('./views/widgets/widgets.module').then((m) => m.WidgetsModule)
       },
       {
-        path: 'youtubeauto',
+        path: 'legion',
         loadChildren: () =>
-          import('./youtubeauto/youtubeauto.module').then((m) => m.YoutubeAutoModule)
+          import('./legion/legion.module').then((m) => m.LegionModule)
       },
       {
         path: 'pages',

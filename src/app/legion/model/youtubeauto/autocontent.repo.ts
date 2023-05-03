@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Media } from '../model/media/media.model';
-import { ListVideo } from '../model/media/video/listvideo.model';
+import { Media } from '../media/media.model';
+import { ListVideo } from '../media/video/listvideo.model';
 import {
   getDefaultVideoNiches,
   VideoNiche,
-} from '../model/create/videoniche.model';
+} from './create/videoniche.model';
 import {
   getDefaultVideoDurations,
   VideoDuration,
-} from '../model/create/videoduration.model';
+} from './create/videoduration.model';
 import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContentRepository {
+export class AutoContentRepository {
   
   mediaSubjectObserver = new Subject<Media>();
 

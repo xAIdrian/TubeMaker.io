@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { GptService } from '../service/gpt.service';
+import { GptService } from '../../../service/gpt.service';
 import {
   FormBuilder,
   FormGroup,
@@ -13,10 +13,10 @@ import {
   FormControl,
   FormArray,
 } from '@angular/forms';
-import { NavigationService } from '../service/navigation.service';
-import { ContentRepository } from '../repository/content.repo';
-import { VideoNiche as VideoNiche } from '../model/create/videoniche.model';
-import { VideoDuration } from '../model/create/videoduration.model';
+import { NavigationService } from '../../../service/navigation.service';
+import { AutoContentRepository } from '../../../model/youtubeauto/autocontent.repo';
+import { VideoNiche as VideoNiche } from '../../../model/youtubeauto/create/videoniche.model';
+import { VideoDuration } from '../../../model/youtubeauto/create/videoduration.model';
 
 @Component({
   selector: 'video-create',
@@ -56,7 +56,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   constructor(
     private gptService: GptService,
-    private contentRepo: ContentRepository,
+    private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -68,7 +68,6 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    // this.contentRepo.getDurationOptionsObserver();
     this.changeDetectorRef.detectChanges();
   }
 

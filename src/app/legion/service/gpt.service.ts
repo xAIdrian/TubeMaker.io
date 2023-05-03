@@ -6,9 +6,9 @@ import { GptVideoReqBody } from '../model/gpt/gptvideoreqbody.model';
 import { GptResponse } from '../model/gpt/gptresponse.model';
 import { catchError, concatMap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { ContentRepository } from '../repository/content.repo';
+import { AutoContentRepository } from '../model/youtubeauto/autocontent.repo';
 import { GptRepository } from '../repository/gpt.repo';
-import { DurationSection } from '../model/create/videoduration.model';
+import { DurationSection } from '../model/youtubeauto/create/videoduration.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,7 +40,7 @@ export class GptService {
 
   constructor(
     private gptRepo: GptRepository,
-    private contentRepo: ContentRepository
+    private contentRepo: AutoContentRepository
   ) {}
 
   getErrorObserver(): Observable<string> { return this.errorSubject.asObservable() }

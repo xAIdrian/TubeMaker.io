@@ -2,8 +2,8 @@ import { INavData } from '@coreui/angular';
 
 export const navItems: INavData[] = [
   {
-    name: 'Dashboard',
-    url: '/dashboard',
+    name: 'Copy Cat',
+    url: '/legion/youtubeextract',
     iconComponent: { name: 'cil-speedometer' },
     badge: {
       color: 'info',
@@ -11,17 +11,9 @@ export const navItems: INavData[] = [
     }
   },
   {
-    name: 'Create',
-    title: true
-  },
-  {
-    name: 'Youtube Video',
-    url: '/youtubeauto',
-    iconComponent: { name: 'cil-media-play' },
-    badge: {
-      color: 'info',
-      text: 'NEW'
-    }
+    name: 'Create Video',
+    url: '/legion/youtubeauto',
+    iconComponent: { name: 'cil-media-play' }
   },
   // {
   //   name: 'Forms',
