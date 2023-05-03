@@ -19,23 +19,6 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root',
 })
 export class FirebaseRepository {
-  // getVideos(): Observable<ListVideo[]> {
-  //   return this.firebaseService.getVideos().subscribe((data: ListVideo[]) => {
-  //     this.exampleVideos = data;
-  //   }).then(() => {
-  //     return of(this.exampleVideos);
-  //   }
-  // }
-
-  // Initialize Firebase
-  // private app = initializeApp(environment.firebaseConfig);
-  // private analytics = getAnalytics(this.app);
-  // // Get a reference to the storage service, which is used to create references in your storage bucket
-  // private storageService = getStorage(this.app);
-  // // Create a storage reference from our storage service
-  // private rootRef = ref(this.storageService);
-  // // Create a child reference
-  // private voiceSamplesRef = ref(this.storageService, 'voice_samples');
 
   constructor(
     private translate: TranslateService,
@@ -43,7 +26,8 @@ export class FirebaseRepository {
   ) {}
 
   getSampleVoices(): Observable<{ name: string, sampleUrl: string }[]> {
-    let voicesSampleRef = this.storage.ref('voice_samples');
+    const language = this.translate.currentLang;
+    let voicesSampleRef = this.storage.ref('voice_samples').child(language);
     return from(voicesSampleRef.listAll()).pipe(
       map(list => {
         const urlMap: { name: string, sampleUrl: string }[] = [];

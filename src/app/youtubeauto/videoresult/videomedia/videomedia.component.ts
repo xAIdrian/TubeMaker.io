@@ -15,6 +15,7 @@ import { VoiceService } from '../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 import * as saveAs from 'file-saver';
 import { NavigationService } from '../../service/navigation.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'video-media',
@@ -51,6 +52,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
     private contentRepo: ContentRepository,
     private voiceService: VoiceService,
     private navigationService: NavigationService,
+    private translate: TranslateService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
@@ -62,6 +64,9 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
     this.voiceService.getVoiceSamplesObserver().subscribe((response) => {
       this.audioDropdown.populateList(response);
       this.changeDetectorRef.detectChanges();
+    });
+    this.translate.onLangChange.subscribe(() => {
+      this.voiceService.getVoices();
     });
   }
 

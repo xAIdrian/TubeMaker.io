@@ -21,8 +21,6 @@ import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../../service/gpt.service';
 import { ContentRepository } from '../../repository/content.repo';
 import { VideoDuration } from '../../model/create/videoduration.model';
-import { VideoScriptComponent } from '../videoscript/videoscript.component';
-import { VideoMediaComponent } from '../videomedia/videomedia.component';
 
 @Component({
   selector: 'video-result',
