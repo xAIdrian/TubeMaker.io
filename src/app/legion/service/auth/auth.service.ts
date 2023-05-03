@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,10 @@ export class AuthService {
       };
 
     constructor( ) { /** */ }
+
+    isAuthenticated(): Observable<boolean> {
+      return of(true);
+    }
 
     sendSignInLinkToEmail(email: string) {
 

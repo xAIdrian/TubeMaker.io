@@ -1,25 +1,23 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
 
 import { DefaultComponent } from './containers';
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LanderComponent } from './views/pages/lander/lander.component';
 import { RegisterComponent } from './views/pages/register/register.component';
+import { authGuard } from './legion/service/auth/auth.guard';
 
 const routes: Routes = [
-  // { path: 'protected', component: ProtectedComponent, canActivate: [AuthGuard] },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'legion',
     pathMatch: 'full'
   },
   {
     path: '',
     component: DefaultComponent,
-    data: {
-      title: 'Home'
-    },
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
@@ -106,7 +104,9 @@ const routes: Routes = [
       title: 'Register Page'
     }
   },
-  {path: '**', redirectTo: 'dashboard'}
+  {
+    path: '**', redirectTo: 'dashboard'
+  }
 ];
 
 @NgModule({
@@ -115,7 +115,6 @@ const routes: Routes = [
       scrollPositionRestoration: 'top',
       anchorScrolling: 'enabled',
       initialNavigation: 'enabledBlocking'
-      // relativeLinkResolution: 'legacy'
     })
   ],
   exports: [RouterModule]

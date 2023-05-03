@@ -8,6 +8,11 @@ import { VideoExtractorComponent } from "./views/youtubeextract/videoextractor/v
 
 const routes: Routes = [
     {
+        path: "",
+        redirectTo: "youtubeextract",
+        pathMatch: "prefix"
+    },
+    {
         path: "youtubeextract",
         component: VideoExtractorComponent,
         data: {
