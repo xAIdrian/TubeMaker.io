@@ -45,8 +45,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
     console.log("🚀 ~ file: default.component.ts:37 ~ DefaultComponent ~ updateNavItems ~ translate:", translate)
     this.navItems = [
       {
-        name: translate.instant('navigation.dashboard'),
-        url: '/dashboard',
+        name: translate.instant('navigation.create'),
+        title: true
+      },
+      {
+        name: translate.instant('navigation.copy_cat'),
+        url: '/legion/youtubeextract',
         iconComponent: { name: 'cil-speedometer' },
         badge: {
           color: 'info',
@@ -54,17 +58,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
         }
       },
       {
-        name: translate.instant('navigation.createa'),
-        title: true
-      },
-      {
-        name: translate.instant('navigation.youtube_video'),
-        url: '/youtubeauto',
-        iconComponent: { name: 'cil-media-play' },
-        badge: {
-          color: 'info',
-          text: translate.instant('navigation.new')
-        }
+        name: translate.instant('navigation.brand_new'),
+        url: '/legion/youtubeauto',
+        iconComponent: { name: 'cil-media-play' }
       },
       {
         title: true,

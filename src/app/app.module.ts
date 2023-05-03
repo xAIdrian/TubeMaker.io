@@ -60,7 +60,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
   signInOptions: [
     {
-      requireDisplayName: false,
+      requireDisplayName: true,
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
     }
   ],
