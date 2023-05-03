@@ -29,13 +29,13 @@ import { VideoDuration } from '../../../../model/youtubeauto/create/videoduratio
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
+
+  //debug variable to be removed
+  isInDebugMode: boolean = false;
+  ////////////////////////////
   
   scriptFormGroup: FormGroup;
   currentVideoDuration: VideoDuration;
-
-  //debug variable to be removed
-  isInDebugMode: boolean = true;
-  ////////////////////////////
 
   contentProgressValue: number = 0;
   contentProgressLabel: string = 'Please wait...';

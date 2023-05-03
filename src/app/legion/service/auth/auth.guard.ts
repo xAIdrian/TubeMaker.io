@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, createUrlTreeFromSnapshot } from '@angular/router';
-import { AuthService } from './auth.service';
+import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
 import { map } from 'rxjs';
 
 export const authGuard = (next: ActivatedRouteSnapshot) => {
-  return inject(AuthService)
+  return inject(FireAuthRepository)
     .isAuthenticated()
     .pipe(
       map((isAuthenticated) => {

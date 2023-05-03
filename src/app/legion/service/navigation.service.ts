@@ -6,21 +6,27 @@ import { Router } from '@angular/router';
 })
 export class NavigationService {
   
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+
+  }
 
   navigateToResults() {
-    this.router.navigate(['/youtubeauto/details']);
+    this.router.navigate(['legion/details']);
   }
 
   navigateToCreateVideo() {
-    this.router.navigate(['youtubeauto/create']);
+    this.router.navigate(['legion/create']);
   }
 
   navigateToUploadVideo() {
-    this.router.navigate(['youtubeauto/upload']);
+    this.router.navigate(['legion/upload']);
   }
 
   navigateToLander() {
     this.router.navigate(['lander']);
+  }
+
+  navigateToCopyCat() {
+    this.router.navigate(['youtubeextract/copycat']);
   }
 }
