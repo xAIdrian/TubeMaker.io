@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { AutoContentRepository } from '../../../../model/youtubeauto/autocontent.repo';
+import { ContentRepository } from '../../../../model/content.repo';
 import { FormGroup } from '@angular/forms';
 import { VoiceService } from '../../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
@@ -49,7 +49,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   selectedMediaOption = 'Video';
 
   constructor(
-    private contentRepo: AutoContentRepository,
+    private contentRepo: ContentRepository,
     private voiceService: VoiceService,
     private navigationService: NavigationService,
     private translate: TranslateService,

@@ -19,8 +19,8 @@ import { saveAs } from 'file-saver';
 
 import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../../../../service/gpt.service';
-import { AutoContentRepository } from '../../../../model/youtubeauto/autocontent.repo';
-import { VideoDuration } from '../../../../model/youtubeauto/create/videoduration.model';
+import { ContentRepository } from '../../../../model/content.repo';
+import { VideoDuration } from '../../../../model/videoduration.model';
 
 @Component({
   selector: 'video-result',
@@ -67,7 +67,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   constructor(
     private gptService: GptService,
-    private contentRepo: AutoContentRepository,
+    private contentRepo: ContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,

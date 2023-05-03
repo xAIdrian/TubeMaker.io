@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { from, map, Observable, of, Subject } from 'rxjs';
-import { GptGeneratedMetaData, GptGeneratedScript as GptGeneratedScriptData } from '../model/gpt/gptgeneratedvideo.model';
-import { GptVideoReqBody } from '../model/gpt/gptvideoreqbody.model';
-import { GptResponse } from '../model/gpt/gptresponse.model';
-import { catchError, concatMap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { AutoContentRepository } from '../model/youtubeauto/autocontent.repo';
+import { from, Observable, Subject, concatMap } from 'rxjs';
+import { GptGeneratedMetaData } from '../model/gpt/gptgeneratedvideo.model';
+
+import { ContentRepository } from '../model/content.repo';
 import { GptRepository } from '../repository/gpt.repo';
-import { DurationSection } from '../model/youtubeauto/create/videoduration.model';
+import { DurationSection } from '../model/videoduration.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,7 +36,7 @@ export class GptService {
 
   constructor(
     private gptRepo: GptRepository,
-    private contentRepo: AutoContentRepository
+    private contentRepo: ContentRepository
   ) {}
 
   getErrorObserver(): Observable<string> { return this.errorSubject.asObservable() }
@@ -287,7 +283,7 @@ export class GptService {
     }
   }
 
-  getNewScriptSection(section: DurationSection, updateProgress = true) {
+  getNewScriptSection(section: DurationSection) {
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');

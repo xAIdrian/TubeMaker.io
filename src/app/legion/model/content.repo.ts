@@ -1,25 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Media } from '../media/media.model';
-import { ListVideo } from '../media/video/listvideo.model';
 import {
   getDefaultVideoNiches,
   VideoNiche,
-} from './create/videoniche.model';
+} from './videoniche.model';
 import {
   getDefaultVideoDurations,
   VideoDuration,
-} from './create/videoduration.model';
+} from './videoduration.model';
 import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AutoContentRepository {
+export class ContentRepository {
   
-  mediaSubjectObserver = new Subject<Media>();
-
   private currentTopic: string;
   private currentStyle: VideoNiche;
   private currentDuration: VideoDuration = {
@@ -140,10 +135,6 @@ export class AutoContentRepository {
         return of(getDefaultVideoDurations(this.translate));
       })
     )
-  }
-
-  getMediaObserver(): Observable<Media> {
-    return this.mediaSubjectObserver.asObservable();
   }
 
   getCurrentVideoDuration(): VideoDuration {

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { AutoContentRepository } from '../../../model/youtubeauto/autocontent.repo';
-import { ListVideo } from '../../../model/media/video/listvideo.model';
+import { ContentRepository } from '../../../model/content.repo';
+import { UserVideo } from '../../../model/video/uservideo.model';
 import { Router } from '@angular/router';
 import { NavigationService } from '../../../service/navigation.service';
 
@@ -12,11 +12,11 @@ import { NavigationService } from '../../../service/navigation.service';
 })
 export class VideoExtractorComponent implements OnInit, AfterContentInit {
 
-    videos: ListVideo[] = [];
+    videos: UserVideo[] = [];
     
     constructor(
         private router: Router,
-        private contentRepo: AutoContentRepository,
+        private contentRepo: ContentRepository,
         private navigationService: NavigationService,
         private changeDetectorRef: ChangeDetectorRef
     ) { }
