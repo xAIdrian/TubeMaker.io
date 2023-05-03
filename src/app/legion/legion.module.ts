@@ -46,6 +46,7 @@ import { CorsInterceptor } from './repository/cors.interceptor';
 import { VideoScriptComponent } from './views/youtubeauto/videoresult/videoscript/videoscript.component';
 import { VideoMediaComponent } from './views/youtubeauto/videoresult/videomedia/videomedia.component';
 import { AudioDropdownComponent } from './views/youtubeauto/videoresult/videomedia/audiodropdown/audiodropdown.component';
+import { VideoExtractorComponent } from './views/youtubeextract/videoextractor/videoextractor.component'
 
 @NgModule({
     providers: [{
@@ -60,7 +61,8 @@ import { AudioDropdownComponent } from './views/youtubeauto/videoresult/videomed
         VideoUploadComponent,
         VideoScriptComponent,
         VideoMediaComponent,
-        AudioDropdownComponent
+        AudioDropdownComponent,
+        VideoExtractorComponent
     ],
     imports: [
         MatStepperModule,
