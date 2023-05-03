@@ -9,9 +9,7 @@ import { GptService } from '../../../service/gpt.service';
 import {
   FormBuilder,
   FormGroup,
-  Validators,
-  FormControl,
-  FormArray,
+  Validators
 } from '@angular/forms';
 import { NavigationService } from '../../../service/navigation.service';
 import { ContentRepository } from '../../../model/content.repo';
@@ -33,7 +31,6 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   topicFormGroup: FormGroup;
   styleFormGroup: FormGroup;
   durationFormGroup: FormGroup;
-  moneyFormGroup: FormGroup;
 
   videoNiches: VideoNiche[] = [];
   selectedVideoNiche: VideoNiche = {
@@ -81,12 +78,6 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.durationFormGroup = this._formBuilder.group({
       selectedDuration: ['', Validators.required],
     });
-    this.moneyFormGroup = this._formBuilder.group({
-      selectedMonetization: [''],
-      productName: [''],
-      productDescription: [''],
-      links: this._formBuilder.array([]) // Add FormArray to the FormGroup
-    });
   }
 
   private setupObservers() {
@@ -102,10 +93,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
         topic: response.replace('"', '').trim()
       })
     });
-    this.contentRepo.getVideoOptionsObserver().subscribe((response) => {
+    this.contentRepo.getDefaultVideoNicheObserver().subscribe((response) => {
       this.videoNiches = response;
     });
-    this.contentRepo.getDurationOptionsObserver().subscribe((response) => {
+    this.contentRepo.getDefaultVideoDurationsObserver().subscribe((response) => {
       this.videoDurations = response;
     });
   }

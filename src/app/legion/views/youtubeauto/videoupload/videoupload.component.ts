@@ -41,7 +41,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     // @ts-ignore
     window.onGoogleLibraryLoad = () => {
       console.log("🚀 ~ file: videoupload.component.ts:50 ~ VideoUploadComponent ~ ngOnInit ~ onGoogleLibraryLoad:")
-      this.youtubeService.initTokenClient();
+      // this.youtubeService.initTokenClient();
     };
     this.setupObservers();
   }
@@ -59,12 +59,12 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     this.youtubeService.getTokenSuccessObserver().subscribe((success) => {
       console.log("🚀 ~ file: videoupload.component.ts:123 ~ VideoUploadComponent ~ this.youtubeService.getTokenSuccessObserver ~ token", success)
       if (success) {
-        this.youtubeService.getChannels().subscribe((channels) => {
-            console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
-            let channelId = channels.items[0].id
-            let url = `https://studio.youtube.com/channel/${channelId}/videos/upload?d=ud`
-            window.open(url, '_blank');
-        });
+        // this.youtubeService.getChannels().subscribe((channels) => {
+        //     console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
+        //     let channelId = channels.items[0].id
+        //     let url = `https://studio.youtube.com/channel/${channelId}/videos/upload?d=ud`
+        //     window.open(url, '_blank');
+        // });
       }
     });
   }

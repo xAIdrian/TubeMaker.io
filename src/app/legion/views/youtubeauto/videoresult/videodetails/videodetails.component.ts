@@ -5,17 +5,13 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
-  ViewChild,
 } from '@angular/core';
-import { VoiceService } from '../../../../service/voice.service';
 import { NavigationService } from '../../../../service/navigation.service';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { saveAs } from 'file-saver';
 
 import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../../../../service/gpt.service';
@@ -31,7 +27,7 @@ import { VideoDuration } from '../../../../model/videoduration.model';
 export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
 
   //debug variable to be removed
-  isInDebugMode: boolean = false;
+  isInDebugMode: boolean = true;
   ////////////////////////////
   
   scriptFormGroup: FormGroup;

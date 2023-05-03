@@ -38,7 +38,6 @@ export class VoiceService {
 
   getVoices() {
     this.firebaseRepository.getSampleVoices().subscribe((samples: { name: string, sampleUrl: string }[]) => {
-      console.log("🚀 ~ file: voice.service.ts:41 ~ VoiceService ~ map ~ urlMap:", samples)
       this.voiceObserverSubject.next(samples);
     });
   }
@@ -54,8 +53,6 @@ export class VoiceService {
   generateTextToSpeech(name: string, scriptValue: string): Observable<Blob> {
     return this.voiceRepository.getListOfVoices().pipe(
       map((response: { message: string, result: { name: string, id: string }[]}) => {
-        console.log("🚀 ~ file: voice.service.ts:54 ~ VoiceService ~ this.voiceRepository.getListOfVoices ~ voices:", response)
-
         if (response.message !== 'success') {
           this.erroSubject.next('Error getting voices');
           return

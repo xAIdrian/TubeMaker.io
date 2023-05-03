@@ -4,7 +4,7 @@ import { VideoListComponent } from "./views/youtubeauto/videolist/videolist.comp
 import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreate.component";
 import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails/videodetails.component";
 import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
-import { VideoExtractorComponent } from "./views/youtubeextract/videoextractor/videoextractor.component";
+import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
 
 const routes: Routes = [
     {
@@ -14,7 +14,7 @@ const routes: Routes = [
     },
     {
         path: "youtubeextract",
-        component: VideoExtractorComponent,
+        component: VideoCopyComponent,
         data: {
             title: "Copy Cat"
         }

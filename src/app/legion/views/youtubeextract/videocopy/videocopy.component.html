@@ -1,0 +1,34 @@
+<c-card class="mb-4">
+    <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
+      <strong>Pick a Niche To Find Videos To Copy</strong>
+    </div>
+
+    <c-card-body  style="min-height: 80vh">
+            <form [formGroup]="nicheFormGroup">
+              <div class="row">
+                <div class="col-4">
+                  <mat-button-toggle-group formControlName="selectedNiche">
+                    <mat-button-toggle *ngFor="let videoOption of videoNiches" [value]="selectedVideoNiche"
+                      (click)="onVideoOptionSelected(videoOption)">{{ videoOption.name }}</mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+                <div class="col-8">
+                  <div class="video_list" cListGroup *ngFor="let video of searchVideos">
+                    <div cListGroupItem>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="title-published">
+                          <p class="mb-1">{{ video.title }}</p>
+                        </div>
+                      </div>
+                      <div class="description">
+                        <small>{{ video.channelTitle }}</small>
+                        <small class="published">{{ 'video_list.published' | translate }}: {{ video.publishedAt }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+        </c-card-body>
+  </c-card>    
+  

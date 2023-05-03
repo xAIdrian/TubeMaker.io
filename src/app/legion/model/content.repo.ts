@@ -121,7 +121,7 @@ export class ContentRepository {
     return this.scriptTotalNumberOfPoints;
   }
 
-  getVideoOptionsObserver(): Observable<VideoNiche[]> {
+  getDefaultVideoNicheObserver(): Observable<VideoNiche[]> {
     return this.translate.getTranslation(this.translate.currentLang).pipe(
       concatMap((res) => {
         return of(getDefaultVideoNiches(this.translate));
@@ -129,7 +129,7 @@ export class ContentRepository {
     )
   }
 
-  getDurationOptionsObserver(): Observable<VideoDuration[]> {
+  getDefaultVideoDurationsObserver(): Observable<VideoDuration[]> {
     return this.translate.getTranslation(this.translate.currentLang).pipe(
       concatMap((res) => {
         return of(getDefaultVideoDurations(this.translate));

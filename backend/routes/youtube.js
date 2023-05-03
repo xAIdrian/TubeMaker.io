@@ -1,23 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
+const { map } = require("rxjs/operators");
 const { YOUTUBE_DATA_V3_KEY } = require("../../appsecrets");
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 const SEARCH_URL = `${BASE_URL}/search`;
 
-router.post("/auth", async (req, res, next) => {
-  let body = req.body;
-
-  res.status(200).json({
-    message: "success",
-    result: { topic: "How to make money using faceless youtube channels." },
-  });
-});
-
 router.get("/videos", async (req, res) => {
-  const reqNiche = req.body.niche;
-  const reqPublishedAtfter = req.body.publishedAfter;
+  const reqNiche = req.query.niche;
+  const reqPublishedAtfter = req.query.publishedAfter;
 
   if (reqNiche === undefined || reqNiche === null || reqNiche === "") {
     res.status(400).json({ error: "Missing niche parameter" });
@@ -35,7 +27,7 @@ router.get("/videos", async (req, res) => {
       part: "snippet",
       maxResults: "25",
       order: "viewCount",
-      publishedAfter: "2023-04-25T00:00:00Z",
+      publishedAfter: reqPublishedAtfter,
       q: reqNiche,
       regionCode: "US",
       relevanceLanguage: "en",
@@ -48,26 +40,33 @@ router.get("/videos", async (req, res) => {
     const apiUrl = `${SEARCH_URL}?${queryParams.toString()}`;
 
     await fetch(apiUrl, params)
-      .then(res => {
+      .then((res) => {
+        console.log("🚀 ~ file: youtube.js:45 ~ .then ~ res:", res)
         if (res.ok) {
           return res.json();
         } else {
-          throw new Error('Error fetching videos');
+          throw new Error("Error fetching videos");
         }
-      }).pipe(
-        map((data) => {
-          return data.items.map((item) => ({
-            id: item.id.videoId,
-            title: item.snippet.title,
-            description: item.snippet.description,
-            thumbnail: item.snippet.thumbnails.medium.url,
-            publishedAt: item.snippet.publishedAt,
-          }));
-         })
-      ).then(data => {
+      })
+      .then((data) => {
+        return data.items.map((item) => ({
+          id: item.id.videoId,
+          title: item.snippet.title,
+          description: item.snippet.description,
+          thumbnail: item.snippet.thumbnails.high.url,
+          publishedAt: item.snippet.publishTime,
+          channelTitle: item.channelTitle,
+          // viewCount: item.statistics.viewCount,
+          // likeCount: item.statistics.likeCount,
+          // dislikeCount: item.statistics.dislikeCount,
+          // commentCount: item.statistics.commentCount,
+        }));
+      })
+      .then((data) => {
         // Map the data object here
-        res.status(200).json(mappedData);
-      }).catch(err => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
         console.error(err);
         // Handle errors here
         console.error(err);
