@@ -116,8 +116,20 @@ function fetchVideoDetails(videoId) {
 function mapVideoListToDetails(videoList) {
   console.log("🚀 ~ file: youtube.js:128 ~ updateVideoList ~ videoList:", videoList)
   const updateObservables = videoList.map((video) =>
-    fetchVideoDetails(video.id)
-  );
+    fetchVideoDetails(video.id).pipe(
+      map((data) => {
+        console.log("🚀 ~ file: youtube.js:131 ~ map ~ data:", data)
+        const videoDetails = data.items[0].statistics;
+        return {
+          ...video,
+          statistics: {
+            viewCount: videoDetails.viewCount,
+            likeCount: videoDetails.likeCount,
+            commentCount: videoDetails.commentCount,
+          },
+        };
+      })
+  ));
 
   return forkJoin(updateObservables);
 }
@@ -128,21 +140,19 @@ function mapVideoListToDetails(videoList) {
  */
 function fetchCompleteVideoData(niche, publishedAfter) {
   return fetchVideoList(niche, publishedAfter)
-  .pipe(
-    map((data) =>
-      data.items.map((item) => ({
-        id: item.id.videoId,
-        params: {
+    .pipe(
+      map((data) =>
+        data.items.map((item) => ({
+          id: item.id.videoId,
           title: item.snippet.title,
           description: item.snippet.description,
-          thumbnail: item.snippet.thumbnails.high.url,
+          thumbnailUrl: item.snippet.thumbnails.high.url,
           publishedAt: item.snippet.publishTime,
-          channelTitle: item.channelTitle,
-        },
-      }))
-    ),
-    mergeMap((videoList) => mapVideoListToDetails(videoList))
-  )
+          channelTitle: item.snippet.channelTitle,
+        }))
+      ),
+      mergeMap((videoList) => mapVideoListToDetails(videoList))
+    )
 }
 
 module.exports = router;

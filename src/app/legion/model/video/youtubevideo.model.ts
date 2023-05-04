@@ -2,14 +2,16 @@ export interface YoutubeVideo {
     id: string;
     title: string;
     description: string;
-    thumbnail: string;
+    thumbnailUrl: string;
     publishedAt: string;
     channelTitle: string;
-    viewCount: string;
-    likeCount: string;
-    dislikeCount: string;
-    favoriteCount: string;
-    commentCount: string;
+    statistics: {
+        viewCount: string;
+        likeCount: string;
+        commentCount: string;
+        dislikeCount?: string;
+        favoriteCount?: string;
+    };
     channelId?: string;
     duration?: string;
     tags?: string[];

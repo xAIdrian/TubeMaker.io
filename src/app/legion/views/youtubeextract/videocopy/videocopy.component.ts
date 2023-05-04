@@ -1,12 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ContentRepository } from '../../../model/content.repo';
-import { UserVideo } from '../../../model/video/uservideo.model';
-import { Router } from '@angular/router';
-import { NavigationService } from '../../../service/navigation.service';
-import { VideoNiche } from 'src/app/legion/model/videoniche.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { YoutubeService } from 'src/app/legion/service/youtube.service';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
+import { VideoNiche } from 'src/app/legion/model/videoniche.model';
 
 @Component({
     selector: 'video-copy',
@@ -56,8 +53,12 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         });
         this.youtubeService.getYoutubeVideosObserver().subscribe({
             next: (videos: YoutubeVideo[]) => {
+                console.log(videos);
                 this.isLoading = false;
                 this.searchVideos = videos;
+            },
+            complete: () => {
+                this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
             }
         });
@@ -71,6 +72,13 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
 
     onVideoOptionSelected(niche: VideoNiche) {
         this.selectedVideoNiche = niche;
+        this.isLoading = true;
         this.youtubeService.searchYoutubeVideos(niche.name);
+    }
+
+    onCopyCatClick(video: YoutubeVideo) {
+        console.log("🚀 ~ file: videocopy.component.ts:83 ~ VideoCopyComponent ~ onCopyCatClicked ~ video:", video)
+        // this.isLoading = true;
+        // this.youtubeService.copyYoutubeVideo(video);
     }
 }
