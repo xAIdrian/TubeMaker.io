@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationService } from '../../../service/navigation.service';
-import { ContentRepository } from '../../../model/content.repo';
+import{ AutoContentModel } from '../../../model/autocontent.model';
 import { YoutubeService } from '../../../service/youtube.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
@@ -30,7 +30,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   showScriptBadge = false;
   
   constructor(
-    private contentRepo: ContentRepository,
+    private contentRepo: AutoContentModel,
     private navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef,
     private youtubeService: YoutubeService,

@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ContentRepository } from '../../../../model/content.repo';
+import { AutoContentModel } from '../../../../model/autocontent.model';
 import { FormGroup } from '@angular/forms';
 import { VoiceService } from '../../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
@@ -49,7 +49,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   selectedMediaOption = 'Video';
 
   constructor(
-    private contentRepo: ContentRepository,
+    private contentRepo: AutoContentModel,
     private voiceService: VoiceService,
     private navigationService: NavigationService,
     private translate: TranslateService,
@@ -83,7 +83,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   }
 
   downloadTextFile() {
-    this.contentRepo.getScriptForDownload().subscribe((blobItem) => {
+    this.contentRepo.getScriptForDownload('auto-content-file').subscribe((blobItem) => {
       saveAs(blobItem.blob, blobItem.filename);
     });
   }

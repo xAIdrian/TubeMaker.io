@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { from, Observable, Subject, concatMap } from 'rxjs';
 import { GptGeneratedMetaData } from '../model/gpt/gptgeneratedvideo.model';
 
-import { ContentRepository } from '../model/content.repo';
+import { AutoContentModel } from '../model/autocontent.model';
 import { GptRepository } from '../repository/gpt.repo';
 import { DurationSection } from '../model/videoduration.model';
 
@@ -36,7 +36,7 @@ export class GptService {
 
   constructor(
     private gptRepo: GptRepository,
-    private contentRepo: ContentRepository
+    private contentRepo: AutoContentModel
   ) {}
 
   getErrorObserver(): Observable<string> { return this.errorSubject.asObservable() }
@@ -77,7 +77,7 @@ export class GptService {
 
     this.gptRepo.postNewTitleObservable({
       summary: this.gptGeneratedSummary,
-      style: this.contentRepo.getCurrentVideoStyle().name,
+      style: this.contentRepo.getCurrentVideoNiche().name,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:84 ~ GptService ~ updateNewTitle ~ response:", response)
       if (response.message !== 'success') {
@@ -116,7 +116,7 @@ export class GptService {
 
     this.gptRepo.postNewDescriptionObservable({
       summary: this.gptGeneratedSummary,
-      style: this.contentRepo.getCurrentVideoStyle().name,
+      style: this.contentRepo.getCurrentVideoNiche().name,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:125 ~ GptService ~ updateNewDescription ~ response:", response)
       if (response.message !== 'success') {
@@ -155,7 +155,7 @@ export class GptService {
 
     this.gptRepo.postNewTagsObservable({
       summary: this.gptGeneratedSummary,
-      style: this.contentRepo.getCurrentVideoStyle().name,
+      style: this.contentRepo.getCurrentVideoNiche().name,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:164 ~ GptService ~ updateNewTags ~ response:", response)
       if (response.message !== 'success') {
@@ -188,7 +188,7 @@ export class GptService {
     console.log("🚀 ~ file: gpt.service.ts:192 ~ GptService ~ generateVideoContentWithAI ~ generateVideoContentWithAI:")
     if (
       this.contentRepo.getCurrentTopic() === undefined
-      || this.contentRepo.getCurrentVideoStyle() === undefined
+      || this.contentRepo.getCurrentVideoNiche() === undefined
       || this.contentRepo.getCurrentVideoDuration() === undefined
     ) { throw new Error('Sources video is undefined'); }
 
@@ -216,7 +216,7 @@ export class GptService {
         
         this.gptRepo.postNewTitleObservable({
           summary: requestSummary,
-          style: this.contentRepo.getCurrentVideoStyle().name
+          style: this.contentRepo.getCurrentVideoNiche().name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -230,7 +230,7 @@ export class GptService {
 
         this.gptRepo.postNewDescriptionObservable({
           summary: requestSummary,
-          style: this.contentRepo.getCurrentVideoStyle().name
+          style: this.contentRepo.getCurrentVideoNiche().name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -244,7 +244,7 @@ export class GptService {
 
         this.gptRepo.postNewTagsObservable({
           summary: requestSummary,
-          style: this.contentRepo.getCurrentVideoStyle().name
+          style: this.contentRepo.getCurrentVideoNiche().name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -298,7 +298,7 @@ export class GptService {
         
         return this.gptRepo.postNewScriptSectionObservable({
           summary: this.gptGeneratedSummary,
-          style: this.contentRepo.getCurrentVideoStyle().name,
+          style: this.contentRepo.getCurrentVideoNiche().name,
           point: sectionPoint,
         });
       })
@@ -328,39 +328,6 @@ export class GptService {
       }
     });
   }
-
-  // optimizeScriptSection(section: DurationSection, currentSection: string) {
-  //   //improve error being sent back here
-  //   // if (this.currentSection === '') {
-  //   //   this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
-  //   //   return;
-  //   // }
-  //   let compiledPoints = '';
-  //   let pointsCount = 0;
-
-  //   from(currentSection.split('\n\n')).pipe(
-  //     concatMap((section) => {
-  //       return this.gptRepo.postOptimizeScriptSectionObservable({
-  //         current: section
-  //       });
-  //     })
-  //   ).subscribe((response) => {
-  //     if (response.message !== 'success') {
-  //       this.errorSubject.next(response.message);
-  //       return;
-  //     }
-  //     pointsCount++;
-  //     compiledPoints += '\n' + response.result.script;
-
-  //     if (pointsCount === currentSection.length) {        
-  //       // emit just the view value of the section
-  //       this.scriptSectionSubject.next({
-  //         sectionControl: section.controlName,
-  //         scriptSection: compiledPoints.trim()
-  //       });
-  //     }
-  //   });
-  // }
 
   generateLoadingMessage(): string {
     const messages = [
