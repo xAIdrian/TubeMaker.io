@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationService } from '../../../service/navigation.service';
-import { AutoContentRepository } from '../../../model/youtubeauto/autocontent.repo';
+import { ContentRepository } from '../../../model/content.repo';
 import { YoutubeService } from '../../../service/youtube.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
@@ -30,7 +30,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   showScriptBadge = false;
   
   constructor(
-    private contentRepo: AutoContentRepository,
+    private contentRepo: ContentRepository,
     private navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef,
     private youtubeService: YoutubeService,
@@ -41,7 +41,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     // @ts-ignore
     window.onGoogleLibraryLoad = () => {
       console.log("🚀 ~ file: videoupload.component.ts:50 ~ VideoUploadComponent ~ ngOnInit ~ onGoogleLibraryLoad:")
-      this.youtubeService.initTokenClient();
+      // this.youtubeService.initTokenClient();
     };
     this.setupObservers();
   }
@@ -59,12 +59,12 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     this.youtubeService.getTokenSuccessObserver().subscribe((success) => {
       console.log("🚀 ~ file: videoupload.component.ts:123 ~ VideoUploadComponent ~ this.youtubeService.getTokenSuccessObserver ~ token", success)
       if (success) {
-        this.youtubeService.getChannels().subscribe((channels) => {
-            console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
-            let channelId = channels.items[0].id
-            let url = `https://studio.youtube.com/channel/${channelId}/videos/upload?d=ud`
-            window.open(url, '_blank');
-        });
+        // this.youtubeService.getChannels().subscribe((channels) => {
+        //     console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
+        //     let channelId = channels.items[0].id
+        //     let url = `https://studio.youtube.com/channel/${channelId}/videos/upload?d=ud`
+        //     window.open(url, '_blank');
+        // });
       }
     });
   }

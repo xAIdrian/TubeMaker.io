@@ -1,4 +1,4 @@
-export interface ListVideo {
+export interface UserVideo {
     id: string;
     title: string;
     description: string;

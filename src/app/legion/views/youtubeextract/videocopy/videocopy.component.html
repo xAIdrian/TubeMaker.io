@@ -1,0 +1,55 @@
+<c-card class="mb-4">
+  <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
+    <strong>Pick a Niche To Find Videos To Copy</strong>
+  </div>
+
+  <c-card-body style="min-height: 80vh">
+    <form [formGroup]="nicheFormGroup">
+      <div class="row">
+        <div class="col-4">
+          <mat-button-toggle-group formControlName="selectedNiche">
+            <mat-button-toggle *ngFor="let videoOption of videoNiches" [value]="selectedVideoNiche"
+              (click)="onVideoOptionSelected(videoOption)">{{ videoOption.name }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="col-8">
+          <c-spinner color="info" *ngIf="isLoading"></c-spinner>
+
+          <div class="video_list" cListGroup *ngFor="let video of searchVideos" style="margin-top: 0.5rem;">
+            <div cListGroupItem class="hover-overlay" style="padding-bottom: 1rem; padding-top: 1rem;">
+              <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onCopyCatClick(video)">Copy Cat</button>
+              <div class="col-5">
+                <div class="stretchy-wrapper">
+                  <div>
+                    <img class="myimageoverlap" [src]="video.thumbnailUrl" alt="Responsive image"
+                      style="overflow: hidden; width:100%;" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-5" style="padding-left: 1rem;">
+                <h5>{{ video.title }}</h5>
+                <p>{{ video.description }}</p>
+                <strong>{{ video.channelTitle }}</strong>
+                <p class="text-medium-emphasis small" class="published">{{ 'video_list.published' | translate }}: {{ video.publishedAt }}</p>
+                <div class="row">
+                  <div class="col-3">
+                    <svg cIcon name="cibYoutube"></svg>
+                    <p class="text-medium-emphasis small" class="views">{{ video.statistics.viewCount }}</p>
+                  </div>
+                  <div class="col-3">
+                    <svg cIcon name="cilThumbUp"></svg>
+                    <p class="text-medium-emphasis small" class="likes">{{ video.statistics.likeCount }}</p>
+                  </div>
+                  <div class="col-3">
+                    <svg cIcon name="cilCommentBubble"></svg>
+                    <p class="text-medium-emphasis small" class="dislikes">{{ video.statistics.commentCount }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </c-card-body>
+</c-card>

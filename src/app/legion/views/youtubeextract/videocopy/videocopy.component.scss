@@ -1,0 +1,141 @@
+.full-width {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.mat-input-element {
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.flex-grow-1 {
+    padding-right: 1rem;
+}
+
+.d-flex {
+    padding-top: 1rem;
+}
+
+mat-button-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1rem;
+    border: none;
+    orientation: vertical;
+    display: block; // display the buttons as block elements for vertical orientation
+
+    mat-button-toggle {
+        margin: 0.5rem;
+        margin-top: 5px; // add a margin to the top of each button
+        border-radius: 10px;
+        color: #333;
+        font-size: 1rem;
+        display: block;
+
+        border: 1px solid #333 !important;
+        background-color: transparent;
+        color: #333;
+
+        &.mat-button-toggle-checked {
+            background-color: #007bff;
+            color: #fff;
+            border: 1px solid #007bff !important;
+        }
+    }
+}
+
+.container {
+    flex-direction: row;
+    align-items: center;
+    background-color: #FFE4E1;
+    display: flex;
+    align-items: center;
+    background-color: #ffebee;
+    padding-top: 1rem;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.hover-overlay {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  align-items: center;
+    // z-index: 1;
+    // position: relative;
+    // transition: background-color 0.1s ease-in-out;
+
+    &:hover {
+        background-color: lightgray;
+    }
+}
+
+.hover-overlay:hover .mybuttonoverlap{
+    display: block;
+}
+
+.hover-overlay:hover .myimageoverlap {
+    opacity: 0.7;
+}
+
+.mybuttonoverlap {
+    position: absolute;
+    z-index: 2;
+    display: none;
+    width: 60%;
+    height: 30%;
+    font-size: 2.5rem;
+    border-radius: 1rem;
+    color: white;
+}
+
+.col-8 {
+    flex-basis: calc(66.66667% - 20px);
+    max-width: calc(66.66667% - 20px);
+}
+
+.col-4 {
+    flex-basis: calc(33.33333% - 20px);
+    max-width: calc(33.33333% - 20px);
+}
+
+.col-5 {
+    flex-basis: calc(50%);
+    max-width: calc(50%);
+}
+
+.col-3 {
+    flex-basis: calc(30% - 5px);
+    max-width: calc(30% - 5px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+h4 {
+    padding-top: 2rem;
+}
+
+div.stretchy-wrapper {
+    width: 100%;
+    padding-bottom: 56.25%;
+    /* 16:9 */
+    position: relative;
+    overflow: hidden;
+}
+
+div.stretchy-wrapper>div {
+    position: absolute;
+    top: -16.75%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

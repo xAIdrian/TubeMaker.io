@@ -9,14 +9,12 @@ import { GptService } from '../../../service/gpt.service';
 import {
   FormBuilder,
   FormGroup,
-  Validators,
-  FormControl,
-  FormArray,
+  Validators
 } from '@angular/forms';
 import { NavigationService } from '../../../service/navigation.service';
-import { AutoContentRepository } from '../../../model/youtubeauto/autocontent.repo';
-import { VideoNiche as VideoNiche } from '../../../model/youtubeauto/create/videoniche.model';
-import { VideoDuration } from '../../../model/youtubeauto/create/videoduration.model';
+import { ContentRepository } from '../../../model/content.repo';
+import { VideoNiche as VideoNiche } from '../../../model/videoniche.model';
+import { VideoDuration } from '../../../model/videoduration.model';
 
 @Component({
   selector: 'video-create',
@@ -33,7 +31,6 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   topicFormGroup: FormGroup;
   styleFormGroup: FormGroup;
   durationFormGroup: FormGroup;
-  moneyFormGroup: FormGroup;
 
   videoNiches: VideoNiche[] = [];
   selectedVideoNiche: VideoNiche = {
@@ -56,7 +53,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   constructor(
     private gptService: GptService,
-    private contentRepo: AutoContentRepository,
+    private contentRepo: ContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -81,12 +78,6 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.durationFormGroup = this._formBuilder.group({
       selectedDuration: ['', Validators.required],
     });
-    this.moneyFormGroup = this._formBuilder.group({
-      selectedMonetization: [''],
-      productName: [''],
-      productDescription: [''],
-      links: this._formBuilder.array([]) // Add FormArray to the FormGroup
-    });
   }
 
   private setupObservers() {
@@ -102,10 +93,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
         topic: response.replace('"', '').trim()
       })
     });
-    this.contentRepo.getVideoOptionsObserver().subscribe((response) => {
+    this.contentRepo.getDefaultVideoNicheObserver().subscribe((response) => {
       this.videoNiches = response;
     });
-    this.contentRepo.getDurationOptionsObserver().subscribe((response) => {
+    this.contentRepo.getDefaultVideoDurationsObserver().subscribe((response) => {
       this.videoDurations = response;
     });
   }
