@@ -5,18 +5,26 @@ import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreat
 import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails/videodetails.component";
 import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
+import { ExtractDetailsComponent } from "./views/youtubeextract/extractdetails/extractdetails.component";
 
 const routes: Routes = [
     {
         path: "",
-        redirectTo: "youtubeextract",
+        redirectTo: "copycat",
         pathMatch: "prefix"
     },
     {
-        path: "youtubeextract",
+        path: "copycat",
         component: VideoCopyComponent,
         data: {
             title: "Copy Cat"
+        }
+    },
+    {
+        path: "copycat/details",
+        component: ExtractDetailsComponent,
+        data: {
+            title: "Transcript"
         }
     },
     {
@@ -26,6 +34,7 @@ const routes: Routes = [
             title: "Your Videos"
         }
     },
+    
     {
         path: "create",
         component: VideoCreateComponent,

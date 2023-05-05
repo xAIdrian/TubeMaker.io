@@ -7,6 +7,7 @@ const app = express();
 const openaiRoutes = require('./routes/ai')
 const voiceRoutes = require('./routes/elevenlabs')
 const youtubeRoutes = require('./routes/youtube')
+const transcriptionRoutes = require('./routes/transcribe')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,5 +35,6 @@ app.use((req, res, next) => {
 app.use("/api/openai", openaiRoutes)
 app.use("/api/voices", voiceRoutes)
 app.use("/api/youtube", youtubeRoutes)
+app.use("/api/download", transcriptionRoutes)
 
 module.exports = app;

@@ -15,7 +15,7 @@ export class NavigationService {
   }
 
   navigateToCreateVideo() {
-    this.router.navigate(['legion/create']);
+    this.router.navigate(['z/create']);
   }
 
   navigateToUploadVideo() {
@@ -27,6 +27,10 @@ export class NavigationService {
   }
 
   navigateToCopyCat() {
-    this.router.navigate(['youtubeextract/copycat']);
+    this.router.navigate(['legion/copycat']);
+  }
+
+  navigateToExtractDetails() {
+    this.router.navigate(['legion/copycat/details']);
   }
 }

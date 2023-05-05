@@ -3,7 +3,7 @@ import { INavData } from '@coreui/angular';
 export const navItems: INavData[] = [
   {
     name: 'Copy Cat',
-    url: '/legion/youtubeextract',
+    url: '/legion/copycat',
     iconComponent: { name: 'cil-speedometer' },
     badge: {
       color: 'info',

@@ -1,0 +1,42 @@
+<c-card class="mb-4">
+    <c-card-body>
+  
+      <div style="display: flex; align-items: center;" *ngIf="transcriptIsLoading">
+        <c-spinner color="info"></c-spinner>
+      </div>
+      <p *ngIf="transcriptIsLoading" style="margin: 1rem;" class="text-medium-emphasis">
+        AI Loading...
+      </p>
+  
+      <mat-horizontal-stepper [linear]="true" #stepper>
+  
+        <mat-step [stepControl]="scriptFormGroup" *ngIf="!transcriptIsLoading">
+          <h4>Great, Your Script Is Ready</h4>
+          <p class="text-medium-emphasis small">
+            Take your time and look over the script.  Make changes to make it yours and use our AI tools to improve specific sections.
+          </p>
+          <form [formGroup]="scriptFormGroup">
+            <ng-template matStepLabel>Edit</ng-template>
+            <div class="row">
+              <div class="col-8">
+                <textarea 
+                  style="height: 100%; margin-bottom: 0.5rem;" 
+                  cFormControl 
+                  formControlName="title">
+              </textarea>
+              </div>
+              <div class="col-2">
+                <!-- <div style="display: flex; align-items: center; padding: 0; margin:0">
+                  <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleLoading"
+                    (click)="rerollTitle()">
+                    <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
+                    {{ 'video_editor.new' | translate }}
+                  </button>
+                </div> -->
+                </div>
+              </div>
+          </form>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </c-card-body>
+</c-card>
