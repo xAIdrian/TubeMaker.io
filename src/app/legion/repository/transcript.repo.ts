@@ -12,7 +12,7 @@ export class TranscriptRepository {
 
     constructor() { /** */ }
 
-    getTranscript(videoId: string): Observable<string> {
+    getTranscript(videoId: string): Observable<{ message: string, result: { translation: string[] }}> {
         const config: AxiosRequestConfig = {
             method: 'get',
             url: `http://localhost:3000/api/download/${videoId}`

@@ -12,13 +12,14 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 const { Configuration, OpenAIApi } = require("openai");
 const { OPEN_AI_API_KEY } = require("../../appsecrets");
 
-const { Translate } = require('@google-cloud/translate').v2;
+const { TranslationServiceClient } = require('@google-cloud/translate');
+const { GOOGLE_PROJECT_ID } = require("../../appsecrets");
 
 const configuration = new Configuration({
   apiKey: OPEN_AI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-const translater = new Translate();
+const translationClient = new TranslationServiceClient();
 
 const storagePath = './backend/audio'
 
@@ -36,7 +37,7 @@ router.get("/:videoId", async (req, res) => {
   from(ytdl.getInfo(videoUrl, options)).pipe(
     concatMap(async (info) => {
       console.log('Start processing download...')
-      const stream = await ytdl.downloadFromInfo(info, options);
+      const stream = ytdl.downloadFromInfo(info, options);
       const filename = `${info.videoDetails.title}.mp3`;
       const filePath = `${storagePath}/${filename}`;
 
@@ -48,31 +49,51 @@ router.get("/:videoId", async (req, res) => {
         }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded!")
           const transcription = await transcribeAudio(filePath, info.videoDetails.description)
-          translater.translate(transcription, 'fr').then(results => {
-            const translation = results[0];
-            console.log(`Text: ${transcription}`);
-            console.log(`Translation: ${translation}`);
-            return translation
-          })
+          const translations = await translateText(transcription)
+
+          if (translations !== undefined && translations.length > 0) {
+            res.status(200).json({
+              message: "success",
+              result: {
+                translation: translations,
+              }
+            });
+            // deletefile(filePath)
+          } else {
+            deletefile(filePath)
+            return throwError(() => new Error('🔥' + 'No translation found'))
+          }
         })
     })
   ).subscribe({
-    // Be careful because this is emitt
-    next: (transcript) => {
-      if (transcript !== undefined) {
-        console.log("🚀 ~ file: transcribe.js:45 ~ transcribeAudio ~ response:", transcript[0])
-        res.status(200).json(transcript);
-      }
-    },
     error: (err) => {
       console.error(err);
       res.status(500).json({ error: "Internal server error" });
     }
-  });
+  })
 });
 
+async function translateText(text) {
+  // Construct request
+  const request = {
+    parent: `projects/${GOOGLE_PROJECT_ID}/locations/global`,
+    contents: [text],
+    mimeType: 'text/plain', // mime types: text/plain, text/html
+    sourceLanguageCode: 'en',
+    targetLanguageCode: 'fr',
+  };
 
-function deletefile(filePath) {
+  // Run request
+  const [response] = await translationClient.translateText(request);
+
+  for (const translation of response.translations) {
+    console.log(`Translation: ${translation.translatedText}`);
+  }
+  return response.translations
+}
+
+
+async function deletefile(filePath) {
   fs.unlink(filePath, (err) => {
     if (err) {
       console.error(err);

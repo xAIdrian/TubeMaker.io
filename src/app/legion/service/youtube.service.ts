@@ -416,11 +416,17 @@ export class YoutubeService {
     if (videoId === '' || videoId === undefined) {
       return;
     }
-    // this.navigationService.navigateToExtractDetails();
+    this.navigationService.navigateToExtractDetails();
     this.transcriptRepository.getTranscript(videoId).subscribe({
-      next: (value) => {
-        console.log(value);
-        this.videoTranscriptSubject.next(value.split('\n'));
+      next: (response: { message: string, result: { translation: string[] }}) => {
+        if (response.message !== 'success') {
+          this.errorSubject.next(response.message);
+          return
+        } else if (response.result.translation.length === 0) {
+          this.errorSubject.next('No transcript found');
+          return;
+        }
+        this.videoTranscriptSubject.next(response.result.translation);
       },
       error: (err) => {
         console.log(err);

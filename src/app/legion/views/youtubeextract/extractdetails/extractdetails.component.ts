@@ -33,7 +33,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     private setupObservers() {
         this.youtubeService.getVideoTranscriptObserver().subscribe({
-            next: (sections) => {
+            next: (sections) => {console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
             },
             error: (error) => {
