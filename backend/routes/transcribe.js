@@ -1,18 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const ytdl = require("ytdl-core");
-const { Configuration, OpenAIApi } = require("openai");
 const fs = require("fs");
 const { of, map, from, throwError, concatMap, subscribe } = require("rxjs");
+
+const ytdl = require("ytdl-core");
+
 const ffmpegPath = require("ffmpeg-static");
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 
+const { Configuration, OpenAIApi } = require("openai");
 const { OPEN_AI_API_KEY } = require("../../appsecrets");
+
+const { Translate } = require('@google-cloud/translate').v2;
+
 const configuration = new Configuration({
   apiKey: OPEN_AI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+const translater = new Translate();
 
 const storagePath = './backend/audio'
 
@@ -39,16 +45,22 @@ router.get("/:videoId", async (req, res) => {
         .saveToFile(filePath)
         .on("error", function (err) {
           return throwError(() => new Error('🔥' + err))
-        }).on("end", function () {
+        }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded!")
-          return transcribeAudio(filePath, info.videoDetails.description)
+          const transcription = await transcribeAudio(filePath, info.videoDetails.description)
+          translater.translate(transcription, 'fr').then(results => {
+            const translation = results[0];
+            console.log(`Text: ${transcription}`);
+            console.log(`Translation: ${translation}`);
+            return translation
+          })
         })
     })
   ).subscribe({
     // Be careful because this is emitt
     next: (transcript) => {
-      console.log("🚀 ~ file: transcribe.js:45 ~ transcribeAudio ~ response:", transcript)
-      if (transcript != undefined) {
+      if (transcript !== undefined) {
+        console.log("🚀 ~ file: transcribe.js:45 ~ transcribeAudio ~ response:", transcript[0])
         res.status(200).json(transcript);
       }
     },
@@ -56,8 +68,9 @@ router.get("/:videoId", async (req, res) => {
       console.error(err);
       res.status(500).json({ error: "Internal server error" });
     }
-  })
+  });
 });
+
 
 function deletefile(filePath) {
   fs.unlink(filePath, (err) => {
