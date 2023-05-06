@@ -9,8 +9,12 @@
           </mat-button-toggle-group>
         </div>
         <div class="col-8">
-          <c-spinner color="info" *ngIf="isLoading"></c-spinner>
-          <div *ngIf="selectedVideoNiche.name === ''">
+          <div class="row" *ngIf="isLoading" >
+            <c-spinner color="info" style="margin: 2rem;"></c-spinner>
+            <p style="margin-left: 1rem;" class="text-medium-emphasis">
+              Getting videos from Youtube
+          </div>
+          <div *ngIf="selectedVideoNiche.name === '' && !isLoading">
             <h4>{{ selectedVideoNiche.header }}</h4>
             <p class="text-medium-emphasis">{{ selectedVideoNiche.description }}</p>
           </div>

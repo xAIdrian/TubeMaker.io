@@ -10,7 +10,7 @@ import { YoutubeService } from "../../../service/youtube.service";
 })
 export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
-    transcriptIsLoading = false;
+    transcriptIsLoading = true;
     showErrorState = false;
 
     transcriptSections: string[] = [];
@@ -35,11 +35,11 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
         this.youtubeService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
+                this.transcriptIsLoading = false;
+                this.changeDetectorRef.detectChanges();
             },
             error: (error) => {
                 this.showErrorState = true;
-            },
-            complete: () => {
                 this.transcriptIsLoading = false;
                 this.changeDetectorRef.detectChanges();
             }
@@ -48,5 +48,13 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     private setupFormControls() {
         this.scriptFormGroup = new FormGroup({});
+    }
+
+    onImproveClick(prompt: string, section: string) {
+        // this.youtubeService.openVideoInYoutubeStudio();
+    }
+
+    onDrop(event: any, itemIndex: any) {
+
     }
 }

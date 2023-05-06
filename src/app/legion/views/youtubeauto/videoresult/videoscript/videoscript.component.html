@@ -8,11 +8,10 @@
       <h5>{{ section.name }}</h5>
       <div class="row">
         <textarea 
-          rows="10" 
+          autosize
           style="height: auto; margin-bottom: 0.5rem;" 
           cFormControl 
-          formControlName="{{ section.controlName }}" 
-          oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'>
+          formControlName="{{ section.controlName }}">
         </textarea>
       </div>
     </div>
