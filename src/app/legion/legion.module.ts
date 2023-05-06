@@ -6,7 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { AutosizeModule } from 'ngx-autosize';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import {
     AccordionModule,
     BadgeModule,
@@ -47,6 +48,7 @@ import { VideoScriptComponent } from './views/youtubeauto/videoresult/videoscrip
 import { VideoMediaComponent } from './views/youtubeauto/videoresult/videomedia/videomedia.component';
 import { AudioDropdownComponent } from './views/youtubeauto/videoresult/videomedia/audiodropdown/audiodropdown.component';
 import { VideoCopyComponent } from './views/youtubeextract/videocopy/videocopy.component'
+import { ExtractDetailsComponent } from './views/youtubeextract/extractdetails/extractdetails.component';
 
 @NgModule({
     providers: [{
@@ -62,9 +64,12 @@ import { VideoCopyComponent } from './views/youtubeextract/videocopy/videocopy.c
         VideoScriptComponent,
         VideoMediaComponent,
         AudioDropdownComponent,
-        VideoCopyComponent
+        VideoCopyComponent,
+        ExtractDetailsComponent
     ],
     imports: [
+        DragDropModule,
+        AutosizeModule,
         MatStepperModule,
         CommonModule,
         IconModule,

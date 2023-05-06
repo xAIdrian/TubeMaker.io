@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
-const { map, mergeMap, catchError } = require("rxjs/operators");
+const { map, mergeMap } = require("rxjs/operators");
 const { from, forkJoin } = require("rxjs");
 const { YOUTUBE_DATA_V3_KEY } = require("../../appsecrets");
 
@@ -49,7 +49,7 @@ function fetchVideoList(niche, publishedAfter) {
 
   const queryParams = new URLSearchParams({
     part: "snippet",
-    maxResults: "25",
+    maxResults: "12",
     order: "viewCount",
     publishedAfter: publishedAfter,
     q: niche,

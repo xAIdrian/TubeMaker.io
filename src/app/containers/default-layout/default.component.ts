@@ -50,7 +50,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
       },
       {
         name: translate.instant('navigation.copy_cat'),
-        url: '/legion/youtubeextract',
+        url: '/legion/copycat',
         iconComponent: { name: 'cil-speedometer' },
         badge: {
           color: 'info',

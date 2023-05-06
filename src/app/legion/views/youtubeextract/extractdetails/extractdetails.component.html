@@ -1,0 +1,44 @@
+<c-card class="mb-4">
+  <c-card-body>
+
+    <div class="row" style="display: flex; align-items: center;" *ngIf="transcriptIsLoading">
+      <c-spinner color="info" style="margin-top: 1rem; margin-left: 1rem;"></c-spinner>
+      <p style="margin-top: 1rem;" class="text-medium-emphasis">
+        Your script is loading...
+      </p>
+    </div>
+
+    <mat-horizontal-stepper [linear]="true" #stepper>
+
+      <mat-step [stepControl]="scriptFormGroup" *ngIf="!transcriptIsLoading">
+        <h4>Great, Your Script Is Ready</h4>
+        <p class="text-medium-emphasis small">
+          Take your time and look over the script. Make changes to make it yours and use our AI tools to improve
+          specific sections.
+        </p>
+        <ng-template matStepLabel>Edit</ng-template>
+        <div cdkDropList (cdkDropListDropped)="onDrop($event)">
+          <div cdkDrag cdkDragLockAxis="y" *ngFor="let tran of transcriptSections; let i = index" class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
+          <div class="col-8">
+            <div class="text-container" style="display: flex; justify-content: space-between; flex-direction: row;">
+              <div cdkDragHandle>
+                <svg cIcon name="cilGrain" style="margin-top: 0.75rem;"></svg>
+              </div>
+              <textarea autosize cFormControl [(ngModel)]="transcriptSections[i]"></textarea>
+            </div>
+          </div>
+          <div class="col-2">
+            <div style="display: flex; align-items: center; padding: 0; margin:0">
+              <button cButton class="col-btn" variant="outline" color="dark" [disabled]="transcriptIsLoading"
+                (click)="onImproveClick('funny', transcriptSections[i])">
+                <c-spinner *ngIf="transcriptIsLoading" size="sm"></c-spinner>
+                {{ 'video_editor.new' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </c-card-body>
+</c-card>

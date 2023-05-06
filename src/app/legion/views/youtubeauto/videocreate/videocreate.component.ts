@@ -12,7 +12,7 @@ import {
   Validators
 } from '@angular/forms';
 import { NavigationService } from '../../../service/navigation.service';
-import { ContentRepository } from '../../../model/content.repo';
+import{ AutoContentModel } from '../../../model/autocontent.model';
 import { VideoNiche as VideoNiche } from '../../../model/videoniche.model';
 import { VideoDuration } from '../../../model/videoduration.model';
 
@@ -53,7 +53,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   constructor(
     private gptService: GptService,
-    private contentRepo: ContentRepository,
+    private contentRepo: AutoContentModel,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -81,7 +81,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   private setupObservers() {
-    this.contentRepo.getInitVideoNiche().subscribe((response) => {
+    this.contentRepo.getInitVideoNiche(
+      'video_style.init_header',
+      'video_style.init_description'
+    ).subscribe((response) => {
       this.selectedVideoNiche = response;
     });
     this.contentRepo.getInitVideoDuration().subscribe((response) => {
@@ -93,7 +96,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
         topic: response.replace('"', '').trim()
       })
     });
-    this.contentRepo.getDefaultVideoNicheObserver().subscribe((response) => {
+    this.contentRepo.getDefaultVideoNichesObserver().subscribe((response) => {
       this.videoNiches = response;
     });
     this.contentRepo.getDefaultVideoDurationsObserver().subscribe((response) => {

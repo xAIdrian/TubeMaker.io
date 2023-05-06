@@ -1,4 +1,5 @@
 import {
+  cilGrain,
   cibCcAmex,
   cibCcApplePay,
   cibCcMastercard,
@@ -94,6 +95,7 @@ import {
 } from '@coreui/icons';
 
 export const iconSubset = {
+  cilGrain,
   cibCcAmex,
   cibCcApplePay,
   cibCcMastercard,
@@ -189,6 +191,7 @@ export const iconSubset = {
 };
 
 export enum IconSubset {
+  cilGrain = 'cilGrain',
   cibCcAmex = 'cibCcAmex',
   cibCcApplePay = 'cibCcApplePay',
   cibCcMastercard = 'cibCcMastercard',

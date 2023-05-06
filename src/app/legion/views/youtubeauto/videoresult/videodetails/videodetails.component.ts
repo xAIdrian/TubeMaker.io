@@ -15,7 +15,7 @@ import {
 
 import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
 import { GptService } from '../../../../service/gpt.service';
-import { ContentRepository } from '../../../../model/content.repo';
+import{ AutoContentModel } from '../../../../model/autocontent.model';
 import { VideoDuration } from '../../../../model/videoduration.model';
 
 @Component({
@@ -63,7 +63,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   constructor(
     private gptService: GptService,
-    private contentRepo: ContentRepository,
+    private contentRepo: AutoContentModel,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,

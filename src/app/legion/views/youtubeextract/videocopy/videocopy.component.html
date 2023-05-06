@@ -1,8 +1,4 @@
 <c-card class="mb-4">
-  <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
-    <strong>Pick a Niche To Find Videos To Copy</strong>
-  </div>
-
   <c-card-body style="min-height: 80vh">
     <form [formGroup]="nicheFormGroup">
       <div class="row">
@@ -13,7 +9,15 @@
           </mat-button-toggle-group>
         </div>
         <div class="col-8">
-          <c-spinner color="info" *ngIf="isLoading"></c-spinner>
+          <div class="row" *ngIf="isLoading" >
+            <c-spinner color="info" style="margin: 2rem;"></c-spinner>
+            <p style="margin-left: 1rem;" class="text-medium-emphasis">
+              Getting videos from Youtube
+          </div>
+          <div *ngIf="selectedVideoNiche.name === '' && !isLoading">
+            <h4>{{ selectedVideoNiche.header }}</h4>
+            <p class="text-medium-emphasis">{{ selectedVideoNiche.description }}</p>
+          </div>
 
           <div class="video_list" cListGroup *ngFor="let video of searchVideos" style="margin-top: 0.5rem;">
             <div cListGroupItem class="hover-overlay" style="padding-bottom: 1rem; padding-top: 1rem;">
