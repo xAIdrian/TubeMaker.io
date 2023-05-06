@@ -17,7 +17,7 @@ export class YoutubeService {
 
   private tokenSuccessSubject = new Subject<string>();
   private youtubeVideosSubject = new Subject<YoutubeVideo[]>();
-  private videoTranscriptSubject = new Subject<string[]>();
+  private videoTranscriptSubject = new Subject<{ isLoading: boolean, section: string }[]>();
 
   private currentCopyCatVideoId = '';
 
@@ -50,7 +50,7 @@ export class YoutubeService {
     return this.youtubeVideosSubject.asObservable();
   }
 
-  getVideoTranscriptObserver(): Observable<string[]> {
+  getVideoTranscriptObserver(): Observable<{ isLoading: boolean, section: string }[]> {
     return this.videoTranscriptSubject.asObservable();
   }
 
@@ -94,7 +94,9 @@ export class YoutubeService {
       this.currentCopyCatVideoId = 'test';
     }
 
-    this.transcriptRepository.getTranscript(this.currentCopyCatVideoId).subscribe({
+    this.transcriptRepository.getTranscript(this.currentCopyCatVideoId).pipe(
+
+    ).subscribe({
       next: (response: { message: string, result: { translation: string }}) => {
         if (response.message !== 'success') {
           this.errorSubject.next(response.message);
@@ -105,7 +107,13 @@ export class YoutubeService {
           this.errorSubject.complete();
           return;
         }
-        this.videoTranscriptSubject.next(this.textSplitUtility.splitIntoParagraphs(response.result.translation));
+        const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
+        const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
+        splitParagraphs.forEach((paragraph) => {
+          uiPreppedResponse.push({ isLoading: false, section: paragraph });
+        });
+
+        this.videoTranscriptSubject.next(uiPreppedResponse);
         this.isTranscriptLoadingSubject.next(false);
         this.videoTranscriptSubject.complete();
       },

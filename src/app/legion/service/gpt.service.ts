@@ -27,8 +27,9 @@ export class GptService {
   private titleSubject = new Subject<String>();
   private descriptionSubject = new Subject<String>();
   private scriptSectionSubject = new Subject<{
-    sectionControl: string,
     scriptSection: string
+    sectionControl?: string,
+    sectionIndex?: number
   }>();
   private tagsSubject = new Subject<String[]>();
 
@@ -88,24 +89,6 @@ export class GptService {
     });
   }
 
-  optimizeTitle(title: string) {
-    console.log("🚀 ~ file: gpt.service.ts:96 ~ GptService ~ optimizeTitle ~ optimizeTitle:")
-    if (title === '') {
-      this.errorSubject.next('Please enter a title');
-      return;
-    }
-    this.gptRepo.postOptimizedTitleObservable({
-      current: title,
-    }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:104 ~ GptService ~ optimizeTitle ~ response:", response)
-      if (response.message !== 'success') {
-        this.errorSubject.next(response.message);
-        return;
-      }
-      this.titleSubject.next(response.result.title);
-    });
-  }
-
   updateNewDescription() {
     console.log("🚀 ~ file: gpt.service.ts:114 ~ GptService ~ updateNewDescription ~ updateNewDescription:")
     //improve error being sent back here
@@ -119,24 +102,6 @@ export class GptService {
       style: this.contentRepo.getCurrentVideoNiche().name,
     }).subscribe((response) => {
       console.log("🚀 ~ file: gpt.service.ts:125 ~ GptService ~ updateNewDescription ~ response:", response)
-      if (response.message !== 'success') {
-        this.errorSubject.next(response.message);
-        return;
-      }
-      this.descriptionSubject.next(response.result.description);
-    });
-  }
-
-  optimizeDescription(description: string) {
-    console.log("🚀 ~ file: gpt.service.ts:135 ~ GptService ~ optimizeDescription ~ optimizeDescription:")
-    if (description === '') {
-      this.errorSubject.next('Please enter a description');
-      return;
-    }
-    this.gptRepo.postOptimizedDescriptionObservable({
-      current: description,
-    }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:143 ~ GptService ~ optimizeDescription ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -166,22 +131,14 @@ export class GptService {
     });
   }
 
-  optimizeTags(tags: string) {
-    console.log("🚀 ~ file: gpt.service.ts:174 ~ GptService ~ optimizeTags ~ optimizeTags:")
-    if (tags === '') {
-      this.errorSubject.next('Please enter a description');
+  updateNewScriptSection(prompt: string, section: string, sectionControl?: string, sectionIndex?: number) {
+    //improve error being sent back here
+    if (section === '') {
+      this.errorSubject.next('🤔 We need text to improve. Please input something and try again.');
       return;
     }
-    this.gptRepo.postOptimizedTagsObservable({
-      current: tags,
-    }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:182 ~ GptService ~ optimizeTags ~ response:", response)
-      if (response.message !== 'success') {
-        this.errorSubject.next(response.message);
-        return;
-      }
-      this.tagsSubject.next(response.result.tags.split(','));
-    });
+
+    //TODO: add a new repo and endpoint for this. it must be more robust than the other solution.
   }
 
   generateVideoContentWithAI() {

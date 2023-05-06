@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { AfterContentInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { GptService } from "src/app/legion/service/gpt.service";
 import { YoutubeService } from "src/app/legion/service/youtube.service";
 
 
@@ -11,34 +12,54 @@ import { YoutubeService } from "src/app/legion/service/youtube.service";
 
     @Input() parentIsLoading: boolean;
 
-    transcriptSections: string[] = [];
+    transcriptSections: { isLoading: boolean, section: string }[] = [];
+
+    dragIsEnabled = true;
+    showErrorToast = false;
+    errorToastText = ''
 
     constructor(
         private youtubeService: YoutubeService,
+        private gptService: GptService,
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
 
     ngOnInit() {
-        console.log("🚀 ~ file: scriptdetails.component.ts:20 ~ ngOnInit ~ ngOnInit:", 'ngOnInit')
+        this.gptService.getErrorObserver().subscribe({
+            next: (error) => {
+                console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", error)
+            },
+            complete: () => {
+                this.changeDetectorRef.detectChanges();
+            }
+        });
         this.youtubeService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
             },
             complete: () => {
-                // this.transcriptIsLoading = false;
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.youtubeService.getVideoTranscript();
+        this.gptService.getScriptSectionObserver().subscribe({
+            next: (sections) => {
+            },
+            complete: () => {
+                this.changeDetectorRef.detectChanges();
+            }
+        });
     }
 
     ngAfterContentInit() {
+        this.youtubeService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
     }
 
-    onImproveClick(prompt: string, section: string) {
-        // this.youtubeService.openVideoInYoutubeStudio();
+    onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {
+        this.toggleLoading(section);
+        this.gptService.updateNewScriptSection(prompt, section.section, '', index);
+        this.changeDetectorRef.detectChanges();
     }
 
     onDrop(event: CdkDragDrop<string[]>) {
@@ -47,5 +68,11 @@ import { YoutubeService } from "src/app/legion/service/youtube.service";
 
     onScriptSubmit() {
 
+    }
+
+    private toggleLoading(section: { isLoading: boolean, section: string }) {
+        section.isLoading = !section.isLoading;
+        this.dragIsEnabled = !this.dragIsEnabled;
+        this.changeDetectorRef.detectChanges();
     }
 }
