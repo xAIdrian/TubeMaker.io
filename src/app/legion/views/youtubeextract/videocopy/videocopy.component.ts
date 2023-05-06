@@ -86,6 +86,6 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     }
 
     onCopyCatClick(video: YoutubeVideo) {
-        this.youtubeService.getVideoTranscript(video.id);
+        this.youtubeService.setCopyCatVideoId(video.id);
     }
 }

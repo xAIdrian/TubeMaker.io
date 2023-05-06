@@ -29,6 +29,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
+        this.youtubeService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
     }
 

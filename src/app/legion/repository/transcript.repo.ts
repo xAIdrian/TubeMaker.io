@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TextSplitUtility } from '../helper/textsplit.utility';
 import axios, { AxiosRequestConfig } from 'axios';
 import { Observable, from, map } from 'rxjs';
 
@@ -10,7 +10,9 @@ import { Observable, from, map } from 'rxjs';
 })
 export class TranscriptRepository {
 
-    constructor() { /** */ }
+    constructor(
+        private textSplitter: TextSplitUtility,
+    ) { /** */ }
 
     getTranscript(videoId: string): Observable<{ message: string, result: { translation: string[] }}> {
         const config: AxiosRequestConfig = {
@@ -20,7 +22,16 @@ export class TranscriptRepository {
         return from(axios(config)).pipe(
             map((response) => {
                 console.log("🚀 ~ file: transcript.repo.ts:22 ~ TranscriptRepository ~ map ~ response:", response)
-                return response.data;
+                if (response.data.message === 'success') {
+                    return {
+                        message: response.data.message,
+                        result: {
+                            translation: this.textSplitter.splitIntoParagraphs(response.data.result.translation)
+                        }
+                    }
+                } else {
+                    return response.data
+                }
             })
         );
     }

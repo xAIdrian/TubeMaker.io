@@ -27,7 +27,7 @@ router.get("/:videoId", async (req, res) => {
   const videoId = req.params.videoId;
 
   // const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-  const videoUrl = 'https://www.youtube.com/watch?v=HTeJ7gSguwQ&pp=ygUlb25lIG1pbnV0ZSB2aWRlbyBvbiBoZWxwaW5nIGFsdHppbWVycw%3D%3D'
+  const videoUrl = 'https://www.youtube.com/watch?v=XzLgw2Y8gNw'
   const options = {
     filter: "audioonly",
     quality: "highestaudio",
@@ -49,16 +49,16 @@ router.get("/:videoId", async (req, res) => {
         }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded!")
           const transcription = await transcribeAudio(filePath, info.videoDetails.description)
-          const translations = await translateText(transcription)
+          const translatedText = await translateText(transcription)
 
-          if (translations !== undefined && translations.length > 0) {
+          if (translatedText !== undefined && translatedText !== '') {
             res.status(200).json({
               message: "success",
               result: {
-                translation: translations,
+                translation: translatedText,
               }
             });
-            // deletefile(filePath)
+            deletefile(filePath)
           } else {
             deletefile(filePath)
             return throwError(() => new Error('🔥' + 'No translation found'))
@@ -89,7 +89,7 @@ async function translateText(text) {
   for (const translation of response.translations) {
     console.log(`Translation: ${translation.translatedText}`);
   }
-  return response.translations
+  return response.translations.translatedText
 }
 
 
