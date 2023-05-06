@@ -1,38 +1,17 @@
-.container {
-    display: flex;
-    flex-direction: row;
-
-    .btn {
-        /* Make the buttons grow to fill the container */
-        flex: 1;
-        /* Set the height to match the container height */
-        height: 100%;
-        /* Split the container into two equal halves */
-        width: 50%;
-        margin: 0.5rem;
-    }
-}
+::ng-deep .mat-horizontal-stepper-header {
+    pointer-events: none !important;
+  }
 
 .row {
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 textarea {
     width: 100%;
     height: auto;
     border: none;
-  }
-
-.grid-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.grid-item {
-    width: 49%;
-    margin: 4px;
 }
 
 .responsive-wrapper {
@@ -63,46 +42,8 @@ textarea {
     pointer-events: none !important;
 }
 
-.mat-input-element {
-    background-color: #fff;
-    border-radius: 10px;
-}
-
-.flex-grow-1 {
-    padding-right: 1rem;
-}
-
 .d-flex {
     padding-top: 1rem;
-}
-
-mat-button-toggle-group {
-    padding-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    margin: 1rem;
-    border: none;
-    orientation: vertical;
-    display: block; // display the buttons as block elements for vertical orientation
-
-    mat-button-toggle {
-        margin: 0.5rem;
-        margin-top: 5px; // add a margin to the top of each button
-        border-radius: 10px;
-        color: #333;
-        font-size: 1rem;
-        display: block;
-
-        border: 1px solid #333 !important;
-        background-color: transparent;
-        color: #333;
-
-        &.mat-button-toggle-checked {
-            background-color: #007bff;
-            color: #fff;
-            border: 1px solid #007bff !important;
-        }
-    }
 }
 
 .row {
@@ -111,13 +52,13 @@ mat-button-toggle-group {
 }
 
 .col-8 {
-    flex-basis: calc(80% - 20px);
-    max-width: calc(80% - 20px);
+    flex-basis: calc(90% - 20px);
+    max-width: calc(90% - 20px);
 }
 
-.col-2 {
-    flex-basis: calc(20% - 20px);
-    max-width: calc(20% - 20px);
+.col-1 {
+    flex-basis: calc(10% - 20px);
+    max-width: calc(10% - 20px);
 }
 
 h4 {
@@ -131,4 +72,14 @@ h5 {
 .col-btn {
     width: 100%;
     margin-bottom: 0.5rem;
+}
+
+.error-container {
+    flex-direction: row;
+    align-items: center;
+    background-color: #FFE4E1;
+    display: flex;
+    align-items: center;
+    background-color: #ffebee;
+    padding: 1rem;
 }

@@ -1,4 +1,5 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+
 import { FormGroup } from "@angular/forms";
 import { YoutubeService } from "../../../service/youtube.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
@@ -13,10 +14,12 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     transcriptIsLoading = true;
     showErrorState = false;
+    errorText = '';
 
     transcriptSections: string[] = [];
 
     scriptFormGroup: FormGroup;
+    dropdownIsOpen = false;
 
     constructor(
         private youtubeService: YoutubeService,
@@ -34,14 +37,24 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     }
 
     private setupObservers() {
+        this.youtubeService.getErrorObserver().subscribe({
+            next: (error: any) => {
+                this.showErrorState = true;
+                this.errorText = error;
+                this.transcriptIsLoading = false;
+                this.changeDetectorRef.detectChanges();
+            }
+        });
         this.youtubeService.getVideoTranscriptObserver().subscribe({
-            next: (sections) => {console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
+            next: (sections) => {
+                console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
                 this.transcriptIsLoading = false;
                 this.changeDetectorRef.detectChanges();
             },
             error: (error) => {
                 this.showErrorState = true;
+                this.errorText = error;
                 this.transcriptIsLoading = false;
                 this.changeDetectorRef.detectChanges();
             }
@@ -58,6 +71,9 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     onDrop(event: CdkDragDrop<string[]>) {
         moveItemInArray(this.transcriptSections, event.previousIndex, event.currentIndex);
-        console.log("🚀 ~ file: extractdetails.component.ts:77 ~ ExtractDetailsComponent ~ onDrop ~ this.transcriptSections", this.transcriptSections)
+    }
+
+    onScriptSubmit() {
+
     }
 }

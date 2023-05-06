@@ -4,6 +4,7 @@ import { from, Observable, Observer, of, Subject } from 'rxjs';
 import { YoutubeDataRepository } from '../repository/youtubedata.repo';
 import { YoutubeVideo } from '../model/video/youtubevideo.model';
 import { NavigationService } from './navigation.service';
+import { TextSplitUtility } from '../helper/textsplit.utility';
 
 declare var gapi: any;
 
@@ -23,6 +24,7 @@ export class YoutubeService {
     private youtubeRepository: YoutubeDataRepository,
     private transcriptRepository: TranscriptRepository,
     private navigationService: NavigationService,
+    private textSplitUtility: TextSplitUtility
   ) {}
 
   requestAccessToken() {
@@ -77,12 +79,13 @@ export class YoutubeService {
 
   getVideoTranscript() {
     if (this.currentCopyCatVideoId === '' || this.currentCopyCatVideoId === undefined) {
-      this.errorSubject.next('No video selected');
-      return;
+      this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
+      // return;
+      this.currentCopyCatVideoId = 'test';
     }
 
     this.transcriptRepository.getTranscript(this.currentCopyCatVideoId).subscribe({
-      next: (response: { message: string, result: { translation: string[] }}) => {
+      next: (response: { message: string, result: { translation: string }}) => {
         console.log("🚀 ~ file: youtube.service.ts:108 ~ YoutubeService ~ this.transcriptRepository.getTranscript ~ response:", response)
         if (response.message !== 'success') {
           this.errorSubject.next(response.message);
@@ -91,7 +94,7 @@ export class YoutubeService {
           this.errorSubject.next('No transcript found');
           return;
         }
-        this.videoTranscriptSubject.next(response.result.translation);
+        this.videoTranscriptSubject.next(this.textSplitUtility.splitIntoParagraphs(response.result.translation));
       },
       error: (err) => {
         console.log(err);
