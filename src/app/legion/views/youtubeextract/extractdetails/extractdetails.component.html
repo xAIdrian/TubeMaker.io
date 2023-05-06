@@ -17,16 +17,13 @@
           specific sections.
         </p>
         <ng-template matStepLabel>Edit</ng-template>
-        <div class="row" *ngFor="let tran of transcriptSections; let i = index" style="margin: 0.5rem;"
-          draggable="true"
-          [dragData]="transcriptSections"
-          [dragScope]="'transcript'"
-          [dragEnabled]="true"
-          [dragSnapGrid]="{x: 10, y: 10}"
-          (drop)="onDrop($event, i)">
+        <div cdkDropList (cdkDropListDropped)="onDrop($event)">
+          <div cdkDrag cdkDragLockAxis="y" *ngFor="let tran of transcriptSections; let i = index" class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
           <div class="col-8">
-            <div ngDragHandle class="text-container" style="display: flex; justify-content: space-between; flex-direction: row;">
-              <svg cIcon name="cilGrain" style="margin-top: 0.75rem;"></svg>
+            <div class="text-container" style="display: flex; justify-content: space-between; flex-direction: row;">
+              <div cdkDragHandle>
+                <svg cIcon name="cilGrain" style="margin-top: 0.75rem;"></svg>
+              </div>
               <textarea autosize cFormControl [(ngModel)]="transcriptSections[i]"></textarea>
             </div>
           </div>
@@ -39,6 +36,7 @@
               </button>
             </div>
           </div>
+        </div>
         </div>
       </mat-step>
     </mat-horizontal-stepper>

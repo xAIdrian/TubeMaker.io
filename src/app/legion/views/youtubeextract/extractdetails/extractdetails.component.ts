@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { YoutubeService } from "../../../service/youtube.service";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'extract-details',
@@ -54,7 +55,8 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
         // this.youtubeService.openVideoInYoutubeStudio();
     }
 
-    onDrop(event: any, itemIndex: any) {
-
+    onDrop(event: CdkDragDrop<string[]>) {
+        moveItemInArray(this.transcriptSections, event.previousIndex, event.currentIndex);
+        console.log("🚀 ~ file: extractdetails.component.ts:77 ~ ExtractDetailsComponent ~ onDrop ~ this.transcriptSections", this.transcriptSections)
     }
 }

@@ -7,7 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { AutosizeModule } from 'ngx-autosize';
-import { NgDragDropModule } from 'ng-drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import {
     AccordionModule,
     BadgeModule,
@@ -68,7 +68,7 @@ import { ExtractDetailsComponent } from './views/youtubeextract/extractdetails/e
         ExtractDetailsComponent
     ],
     imports: [
-        NgDragDropModule.forRoot(),
+        DragDropModule,
         AutosizeModule,
         MatStepperModule,
         CommonModule,
