@@ -1,0 +1,85 @@
+::ng-deep .mat-horizontal-stepper-header {
+    pointer-events: none !important;
+  }
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+textarea {
+    width: 100%;
+    height: auto;
+    border: none;
+}
+
+.responsive-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    /* 16:9 aspect ratio */
+    background-color: lightgrey;
+}
+
+.responsive-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.full-width {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+    pointer-events: none !important;
+}
+
+.d-flex {
+    padding-top: 1rem;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-8 {
+    flex-basis: calc(90% - 20px);
+    max-width: calc(90% - 20px);
+}
+
+.col-1 {
+    flex-basis: calc(10% - 20px);
+    max-width: calc(10% - 20px);
+}
+
+h4 {
+    padding-top: 2rem;
+}
+
+h5 {
+    margin-top: 1rem;
+}
+
+.col-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.error-container {
+    flex-direction: row;
+    align-items: center;
+    background-color: #FFE4E1;
+    display: flex;
+    align-items: center;
+    background-color: #ffebee;
+    padding: 1rem;
+}

@@ -49,6 +49,7 @@ import { VideoMediaComponent } from './views/youtubeauto/videoresult/videomedia/
 import { AudioDropdownComponent } from './views/youtubeauto/videoresult/videomedia/audiodropdown/audiodropdown.component';
 import { VideoCopyComponent } from './views/youtubeextract/videocopy/videocopy.component'
 import { ExtractDetailsComponent } from './views/youtubeextract/extractdetails/extractdetails.component';
+import { ScriptDetailsComponent } from './views/youtubeextract/extractdetails/scriptdetails/scriptdetails.component';
 
 @NgModule({
     providers: [{
@@ -65,7 +66,8 @@ import { ExtractDetailsComponent } from './views/youtubeextract/extractdetails/e
         VideoMediaComponent,
         AudioDropdownComponent,
         VideoCopyComponent,
-        ExtractDetailsComponent
+        ExtractDetailsComponent,
+        ScriptDetailsComponent
     ],
     imports: [
         DragDropModule,

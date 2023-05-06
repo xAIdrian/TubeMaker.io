@@ -16,10 +16,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     showErrorState = false;
     errorText = '';
 
-    transcriptSections: string[] = [];
-
     scriptFormGroup: FormGroup;
-    dropdownIsOpen = false;
 
     constructor(
         private youtubeService: YoutubeService,
@@ -32,7 +29,6 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
-        this.youtubeService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
     }
 
@@ -41,39 +37,21 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
             next: (error: any) => {
                 this.showErrorState = true;
                 this.errorText = error;
+            },
+            complete: () => {
                 this.transcriptIsLoading = false;
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.youtubeService.getVideoTranscriptObserver().subscribe({
-            next: (sections) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
-                this.transcriptSections = sections;
-                this.transcriptIsLoading = false;
-                this.changeDetectorRef.detectChanges();
-            },
-            error: (error) => {
-                this.showErrorState = true;
-                this.errorText = error;
-                this.transcriptIsLoading = false;
-                this.changeDetectorRef.detectChanges();
+        this.youtubeService.getTranscriptIsLoadingObserver().subscribe({
+            next: (isLoading: boolean) => {
+                console.log("🚀 ~ file: extractdetails.component.ts:51 ~ ExtractDetailsComponent ~ this.youtubeService.getTranscriptIsLoadingObserver ~ isLoading:", isLoading)
+                this.transcriptIsLoading = isLoading;
             }
         });
     }
 
     private setupFormControls() {
         this.scriptFormGroup = new FormGroup({});
-    }
-
-    onImproveClick(prompt: string, section: string) {
-        // this.youtubeService.openVideoInYoutubeStudio();
-    }
-
-    onDrop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.transcriptSections, event.previousIndex, event.currentIndex);
-    }
-
-    onScriptSubmit() {
-
     }
 }

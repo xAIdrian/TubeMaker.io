@@ -13,6 +13,7 @@ declare var gapi: any;
 })
 export class YoutubeService {
   private errorSubject = new Subject<string>();
+  private isTranscriptLoadingSubject = new Subject<boolean>();
 
   private tokenSuccessSubject = new Subject<string>();
   private youtubeVideosSubject = new Subject<YoutubeVideo[]>();
@@ -41,6 +42,10 @@ export class YoutubeService {
     return this.errorSubject.asObservable();
   }
 
+  getTranscriptIsLoadingObserver(): Observable<boolean> {
+    return this.isTranscriptLoadingSubject.asObservable();
+  }
+
   getYoutubeVideosObserver(): Observable<YoutubeVideo[]> {
     return this.youtubeVideosSubject.asObservable();
   }
@@ -65,10 +70,14 @@ export class YoutubeService {
           commentCount: '12000',
         },
       }])
+    this.youtubeVideosSubject.complete();
     
     // this.youtubeRepository.getVideoListByNiche(niche).subscribe({
-    //   next: (videos) => this.youtubeVideosSubject.next(videos),
-    //   error: (err) => this.errorSubject.next(err)
+    //   next: (videos) => {
+          //   this.youtubeVideosSubject.next(videos);
+          //   this.youtubeVideosSubject.complete();
+          // },
+    //   error: (err) => {this.errorSubject.next(err); this.youtubeVideosSubject.complete();}
     // });
   }
 
@@ -78,6 +87,7 @@ export class YoutubeService {
   }
 
   getVideoTranscript() {
+    console.log("🚀 ~ file: youtube.service.ts:90 ~ YoutubeService ~ getVideoTranscript ~ getVideoTranscript:", 'getVideoTranscript')
     if (this.currentCopyCatVideoId === '' || this.currentCopyCatVideoId === undefined) {
       this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
       // return;
@@ -86,19 +96,22 @@ export class YoutubeService {
 
     this.transcriptRepository.getTranscript(this.currentCopyCatVideoId).subscribe({
       next: (response: { message: string, result: { translation: string }}) => {
-        console.log("🚀 ~ file: youtube.service.ts:108 ~ YoutubeService ~ this.transcriptRepository.getTranscript ~ response:", response)
         if (response.message !== 'success') {
           this.errorSubject.next(response.message);
+          this.errorSubject.complete();
           return
         } else if (response.result.translation.length === 0) {
           this.errorSubject.next('No transcript found');
+          this.errorSubject.complete();
           return;
         }
         this.videoTranscriptSubject.next(this.textSplitUtility.splitIntoParagraphs(response.result.translation));
+        this.isTranscriptLoadingSubject.next(false);
+        this.videoTranscriptSubject.complete();
       },
       error: (err) => {
-        console.log(err);
         this.errorSubject.next(err);
+        this.errorSubject.complete
       },
     });
   }
