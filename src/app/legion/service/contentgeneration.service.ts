@@ -4,7 +4,7 @@ import { GptGeneratedMetaData } from '../model/gpt/gptgeneratedvideo.model';
 
 import { AutoContentModel } from '../model/autocontent.model';
 import { GptRepository } from '../repository/gpt.repo';
-import { DurationSection } from '../model/videoduration.model';
+import { DurationSection } from '../model/autocreate/videoduration.model';
 
 @Injectable({
   providedIn: 'root',

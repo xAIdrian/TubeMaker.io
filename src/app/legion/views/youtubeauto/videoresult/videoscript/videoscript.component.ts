@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ContentGenerationService } from "../../../../service/contentgeneration.service";
 import{ AutoContentModel } from '../../../../model/autocontent.model';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DurationSection, VideoDuration } from "../../../../model/videoduration.model";
+import { DurationSection, VideoDuration } from "../../../../model/autocreate/videoduration.model";
 
 @Component({
   selector: 'video-script',

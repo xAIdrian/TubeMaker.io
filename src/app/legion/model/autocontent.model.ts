@@ -5,7 +5,7 @@ import {
 import {
   getDefaultVideoDurations,
   VideoDuration,
-} from './videoduration.model';
+} from './autocreate/videoduration.model';
 import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
 import{ ContentModel } from './common/content.model';
 import { TranslateService } from '@ngx-translate/core';

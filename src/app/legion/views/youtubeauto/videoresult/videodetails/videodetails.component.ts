@@ -16,7 +16,7 @@ import {
 import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
 import { ContentGenerationService } from '../../../../service/contentgeneration.service';
 import{ AutoContentModel } from '../../../../model/autocontent.model';
-import { VideoDuration } from '../../../../model/videoduration.model';
+import { VideoDuration } from '../../../../model/autocreate/videoduration.model';
 
 @Component({
   selector: 'video-result',
