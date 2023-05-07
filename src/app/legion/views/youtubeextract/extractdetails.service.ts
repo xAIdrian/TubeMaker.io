@@ -51,8 +51,9 @@ export class ExtractDetailsService {
   }> {
     return this.generationService.getScriptSectionObserver().pipe(
       map((scriptSection) => {
+        console.log("🚀 ~ file: extractdetails.service.ts:54 ~ ExtractDetailsService ~ map ~ scriptSection:", scriptSection)
         return {
-          scriptSection: scriptSection.scriptSection,
+          scriptSection: scriptSection.scriptSection.trim(),
           sectionIndex: scriptSection.position as number
         }
       })
@@ -110,7 +111,7 @@ export class ExtractDetailsService {
         const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
         const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
         splitParagraphs.forEach((paragraph) => {
-          uiPreppedResponse.push({ isLoading: false, section: paragraph });
+          uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
         });
 
         this.videoTranscriptSubject.next(uiPreppedResponse);
@@ -118,6 +119,7 @@ export class ExtractDetailsService {
         this.videoTranscriptSubject.complete();
       },
       error: (err) => {
+        console.log("🔥 ~ file: extractdetails.service.ts:122 ~ ExtractDetailsService ~ getVideoTranscript ~ err:", err)
         this.errorSubject.next(err);
         this.errorSubject.complete
       },

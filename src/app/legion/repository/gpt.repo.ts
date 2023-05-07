@@ -99,6 +99,7 @@ export class GptRepository {
       reqBody
     ).pipe(
         map((res) => {
+          console.log("🚀 ~ file: gpt.repo.ts:102 ~ GptRepository ~ map ~ res:", res)
           return {
             message: res.message,
             result: {

@@ -2,8 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import{ ExtractContentModel } from '../../../model/extractcontent.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
-import { VideoNiche } from 'src/app/legion/model/videoniche.model';
-import { ExtractDetailsComponent } from '../extractdetails/extractdetails.component';
+import { VideoNiche } from '../../../model/autocreate/videoniche.model';
 import { ExtractDetailsService } from '../extractdetails.service';
 
 @Component({

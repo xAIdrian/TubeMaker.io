@@ -143,10 +143,9 @@ export class ContentGenerationService {
       sectionIndex
     ).subscribe({
       next: (response) => {
+        console.log("🚀 ~ file: contentgeneration.service.ts:161 ~ ContentGenerationService ~ response:", response)
         if (response.message !== 'success') {
           this.errorSubject.next(response.message);
-          this.errorSubject.complete();
-          return;
         }
         this.scriptSectionSubject.next({
           scriptSection: response.result.script,
@@ -155,7 +154,6 @@ export class ContentGenerationService {
       },
       error: (error) => {
         this.errorSubject.next(error);
-        this.errorSubject.complete();
       }
     })
   }

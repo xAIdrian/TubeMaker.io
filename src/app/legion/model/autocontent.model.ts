@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
   VideoNiche,
-} from './videoniche.model';
+} from './autocreate/videoniche.model';
 import {
   getDefaultVideoDurations,
   VideoDuration,
 } from './autocreate/videoduration.model';
-import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
+import { combineLatest, concatMap, Observable, of } from 'rxjs';
 import{ ContentModel } from './common/content.model';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',

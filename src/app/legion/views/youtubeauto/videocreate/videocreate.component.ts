@@ -13,7 +13,7 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../../../service/navigation.service';
 import{ AutoContentModel } from '../../../model/autocontent.model';
-import { VideoNiche as VideoNiche } from '../../../model/videoniche.model';
+import { VideoNiche as VideoNiche } from '../../../model/autocreate/videoniche.model';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 
 @Component({

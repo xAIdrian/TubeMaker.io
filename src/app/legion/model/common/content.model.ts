@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   getDefaultVideoNiches,
   VideoNiche,
-} from '../videoniche.model';
-import {
-  getDefaultVideoDurations,
-  VideoDuration,
-} from '../autocreate/videoduration.model';
+} from '../autocreate/videoniche.model';
 import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 

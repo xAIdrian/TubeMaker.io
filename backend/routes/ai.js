@@ -10,15 +10,21 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+////////////////////
+// TOPIC ///////////
+///////////////////
+
 router.get("/topic/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:14 ~ router.get ~ req:", req.url, req.body)
+
   let language = req.params.language;
+
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_topic.txt";
   } else if (language === 'fr') {
     inputFile ="backend/routes/inputprompts/fr/youtube_topic.txt";
   } else {
-    res.status(403).json({
+    res.status(500).json({
       message: "language is required",
     });
   }
@@ -38,7 +44,7 @@ router.get("/topic/:language", async (req, res, next) => {
       frequency_penalty: 0.7
     });
     response = completion.data.choices[0].text;
-    console.log("🚀 ~ file: ai.js:41 ~ router.get ~ response:", response)
+    
     res.status(200).json({
       message: "success",
       result: { topic: response },
@@ -47,32 +53,39 @@ router.get("/topic/:language", async (req, res, next) => {
   } catch (error) {
     if (error.response) {
       console.log("🚀 ~ file: ai.js:31 ~ router.get ~ error.respons:", error.respons)
-      res.status(403).json(error.response.data);
+      res.status(500).json(error.response.data);
     } else {
       console.log("🚀 ~ file: ai.js:34 ~ router.get ~ error.message:", error.message)
-      res.status(403).json(error.message);
+      res.status(500).json(error.message);
     }
   }
 });
 
+////////////////////
+// SUMMARY /////////
+///////////////////
+
 router.post("/summary/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:57 ~ router.post ~ req:", req.url, req.body)
+
   let language = req.params.language;
+  let prompt = req.body.prompt;
+
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/summary.txt";
   } else if (language === 'fr') {
     inputFile = "backend/routes/inputprompts/fr/summary.txt";
   } else {
-    res.status(403).json({
+    res.status(500).json({
       message: "language is required",
     });
   }
 
-  let prompt = req.body.prompt;
   if (prompt === "") {
     // this needs to be another GPT prompt
     prompt = "How to make money using faceless youtube channels.";
   }
+
   let gptSummary = await summaryPromptCompletion(inputFile, prompt);
   console.log("🚀 ~ file: ai.js:77 ~ router.post ~ gptSummary:", gptSummary)
 
@@ -85,23 +98,29 @@ router.post("/summary/:language", async (req, res, next) => {
   });
 });
 
+////////////////////
+// TITLE //////////
+///////////////////
+
 router.post("/new/title/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:85 ~ router.post ~ req:", req.url, req.body)
+
   let language = req.params.language;
+  let summary = req.body.summary;
+  let style = req.body.style;
+
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_title.txt";
   } else if (language === 'fr') {
     inputFile ="backend/routes/inputprompts/fr/youtube_title.txt";
   } else {
-    res.status(403).json({
+    res.status(500).json({
       message: "language is required",
     });
   }
 
-  let summary = req.body.summary;
-  let style = req.body.style;
   if (summary === "") {
-    res.status(403).json({
+    res.status(500).json({
       message: "summary is required",
     });
   }
@@ -117,25 +136,25 @@ router.post("/new/title/:language", async (req, res, next) => {
 
 router.post("/improve/title/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:114 ~ router.post ~ req:", req.url, req.body)
+  
   let language = req.params.language;
-  if (language === 'en') {
-    inputFile = "backend/routes/inputprompts/en/youtube_optimizer_title.txt";
-  } else if (language === 'fr') {
-    inputFile ="backend/routes/inputprompts/fr/youtube_optimizer_title.txt";
-  } else {
-    res.status(403).json({
-      message: "language is required",
-    });
-  }
-
   let current = req.body.current;
+  let prompt = req.body.prompt;
+
   if (current === "") {
-    res.status(403).json({
+    res.status(500).json({
       message: "current is required",
     });
   }
 
-  let gptTitle = await optimizePromptCompletion(inputFile, current);
+  let inputFile = getImproveFileName(language, prompt);
+  if (inputFile === '') {
+    res.status(500).json({
+      message: "something is missing in body",
+    });
+  }
+
+  let gptTitle = await improvePromptCompletion(inputFile, current);
   console.log("🚀 ~ file: ai.js:140 ~ router.post ~ gptTitle:", gptTitle)
 
   res.status(200).json({
@@ -144,23 +163,29 @@ router.post("/improve/title/:language", async (req, res, next) => {
   });
 });
 
+////////////////////
+// DESCRIPTION /////
+///////////////////
+
 router.post("/new/description/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:149 ~ router.post ~ req:", req.url, req.body)
+
   let language = req.params.language;
+  let summary = req.body.summary;
+  let style = req.body.style;
+
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_description.txt";
   } else if (language === 'fr') {
     inputFile ="backend/routes/inputprompts/fr/youtube_description.txt";
   } else {
-    res.status(403).json({
+    res.status(500).json({
       message: "language is required",
     });
   }
 
-  let summary = req.body.summary;
-  let style = req.body.style;
   if (summary === "") {
-    res.status(403).json({
+    res.status(500).json({
       message: "summary is required",
     });
   }
@@ -176,25 +201,25 @@ router.post("/new/description/:language", async (req, res, next) => {
 
 router.post("/improve/description/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:179 ~ router.post ~ req:", req.url, req.body)
+  
   let language = req.params.language;
-  if (language === 'en') {
-    inputFile = "backend/routes/inputprompts/en/youtube_optimizer_description.txt";
-  } else if (language === 'fr') {
-    inputFile ="backend/routes/inputprompts/fr/youtube_optimizer_description.txt";
-  } else {
-    res.status(403).json({
-      message: "language is required",
-    });
-  }
-
   let current = req.body.current;
+  let prompt = req.body.prompt;
+
   if (current === "") {
-    res.status(403).json({
+    res.status(500).json({
       message: "current is required",
     });
   }
 
-  let gptDescription = await optimizePromptCompletion(inputFile, current);
+  let inputFile = getImproveFileName(language, prompt);
+  if (inputFile === '') {
+    res.status(500).json({
+      message: "something is missing in body",
+    });
+  }
+
+  let gptDescription = await improvePromptCompletion(inputFile, current);
   console.log("🚀 ~ file: ai.js:199 ~ router.post ~ gptDescription:", gptDescription)
 
   res.status(200).json({
@@ -203,27 +228,30 @@ router.post("/improve/description/:language", async (req, res, next) => {
   });
 });
 
-/**
- * Keep in mind this is processing Script Sections
- */
+////////////////////
+// SCRIPT //////////
+///////////////////
+
 router.post("/new/script/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:211 ~ router.post ~ req:", req.url, req.body)
+
   let language = req.params.language;
+  let summary = req.body.summary;
+  let style = req.body.style;
+  let point = req.body.point;
+
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_script_section.txt";
   } else if (language === 'fr') {
     inputFile ="backend/routes/inputprompts/fr/youtube_script_section.txt";
   } else {
-    res.status(403).json({
+    res.status(500).json({
       message: "language is required",
     });
   }
 
-  let summary = req.body.summary;
-  let style = req.body.style;
-  let point = req.body.point;
   if (summary === "") {
-    res.status(403).json({
+    res.status(500).json({
       message: "summary is required",
     });
   }
@@ -237,26 +265,62 @@ router.post("/new/script/:language", async (req, res, next) => {
   });
 });
 
+router.post("/improve/script/:language", async (req, res, next) => {
+  console.log("🚀 ~ file: ai.js:271 ~ router.post ~ req:", req.url, req.body)
+
+  let language = req.params.language;
+  let current = req.body.current;
+  let prompt = req.body.prompt;
+
+  if (current === "") {
+    res.status(500).json({
+      message: "current is required",
+    });
+  }
+
+  let inputFile = getImproveFileName(language, prompt);
+  if (inputFile === '') {
+    res.status(500).json({
+      message: "something is missing in body",
+    });
+  }
+
+  let gptScript = await improvePromptCompletion(inputFile, current);
+  console.log("🚀 ~ file: ai.js:212 ~ router.post ~ gptScript:", gptScript)
+
+  res.status(200).json({
+    message: "success",
+    result: { script: gptScript },
+  });
+});
+
+////////////////////
+// TAGS ///////////
+///////////////////
+
 router.post("/new/tags/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:242 ~ router.post ~ req:", req.url, req.body)
+
   let language = req.params.language;
+  let summary = req.body.summary;
+  let style = req.body.style;
+
   if (language === 'en') {
     inputFile = "backend/routes/inputprompts/en/youtube_tags.txt";
   } else if (language === 'fr') {
     inputFile ="backend/routes/inputprompts/fr/youtube_tags.txt";
   } else {
-    res.status(403).json({
+    res.status(500).json({
       message: "language is required",
     });
   }
 
-  let summary = req.body.summary;
   if (summary === "") {
-    res.status(403).json({
+    res.status(500).json({
       message: "summary is required",
     });
   }
-  let style = req.body.style;
+  
   let gptTags = await newPromptCompletion(inputFile, summary,style);
   console.log("🚀 ~ file: ai.js:262 ~ router.post ~ gptTags:", gptTags)
 
@@ -268,24 +332,25 @@ router.post("/new/tags/:language", async (req, res, next) => {
 
 router.post("/improve/tags/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:271 ~ router.post ~ req:", req.url, req.body)
-  let language = req.params.language;
-  if (language === 'en') {
-    inputFile = "backend/routes/inputprompts/en/youtube_optimizer_tags.txt";
-  } else if (language === 'fr') {
-    inputFile ="backend/routes/inputprompts/fr/youtube_optimizer_tags.txt";
-  } else {
-    res.status(403).json({
-      message: "language is required",
-    });
-  }
 
+  let language = req.params.language;
   let current = req.body.current;
+  let prompt = req.body.prompt;
+
   if (current === "") {
-    res.status(403).json({
+    res.status(500).json({
       message: "current is required",
     });
   }
-  let gptTags = await optimizePromptCompletion(inputFile, current);
+
+  let inputFile = getImproveFileName(language, prompt);
+  if (inputFile === '') {
+    res.status(500).json({
+      message: "something is missing in body",
+    });
+  }
+
+  let gptTags = await improvePromptCompletion(inputFile, current);
   console.log("🚀 ~ file: ai.js:212 ~ router.post ~ gptTags:", gptTags)
 
   res.status(200).json({
@@ -293,6 +358,32 @@ router.post("/improve/tags/:language", async (req, res, next) => {
     result: { tags: gptTags },
   });
 });
+
+////////////////////
+// FUNCTIONS //////
+////////////////////
+
+function getImproveFileName(language, prompt) {
+  if (language === 'en') {
+    inputFolder = "backend/routes/inputprompts/en";
+  } else if (language === 'fr') {
+    inputFolder ="backend/routes/inputprompts/fr";
+  } else {
+    console.log('🔥 language not found')
+    return ''
+  }
+  switch (prompt) { 
+    case 'funnier': return `${inputFolder}/optimizer_funnier.txt`;
+    case 'formal': return `${inputFolder}/optimizer_formal.txt`;
+    case 'simpler': return `${inputFolder}/optimizer_simpler.txt`;
+    case 'expand': return `${inputFolder}/optimizer_expand.txt`;
+    case 'shorten': return `${inputFolder}/optimizer_shorten.txt`;
+    default: {
+      console.log('🔥 prompt not found')
+      return ''
+    }
+  }
+}
 
 async function getNewOutputCompletion(prompt) {
   try {
@@ -302,8 +393,6 @@ async function getNewOutputCompletion(prompt) {
       temperature: 0.7,
       max_tokens: 3000,
       top_p: 1,
-      presence_penalty: 0.6,
-      frequency_penalty: 0.6
     });
     return completion.data.choices[0].text;
     
@@ -324,9 +413,11 @@ async function getOptimizedOutputCompletion(prompt) {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
-      temperature: 0.7,
+      temperature: 1,
       max_tokens: 2500,
       top_p: 1,
+      presence_penalty: 0.6,
+      frequency_penalty: 0.6
     });
     return completion.data.choices[0].text;
     
@@ -369,7 +460,7 @@ function newPromptCompletion(filename, inputParam, styleParam) {
   return getNewOutputCompletion(properPrompt);
 }
 
-function optimizePromptCompletion(filename, inputParam) {
+function improvePromptCompletion(filename, inputParam) {
   console.log("🚀 ~ file: ai.js:292 ~ optimizePromptCompletion ~ inputParam:", inputParam)
   rawPrompt = readTextFileToPrompt(filename);
   console.log("🚀 ~ file: ai.js:294 ~ optimizePromptCompletion ~ rawPrompt:", rawPrompt)

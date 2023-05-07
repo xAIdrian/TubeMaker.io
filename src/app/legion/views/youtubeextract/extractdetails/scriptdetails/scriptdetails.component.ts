@@ -26,8 +26,8 @@ import { ExtractDetailsService } from "../../extractdetails.service";
         this.extractDetailsService.getErrorObserver().subscribe({
             next: (error) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", error)
-            },
-            complete: () => {
+                this.showErrorToast = true;
+                this.errorToastText = error;
                 this.changeDetectorRef.detectChanges();
             }
         });
@@ -44,7 +44,7 @@ import { ExtractDetailsService } from "../../extractdetails.service";
             next: (section) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", section)
                 const updateElement = {
-                    isLoading: false,
+                    isLoading: true,
                     section: section.scriptSection
                 }
                 if (section.sectionIndex < 0) {
@@ -55,9 +55,6 @@ import { ExtractDetailsService } from "../../extractdetails.service";
                 }
                 this.transcriptSections[section.sectionIndex] = updateElement;
                 this.toggleLoading(updateElement);
-                this.changeDetectorRef.detectChanges();
-            },
-            complete: () => {
                 this.changeDetectorRef.detectChanges();
             }
         });
