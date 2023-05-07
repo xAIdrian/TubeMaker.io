@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { NavigationService } from '../../../service/navigation.service';
 import{ AutoContentModel } from '../../../model/autocontent.model';
-import { YoutubeService } from '../../../service/youtube.service';
+import { ExtractDetailsService } from '../../youtubeextract/extractdetails.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -33,7 +33,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     private contentRepo: AutoContentModel,
     private navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef,
-    private youtubeService: YoutubeService,
+    private youtubeService: ExtractDetailsService,
     private clipboard: Clipboard
   ) {}
 
@@ -43,7 +43,6 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
       console.log("🚀 ~ file: videoupload.component.ts:50 ~ VideoUploadComponent ~ ngOnInit ~ onGoogleLibraryLoad:")
       // this.youtubeService.initTokenClient();
     };
-    this.setupObservers();
   }
 
   ngAfterContentInit() {
@@ -53,24 +52,6 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     this.script = this.contentRepo.getCompleteScript();
 
     this.changeDetectorRef.detectChanges();
-  }
-
-  setupObservers() {
-    this.youtubeService.getTokenSuccessObserver().subscribe((success) => {
-      console.log("🚀 ~ file: videoupload.component.ts:123 ~ VideoUploadComponent ~ this.youtubeService.getTokenSuccessObserver ~ token", success)
-      if (success) {
-        // this.youtubeService.getChannels().subscribe((channels) => {
-        //     console.log("🚀 ~ file: videoupload.component.ts:82 ~ VideoUploadComponent ~ loginOnClick ~ channels", channels)
-        //     let channelId = channels.items[0].id
-        //     let url = `https://studio.youtube.com/channel/${channelId}/videos/upload?d=ud`
-        //     window.open(url, '_blank');
-        // });
-      }
-    });
-  }
-
-  loginOnClick() {
-    this.youtubeService.requestAccessToken();
   }
 
   copyTitle() { 

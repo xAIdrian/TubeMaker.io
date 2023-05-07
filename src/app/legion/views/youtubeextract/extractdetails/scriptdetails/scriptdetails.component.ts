@@ -1,8 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { AfterContentInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { GptService } from "src/app/legion/service/gpt.service";
-import { YoutubeService } from "src/app/legion/service/youtube.service";
-
+import { AfterContentInit, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
+import { ContentGenerationService } from "../../../../service/contentgeneration.service";
+import { ExtractDetailsService } from "../../extractdetails.service";
 
 @Component({
     selector: 'script-details',
@@ -19,13 +18,12 @@ import { YoutubeService } from "src/app/legion/service/youtube.service";
     errorToastText = ''
 
     constructor(
-        private youtubeService: YoutubeService,
-        private gptService: GptService,
+        private extractDetailsService: ExtractDetailsService,
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
 
     ngOnInit() {
-        this.gptService.getErrorObserver().subscribe({
+        this.extractDetailsService.getErrorObserver().subscribe({
             next: (error) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", error)
             },
@@ -33,7 +31,7 @@ import { YoutubeService } from "src/app/legion/service/youtube.service";
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.youtubeService.getVideoTranscriptObserver().subscribe({
+        this.extractDetailsService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
@@ -42,8 +40,22 @@ import { YoutubeService } from "src/app/legion/service/youtube.service";
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.gptService.getScriptSectionObserver().subscribe({
-            next: (sections) => {
+        this.extractDetailsService.getScriptSectionObserver().subscribe({
+            next: (section) => {
+                console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", section)
+                const updateElement = {
+                    isLoading: false,
+                    section: section.scriptSection
+                }
+                if (section.sectionIndex < 0) {
+                    this.showErrorToast = true;
+                    this.errorToastText = 'Error: Section index is less than 0';
+                    this.toggleLoading(updateElement);
+                    return;
+                }
+                this.transcriptSections[section.sectionIndex] = updateElement;
+                this.toggleLoading(updateElement);
+                this.changeDetectorRef.detectChanges();
             },
             complete: () => {
                 this.changeDetectorRef.detectChanges();
@@ -52,13 +64,13 @@ import { YoutubeService } from "src/app/legion/service/youtube.service";
     }
 
     ngAfterContentInit() {
-        this.youtubeService.getVideoTranscript();
+        this.extractDetailsService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
     }
 
     onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {
         this.toggleLoading(section);
-        this.gptService.updateNewScriptSection(prompt, section.section, '', index);
+        this.extractDetailsService.updateNewScriptIndex(prompt, section.section, index);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -67,7 +79,7 @@ import { YoutubeService } from "src/app/legion/service/youtube.service";
     }
 
     onScriptSubmit() {
-
+        this.extractDetailsService.submitScript(this.transcriptSections);
     }
 
     private toggleLoading(section: { isLoading: boolean, section: string }) {
