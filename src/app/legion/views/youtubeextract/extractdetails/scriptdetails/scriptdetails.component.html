@@ -24,24 +24,22 @@
             </div>
             <div class="col-1">
                 <div style="display: flex; align-items: center; padding: 0; margin:0">
-                    <c-button-group>
-                        <c-dropdown #dropdown direction="dropstart" variant="input-group">
-                            <ul cDropdownMenu>
-                                <li><button cDropdownItem (click)="onImproveClick('funny', transcriptSections[i], i)">Funnier</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('formal', transcriptSections[i], i)">Formal</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('simple', transcriptSections[i], i)">Simpler</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('expand', transcriptSections[i], i)">Expand</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('shorten', transcriptSections[i], i)">Shorten</button></li>
-                                <li><hr cDropdownDivider></li>
-                                <li><button cDropdownItem>Close</button></li>
-                            </ul>
-                            <button cButton cDropdownToggle class="col-btn" variant="outline" color="dark"
-                                [disabled]="transcriptSections[i].isLoading" style="margin-right: 0px;">
-                            <c-spinner *ngIf="transcriptSections[i].isLoading" size="sm"></c-spinner>
-                                Use AI
-                            </button>
-                        </c-dropdown>
-                    </c-button-group>
+                    <c-dropdown #dropdown direction="dropstart" variant="btn-group">
+                        <button cButton cDropdownToggle color="primary"
+                            [disabled]="transcriptSections[i].isLoading" style="margin-left: 1rem;">
+                        <c-spinner *ngIf="transcriptSections[i].isLoading" size="sm"></c-spinner>
+                            Use AI
+                        </button>
+                        <ul cDropdownMenu class="custom-dropdown-menu">
+                            <li class="dropdown-header">Pick a way to improve this script:</li>
+                            <li><hr cDropdownDivider></li>
+                            <li><button cDropdownItem (click)="onImproveClick('funny', transcriptSections[i], i)">Funnier</button></li>
+                            <li><button cDropdownItem (click)="onImproveClick('formal', transcriptSections[i], i)">Formal</button></li>
+                            <li><button cDropdownItem (click)="onImproveClick('simple', transcriptSections[i], i)">Simpler</button></li>
+                            <li><button cDropdownItem (click)="onImproveClick('expand', transcriptSections[i], i)">Expand</button></li>
+                            <li><button cDropdownItem (click)="onImproveClick('shorten', transcriptSections[i], i)">Shorten</button></li>
+                        </ul>
+                    </c-dropdown>
                 </div>
             </div>
         </div>
