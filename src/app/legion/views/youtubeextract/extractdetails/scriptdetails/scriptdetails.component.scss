@@ -1,0 +1,55 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+textarea {
+    width: 100%;
+    height: auto;
+    border: none;
+}
+
+.full-width {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.d-flex {
+    padding-top: 1rem;
+}
+
+.col-8 {
+    flex-basis: calc(90% - 20px);
+    max-width: calc(90% - 20px);
+}
+
+.col-1 {
+    flex-basis: calc(10% - 20px);
+    max-width: calc(10% - 20px);
+}
+
+h4 {
+    padding-top: 2rem;
+}
+
+.col-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.custom-dropdown-menu {
+    width: 130%;
+    font-weight: bold;
+  }
+  
+  .dropdown-header {
+    font-weight: bold;
+    color: darkslategray;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+  

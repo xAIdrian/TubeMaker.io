@@ -204,52 +204,16 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     this.gptService.updateNewTitle();
   }
 
-  optimizeTitle() {
-    if (this.infoFormGroup.value.title === '') {
-      this.infoFormGroup.patchValue({ title: 'Please input a value to optimize' })
-      return
-    }
-    this.isTitleOptimizing = true;
-    this.gptService.optimizeTitle(
-      this.infoFormGroup.value.title,
-    );
-    this.infoFormGroup.patchValue({ title: 'Please wait...' })
-  }
-
   rerollDescription() {
     this.isDescLoading = true;
     this.infoFormGroup.patchValue({ description: 'Please wait...' })
     this.gptService.updateNewDescription();
-  }
-  
-  optimizeDesc() {
-    if (this.infoFormGroup.value.description === '') {
-      this.infoFormGroup.patchValue({ description: 'Please input a value to optimize' })
-      return
-    }
-    this.isDescOptimizing = true;
-    this.gptService.optimizeDescription(
-      this.infoFormGroup.value.description,
-    );
-    this.infoFormGroup.patchValue({ description: 'Please wait...' })
   }
 
   rerollTags() {
     this.isTagsLoading = true;
     this.infoFormGroup.patchValue({ tags: 'Please wait...' })
     this.gptService.updateNewTags();
-  }
-
-  optimizeTags() {
-    if (this.infoFormGroup.value.tags === '') {
-      this.infoFormGroup.patchValue({ tags: 'Please input a value to optimize' })
-      return
-    }
-    this.isTagsOptimizing = true;
-    this.gptService.optimizeTags(
-      this.infoFormGroup.value.tags,
-    );
-    this.infoFormGroup.patchValue({ tags: 'Please wait...' })
   }
 
   onInfoSectionClick() {

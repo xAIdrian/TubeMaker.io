@@ -1,4 +1,5 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+
 import { FormGroup } from "@angular/forms";
 import { YoutubeService } from "../../../service/youtube.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
@@ -13,8 +14,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     transcriptIsLoading = true;
     showErrorState = false;
-
-    transcriptSections: string[] = [];
+    errorText = '';
 
     scriptFormGroup: FormGroup;
 
@@ -29,35 +29,29 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
-        this.youtubeService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
     }
 
     private setupObservers() {
-        this.youtubeService.getVideoTranscriptObserver().subscribe({
-            next: (sections) => {console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
-                this.transcriptSections = sections;
-                this.transcriptIsLoading = false;
-                this.changeDetectorRef.detectChanges();
-            },
-            error: (error) => {
+        this.youtubeService.getErrorObserver().subscribe({
+            next: (error: any) => {
                 this.showErrorState = true;
+                this.errorText = error;
+            },
+            complete: () => {
                 this.transcriptIsLoading = false;
                 this.changeDetectorRef.detectChanges();
+            }
+        });
+        this.youtubeService.getTranscriptIsLoadingObserver().subscribe({
+            next: (isLoading: boolean) => {
+                console.log("🚀 ~ file: extractdetails.component.ts:51 ~ ExtractDetailsComponent ~ this.youtubeService.getTranscriptIsLoadingObserver ~ isLoading:", isLoading)
+                this.transcriptIsLoading = isLoading;
             }
         });
     }
 
     private setupFormControls() {
         this.scriptFormGroup = new FormGroup({});
-    }
-
-    onImproveClick(prompt: string, section: string) {
-        // this.youtubeService.openVideoInYoutubeStudio();
-    }
-
-    onDrop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.transcriptSections, event.previousIndex, event.currentIndex);
-        console.log("🚀 ~ file: extractdetails.component.ts:77 ~ ExtractDetailsComponent ~ onDrop ~ this.transcriptSections", this.transcriptSections)
     }
 }

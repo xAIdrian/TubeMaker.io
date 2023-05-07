@@ -26,8 +26,20 @@ const storagePath = './backend/audio'
 router.get("/:videoId", async (req, res) => {
   const videoId = req.params.videoId;
 
+  //test code
+  if (videoId === 'test') { 
+    res.status(200).json({
+      message: "success",
+      result: {
+        //our extrememely long sample response
+        translation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum bibendum ac ante id molestie. Nam vel enim quis leo egestas facilisis a ac enim. Aliquam diam ligula, volutpat vel nulla non, maximus blandit tellus. Vestibulum condimentum eleifend orci vel dictum. Aenean mollis tempus felis, iaculis ultricies justo tincidunt nec. Duis lobortis quam id ligula suscipit, sit amet porttitor massa sagittis. Phasellus scelerisque, ligula nec ullamcorper consectetur, augue elit consectetur elit, eget tempus ante sapien congue sapien. Ut mollis vulputate ex eget bibendum. Donec sed urna feugiat, pharetra enim vel, maximus ligula. Aenean aliquet nec sapien ultricies ornare.Curabitur et tincidunt urna, sed pulvinar purus. Mauris venenatis neque non dolor consectetur, egestas maximus risus placerat. Suspendisse eget dui commodo, suscipit velit id, pellentesque justo. Suspendisse scelerisque sollicitudin malesuada. Maecenas fermentum sodales ipsum nec condimentum. Donec vitae dolor lacinia, gravida mauris id, mollis turpis. Vivamus rutrum augue nibh, sed convallis leo pulvinar nec. Donec feugiat pellentesque tincidunt. Donec ut ligula a arcu feugiat tempor. Donec ut erat eget lorem rutrum pellentesque. Etiam sit amet efficitur lacus. Morbi quis justo facilisis ligula congue porta. Fusce a ex arcu. Nam tellus justo, laoreet vitae tempus a, tempor sit amet lacus"
+      }
+    });
+    const videoUrl = 'https://www.youtube.com/watch?v=XzLgw2Y8gNw'
+    return;
+  }
+
   // const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-  const videoUrl = 'https://www.youtube.com/watch?v=XzLgw2Y8gNw'
   const options = {
     filter: "audioonly",
     quality: "highestaudio",
@@ -41,27 +53,27 @@ router.get("/:videoId", async (req, res) => {
       const filename = `${info.videoDetails.title}.mp3`;
       const filePath = `${storagePath}/${filename}`;
 
-      await ffmpeg(stream)
+      ffmpeg(stream)
         .toFormat("mp3")
         .saveToFile(filePath)
         .on("error", function (err) {
-          return throwError(() => new Error('🔥' + err))
+          return throwError(() => new Error('🔥' + err));
         }).on("end", async function () {
-          console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded!")
-          const transcription = await transcribeAudio(filePath, info.videoDetails.description)
-          const translatedText = await translateText(transcription)
+          console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded!");
+          const transcription = await transcribeAudio(filePath, info.videoDetails.description);
+          const translations = await translateText(transcription);
 
-          if (translatedText !== undefined && translatedText !== '') {
+          if (translations !== undefined && translations.length > 0) {
             res.status(200).json({
               message: "success",
               result: {
-                translation: translatedText,
+                translation: translations[0].translatedText,
               }
             });
-            deletefile(filePath)
+            // deletefile(filePath)
           } else {
-            deletefile(filePath)
-            return throwError(() => new Error('🔥' + 'No translation found'))
+            deletefile(filePath);
+            return throwError(() => new Error('🔥' + 'No translation found'));
           }
         })
     })
@@ -87,9 +99,9 @@ async function translateText(text) {
   const [response] = await translationClient.translateText(request);
 
   for (const translation of response.translations) {
-    console.log(`Translation: ${translation.translatedText}`);
+    console.log(`\n\nTranslation: ${translation.translatedText}`);
   }
-  return response.translations.translatedText
+  return response.translations
 }
 
 

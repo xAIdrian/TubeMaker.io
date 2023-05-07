@@ -1,0 +1,82 @@
+<mat-step [stepControl]="infoFormGroup">
+    <h4>Improve Your Listing Data</h4>
+    <p class="text-medium-emphasis small">
+      With your script completed you are ready to improve your listing data.  This is the first impression your audience will have of your video.  Make sure to use our tools to make it better.
+    </p>
+    <form [formGroup]="infoFormGroup">
+      <ng-template matStepLabel>Title</ng-template>
+
+      <h5>Title</h5>
+      <div class="row">
+        <div class="col-8">
+          <textarea 
+            autosize
+            style="height: 100%; margin-bottom: 0.5rem;" 
+            cFormControl 
+            formControlName="title">
+        </textarea>
+        </div>
+        <!-- Improve this with our Use AI dropdown. From the previous page -->
+        <div class="col-2">
+          <!-- <div style="display: flex; align-items: center; padding: 0; margin:0">
+            <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleLoading"
+              (click)="rerollTitle()">
+              <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
+              {{ 'video_editor.new' | translate }}
+            </button>
+          </div> -->
+        </div>
+      </div>
+
+      <h5>Description</h5>
+      <div class="row">
+        <div class="col-8">
+          <textarea  
+            autosize
+            style="height: 100%; margin-bottom: 0.5rem;" 
+            cFormControl 
+            formControlName="description" >
+        </textarea>
+        </div>
+        <div class="col-2">
+        <!-- Improve this with our Use AI dropdown. From the previous page -->
+          <!-- <div style="display: flex; align-items: center; padding: 0; margin:0">
+            <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isDescLoading"
+              (click)="rerollDescription()">
+              <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
+              {{ 'video_editor.new' | translate }}
+            </button>
+          </div> -->
+        </div>
+      </div>
+
+      <h5>Tags</h5>
+      <div class="row">
+        <div class="col-8">
+          <textarea autosize style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags">
+        </textarea>
+        </div>
+        <div class="col-2">
+            <!-- Improve this with our Use AI dropdown. From the previous page -->
+          <!-- <div style="display: flex; align-items: center; padding: 0; margin:0">
+            <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTagsLoading"
+              (click)="rerollTags()">
+              <c-spinner *ngIf="isTagsLoading" size="sm"></c-spinner>
+              {{ 'video_editor.new' | translate }}
+            </button>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+        <button cButton variant="outline" color="dark" matStepperNext>Go Back</button>
+        <button 
+          class="btn btn-primary" 
+          style="margin-left: 1rem;" 
+          matStepperNext 
+          (click)="onTitleSubmitClick()">
+            Next Step
+          </button>
+      </div>
+    </form>
+  </mat-step>

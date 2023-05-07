@@ -4,6 +4,7 @@ import { from, Observable, Observer, of, Subject } from 'rxjs';
 import { YoutubeDataRepository } from '../repository/youtubedata.repo';
 import { YoutubeVideo } from '../model/video/youtubevideo.model';
 import { NavigationService } from './navigation.service';
+import { TextSplitUtility } from '../helper/textsplit.utility';
 
 declare var gapi: any;
 
@@ -12,10 +13,11 @@ declare var gapi: any;
 })
 export class YoutubeService {
   private errorSubject = new Subject<string>();
+  private isTranscriptLoadingSubject = new Subject<boolean>();
 
   private tokenSuccessSubject = new Subject<string>();
   private youtubeVideosSubject = new Subject<YoutubeVideo[]>();
-  private videoTranscriptSubject = new Subject<string[]>();
+  private videoTranscriptSubject = new Subject<{ isLoading: boolean, section: string }[]>();
 
   private currentCopyCatVideoId = '';
 
@@ -23,6 +25,7 @@ export class YoutubeService {
     private youtubeRepository: YoutubeDataRepository,
     private transcriptRepository: TranscriptRepository,
     private navigationService: NavigationService,
+    private textSplitUtility: TextSplitUtility
   ) {}
 
   requestAccessToken() {
@@ -39,11 +42,15 @@ export class YoutubeService {
     return this.errorSubject.asObservable();
   }
 
+  getTranscriptIsLoadingObserver(): Observable<boolean> {
+    return this.isTranscriptLoadingSubject.asObservable();
+  }
+
   getYoutubeVideosObserver(): Observable<YoutubeVideo[]> {
     return this.youtubeVideosSubject.asObservable();
   }
 
-  getVideoTranscriptObserver(): Observable<string[]> {
+  getVideoTranscriptObserver(): Observable<{ isLoading: boolean, section: string }[]> {
     return this.videoTranscriptSubject.asObservable();
   }
 
@@ -63,10 +70,14 @@ export class YoutubeService {
           commentCount: '12000',
         },
       }])
+    this.youtubeVideosSubject.complete();
     
     // this.youtubeRepository.getVideoListByNiche(niche).subscribe({
-    //   next: (videos) => this.youtubeVideosSubject.next(videos),
-    //   error: (err) => this.errorSubject.next(err)
+    //   next: (videos) => {
+          //   this.youtubeVideosSubject.next(videos);
+          //   this.youtubeVideosSubject.complete();
+          // },
+    //   error: (err) => {this.errorSubject.next(err); this.youtubeVideosSubject.complete();}
     // });
   }
 
@@ -76,26 +87,39 @@ export class YoutubeService {
   }
 
   getVideoTranscript() {
+    console.log("🚀 ~ file: youtube.service.ts:90 ~ YoutubeService ~ getVideoTranscript ~ getVideoTranscript:", 'getVideoTranscript')
     if (this.currentCopyCatVideoId === '' || this.currentCopyCatVideoId === undefined) {
-      this.errorSubject.next('No video selected');
-      return;
+      this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
+      // return;
+      this.currentCopyCatVideoId = 'test';
     }
 
-    this.transcriptRepository.getTranscript(this.currentCopyCatVideoId).subscribe({
-      next: (response: { message: string, result: { translation: string[] }}) => {
-        console.log("🚀 ~ file: youtube.service.ts:108 ~ YoutubeService ~ this.transcriptRepository.getTranscript ~ response:", response)
+    this.transcriptRepository.getTranscript(this.currentCopyCatVideoId).pipe(
+
+    ).subscribe({
+      next: (response: { message: string, result: { translation: string }}) => {
         if (response.message !== 'success') {
           this.errorSubject.next(response.message);
+          this.errorSubject.complete();
           return
         } else if (response.result.translation.length === 0) {
           this.errorSubject.next('No transcript found');
+          this.errorSubject.complete();
           return;
         }
-        this.videoTranscriptSubject.next(response.result.translation);
+        const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
+        const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
+        splitParagraphs.forEach((paragraph) => {
+          uiPreppedResponse.push({ isLoading: false, section: paragraph });
+        });
+
+        this.videoTranscriptSubject.next(uiPreppedResponse);
+        this.isTranscriptLoadingSubject.next(false);
+        this.videoTranscriptSubject.complete();
       },
       error: (err) => {
-        console.log(err);
         this.errorSubject.next(err);
+        this.errorSubject.complete
       },
     });
   }
