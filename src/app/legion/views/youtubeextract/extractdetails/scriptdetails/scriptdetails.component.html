@@ -26,7 +26,8 @@
                 <div style="display: flex; align-items: center; padding: 0; margin:0">
                     <c-dropdown #dropdown direction="dropstart" variant="btn-group">
                         <button cButton cDropdownToggle color="primary"
-                            [disabled]="transcriptSections[i].isLoading" style="margin-left: 1rem;">
+                            [disabled]="transcriptSections[i].isLoading" 
+                            style="margin-left: 1rem; margin-top: 0.75rem;">
                         <c-spinner *ngIf="transcriptSections[i].isLoading" size="sm"></c-spinner>
                             Use AI
                         </button>
