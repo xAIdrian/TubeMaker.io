@@ -18,11 +18,9 @@
         </div>
         <!-- Improve this with our Use AI dropdown. From the previous page -->
         <div class="col-2">
-          <div style="display: flex; justify-content: center;">
+          <div style="margin-left: 1rem;">
             <c-dropdown #dropdown direction="dropstart" variant="btn-group">
-                <button cButton cDropdownToggle color="primary"
-                    [disabled]="isTitleLoading" 
-                    style="margin-top: 0.75rem;">
+                <button cButton cDropdownToggle color="primary" [disabled]="isTitleLoading">
                         Use AI
                 <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
                 </button>
@@ -51,11 +49,9 @@
           </textarea>
         </div>
         <div class="col-2">
-          <div style="display: flex; justify-content: center;">
+          <div style="margin-left: 1rem;">
             <c-dropdown #dropdown direction="dropstart" variant="btn-group">
-                <button cButton cDropdownToggle color="primary"
-                    [disabled]="isDescLoading" 
-                    style="margin-top: 0.75rem;">
+                <button cButton cDropdownToggle color="primary" [disabled]="isDescLoading">
                         Use AI
                 <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
                 </button>
@@ -80,8 +76,7 @@
         </textarea>
         </div>
         <div class="col-2">
-            <!-- Improve this with our Use AI dropdown. From the previous page -->
-          <div style="display: flex; align-items: center; padding: 0; margin:0">
+          <div style="margin-left: 0.5rem;">
             <button cButton class="col-btn"color="primary" [disabled]="isTagsLoading"
               (click)="rerollTags()">
               <c-spinner *ngIf="isTagsLoading" size="sm"></c-spinner>
@@ -92,7 +87,7 @@
       </div>
 
       <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-        <button cButton variant="outline" color="dark" matStepperNext>Go Back</button>
+        <button cButton variant="outline" color="dark" matStepperPrevious>Go Back</button>
         <button 
           class="btn btn-primary" 
           style="margin-left: 1rem;" 

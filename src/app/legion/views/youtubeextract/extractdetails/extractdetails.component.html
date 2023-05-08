@@ -13,7 +13,7 @@
       </p>
     </div>
 
-    <mat-horizontal-stepper [linear]="true" #stepper>
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
       <mat-step>
         <ng-template matStepLabel>Script</ng-template>
         <script-details [parentIsLoading]="transcriptIsLoading"></script-details>

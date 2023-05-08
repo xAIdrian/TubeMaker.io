@@ -221,11 +221,21 @@ export class ExtractDetailsService {
       )
 
       //test code above
+      return
     }
     //real code to uncomment below
-    // this.generationService.updateNewTitle(this.currentCopyCatVideo.title);
-    // this.generationService.updateNewDescription(this.currentCopyCatVideo.description);
-    // this.generationService.updateNewTags(this.currentCopyCatVideo.tags);
+    this.generationService.getNewTitle(
+      this.currentCopyCatVideo.description,
+      this.currentCopyCatVideo.title
+    );
+    this.generationService.getNewDescription(
+      this.currentCopyCatVideo.title,
+      this.currentCopyCatVideo.description
+    );
+    this.generationService.getNewTags(
+      this.currentCopyCatVideo.title,
+      this.currentCopyCatVideo.description
+    );
   }
 
   updateTitle(prompt: string, current: string) { 

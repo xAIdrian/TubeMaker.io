@@ -17,6 +17,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     errorText = '';
 
     scriptFormGroup: FormGroup;
+    isLinear: any;
 
     constructor(
         private youtubeService: ExtractDetailsService,
