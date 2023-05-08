@@ -50,7 +50,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
       },
       {
         name: translate.instant('navigation.copy_cat'),
-        url: '/legion/copycat',
+        url: '/maker/copycat',
         iconComponent: { name: 'cil-speedometer' },
         badge: {
           color: 'info',
@@ -59,7 +59,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
       },
       {
         name: translate.instant('navigation.brand_new'),
-        url: '/legion/youtubeauto',
+        url: '/maker/autos',
         iconComponent: { name: 'cil-media-play' }
       },
       {

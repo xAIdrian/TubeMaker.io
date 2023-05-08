@@ -21,9 +21,9 @@ export abstract class ContentModel {
   protected translate: TranslateService;
 
   constructor(
-    private injTranslate: TranslateService
+    private initTranslate: TranslateService
   ) { 
-    this.translate = injTranslate
+    this.translate = initTranslate
    }
 
   getInitVideoNiche(headerKey: string, descriptionKey: string): Observable<VideoNiche>{

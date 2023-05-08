@@ -11,7 +11,7 @@ import { authGuard } from './legion/service/auth/auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'legion',
+    redirectTo: 'maker',
     pathMatch: 'full'
   },
   {
@@ -65,7 +65,7 @@ const routes: Routes = [
           import('./views/widgets/widgets.module').then((m) => m.WidgetsModule)
       },
       {
-        path: 'legion',
+        path: 'maker',
         loadChildren: () =>
           import('./legion/legion.module').then((m) => m.LegionModule)
       },

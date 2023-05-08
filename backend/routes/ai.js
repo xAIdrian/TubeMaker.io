@@ -435,7 +435,7 @@ async function getOptimizedOutputCompletion(prompt) {
 
 function summaryPromptCompletion(inputFile, inputParam) {
   rawPrompt = readTextFileToPrompt(inputFile); 
-  summaryPrompt = rawPrompt.replace("<<FEED>>", inputParam);
+  summaryPrompt = rawPrompt.replace("FEED", inputParam);
   
   return getNewOutputCompletion(summaryPrompt);
 }
@@ -443,9 +443,9 @@ function summaryPromptCompletion(inputFile, inputParam) {
 function newScriptPromptCompletion(inputFile, inputParam, styleParam, durationPoint) {
   rawPrompt = readTextFileToPrompt(inputFile); 
   scriptPrompt = rawPrompt
-    .replace("<<FEED>>", inputParam)
-    .replace("<<STYLE>>", styleParam)
-    .replace("<<POINT>>", durationPoint);
+    .replace("FEED", inputParam)
+    .replace("STYLE", styleParam)
+    .replace("POINT", durationPoint);
 
   return getNewOutputCompletion(scriptPrompt);
 }
@@ -456,7 +456,7 @@ function newPromptCompletion(filename, inputParam, styleParam) {
     console.log("🔥 ~ file: ai.js:80 ~ newPromptCompletion ~", filename, inputParam, styleParam)
     return
   }
-  properPrompt = rawPrompt.replace("<<FEED>>", inputParam).replace("<<STYLE>>", styleParam);
+  properPrompt = rawPrompt.replace("FEED", inputParam).replace("STYLE", styleParam);
   return getNewOutputCompletion(properPrompt);
 }
 
@@ -468,7 +468,7 @@ function improvePromptCompletion(filename, inputParam) {
     console.log("🔥 ~ file: ai.js:296 ~ optimizePromptCompletion ~ inputParam:", inputParam)
     return
   }
-  properPrompt = rawPrompt.replace("<<SOURCE>>", inputParam);
+  properPrompt = rawPrompt.replace("SOURCE", inputParam);
   console.log("🚀 ~ file: ai.js:300 ~ optimizePromptCompletion ~ properPrompt:", properPrompt)
   return getOptimizedOutputCompletion(properPrompt);
 }

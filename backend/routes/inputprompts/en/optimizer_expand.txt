@@ -1,5 +1,5 @@
-Your task is to expand the following text and make it longer while maintaining its original meaning. Please provide a detailed response that includes additional information, examples, or explanations to enhance the clarity and depth of the original text.
+Your task is to expand the following text delimited by <<>> and make it longer while maintaining its original meaning. Please provide a detailed response that includes additional information, examples, or explanations to enhance the clarity and depth of the original text.
 
 <<SOURCE>>
 
-Your task is to expand the above text and make it longer while maintaining its original meaning.  Please provide a detailed response that includes additional information, examples, or explanations to enhance the clarity and depth of the original text.
+Your task is to expand the above text delimited by <<>>  and make it longer while maintaining its original meaning.  Please provide a detailed response that includes additional information, examples, or explanations to enhance the clarity and depth of the original text.

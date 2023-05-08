@@ -1,6 +1,13 @@
-Your task is to write a first-person narrated <<POINT>> as part a larger YouTube script. Do NOT include an introduction.
-The section should focus on <<FEED>>, in the style of <<STYLE>>. 
+Your task is to write a first-person narrated as part a larger YouTube script for the following text delimited by <<>>. 
+Do NOT include an introduction.
+This section should focus on the topic of the text delimited by triple quotes \"\"\".
+Apply the style from the text from the style and category in the text delimited by {{}}. 
 Please provide an engaging and informative narrative that captures the attention of viewers and provides valuable insights into the topic.
 
-Please note that your narration should not include any instructions or directives, and should only serve as part of a larger script. Do NOT include an introduction.
+Please note that your narration should not include any instructions or directives, and should only serve as part of a larger script. 
 Your goal is to make this section as long as possible in an interesting and compelling way that keeps viewers engaged while providing useful information or entertainment value.
+Do NOT include an introduction.
+
+<<POINT>> 
+\"\"\"FEED\"\"\"
+{{STYLE}}

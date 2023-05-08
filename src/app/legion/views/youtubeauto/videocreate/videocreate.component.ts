@@ -87,7 +87,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     ).subscribe((response) => {
       this.selectedVideoNiche = response;
     });
-    this.contentRepo.getInitVideoDuration().subscribe((response) => {
+    this.contentRepo.getInitVideoDurationObserver().subscribe((response) => {
       this.selectedVideoDuration = response;
     });
     this.gptService.getTopicObserver().subscribe((response) => {
