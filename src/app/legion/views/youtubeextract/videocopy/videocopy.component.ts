@@ -61,6 +61,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         });
         this.extractDetailsService.getYoutubeVideosObserver().subscribe({
             next: (videos: YoutubeVideo[]) => {
+                console.log("🚀 ~ file: videocopy.component.ts:64 ~ VideoCopyComponent ~ this.extractDetailsService.getYoutubeVideosObserver ~ videos:", videos)
                 console.log(videos);
                 this.isLoading = false;
                 this.searchVideos = videos;

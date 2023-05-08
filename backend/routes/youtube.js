@@ -150,12 +150,17 @@ function fetchCompleteVideoData(language, niche, publishedAfter) {
   return fetchVideoList(niche, publishedAfter).pipe(
     map((data) => {
       return data.items.map(async (item) => {
+
         let processedTitle = item.snippet.title;
         let processedDescription = item.snippet.description;
   
         if (language === 'fr') {
-          processedTitle = await translationService.translateText(processedTitle);
-          processedDescription = await translationService.translateText(processedDescription);
+          if (processedTitle !== undefined && processedTitle !== null && processedTitle !== "") {
+            processedTitle = await translationService.translateText(processedTitle);
+          }
+          if (processedDescription !== undefined && processedDescription !== null && processedDescription !== "") {
+            processedDescription = await translationService.translateText(processedDescription);
+          }
 
           return {
             id: item.id.videoId,

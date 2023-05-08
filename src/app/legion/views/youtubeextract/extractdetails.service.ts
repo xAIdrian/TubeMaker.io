@@ -134,7 +134,6 @@ export class ExtractDetailsService {
     this.youtubeRepository.getVideoListByNiche(niche).subscribe({
       next: (videos) => {
             this.youtubeVideosSubject.next(videos);
-            this.youtubeVideosSubject.complete();
           },
       error: (err) => {this.errorSubject.next(err); this.youtubeVideosSubject.complete();}
     });
