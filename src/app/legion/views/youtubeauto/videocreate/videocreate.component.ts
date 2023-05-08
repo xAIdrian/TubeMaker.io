@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { GptService } from '../../../service/gpt.service';
+import { ContentGenerationService } from '../../../service/contentgeneration.service';
 import {
   FormBuilder,
   FormGroup,
@@ -13,8 +13,8 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../../../service/navigation.service';
 import{ AutoContentModel } from '../../../model/autocontent.model';
-import { VideoNiche as VideoNiche } from '../../../model/videoniche.model';
-import { VideoDuration } from '../../../model/videoduration.model';
+import { VideoNiche as VideoNiche } from '../../../model/autocreate/videoniche.model';
+import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 
 @Component({
   selector: 'video-create',
@@ -52,7 +52,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   hasInputError = false;
 
   constructor(
-    private gptService: GptService,
+    private gptService: ContentGenerationService,
     private contentRepo: AutoContentModel,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
@@ -87,7 +87,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     ).subscribe((response) => {
       this.selectedVideoNiche = response;
     });
-    this.contentRepo.getInitVideoDuration().subscribe((response) => {
+    this.contentRepo.getInitVideoDurationObserver().subscribe((response) => {
       this.selectedVideoDuration = response;
     });
     this.gptService.getTopicObserver().subscribe((response) => {

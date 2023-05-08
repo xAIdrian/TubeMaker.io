@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -80,11 +80,34 @@ export class GptRepository {
     );
   }
 
-  postOptimizeScriptSectionObservable(reqBody: { current: string }): Observable<{ message: string, result: { script: string } }> {
+  postOptimizeScriptSectionObservable(
+    reqBody: { 
+      prompt: string,
+      current: string
+    },
+    position: any
+  ): Observable<{ 
+      message: string,
+      result: { 
+        script: string ,
+        position: any
+      } 
+    }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string, result: { script: string } }>(
       `http://localhost:3000/api/openai/improve/script/${currLang}`,
       reqBody
+    ).pipe(
+        map((res) => {
+          console.log("🚀 ~ file: gpt.repo.ts:102 ~ GptRepository ~ map ~ res:", res)
+          return {
+            message: res.message,
+            result: {
+              script: res.result.script,
+              position: position
+            }
+          }
+      })
     );
   }
 

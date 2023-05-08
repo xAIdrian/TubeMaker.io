@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import{ ExtractContentModel } from '../../../model/extractcontent.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { YoutubeService } from 'src/app/legion/service/youtube.service';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
-import { VideoNiche } from 'src/app/legion/model/videoniche.model';
+import { VideoNiche } from '../../../model/autocreate/videoniche.model';
+import { ExtractDetailsService } from '../extractdetails.service';
 
 @Component({
     selector: 'video-copy',
@@ -27,7 +27,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     
     constructor(
         private contentModel: ExtractContentModel,
-        private youtubeService: YoutubeService,
+        private extractDetailsService: ExtractDetailsService,
         private _formBuilder: FormBuilder,
         private changeDetectorRef: ChangeDetectorRef
     ) { }
@@ -53,13 +53,13 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         this.contentModel.getDefaultVideoNichesObserver().subscribe({
             next: (videoNiches: VideoNiche[]) => this.videoNiches = videoNiches
         });
-        this.youtubeService.getErrorObserver().subscribe({
+        this.extractDetailsService.getErrorObserver().subscribe({
             next: (error: any) => {
                 this.isLoading = false;
                 this.showErrorState = true;
             }
         });
-        this.youtubeService.getYoutubeVideosObserver().subscribe({
+        this.extractDetailsService.getYoutubeVideosObserver().subscribe({
             next: (videos: YoutubeVideo[]) => {
                 console.log(videos);
                 this.isLoading = false;
@@ -82,10 +82,10 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         this.selectedVideoNiche = niche;
         this.searchVideos = [ /** */ ];
         this.isLoading = true;
-        this.youtubeService.searchYoutubeVideos(niche.name);
+        this.extractDetailsService.searchYoutubeVideos(niche.name);
     }
 
     onCopyCatClick(video: YoutubeVideo) {
-        this.youtubeService.setCopyCatVideoId(video.id);
+        this.extractDetailsService.setCopyCatVideoId(video);
     }
 }

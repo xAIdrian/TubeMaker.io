@@ -1,0 +1,5 @@
+Please revise the following text delimited by <<>> to make it more concise and easier to understand. Your revised version should retain all of the key information in the original text, but present it in a clearer and more efficient manner:
+
+<<SOURCE>>
+
+Please revise the above text delimited by <<>> to make it more concise and easier to understand. Your revised version should retain all of the key information in the original text, but present it in a clearer and more efficient manner:

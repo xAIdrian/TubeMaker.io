@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GptService } from '../../../../service/gpt.service';
+import { ContentGenerationService } from '../../../../service/contentgeneration.service';
 
 @Component({
   selector: 'title-details',
@@ -21,7 +21,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
   constructor(
     private formGroupBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private gptService: GptService
+    private gptService: ContentGenerationService
   ) {
     /** */
   }

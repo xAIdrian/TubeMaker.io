@@ -18,7 +18,7 @@ const routes: Routes = [
         component: VideoCopyComponent,
         data: {
             title: "Copy Cat"
-        }
+        },
     },
     {
         path: "copycat/details",
@@ -28,29 +28,29 @@ const routes: Routes = [
         }
     },
     {
-        path: "youtubeauto",
+        path: "autos",
         component: VideoListComponent,
         data: {
             title: "Your Videos"
-        }
+        },
+        pathMatch: "prefix"
     },
-    
     {
-        path: "create",
+        path: "autos/create",
         component: VideoCreateComponent,
         data: {
             title: "Create"
         }
     },
     {
-        path: "details",
+        path: "autos/details",
         component: VideoDetailsComponent,
         data: {
             title: "Details"
         }
     },
     {
-        path: "upload",
+        path: "autos/upload",
         component: VideoUploadComponent,
         data: {
             title: "Upload"

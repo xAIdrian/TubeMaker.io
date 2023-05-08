@@ -1,0 +1,5 @@
+Please simplify and improve the following text delimited by <<>> to make it easier to read and understand. Your rewritten version should be more fluent and straightforward, using simpler language and shorter sentences where possible.
+
+<<SOURCE>>
+
+Please simplify and improve the above text delimited by <<>> to make it easier to read and understand. Your rewritten version should be more fluent and straightforward, using simpler language and shorter sentences where possible.

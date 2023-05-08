@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 
 import { FormGroup } from "@angular/forms";
-import { YoutubeService } from "../../../service/youtube.service";
+import { ExtractDetailsService } from "../extractdetails.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 @Component({
@@ -19,7 +19,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     scriptFormGroup: FormGroup;
 
     constructor(
-        private youtubeService: YoutubeService,
+        private youtubeService: ExtractDetailsService,
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
     

@@ -53,9 +53,7 @@ export class TextSplitUtility {
     
         para += (para ? ' ' : '') + text;
       }
-      if (para.charAt(0) === ' ') {
-        para = para.substring(1);
-      }
+      
       ret.push(para);
     
       return ret;

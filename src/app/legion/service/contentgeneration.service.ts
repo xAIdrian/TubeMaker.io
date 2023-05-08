@@ -4,12 +4,12 @@ import { GptGeneratedMetaData } from '../model/gpt/gptgeneratedvideo.model';
 
 import { AutoContentModel } from '../model/autocontent.model';
 import { GptRepository } from '../repository/gpt.repo';
-import { DurationSection } from '../model/videoduration.model';
+import { DurationSection } from '../model/autocreate/videoduration.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GptService {
+export class ContentGenerationService {
   //state observables
   private contentProgressSubject = new Subject<number>();
   private scriptProgressSubject = new Subject<{
@@ -28,8 +28,7 @@ export class GptService {
   private descriptionSubject = new Subject<String>();
   private scriptSectionSubject = new Subject<{
     scriptSection: string
-    sectionControl?: string,
-    sectionIndex?: number
+    position: string | number
   }>();
   private tagsSubject = new Subject<String[]>();
 
@@ -131,14 +130,32 @@ export class GptService {
     });
   }
 
-  updateNewScriptSection(prompt: string, section: string, sectionControl?: string, sectionIndex?: number) {
-    //improve error being sent back here
-    if (section === '') {
-      this.errorSubject.next('🤔 We need text to improve. Please input something and try again.');
-      return;
-    }
-
-    //TODO: add a new repo and endpoint for this. it must be more robust than the other solution.
+  updateNewScriptIndex(
+    prompt: string, 
+    sectionText: string, 
+    sectionIndex: number
+  ) {
+    this.gptRepo.postOptimizeScriptSectionObservable(
+      {
+        prompt: prompt,
+        current: sectionText
+      },
+      sectionIndex
+    ).subscribe({
+      next: (response) => {
+        console.log("🚀 ~ file: contentgeneration.service.ts:161 ~ ContentGenerationService ~ response:", response)
+        if (response.message !== 'success') {
+          this.errorSubject.next(response.message);
+        }
+        this.scriptSectionSubject.next({
+          scriptSection: response.result.script,
+          position: response.result.position
+        });
+      },
+      error: (error) => {
+        this.errorSubject.next(error);
+      }
+    })
   }
 
   generateVideoContentWithAI() {
@@ -279,8 +296,8 @@ export class GptService {
         this.contentRepo.updateScriptMap(section.controlName, compiledPoints.trim()); 
         // emit just the view value of the section
         this.scriptSectionSubject.next({
-          sectionControl: section.controlName,
-          scriptSection: compiledPoints.trim()
+          scriptSection: compiledPoints.trim(),
+          position: section.controlName
         });
       }
     });

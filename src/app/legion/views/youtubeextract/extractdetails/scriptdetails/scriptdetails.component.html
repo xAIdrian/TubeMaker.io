@@ -28,15 +28,15 @@
                         <button cButton cDropdownToggle color="primary"
                             [disabled]="transcriptSections[i].isLoading" 
                             style="margin-left: 1rem; margin-top: 0.75rem;">
+                                Use AI
                         <c-spinner *ngIf="transcriptSections[i].isLoading" size="sm"></c-spinner>
-                            Use AI
                         </button>
                         <ul cDropdownMenu class="custom-dropdown-menu">
                             <li class="dropdown-header">Pick a way to improve this script:</li>
                             <li><hr cDropdownDivider></li>
-                            <li><button cDropdownItem (click)="onImproveClick('funny', transcriptSections[i], i)">Funnier</button></li>
+                            <li><button cDropdownItem (click)="onImproveClick('funnier', transcriptSections[i], i)">Funnier</button></li>
                             <li><button cDropdownItem (click)="onImproveClick('formal', transcriptSections[i], i)">Formal</button></li>
-                            <li><button cDropdownItem (click)="onImproveClick('simple', transcriptSections[i], i)">Simpler</button></li>
+                            <li><button cDropdownItem (click)="onImproveClick('simpler', transcriptSections[i], i)">Simpler</button></li>
                             <li><button cDropdownItem (click)="onImproveClick('expand', transcriptSections[i], i)">Expand</button></li>
                             <li><button cDropdownItem (click)="onImproveClick('shorten', transcriptSections[i], i)">Shorten</button></li>
                         </ul>

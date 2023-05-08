@@ -14,9 +14,9 @@ import {
 } from '@angular/forms';
 
 import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
-import { GptService } from '../../../../service/gpt.service';
+import { ContentGenerationService } from '../../../../service/contentgeneration.service';
 import{ AutoContentModel } from '../../../../model/autocontent.model';
-import { VideoDuration } from '../../../../model/videoduration.model';
+import { VideoDuration } from '../../../../model/autocreate/videoduration.model';
 
 @Component({
   selector: 'video-result',
@@ -62,7 +62,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   gptResponseTags: string = 'Waiting for tags...';
 
   constructor(
-    private gptService: GptService,
+    private gptService: ContentGenerationService,
     private contentRepo: AutoContentModel,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
@@ -148,7 +148,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     });
     this.gptService.getScriptSectionObserver().subscribe((response) => {      
       console.log("🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.gptService.getScriptSectionObserver ~ response:", response)
-      switch (response.sectionControl) {
+      switch (response.position) { 
         case 'introduction':
           this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
           break;

@@ -5,21 +5,24 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class NavigationService {
+  navigateToTitleDetails() {
+    throw new Error('Method not implemented.');
+  }
   
   constructor(private router: Router) {
 
   }
-
-  navigateToResults() {
-    this.router.navigate(['legion/details']);
+  
+  navigateToCreateVideo() {
+    this.router.navigate(['maker/autos/create']);
   }
 
-  navigateToCreateVideo() {
-    this.router.navigate(['z/create']);
+  navigateToResults() {
+    this.router.navigate(['maker/autos/details']);
   }
 
   navigateToUploadVideo() {
-    this.router.navigate(['legion/upload']);
+    this.router.navigate(['maker/autos/upload']);
   }
 
   navigateToLander() {
@@ -27,10 +30,10 @@ export class NavigationService {
   }
 
   navigateToCopyCat() {
-    this.router.navigate(['legion/copycat']);
+    this.router.navigate(['maker/copycat']);
   }
 
   navigateToExtractDetails() {
-    this.router.navigate(['legion/copycat/details']);
+    this.router.navigate(['maker/copycat/details']);
   }
 }

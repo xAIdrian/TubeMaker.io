@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   getDefaultVideoNiches,
   VideoNiche,
-} from '../videoniche.model';
-import {
-  getDefaultVideoDurations,
-  VideoDuration,
-} from '../videoduration.model';
+} from '../autocreate/videoniche.model';
 import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -25,9 +21,9 @@ export abstract class ContentModel {
   protected translate: TranslateService;
 
   constructor(
-    private injTranslate: TranslateService
+    private initTranslate: TranslateService
   ) { 
-    this.translate = injTranslate
+    this.translate = initTranslate
    }
 
   getInitVideoNiche(headerKey: string, descriptionKey: string): Observable<VideoNiche>{

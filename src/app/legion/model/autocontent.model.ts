@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {
   VideoNiche,
-} from './videoniche.model';
+} from './autocreate/videoniche.model';
 import {
   getDefaultVideoDurations,
   VideoDuration,
-} from './videoduration.model';
-import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
+} from './autocreate/videoduration.model';
+import { combineLatest, concatMap, Observable, of } from 'rxjs';
 import{ ContentModel } from './common/content.model';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -14,6 +14,12 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root',
 })
 export class AutoContentModel extends ContentModel {
+
+  constructor(
+    override translate: TranslateService
+  ) {
+    super(translate)
+  }
   
   currentTopic: string;
   currentDuration: VideoDuration = {
@@ -49,26 +55,30 @@ export class AutoContentModel extends ContentModel {
     ['tags', '']
   ]);
 
-  getInitVideoDuration() {
-    return combineLatest([
-      super.translate.get('video_duration.init_header'),
-      super.translate.get('video_duration.init_description'),
-    ]).pipe(
-      concatMap(([header, description]) => {
-        return of({
-          name: '',
-          header: header,
-          description: description,
-          sections: [],
-        });
-      })
-    );
-  }
+  getInitVideoDurationObserver() {
+        return combineLatest([
+          //perhaps this could be optimized to get from the 'res'
+          this.translate.get('video_duration.init_header'),
+          this.translate.get('video_duration.init_description'),
+        ]).pipe(
+          concatMap(([header, description]) => {
+            return of({
+              name: '',
+              header: header,
+              description: description,
+              sections: [],
+            });
+          })
+        );
+      }
+
+
 
   getDefaultVideoDurationsObserver(): Observable<VideoDuration[]> {
-    return super.translate.getTranslation(super.translate.currentLang).pipe(
+    return this.translate.getTranslation(this.translate.currentLang).pipe(
       concatMap((res) => {
-        return of(getDefaultVideoDurations(super.translate));
+        //perhaps this could be optimized to get from the 'res' insatead of parameter
+        return of(getDefaultVideoDurations(this.translate));
       })
     )
   }
