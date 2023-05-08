@@ -25,6 +25,13 @@ const storagePath = './backend/audio'
 router.get("/:videoId", async (req, res) => {
   const videoId = req.params.videoId;
 
+  const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+  const options = {
+    filter: "audioonly",
+    quality: "highestaudio",
+    format: "mp3",
+  };
+
   //test code
   if (videoId === 'test') { 
     res.status(200).json({
@@ -38,18 +45,13 @@ router.get("/:videoId", async (req, res) => {
     return;
   }
 
-  // const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-  const options = {
-    filter: "audioonly",
-    quality: "highestaudio",
-    format: "mp3",
-  };
 
   from(ytdl.getInfo(videoUrl, options)).pipe(
     concatMap(async (info) => {
       console.log('Start processing download...')
       const stream = ytdl.downloadFromInfo(info, options);
-      const filename = `${info.videoDetails.title}.mp3`;
+      const cleanedString = info.videoDetails.title.replace(/[^a-zA-Z0-9 ]/g, '').trim().replace(/\s+/g, '_');
+      const filename = `${cleanedString}.mp3`;
       const filePath = `${storagePath}/${filename}`;
 
       ffmpeg(stream)
@@ -58,15 +60,15 @@ router.get("/:videoId", async (req, res) => {
         .on("error", function (err) {
           return throwError(() => new Error('🔥' + err));
         }).on("end", async function () {
-          console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded!");
+          console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
           const transcription = await transcribeAudio(filePath, info.videoDetails.description);
-          const translations = await translationService.translateText(transcription);
-
-          if (translations !== undefined && translations.length > 0) {
+          const translation = await translationService.translateText(transcription);
+          
+          if (translation !== undefined && translation !== '') {
             res.status(200).json({
               message: "success",
               result: {
-                translation: translations[0].translatedText,
+                translation: translation,
               }
             });
             // deletefile(filePath)
@@ -101,7 +103,7 @@ async function transcribeAudio(filePath, description) {
   const response = await openai.createTranscription(
     fs.createReadStream(filePath),
     "whisper-1",
-    description, // The prompt to use for transcription.
+    undefined, // The prompt to use for transcription.
     "json", // The format of the transcription.
     1, // Temperature
     "en" // Language

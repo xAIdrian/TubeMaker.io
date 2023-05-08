@@ -157,24 +157,31 @@ export class ExtractDetailsService {
       // return; // uncomment for prod
     }
 
-    this.transcriptRepo.getTranscript('test').pipe(
-    // this.transcriptRepository.getTranscript(this.currentCopyCatVideo.id).pipe(
+    // this.transcriptRepo.getTranscript('test').pipe(
+    this.transcriptRepo.getTranscript(this.currentCopyCatVideo.id).pipe(
     ).subscribe({
       next: (response: { message: string, result: { translation: string }}) => {
-        if (response.message !== 'success' || response.result.translation.length === 0) {
+        console.log("🚀 ~ file: extractdetails.service.ts:185 ~ ExtractDetailsService ~ getVideoTranscript ~ response:", response)
+        if (response.message !== 'success' || response.result.translation === '') {
           this.errorSubject.next(response.message);
           this.errorSubject.complete();
-          return
+          return;
         }
+        if (response.result.translation === '') {
+          this.errorSubject.next('No transcript found.');
+          this.errorSubject.complete();
+          return;
+        }
+
         const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
         const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
+        console.log("🚀 ~ file: extractdetails.service.ts:178 ~ ExtractDetailsService ~ getVideoTranscript ~ splitParagraphs:", splitParagraphs)
         splitParagraphs.forEach((paragraph) => {
           uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
         });
 
         this.videoTranscriptSubject.next(uiPreppedResponse);
         this.isTranscriptLoadingSubject.next(false);
-        this.videoTranscriptSubject.complete();
       },
       error: (err) => {
         console.log("🔥 ~ file: extractdetails.service.ts:122 ~ ExtractDetailsService ~ getVideoTranscript ~ err:", err)

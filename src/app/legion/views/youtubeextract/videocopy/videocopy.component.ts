@@ -15,6 +15,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
 
     isLoading = false;
     showErrorState = false;
+
     nicheFormGroup: FormGroup;
 
     videoNiches: VideoNiche[] = [];
@@ -87,6 +88,8 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     }
 
     onCopyCatClick(video: YoutubeVideo) {
-        this.extractDetailsService.setCopyCatVideoId(video);
+        if (video !== undefined) {
+            this.extractDetailsService.setCopyCatVideoId(video);
+        }
     }
 }
