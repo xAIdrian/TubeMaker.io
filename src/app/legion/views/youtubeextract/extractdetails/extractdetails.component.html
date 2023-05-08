@@ -19,6 +19,16 @@
         <script-details [parentIsLoading]="transcriptIsLoading"></script-details>
       </mat-step>
 
+      <mat-step>
+        <ng-template matStepLabel>Title</ng-template>
+        <title-details></title-details>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Media</ng-template>
+        <video-media></video-media>
+      </mat-step>
+
     </mat-horizontal-stepper>
   </c-card-body>
 </c-card>

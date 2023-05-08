@@ -72,8 +72,6 @@ export class AutoContentModel extends ContentModel {
         );
       }
 
-
-
   getDefaultVideoDurationsObserver(): Observable<VideoDuration[]> {
     return this.translate.getTranslation(this.translate.currentLang).pipe(
       concatMap((res) => {
@@ -89,6 +87,39 @@ export class AutoContentModel extends ContentModel {
 
   getCurrentVideoDuration(): VideoDuration {
     return this.currentDuration;
+  }
+
+  updateScriptMap(controlName: string, script: string) {
+    this.scriptMap.set(controlName, script);
+  }
+
+  getCompleteScriptFromMap(): string {
+    let script = '';
+    // get all the values of the ordered hashmap in the same order
+    let valuesInOrder = Array.from(this.scriptMap.keys()).map(key => this.scriptMap.get(key));
+    // add all values to main string
+    valuesInOrder.map(value => {
+      if (value !== undefined && value !== null && value !== '') {
+        script += value + '\n\n';
+      }
+    });
+    return script;
+  }
+
+  getTotalNumberOfPoints(): number {
+    return this.scriptTotalNumberOfPoints;
+  }
+
+  getScriptForDownload(givenFileName: string): Observable<{ blob: Blob; filename: string }> {
+    const completeScript = this.getCompleteScriptFromMap();
+    if (completeScript !== '') {
+      new Error(`Script not available ${completeScript}`)
+    }
+    const blob = new Blob([completeScript], { type: 'text/plain' });
+    return of({
+      blob: blob,
+      filename: givenFileName.replace(' ', '_').replace(':', '').replace("'", '').replace('"', '') + '.txt',
+    });
   }
 
   submitInputs(

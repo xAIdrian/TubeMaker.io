@@ -6,6 +6,7 @@ import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodeta
 import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
 import { ExtractDetailsComponent } from "./views/youtubeextract/extractdetails/extractdetails.component";
+import { TitleDetailsComponent } from "./views/youtubeextract/extractdetails/titledetails/titledetails.component";
 
 const routes: Routes = [
     {
@@ -25,6 +26,13 @@ const routes: Routes = [
         component: ExtractDetailsComponent,
         data: {
             title: "Transcript"
+        }
+    },
+    {
+        path: "copycat/titles",
+        component: TitleDetailsComponent,
+        data: {
+            title: "Listing"
         }
     },
     {

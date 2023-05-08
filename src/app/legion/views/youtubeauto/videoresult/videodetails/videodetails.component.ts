@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 
 import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
-import { ContentGenerationService } from '../../../../service/contentgeneration.service';
+import { ContentAutoService } from '../../../../service/content/auto.service';
 import{ AutoContentModel } from '../../../../model/autocontent.model';
 import { VideoDuration } from '../../../../model/autocreate/videoduration.model';
 
@@ -62,7 +62,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   gptResponseTags: string = 'Waiting for tags...';
 
   constructor(
-    private gptService: ContentGenerationService,
+    private contentService: ContentAutoService,
     private contentRepo: AutoContentModel,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
@@ -82,7 +82,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     
-    if (!this.isInDebugMode) { this.gptService.generateVideoContentWithAI(); }
+    if (!this.isInDebugMode) { this.contentService.generateVideoContentWithAI(); }
   }
 
   ngAfterViewInit(): void {
@@ -91,7 +91,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   }
 
   setupObservers() {
-    this.gptService.getContentProgressObserver().subscribe((response) => {
+    this.contentService.getContentProgressObserver().subscribe((response) => {
       this.contentProgressValue = this.contentProgressValue + response;
       if (this.contentProgressValue === 0) {
         this.contentProgressLabel = 'Researching the competition...';
@@ -106,10 +106,10 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       }
       this.changeDetectorRef.detectChanges();
     });
-    this.gptService.getScriptProgressObserver().subscribe((response) => {
+    this.contentService.getScriptProgressObserver().subscribe((response) => {
       this.scriptProgressValue = this.scriptProgressValue + response.increment;
-      console.log("🚀 ~ file: videodetails.component.ts:116 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ response:", response)
-      console.log("🚀 ~ file: videodetails.component.ts:124 ~ VideoDetailsComponent ~ this.gptService.getScriptProgressObserver ~ scriptProgressValue:", this.scriptProgressValue)
+      console.log("🚀 ~ file: videodetails.component.ts:116 ~ VideoDetailsComponent ~ this.contentService.getScriptProgressObserver ~ response:", response)
+      console.log("🚀 ~ file: videodetails.component.ts:124 ~ VideoDetailsComponent ~ this.contentService.getScriptProgressObserver ~ scriptProgressValue:", this.scriptProgressValue)
       this.scriptProgressLabel = response.label;
 
       if (this.scriptProgressValue >= 97) {
@@ -122,7 +122,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       }
     });
 
-    this.gptService.getCompleteResultsObserver().subscribe(
+    this.contentService.getCompleteResultsObserver().subscribe(
       (response: { meta: GptGeneratedMetaData }) => {
         this.infoFormGroup.setValue({
           title: response.meta.title.replace('"', '').trim(),
@@ -131,23 +131,23 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
         });
       }
     );
-    this.gptService.getTitleObserver().subscribe((response) => {
+    this.contentService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
       this.isTitleOptimizing = false;
       this.infoFormGroup.patchValue({ title: response.replace('"', '').trim() })
     });
-    this.gptService.getDescriptionObserver().subscribe((response) => {
+    this.contentService.getDescriptionObserver().subscribe((response) => {
       this.isDescLoading = false;
       this.isDescOptimizing = false;
       this.infoFormGroup.patchValue({ description: response.trim() })
     });
-    this.gptService.getTagsObserver().subscribe((response) => {  
+    this.contentService.getTagsObserver().subscribe((response) => {  
       this.isTagsLoading = false;
       this.isTagsOptimizing = false;
       this.infoFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
-    this.gptService.getScriptSectionObserver().subscribe((response) => {      
-      console.log("🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.gptService.getScriptSectionObserver ~ response:", response)
+    this.contentService.getScriptSectionObserver().subscribe((response) => {      
+      console.log("🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.contentService.getScriptSectionObserver ~ response:", response)
       switch (response.position) { 
         case 'introduction':
           this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
@@ -171,7 +171,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
           this.scriptFormGroup.patchValue({ actionables: response.scriptSection })
           break;
         default:
-          console.log("🔥 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.gptService.getScriptSectionObserver ~ default:")
+          console.log("🔥 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.contentService.getScriptSectionObserver ~ default:")
           break;
       }
     });
@@ -201,19 +201,19 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   rerollTitle() {
     this.isTitleLoading = true;
     this.infoFormGroup.patchValue({ title: 'Please wait...' })
-    this.gptService.updateNewTitle();
+    // this.contentService.getNewTitle();
   }
 
   rerollDescription() {
     this.isDescLoading = true;
     this.infoFormGroup.patchValue({ description: 'Please wait...' })
-    this.gptService.updateNewDescription();
+    // this.contentService.getNewDescription();
   }
 
   rerollTags() {
     this.isTagsLoading = true;
     this.infoFormGroup.patchValue({ tags: 'Please wait...' })
-    this.gptService.updateNewTags();
+    // this.contentService.getNewTags();
   }
 
   onInfoSectionClick() {

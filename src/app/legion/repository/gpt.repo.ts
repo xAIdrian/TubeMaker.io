@@ -42,6 +42,7 @@ export class GptRepository {
   }
 
   postOptimizedTitleObservable(reqBody: {
+    prompt: string;
     current: string;
   }): Observable<{ message: string; result: { title: string } }> {
     const currLang = this.translate.currentLang;
@@ -63,6 +64,7 @@ export class GptRepository {
   }
 
   postOptimizedDescriptionObservable(reqBody: {
+    prompt: string;
     current: string;
   }): Observable<{ message: string; result: { description: string } }> {
     const currLang = this.translate.currentLang;
@@ -123,6 +125,7 @@ export class GptRepository {
   }
 
   postOptimizedTagsObservable(reqBody: {
+    prompt: string;
     current: string;
   }): Observable<{ message: string; result: { tags: string } }> {
     const currLang = this.translate.currentLang;

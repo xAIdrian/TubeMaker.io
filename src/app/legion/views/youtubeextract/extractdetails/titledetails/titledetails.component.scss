@@ -13,6 +13,12 @@
     }
 }
 
+.section-row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
 .grid-container {
     display: flex;
     flex-wrap: wrap;
@@ -71,13 +77,13 @@
 }
 
 .col-8 {
-    flex-basis: calc(90% - 20px);
-    max-width: calc(90% - 20px);
+    flex-basis: calc(90%);
+    max-width: calc(90%);
 }
 
 .col-1 {
-    flex-basis: calc(10% - 20px);
-    max-width: calc(10% - 20px);
+    flex-basis: calc(10%);
+    max-width: calc(10%);
 }
 
 h4 {

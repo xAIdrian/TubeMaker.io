@@ -5,7 +5,8 @@ import { YoutubeDataRepository } from '../../repository/youtubedata.repo';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
-import { ContentGenerationService } from '../../service/contentgeneration.service';
+import { ContentExtractionService } from '../../service/content/extract.service';
+import { ExtractContentModel } from '../../model/extractcontent.model';
 
 declare var gapi: any;
 
@@ -23,11 +24,12 @@ export class ExtractDetailsService {
   private currentCopyCatVideo: YoutubeVideo;
 
   constructor(
-    private transcriptRepository: TranscriptRepository,
-    private generationService: ContentGenerationService,
+    private transcriptRepo: TranscriptRepository,
+    private generationService: ContentExtractionService,
     private navigationService: NavigationService,
     private textSplitUtility: TextSplitUtility,
-    private youtubeRepository: YoutubeDataRepository
+    private youtubeRepo: YoutubeDataRepository,
+    private extractContentRepo: ExtractContentModel
   ) {}
 
   getErrorObserver(): Observable<string> {
@@ -60,6 +62,10 @@ export class ExtractDetailsService {
       })
     );
   }
+
+  getTitleObserver() { return this.generationService.getTitleObserver(); }
+  getDescriptionObserver() { return this.generationService.getDescriptionObserver(); }
+  getTagsObserver() { return this.generationService.getTagsObserver(); }
 
   searchYoutubeVideos(niche: string) {
     // this.youtubeVideosSubject.next([
@@ -131,7 +137,7 @@ export class ExtractDetailsService {
     // ])
     // this.youtubeVideosSubject.complete();
     
-    this.youtubeRepository.getVideoListByNiche(niche).subscribe({
+    this.youtubeRepo.getVideoListByNiche(niche).subscribe({
       next: (videos) => {
             this.youtubeVideosSubject.next(videos);
           },
@@ -151,7 +157,7 @@ export class ExtractDetailsService {
       // return; // uncomment for prod
     }
 
-    this.transcriptRepository.getTranscript('test').pipe(
+    this.transcriptRepo.getTranscript('test').pipe(
     // this.transcriptRepository.getTranscript(this.currentCopyCatVideo.id).pipe(
     ).subscribe({
       next: (response: { message: string, result: { translation: string }}) => {
@@ -179,12 +185,67 @@ export class ExtractDetailsService {
   }
 
   updateNewScriptIndex(prompt: string, section: string, index: number) {
-    this.generationService.updateNewScriptIndex(prompt, section, index);
+    this.generationService.optimizeNewScriptIndex(prompt, section, index);
   }
 
   submitScript(transcriptSections: { isLoading: boolean; section: string; }[]) {
+    of(transcriptSections).pipe(
+      map((sections) => {
+        const script: string[] = [];
+        sections.forEach((section) => {
+          script.push(section.section.trim());
+        });
+        return script
+      })
+    ).subscribe((scriptArray: string[]) => {
+      this.extractContentRepo.updateCopyCatScript(scriptArray)
+    });
     this.navigationService.navigateToTitleDetails();
-      throw new Error("Method not implemented.");
+  }
+
+  getVideoMetaData() {
+    if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
+      this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
+      // return; // uncomment for prod
+      this.generationService.getNewTitle(
+        'I Helped 1,000 Deaf People Hear For The First Time',
+        'Thanks to Lickd for providing the music for this video! Discover tracks for your YouTube videos here: https://go.lickd.co/mb1'
+      );
+      this.generationService.getNewDescription(
+        'I Helped 1,000 Deaf People Hear For The First Time',
+        'Thanks to Lickd for providing the music for this video! Discover tracks for your YouTube videos here: https://go.lickd.co/mb1',
+      );
+      this.generationService.getNewTags(
+        'I Helped 1,000 Deaf People Hear For The First Time',
+        'Thanks to Lickd for providing the music for this video! Discover tracks for your YouTube videos here: https://go.lickd.co/mb1'
+      )
+
+      //test code above
+    }
+    //real code to uncomment below
+    // this.generationService.updateNewTitle(this.currentCopyCatVideo.title);
+    // this.generationService.updateNewDescription(this.currentCopyCatVideo.description);
+    // this.generationService.updateNewTags(this.currentCopyCatVideo.tags);
+  }
+
+  updateTitle(prompt: string, current: string) { 
+    this.generationService.optimizeTitle(prompt, current); 
+  }
+
+  updateDescription(prompt: string, current: string) { 
+    this.generationService.optimizeDescription(prompt, current); 
+  }
+
+  updateTags() {
+    this.generationService.getNewTags(
+      this.currentCopyCatVideo.title,
+      this.currentCopyCatVideo.description
+    );
+  }
+
+  submitInfos(title: string,description: string,tags: string) {
+    this.extractContentRepo.submitInfos(title, description, tags);
+    this.navigationService.navigateToCopyCatMedia();
   }
 
   private updateDateToHumanForm(isoDate: string): string {

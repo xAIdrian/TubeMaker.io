@@ -49,7 +49,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
     this.title = this.contentRepo.getTitle();
     this.description = this.contentRepo.getDescription();
     this.tags = this.contentRepo.getTags();
-    this.script = this.contentRepo.getCompleteScript();
+    this.script = this.contentRepo.getCompleteScriptFromMap();
 
     this.changeDetectorRef.detectChanges();
   }

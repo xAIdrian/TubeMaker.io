@@ -13,9 +13,6 @@ export abstract class ContentModel {
   
   currentNiche: VideoNiche;
 
-  abstract scriptTotalNumberOfPoints: number;
-  abstract scriptMap: Map<string, string>; //controlName -> script section
-
   abstract contentMap: Map<string, string>;
 
   protected translate: TranslateService;
@@ -41,23 +38,6 @@ export abstract class ContentModel {
     )
   }
 
-  updateScriptMap(controlName: string, script: string) {
-     this.scriptMap.set(controlName, script);
-  }
-
-  getCompleteScript(): string {
-    let script = '';
-    // get all the values of the ordered hashmap in the same order
-    let valuesInOrder = Array.from(this.scriptMap.keys()).map(key => this.scriptMap.get(key));
-    // add all values to main string
-    valuesInOrder.map(value => {
-      if (value !== undefined && value !== null && value !== '') {
-        script += value + '\n\n';
-      }
-    });
-    return script;
-  }
-
   getTitle(): string {
     return this.contentMap.get('title') ?? '';
   }
@@ -66,10 +46,6 @@ export abstract class ContentModel {
   }
   getTags(): string {
     return this.contentMap.get('tags') ?? '';
-  }
-
-  getTotalNumberOfPoints(): number {
-    return this.scriptTotalNumberOfPoints;
   }
 
   getDefaultVideoNichesObserver(): Observable<VideoNiche[]> {
@@ -88,17 +64,5 @@ export abstract class ContentModel {
     this.contentMap.set('title', title);
     this.contentMap.set('description', description);
     this.contentMap.set('tags', tags);
-  }
-
-  getScriptForDownload(givenFileName: string): Observable<{ blob: Blob; filename: string }> {
-    const completeScript = this.getCompleteScript();
-    if (completeScript !== '') {
-      new Error(`Script not available ${completeScript}`)
-    }
-    const blob = new Blob([completeScript], { type: 'text/plain' });
-    return of({
-      blob: blob,
-      filename: givenFileName.replace(' ', '_').replace(':', '').replace("'", '').replace('"', '') + '.txt',
-    });
   }
 }

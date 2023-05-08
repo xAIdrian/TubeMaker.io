@@ -161,7 +161,6 @@ function fetchCompleteVideoData(language, niche, publishedAfter) {
           if (processedDescription !== undefined && processedDescription !== null && processedDescription !== "") {
             processedDescription = await translationService.translateText(processedDescription);
           }
-
           return {
             id: item.id.videoId,
             title: processedTitle,

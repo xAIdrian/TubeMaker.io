@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import { ContentModel } from "./common/content.model";
+import { Injectable } from '@angular/core';
+import { ContentModel } from './common/content.model';
 
 @Injectable({
-    providedIn: 'root',
-  })
-  export class ExtractContentModel extends ContentModel {
+  providedIn: 'root',
+})
+export class ExtractContentModel extends ContentModel {
+  contentMap: Map<string, string>;
+  private joinedScript: string = '';
 
-    scriptTotalNumberOfPoints: number;
-
-    scriptMap: Map<string, string>;
-    
-    contentMap: Map<string, string>;
+  updateCopyCatScript(scriptArray: string[]) {
+    this.joinedScript = scriptArray.join('\n\n');
   }
+}

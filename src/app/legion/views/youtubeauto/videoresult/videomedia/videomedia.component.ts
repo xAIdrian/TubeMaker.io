@@ -94,7 +94,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
       return;
     }
 
-    const scriptValue = this.contentRepo.getCompleteScript();
+    const scriptValue = this.contentRepo.getCompleteScriptFromMap();
     if (scriptValue === null || scriptValue === '') {
       alert('Please enter a script before generating audio');
       return;
