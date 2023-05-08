@@ -10,6 +10,7 @@ import {
 } from 'rxjs';
 import { YoutubeVideo } from '../model/video/youtubevideo.model';
 import axios, { AxiosRequestConfig } from 'axios';
+import { TranslateService } from '@ngx-translate/core';
 
 // import { YOUTUBE_CLIENT_ID } from '../../appsecrets';
 
@@ -25,7 +26,8 @@ export class YoutubeDataRepository {
   private accessToken: string;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private translate: TranslateService
     ) {
     /** */
     }
@@ -38,9 +40,10 @@ export class YoutubeDataRepository {
   }
 
   getVideoListByNiche(niche: string): Observable<YoutubeVideo[]> {
+    const currentLang = this.translate.currentLang;
     const config: AxiosRequestConfig = {
         method: 'get',
-        url: `http://localhost:3000/api/youtube/videos`,
+        url: `http://localhost:3000/api/youtube/videos/${currentLang}`,
         params: {
             niche: niche,
             publishedAfter: this.getTwoWeeksAgoIsoDate(),
@@ -48,6 +51,7 @@ export class YoutubeDataRepository {
     };
     return from(axios(config)).pipe(
         map((response) => {
+            console.log("🚀 ~ file: youtubedata.repo.ts:54 ~ YoutubeDataRepository ~ map ~ response:", response)
             return response.data;
         })
     );

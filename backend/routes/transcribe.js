@@ -12,14 +12,13 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 const { Configuration, OpenAIApi } = require("openai");
 const { OPEN_AI_API_KEY } = require("../../appsecrets");
 
-const { TranslationServiceClient } = require('@google-cloud/translate');
-const { GOOGLE_PROJECT_ID } = require("../../appsecrets");
+const TranslationService = require("../service/translation.service");
 
 const configuration = new Configuration({
   apiKey: OPEN_AI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-const translationClient = new TranslationServiceClient();
+const translationService = new TranslationService();
 
 const storagePath = './backend/audio'
 
@@ -61,7 +60,7 @@ router.get("/:videoId", async (req, res) => {
         }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded!");
           const transcription = await transcribeAudio(filePath, info.videoDetails.description);
-          const translations = await translateText(transcription);
+          const translations = await translationService.translateText(transcription);
 
           if (translations !== undefined && translations.length > 0) {
             res.status(200).json({
@@ -84,26 +83,6 @@ router.get("/:videoId", async (req, res) => {
     }
   })
 });
-
-async function translateText(text) {
-  // Construct request
-  const request = {
-    parent: `projects/${GOOGLE_PROJECT_ID}/locations/global`,
-    contents: [text],
-    mimeType: 'text/plain', // mime types: text/plain, text/html
-    sourceLanguageCode: 'en',
-    targetLanguageCode: 'fr',
-  };
-
-  // Run request
-  const [response] = await translationClient.translateText(request);
-
-  for (const translation of response.translations) {
-    console.log(`\n\nTranslation: ${translation.translatedText}`);
-  }
-  return response.translations
-}
-
 
 async function deletefile(filePath) {
   fs.unlink(filePath, (err) => {

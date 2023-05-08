@@ -19,7 +19,40 @@
             <p class="text-medium-emphasis">{{ selectedVideoNiche.description }}</p>
           </div>
 
-          <div class="video_list" cListGroup *ngFor="let video of searchVideos" style="margin-top: 0.5rem;">
+          <div class="grid-container">
+            <div class="grid-item" cListGroup *ngFor="let video of searchVideos" style="margin-top: 1rem;">
+                <div class="stretchy-wrapper">
+                  <div class="hover-overlay">
+                    <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onCopyCatClick(video)">Copy Cat</button>
+                    <img class="myimageoverlap" [src]="video.thumbnailUrl" alt="Responsive image"
+                      style="overflow: hidden; width:100%;" />
+                  </div>
+                </div>
+                <div style="padding: 1rem;">
+                  <h5>{{ video.title }}</h5>
+                  <p>{{ video.description }}</p>
+                  <p class="text-mediumemphasis">@{{ video.channelTitle }}</p>
+                  <p class="text-medium-emphasis small" class="published">{{ 'video_list.published' | translate }}: {{ video.publishedAt }}</p>
+                  <div class="row" style="margin: 0;">
+                    <div class="col-3">
+                      <svg cIcon name="cibYoutube"></svg>
+                      <p class="text-medium-emphasis small" class="views">{{ video.statistics.viewCount }}</p>
+                    </div>
+                    <div class="col-3">
+                      <svg cIcon name="cilThumbUp"></svg>
+                      <p class="text-medium-emphasis small" class="likes">{{ video.statistics.likeCount }}</p>
+                    </div>
+                    <div class="col-3">
+                      <svg cIcon name="cilCommentBubble"></svg>
+                      <p class="text-medium-emphasis small" class="dislikes">{{ video.statistics.commentCount }}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          <!-- <div class="video_list" cListGroup *ngFor="let video of searchVideos" style="margin-top: 0.5rem;">
             <div cListGroupItem class="hover-overlay" style="padding-bottom: 1rem; padding-top: 1rem;">
               <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onCopyCatClick(video)">Copy Cat</button>
               <div class="col-5">
@@ -51,7 +84,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </form>

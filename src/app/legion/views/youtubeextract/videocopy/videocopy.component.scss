@@ -60,20 +60,18 @@ mat-button-toggle-group {
 .row {
     display: flex;
     flex-wrap: wrap;
+    min-width: 100%;
 }
 
 .hover-overlay {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-  align-items: center;
+    align-items: center;
+    background-color: black;
     // z-index: 1;
     // position: relative;
     // transition: background-color 0.1s ease-in-out;
-
-    &:hover {
-        background-color: lightgray;
-    }
 }
 
 .hover-overlay:hover .mybuttonoverlap{
@@ -95,14 +93,25 @@ mat-button-toggle-group {
     color: white;
 }
 
+.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.grid-item {
+    width: 49%;
+    margin: 4px;
+}
+
 .col-8 {
-    flex-basis: calc(66.66667% - 20px);
-    max-width: calc(66.66667% - 20px);
+    flex-basis: calc(75%);
+    max-width: calc(75%);
 }
 
 .col-4 {
-    flex-basis: calc(33.33333% - 20px);
-    max-width: calc(33.33333% - 20px);
+    flex-basis: calc(25%);
+    max-width: calc(25%);
 }
 
 .col-5 {
@@ -111,12 +120,12 @@ mat-button-toggle-group {
 }
 
 .col-3 {
-    flex-basis: calc(30% - 5px);
-    max-width: calc(30% - 5px);
+    flex-basis: calc(30%);
+    max-width: calc(30%);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
     flex-direction: column;
 }
 
@@ -138,4 +147,5 @@ div.stretchy-wrapper>div {
     bottom: 0;
     left: 0;
     right: 0;
+    
 }
