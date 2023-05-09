@@ -7,8 +7,8 @@ import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
 import { ContentExtractionService } from '../../service/content/extract.service';
 import { ExtractContentModel } from '../../model/extractcontent.model';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 
-declare var gapi: any;
 
 @Injectable({
   providedIn: 'root',
@@ -269,7 +269,6 @@ export class ExtractDetailsService {
 
   private updateDateToHumanForm(isoDate: string): string {
     const date = new Date(isoDate);
-    const options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    return date.toLocaleString('fr-FR');
-  }
+    return formatDistance(subDays(new Date(), 3), new Date(), { addSuffix: true })
+  }  
 }

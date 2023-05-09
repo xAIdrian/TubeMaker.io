@@ -11,38 +11,34 @@
     border-radius: 10px;
 }
 
-.flex-grow-1 {
-    padding-right: 1rem;
-}
-
-.d-flex {
-    padding-top: 1rem;
-}
+::ng-deep .mat-button-toggle-group::-webkit-scrollbar {
+    display: none;
+}  
 
 mat-button-toggle-group {
     display: flex;
-    flex-wrap: wrap;
+    overflow: scroll;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    min-width: 100%;
     margin: 1rem;
     border: none;
-    orientation: vertical;
-    display: block; // display the buttons as block elements for vertical orientation
+    orientation: horizontal;
+    
 
     mat-button-toggle {
-        margin: 0.5rem;
-        margin-top: 5px; // add a margin to the top of each button
-        border-radius: 10px;
+        margin-right: 0.25rem;
+        border-radius: 1rem;
         color: #333;
-        font-size: 1rem;
-        display: block;
 
         border: 1px solid #333 !important;
         background-color: transparent;
         color: #333;
 
         &.mat-button-toggle-checked {
-            background-color: #007bff;
+            background-color: black;
             color: #fff;
-            border: 1px solid #007bff !important;
+            border: 1px solid black !important;
         }
     }
 }
@@ -61,6 +57,13 @@ mat-button-toggle-group {
     display: flex;
     flex-wrap: wrap;
     min-width: 100%;
+    justify-content: space-between;
+}
+
+.col-3 {
+    justify-content: center;
+    orientation: vertical;
+    align-content: center;
 }
 
 .hover-overlay {
@@ -88,7 +91,7 @@ mat-button-toggle-group {
     display: none;
     width: 60%;
     height: 30%;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     border-radius: 1rem;
     color: white;
 }
@@ -100,33 +103,8 @@ mat-button-toggle-group {
 }
 
 .grid-item {
-    width: 49%;
-    margin: 4px;
-}
-
-.col-8 {
-    flex-basis: calc(75%);
-    max-width: calc(75%);
-}
-
-.col-4 {
-    flex-basis: calc(25%);
-    max-width: calc(25%);
-}
-
-.col-5 {
-    flex-basis: calc(50%);
-    max-width: calc(50%);
-}
-
-.col-3 {
-    flex-basis: calc(30%);
-    max-width: calc(30%);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: right;
-    flex-direction: column;
+    width: 24%;
+    margin: 2px;
 }
 
 h4 {
