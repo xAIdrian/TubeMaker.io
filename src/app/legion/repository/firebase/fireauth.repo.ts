@@ -7,7 +7,9 @@ import {
 } from 'firebase/auth';
 import { Observable, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { FirebaseUser } from '../../model/user/user.model';
+import { PURCHASED_USERS, USERS_DOC } from './firebase.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -33,13 +35,46 @@ export class FireAuthRepository {
   };
 
   constructor(
-    private angularFireAuth: AngularFireAuth
+    private fireAuth: AngularFireAuth,
+    private fireStore: AngularFirestore
   ) {
-    this.userAuthObservable = this.angularFireAuth.authState;
+    this.userAuthObservable = this.fireAuth.authState;
   }
 
   isAuthenticated(): Observable<boolean> {
     return of(true);
+  }
+
+  verifyPurchaseEmail(email: string) {
+    return this.fireStore.doc<FirebaseUser>(`${PURCHASED_USERS}/${email}`).valueChanges()
+  }
+
+  /* Setting up user data when sign in with username/password, 
+   * sign up with username/password and sign in with social auth  
+   * provider in Firestore database using AngularFirestore + AngularFirestoreDocument service 
+   */
+  setUserData(user: any) {
+    const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(
+      `${USERS_DOC}/${user.uid}`
+    );
+    const userData: FirebaseUser = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+    };
+    return userRef.set(userData, {
+      merge: true,
+    });
+  }
+
+  // Sign out
+  signOut() {
+    return this.fireAuth.signOut().then(() => {
+      localStorage.removeItem('user');
+      // this.router.navigate(['sign-in']);
+    });
   }
 
   sendSignInLinkToEmail(email: string) {
@@ -93,6 +128,6 @@ export class FireAuthRepository {
   }
 
   async logout() {
-    this.angularFireAuth.signOut();
+    this.fireAuth.signOut();
   }
 }

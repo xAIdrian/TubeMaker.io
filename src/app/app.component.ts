@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
   template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
-  title = 'TubeMate';
+  title = 'TubeMaker.io';
 
   constructor(
     private router: Router,
@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
     private translate: TranslateService,
     private sessionService: SessionService
   ) {
-    console.log("🚀 ~ file: app.component.ts:22 ~ AppComponent ~ translate:", translate)
     titleService.setTitle(this.title);
     // iconSet singleton
     iconSetService.icons = { ...iconSubset };

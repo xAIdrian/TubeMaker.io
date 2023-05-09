@@ -32,13 +32,6 @@ export class LanderComponent implements OnInit {
     });
   }
 
-  submitForm() {
-    // Use the email value to submit the form
-    console.log('Submitted email:', this.emailForm.value.email);
-    this.sessionService.verifyPurchaseEmail(this.emailForm.value.email ?? '');
-    // Here you can send the email value to your backend API or perform any other actions
-  }
-
   uiShownCallback() {
     console.log('UI shown');
   }
@@ -50,6 +43,6 @@ export class LanderComponent implements OnInit {
 
   successCallback(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     console.log("🚀 ~ file: login.component.ts:23 ~ LoginComponent ~ successCallback ~ signinSuccessData:", signinSuccessData)
-    this.router.navigate(['dashboard']);
+    this.sessionService.verifyEmailPurchase(signinSuccessData)
   }
 }

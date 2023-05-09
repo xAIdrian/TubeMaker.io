@@ -59,8 +59,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
   signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     {
-      requireDisplayName: true,
+      requireDisplayName: false,
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
     }
   ],

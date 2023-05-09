@@ -3,6 +3,8 @@ import { FirestoreRepository } from '../../repository/firebase/firestore.repo';
 import { NavigationService } from '../navigation.service';
 import { Observable, Subject, catchError, of } from 'rxjs';
 import { FirebaseUser } from '../../model/user/user.model';
+import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
+import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
 
 const LANGUAGE_PREF = 'language'
 
@@ -15,6 +17,7 @@ export class SessionService {
 
     constructor(
         private fireStoreRepo: FirestoreRepository,
+        private fireAuthRepo: FireAuthRepository,
         private navService: NavigationService
     ) { /** */ }
 
@@ -30,13 +33,27 @@ export class SessionService {
         return localStorage.getItem(LANGUAGE_PREF);
     }
 
-    verifyPurchaseEmail(email: string) {
-        this.fireStoreRepo.verifyPurchaseEmail(email).subscribe({
+    verifyEmailPurchase(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+        const email = signinSuccessData.authResult.additionalUserInfo?.profile?['email'].toString() : '';
+
+        if (email !== undefined && email !== '') {
+            if (signinSuccessData.authResult.additionalUserInfo?.isNewUser) {
+                this.verifyEmail(email);
+            } else {
+                this.navService.navigateToCopyCat();
+            }
+        } else {
+            this.errorSubject.next('You are not authorized to use this application. Please contact us.');
+        }
+    }
+
+    verifyEmail(email: string) {
+        this.fireAuthRepo.verifyPurchaseEmail(email).subscribe({
             next: (user: FirebaseUser | undefined) => {
                 if (user) {
                     this.navService.navigateToCopyCat();
                 } else {
-                    this.errorSubject.next('You are not authorized to use this application. Please contact the developer.');
+                    this.errorSubject.next('You are not authorized to use this application. Please contact us.');
                 }
             },
             error: (error) => { 
