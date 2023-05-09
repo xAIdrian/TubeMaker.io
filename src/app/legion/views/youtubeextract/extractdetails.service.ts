@@ -5,7 +5,8 @@ import { YoutubeDataRepository } from '../../repository/youtubedata.repo';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
-import { ContentGenerationService } from '../../service/contentgeneration.service';
+import { ContentExtractionService } from '../../service/content/extract.service';
+import { ExtractContentModel } from '../../model/extractcontent.model';
 
 declare var gapi: any;
 
@@ -23,10 +24,12 @@ export class ExtractDetailsService {
   private currentCopyCatVideo: YoutubeVideo;
 
   constructor(
-    private transcriptRepository: TranscriptRepository,
-    private generationService: ContentGenerationService,
+    private transcriptRepo: TranscriptRepository,
+    private generationService: ContentExtractionService,
     private navigationService: NavigationService,
-    private textSplitUtility: TextSplitUtility
+    private textSplitUtility: TextSplitUtility,
+    private youtubeRepo: YoutubeDataRepository,
+    private extractContentRepo: ExtractContentModel
   ) {}
 
   getErrorObserver(): Observable<string> {
@@ -60,30 +63,87 @@ export class ExtractDetailsService {
     );
   }
 
+  getTitleObserver() { return this.generationService.getTitleObserver(); }
+  getDescriptionObserver() { return this.generationService.getDescriptionObserver(); }
+  getTagsObserver() { return this.generationService.getTagsObserver(); }
+
   searchYoutubeVideos(niche: string) {
     this.youtubeVideosSubject.next([
       {
         id: 'test',
-        title: 'Top 5 Videos De FANTASMAS: Tu TÍO Te Esta Buscando...',
-        description:
-          'Bienvenido a Doc Tops. Desde algo en el bosque hasta un árabe tumbapuertas , estos son 5 fantasmas captados en cámara.',
+        title: 'New Video Title',
+        description: 'This is a description for the new video.',
         thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
-        publishedAt: '2023-04-23T21:19:04Z',
-        channelTitle: 'Doc Tops',
+        publishedAt: this.updateDateToHumanForm('2023-05-07T11:30:00Z'),
+        channelTitle: 'Channel Title',
         statistics: {
-          viewCount: '2233445',
-          likeCount: '87654',
-          commentCount: '12000',
+            viewCount: '1000',
+            likeCount: '500',
+            commentCount: '100',
         },
-      }])
-    this.youtubeVideosSubject.complete();
+    },
+    {
+        id: 'test',
+        title: 'Another New Video',
+        description: 'Check out this exciting new video!',
+        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
+        publishedAt: this.updateDateToHumanForm('2023-05-08T13:45:00Z'),
+        channelTitle: 'Channel Name',
+        statistics: {
+            viewCount: '2000',
+            likeCount: '1000',
+            commentCount: '200',
+        },
+    },
+    {
+        id: 'test',
+        title: 'Amazing Video',
+        description: 'This video will change your life.',
+        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
+        publishedAt: this.updateDateToHumanForm('2023-05-09T15:00:00Z'),
+        channelTitle: 'Amazing Channel',
+        statistics: {
+            viewCount: '5000',
+            likeCount: '2500',
+            commentCount: '500',
+        },
+    },
+    {
+        id: 'test',
+        title: 'Funny Video',
+        description: 'You will laugh out loud watching this video.',
+        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
+        publishedAt: this.updateDateToHumanForm('2023-05-10T16:30:00Z'),
+        channelTitle: 'Funny Channel',
+        statistics: {
+            viewCount: '3000',
+            likeCount: '1500',
+            commentCount: '300',
+        },
+    },
+    {
+        id: 'test',
+        title: 'Interesting Video',
+        description: 'This video will make you see the world in a different way.',
+        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
+        publishedAt: this.updateDateToHumanForm('2023-05-11T14:00:00Z'),
+        channelTitle: 'Interesting Channel',
+        statistics: {
+            viewCount: '4000',
+            likeCount: '2000',
+            commentCount: '400',
+        },
+    }
+    ])
     
-    // this.youtubeRepository.getVideoListByNiche(niche).subscribe({
+    // this.youtubeRepo.getVideoListByNiche(niche).subscribe({
     //   next: (videos) => {
-          //   this.youtubeVideosSubject.next(videos);
-          //   this.youtubeVideosSubject.complete();
-          // },
-    //   error: (err) => {this.errorSubject.next(err); this.youtubeVideosSubject.complete();}
+    //         this.youtubeVideosSubject.next(videos);
+    //       },
+    //   error: (err) => {
+    //     this.errorSubject.next(err); 
+    //     this.youtubeVideosSubject.complete();
+    //   }
     // });
   }
 
@@ -99,24 +159,31 @@ export class ExtractDetailsService {
       // return; // uncomment for prod
     }
 
-    this.transcriptRepository.getTranscript('test').pipe(
-    // this.transcriptRepository.getTranscript(this.currentCopyCatVideo.id).pipe(
+    this.transcriptRepo.getTranscript('test').pipe(
+    // this.transcriptRepo.getTranscript(this.currentCopyCatVideo.id).pipe(
     ).subscribe({
       next: (response: { message: string, result: { translation: string }}) => {
-        if (response.message !== 'success' || response.result.translation.length === 0) {
+        console.log("🚀 ~ file: extractdetails.service.ts:185 ~ ExtractDetailsService ~ getVideoTranscript ~ response:", response)
+        if (response.message !== 'success' || response.result.translation === '') {
           this.errorSubject.next(response.message);
           this.errorSubject.complete();
-          return
+          return;
         }
+        if (response.result.translation === '') {
+          this.errorSubject.next('No transcript found.');
+          this.errorSubject.complete();
+          return;
+        }
+
         const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
         const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
+        console.log("🚀 ~ file: extractdetails.service.ts:178 ~ ExtractDetailsService ~ getVideoTranscript ~ splitParagraphs:", splitParagraphs)
         splitParagraphs.forEach((paragraph) => {
           uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
         });
 
         this.videoTranscriptSubject.next(uiPreppedResponse);
         this.isTranscriptLoadingSubject.next(false);
-        this.videoTranscriptSubject.complete();
       },
       error: (err) => {
         console.log("🔥 ~ file: extractdetails.service.ts:122 ~ ExtractDetailsService ~ getVideoTranscript ~ err:", err)
@@ -127,11 +194,82 @@ export class ExtractDetailsService {
   }
 
   updateNewScriptIndex(prompt: string, section: string, index: number) {
-    this.generationService.updateNewScriptIndex(prompt, section, index);
+    this.generationService.optimizeNewScriptIndex(prompt, section, index);
   }
 
   submitScript(transcriptSections: { isLoading: boolean; section: string; }[]) {
+    of(transcriptSections).pipe(
+      map((sections) => {
+        const script: string[] = [];
+        sections.forEach((section) => {
+          script.push(section.section.trim());
+        });
+        return script
+      })
+    ).subscribe((scriptArray: string[]) => {
+      this.extractContentRepo.updateCopyCatScript(scriptArray)
+    });
     this.navigationService.navigateToTitleDetails();
-      throw new Error("Method not implemented.");
+  }
+
+  getVideoMetaData() {
+    if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
+      this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
+      // return; // uncomment for prod
+      this.generationService.getNewTitle(
+        'I Helped 1,000 Deaf People Hear For The First Time',
+        'Thanks to Lickd for providing the music for this video! Discover tracks for your YouTube videos here: https://go.lickd.co/mb1'
+      );
+      this.generationService.getNewDescription(
+        'I Helped 1,000 Deaf People Hear For The First Time',
+        'Thanks to Lickd for providing the music for this video! Discover tracks for your YouTube videos here: https://go.lickd.co/mb1',
+      );
+      this.generationService.getNewTags(
+        'I Helped 1,000 Deaf People Hear For The First Time',
+        'Thanks to Lickd for providing the music for this video! Discover tracks for your YouTube videos here: https://go.lickd.co/mb1'
+      )
+
+      //test code above
+      return
+    }
+    //real code to uncomment below
+    this.generationService.getNewTitle(
+      this.currentCopyCatVideo.description,
+      this.currentCopyCatVideo.title
+    );
+    this.generationService.getNewDescription(
+      this.currentCopyCatVideo.title,
+      this.currentCopyCatVideo.description
+    );
+    this.generationService.getNewTags(
+      this.currentCopyCatVideo.title,
+      this.currentCopyCatVideo.description
+    );
+  }
+
+  updateTitle(prompt: string, current: string) { 
+    this.generationService.optimizeTitle(prompt, current); 
+  }
+
+  updateDescription(prompt: string, current: string) { 
+    this.generationService.optimizeDescription(prompt, current); 
+  }
+
+  updateTags() {
+    this.generationService.getNewTags(
+      this.currentCopyCatVideo.title,
+      this.currentCopyCatVideo.description
+    );
+  }
+
+  submitInfos(title: string,description: string,tags: string) {
+    this.extractContentRepo.submitInfos(title, description, tags);
+    this.navigationService.navigateToCopyCatMedia();
+  }
+
+  private updateDateToHumanForm(isoDate: string): string {
+    const date = new Date(isoDate);
+    const options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    return date.toLocaleString('fr-FR');
   }
 }

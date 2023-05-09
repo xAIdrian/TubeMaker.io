@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, Subject, concatMap } from 'rxjs';
-import { GptGeneratedMetaData } from '../model/gpt/gptgeneratedvideo.model';
+import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
 
-import { AutoContentModel } from '../model/autocontent.model';
-import { GptRepository } from '../repository/gpt.repo';
-import { DurationSection } from '../model/autocreate/videoduration.model';
+import { AutoContentModel } from '../../model/autocontent.model';
+import { GptRepository } from '../../repository/gpt.repo';
+import { DurationSection } from '../../model/autocreate/videoduration.model';
+import { ContentGenerationService } from './generation.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContentGenerationService {
+export class ContentAutoService extends ContentGenerationService {
+
+  private gptGeneratedSummary: string = ''
+
   //state observables
   private contentProgressSubject = new Subject<number>();
   private scriptProgressSubject = new Subject<{
@@ -20,26 +24,14 @@ export class ContentGenerationService {
     meta: GptGeneratedMetaData,
     // script: GptGeneratedScriptData
   }>();
-  private errorSubject = new Subject<string>();
-
-  //field value observables
-  private topicSubject = new Subject<String>();
-  private titleSubject = new Subject<String>();
-  private descriptionSubject = new Subject<String>();
-  private scriptSectionSubject = new Subject<{
-    scriptSection: string
-    position: string | number
-  }>();
-  private tagsSubject = new Subject<String[]>();
-
-  private gptGeneratedSummary: string = ''
 
   constructor(
-    private gptRepo: GptRepository,
+    gptRepo: GptRepository,
     private contentRepo: AutoContentModel
-  ) {}
+  ) {
+    super(gptRepo);
+  }
 
-  getErrorObserver(): Observable<string> { return this.errorSubject.asObservable() }
   getContentProgressObserver(): Observable<number> { return this.contentProgressSubject.asObservable();  }
   getScriptProgressObserver(): Observable<{
     increment: number,
@@ -48,12 +40,6 @@ export class ContentGenerationService {
   getCompleteResultsObserver(): Observable<{
     meta: GptGeneratedMetaData
   }> { return this.completeDetailsSubject.asObservable();  }
-
-  getTopicObserver() { return this.topicSubject.asObservable(); }
-  getTitleObserver() { return this.titleSubject.asObservable(); }
-  getDescriptionObserver() { return this.descriptionSubject.asObservable(); }
-  getScriptSectionObserver() {  return this.scriptSectionSubject.asObservable(); }
-  getTagsObserver() { return this.tagsSubject.asObservable(); }
 
   updateNewTopic() {
     console.log("🚀 ~ file: gpt.service.ts:63 ~ GptService ~ updateNewTopic ~ updateNewTopic:")
@@ -65,97 +51,6 @@ export class ContentGenerationService {
       }
       this.topicSubject.next(response.result.topic);
     });
-  }
-
-  updateNewTitle() {
-    console.log("🚀 ~ file: gpt.service.ts:73 ~ GptService ~ updateNewTitle ~ updateNewTitle:")
-    //improve error being sent back here
-    if (this.gptGeneratedSummary === '') {
-      this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
-      return;
-    }
-
-    this.gptRepo.postNewTitleObservable({
-      summary: this.gptGeneratedSummary,
-      style: this.contentRepo.getCurrentVideoNiche().name,
-    }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:84 ~ GptService ~ updateNewTitle ~ response:", response)
-      if (response.message !== 'success') {
-        this.errorSubject.next(response.message);
-        return;
-      }
-      this.titleSubject.next(response.result.title);
-    });
-  }
-
-  updateNewDescription() {
-    console.log("🚀 ~ file: gpt.service.ts:114 ~ GptService ~ updateNewDescription ~ updateNewDescription:")
-    //improve error being sent back here
-    if (this.gptGeneratedSummary === '') {
-      this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
-      return;
-    }
-
-    this.gptRepo.postNewDescriptionObservable({
-      summary: this.gptGeneratedSummary,
-      style: this.contentRepo.getCurrentVideoNiche().name,
-    }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:125 ~ GptService ~ updateNewDescription ~ response:", response)
-      if (response.message !== 'success') {
-        this.errorSubject.next(response.message);
-        return;
-      }
-      this.descriptionSubject.next(response.result.description);
-    });
-  }
-
-  updateNewTags() {
-    console.log("🚀 ~ file: gpt.service.ts:153 ~ GptService ~ updateNewTags ~ updateNewTags:")
-    //improve error being sent back here
-    if (this.gptGeneratedSummary === '') {
-      this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
-      return;
-    }
-
-    this.gptRepo.postNewTagsObservable({
-      summary: this.gptGeneratedSummary,
-      style: this.contentRepo.getCurrentVideoNiche().name,
-    }).subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:164 ~ GptService ~ updateNewTags ~ response:", response)
-      if (response.message !== 'success') {
-        this.errorSubject.next(response.message);
-        return;
-      }
-      this.tagsSubject.next(response.result.tags.split(','));
-    });
-  }
-
-  updateNewScriptIndex(
-    prompt: string, 
-    sectionText: string, 
-    sectionIndex: number
-  ) {
-    this.gptRepo.postOptimizeScriptSectionObservable(
-      {
-        prompt: prompt,
-        current: sectionText
-      },
-      sectionIndex
-    ).subscribe({
-      next: (response) => {
-        console.log("🚀 ~ file: contentgeneration.service.ts:161 ~ ContentGenerationService ~ response:", response)
-        if (response.message !== 'success') {
-          this.errorSubject.next(response.message);
-        }
-        this.scriptSectionSubject.next({
-          scriptSection: response.result.script,
-          position: response.result.position
-        });
-      },
-      error: (error) => {
-        this.errorSubject.next(error);
-      }
-    })
   }
 
   generateVideoContentWithAI() {

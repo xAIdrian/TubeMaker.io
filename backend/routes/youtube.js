@@ -1,15 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
-const { map, mergeMap } = require("rxjs/operators");
-const { from, forkJoin } = require("rxjs");
+const { map, mergeMap, concatMap } = require("rxjs/operators");
+const { from, forkJoin, of } = require("rxjs");
 const { YOUTUBE_DATA_V3_KEY } = require("../../appsecrets");
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 const SEARCH_URL = `${BASE_URL}/search`;
 const VIDEO_URL = `${BASE_URL}/videos`;
 
-router.get("/videos", async (req, res) => {
+const TranslationService = require("../service/translation.service");
+const translationService = new TranslationService();
+
+router.get("/videos/:language", async (req, res) => {
+  const language = req.params.language;
+  //language check here
   const reqNiche = req.query.niche;
   const reqPublishedAtfter = req.query.publishedAfter;
 
@@ -18,19 +23,22 @@ router.get("/videos", async (req, res) => {
   }
 
   try {
-    fetchCompleteVideoData(reqNiche, reqPublishedAtfter).subscribe(
+    fetchCompleteVideoData(language, reqNiche, reqPublishedAtfter).subscribe(
       (data) => {
-        console.log("🚀 ~ file: youtube.js:23 ~ router.get ~ data:", data)
-        res.status(200).json(data);
-      },
-      (err) => {
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
-      }
-    );
+        of(data).subscribe({
+            next: (results) => {
+              console.log("🚀 ~ file: youtube.js:23 ~ router.get ~ data:", data)
+              res.status(200).json(results);
+            },
+            error: (err) => {
+              console.error(err);
+              res.status(500).json(err);
+            }
+          })
+      })
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json(err);
   }
 });
 /**
@@ -67,7 +75,7 @@ function fetchVideoList(niche, publishedAfter) {
       if (res.ok) {
         return from(res.json());
       } else {
-        console.log('Error fetching videos');
+        res.status(500).json(res.json());
       }
     })
   );
@@ -99,7 +107,6 @@ function fetchVideoDetails(videoId) {
     fetch(apiUrl, params)
   ).pipe(
     mergeMap((res) => {
-      console.log("🚀 ~ file: youtube.js:114 ~ mergeMap ~ res:", res)
       if (res.ok) {
         return from(res.json());
       } else {
@@ -138,21 +145,45 @@ function mapVideoListToDetails(videoList) {
  * Complete wrapper for our fetch functions
  * @returns 
  */
-function fetchCompleteVideoData(niche, publishedAfter) {
-  return fetchVideoList(niche, publishedAfter)
-    .pipe(
-      map((data) =>
-        data.items.map((item) => ({
-          id: item.id.videoId,
-          title: item.snippet.title,
-          description: item.snippet.description,
-          thumbnailUrl: item.snippet.thumbnails.high.url,
-          publishedAt: item.snippet.publishTime,
-          channelTitle: item.snippet.channelTitle,
-        }))
-      ),
-      mergeMap((videoList) => mapVideoListToDetails(videoList))
-    )
+function fetchCompleteVideoData(language, niche, publishedAfter) {
+  return fetchVideoList(niche, publishedAfter).pipe(
+    map((data) => {
+      return data.items.map(async (item) => {
+
+        let processedTitle = item.snippet.title;
+        let processedDescription = item.snippet.description;
+  
+        if (language === 'fr') {
+          if (processedTitle !== undefined && processedTitle !== null && processedTitle !== "") {
+            processedTitle = await translationService.translateText(processedTitle);
+          }
+          if (processedDescription !== undefined && processedDescription !== null && processedDescription !== "") {
+            processedDescription = await translationService.translateText(processedDescription);
+          }
+          return {
+            id: item.id.videoId,
+            title: processedTitle,
+            description: processedDescription,
+            thumbnailUrl: item.snippet.thumbnails.high.url,
+            publishedAt: item.snippet.publishTime,
+            channelTitle: item.snippet.channelTitle,
+          }
+        } else {
+          return {
+            id: item.id.videoId,
+            title: processedTitle,
+            description: processedDescription,
+            thumbnailUrl: item.snippet.thumbnails.high.url,
+            publishedAt: item.snippet.publishTime,
+            channelTitle: item.snippet.channelTitle,
+          };
+        }
+      });
+    }),
+    concatMap((observables) => forkJoin(observables)),
+    mergeMap((videoList) => mapVideoListToDetails(videoList))
+  );
+  
 }
 
 module.exports = router;

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class NavigationService {
-  navigateToTitleDetails() {
+  navigateToCopyCatMedia() {
     throw new Error('Method not implemented.');
   }
   
@@ -35,5 +35,9 @@ export class NavigationService {
 
   navigateToExtractDetails() {
     this.router.navigate(['maker/copycat/details']);
+  }
+
+  navigateToTitleDetails() {
+    this.router.navigate(['maker/copycat/titles']);
   }
 }

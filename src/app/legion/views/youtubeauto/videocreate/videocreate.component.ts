@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { ContentGenerationService } from '../../../service/contentgeneration.service';
+import { ContentGenerationService } from '../../../service/content/generation.service';
 import {
   FormBuilder,
   FormGroup,
@@ -106,7 +106,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   reRollTopic() { 
     this.topicLoading = true;
-    this.gptService.updateNewTopic() 
+    // this.gptService.updateNewTopic() 
   }
 
   onVideoOptionSelected(option: VideoNiche) {

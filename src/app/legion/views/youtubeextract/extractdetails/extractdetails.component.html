@@ -13,10 +13,20 @@
       </p>
     </div>
 
-    <mat-horizontal-stepper [linear]="true" #stepper>
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
       <mat-step>
         <ng-template matStepLabel>Script</ng-template>
         <script-details [parentIsLoading]="transcriptIsLoading"></script-details>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Title</ng-template>
+        <title-details></title-details>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Media</ng-template>
+        <extract-media></extract-media>
       </mat-step>
 
     </mat-horizontal-stepper>

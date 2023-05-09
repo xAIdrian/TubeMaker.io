@@ -4,7 +4,7 @@
     "welcome": "Bienvenue",
     "publish_videos_title": "Créer une nouvelle vidéo",
     "create_new_video": "Sélectionnez une vidéo de la liste pour la modifier ou créez-en une nouvelle en cliquant sur le bouton 'Nouvelle vidéo'.",
-    "published": "Publié:",
+    "published": "Publié",
     "input": {
       "video_title": "",
       "video_channel_title": "",

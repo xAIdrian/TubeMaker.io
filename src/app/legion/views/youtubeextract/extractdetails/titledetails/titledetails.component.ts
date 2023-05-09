@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContentGenerationService } from '../../../../service/contentgeneration.service';
+import { ContentGenerationService } from '../../../../service/content/generation.service';
+import { ExtractDetailsService } from '../../extractdetails.service';
 
 @Component({
   selector: 'title-details',
@@ -11,77 +12,73 @@ import { ContentGenerationService } from '../../../../service/contentgeneration.
 export class TitleDetailsComponent implements OnInit, AfterContentInit {
 
   infoFormGroup: FormGroup;
+
   isTitleLoading: boolean = false;
-  isTitleOptimizing: boolean = false;
   isDescLoading: boolean = false;
-  isDescOptimizing: boolean = false;
   isTagsLoading: boolean = false;
-  isTagsOptimizing: boolean = false;
 
   constructor(
     private formGroupBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private gptService: ContentGenerationService
+    private extractDeatilsService: ExtractDetailsService
   ) {
     /** */
   }
 
   ngOnInit() {
-    // this.gptService.getTitleInfoOserver().subscribe({
-    //   GptGeneratedMetaData
-    //   this.infoFormGroup.setValue({
-    //     title: response.meta.title.replace('"', '').trim(),
-    //     description: response.meta.description.trim(),
-    //     tags: response.meta.tags.join(', ').trim(),
-    //   });
-    // })
-    this.gptService.getTitleObserver().subscribe((response) => {
+    this.extractDeatilsService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
-      this.isTitleOptimizing = false;
       this.infoFormGroup.patchValue({ title: response.replace('"', '').trim() })
+      this.changeDetectorRef.detectChanges();
     });
-    this.gptService.getDescriptionObserver().subscribe((response) => {
+    this.extractDeatilsService.getDescriptionObserver().subscribe((response) => {
       this.isDescLoading = false;
-      this.isDescOptimizing = false;
       this.infoFormGroup.patchValue({ description: response.trim() })
+      this.changeDetectorRef.detectChanges();
     });
-    this.gptService.getTagsObserver().subscribe((response) => {  
+    this.extractDeatilsService.getTagsObserver().subscribe((response) => {  
       this.isTagsLoading = false;
-      this.isTagsOptimizing = false;
       this.infoFormGroup.patchValue({ tags: response.join(', ').trim() })
+      this.changeDetectorRef.detectChanges();
     });
     this.infoFormGroup = this.formGroupBuilder.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      tags: ['', Validators.required],
+      title: ['Loading. Please wait...', Validators.required],
+      description: ['Loading. Please wait...', Validators.required],
+      tags: ['Loading. Please wait...', Validators.required],
     });
-    // this.gptService().generateTitleInfoFromYoutube()
+    this.extractDeatilsService.getVideoMetaData()
   }
 
   ngAfterContentInit() {
     this.changeDetectorRef.detectChanges();
   }
 
-  updateTitle(prompt: string) {
+  onTitleImproveClick(prompt: string) {
     this.isTitleLoading = true;
-    this.gptService.updateNewTitle();
+    this.extractDeatilsService.updateTitle(
+      prompt,
+      this.infoFormGroup.value.title,
+    );
   }
 
-  updateDescription(prompt: string) {
+  onDescriptionImproveClick(prompt: string) {
     this.isDescLoading = true;
-    this.gptService.updateNewDescription();
+    this.extractDeatilsService.updateDescription(
+      prompt,
+      this.infoFormGroup.value.description,
+    );
   }
 
-  updateTags(prompt: string) {
+  rerollTags() {
     this.isTagsLoading = true;
-    this.gptService.updateNewTags();
+    this.extractDeatilsService.updateTags()
   }
 
-  onTitleSubmitClick() {
-    // this.contentRepo.submitInfos(
-    //   this.infoFormGroup.value.title,
-    //   this.infoFormGroup.value.description,
-    //   this.infoFormGroup.value.tags,
-    // );
+  onSubmitClick() {
+    this.extractDeatilsService.submitInfos(
+      this.infoFormGroup.value.title,
+      this.infoFormGroup.value.description,
+      this.infoFormGroup.value.tags,
+    );
   }
 }

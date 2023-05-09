@@ -15,6 +15,8 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
 
     isLoading = false;
     showErrorState = false;
+    errorText = '';
+
     nicheFormGroup: FormGroup;
 
     videoNiches: VideoNiche[] = [];
@@ -57,10 +59,12 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
             next: (error: any) => {
                 this.isLoading = false;
                 this.showErrorState = true;
+                this.errorText = error;
             }
         });
         this.extractDetailsService.getYoutubeVideosObserver().subscribe({
             next: (videos: YoutubeVideo[]) => {
+                console.log("🚀 ~ file: videocopy.component.ts:64 ~ VideoCopyComponent ~ this.extractDetailsService.getYoutubeVideosObserver ~ videos:", videos)
                 console.log(videos);
                 this.isLoading = false;
                 this.searchVideos = videos;
@@ -86,6 +90,8 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     }
 
     onCopyCatClick(video: YoutubeVideo) {
-        this.extractDetailsService.setCopyCatVideoId(video);
+        if (video !== undefined) {
+            this.extractDetailsService.setCopyCatVideoId(video);
+        }
     }
 }
