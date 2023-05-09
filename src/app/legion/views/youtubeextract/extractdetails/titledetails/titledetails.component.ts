@@ -46,7 +46,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
       description: ['Loading. Please wait...', Validators.required],
       tags: ['Loading. Please wait...', Validators.required],
     });
-    this.extractDeatilsService.getVideoMetaData()
+    // this.extractDeatilsService.getVideoMetaData()
   }
 
   ngAfterContentInit() {

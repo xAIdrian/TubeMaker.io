@@ -25,7 +25,6 @@ mat-button-toggle-group {
     border: none;
     orientation: horizontal;
     
-
     mat-button-toggle {
         margin-right: 0.25rem;
         border-radius: 1rem;
@@ -72,9 +71,6 @@ mat-button-toggle-group {
     justify-content: center;
     align-items: center;
     background-color: black;
-    // z-index: 1;
-    // position: relative;
-    // transition: background-color 0.1s ease-in-out;
 }
 
 .hover-overlay:hover .mybuttonoverlap{

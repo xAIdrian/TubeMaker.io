@@ -7,7 +7,7 @@ import { ExtractContentModel } from "../../../../model/extractcontent.model";
 
 @Component({
   selector: 'extract-media',
-  templateUrl: '../../../common/videomedia/videomedia.component.html',
+  templateUrl: './extractmedia.component.html',
   styleUrls: ['../../../common/videomedia/videomedia.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })

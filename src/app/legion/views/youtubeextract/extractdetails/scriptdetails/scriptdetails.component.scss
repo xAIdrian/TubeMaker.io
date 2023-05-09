@@ -76,12 +76,19 @@ h4 {
 .custom-dropdown-menu {
     width: 130%;
     font-weight: bold;
-  }
-  
-  .dropdown-header {
+}
+
+.dropdown-header {
     font-weight: bold;
     color: darkslategray;
     flex-wrap: wrap;
     white-space: normal;
-  }
-  
+}
+
+.ai-button {
+    border: 1px solid gray; 
+    margin-left: 0.25rem; 
+    margin-right: 0.25rem;
+    display: inline-block;
+    margin-top: 0.75rem;
+}

@@ -1,0 +1,34 @@
+<div>
+  <form>
+    <h6>Generate Your Script With AI</h6>
+    <p class="text-medium-emphasis">
+      {{ 'media_selection_form.video_option.description' | translate }}
+    </p>
+    <audio-dropdown #audiochild (voiceSelected)="onVoiceSelected($event)"></audio-dropdown>
+    <p></p>
+    <div>
+      <button cButton variant="outline" style="width: 100%" variant="outline" color="primary"
+        [disabled]="generateAudioLoading" (click)="generateTextToSpeech()">
+        <c-spinner *ngIf="generateAudioLoading" size="sm"></c-spinner>
+        {{ 'media_selection_form.video_option.generate_ai_narration_button' | translate }}
+      </button>
+      <audio #audioPlayer class="flex-grow-1" style="width: 100%;" controls>
+        <source [src]="generatedAudioUrl" type="audio/mpeg">
+        {{ 'media_selection_form.video_option.audio_not_supported_message' | translate }}
+      </audio>
+    </div>
+    <p></p>
+    <button cButton variant="outline" style="width: 100%" variant="outline" color="primary"
+      (click)="downloadTextFile()">
+      {{ 'media_selection_form.video_option.download_script_button' | translate }}
+    </button>
+    <br />
+    <h6 style="margin-top: 1rem;">{{ 'media_selection_form.video_option.edit_in_descript_title' | translate }}</h6><br />
+    <p class="text-medium-emphasis">
+      {{ 'media_selection_form.video_option.edit_in_descript_description' | translate }}
+    </p>
+    <button cButton variant="outline" color="primary" style="width: 100%" (click)="descriptButtonClicked()">
+      {{ 'media_selection_form.video_option.edit_in_descript_button' | translate }}
+    </button>
+  </form>
+</div>
