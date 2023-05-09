@@ -40,17 +40,19 @@ import { LegionRoutingModule } from './legion-routing.module';
 import { VideoListComponent } from './views/youtubeauto/videolist/videolist.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './views/youtubeauto/videocreate/videocreate.component';
-import { VideoDetailsComponent } from './views/youtubeauto/videoresult/videodetails/videodetails.component';
+import { VideoDetailsComponent } from './views/youtubeauto/videoresult/videodetails.component';
 import { VideoUploadComponent } from './views/youtubeauto/videoupload/videoupload.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './repository/cors.interceptor';
 import { VideoScriptComponent } from './views/youtubeauto/videoresult/videoscript/videoscript.component';
-import { VideoMediaComponent } from './views/youtubeauto/videoresult/videomedia/videomedia.component';
-import { AudioDropdownComponent } from './views/youtubeauto/videoresult/videomedia/audiodropdown/audiodropdown.component';
+import { AutoMediaComponent } from './views/youtubeauto/videoresult/videomedia/automedia.component';
+import { ExtractMediaComponent } from './views/youtubeextract/extractdetails/videomedia/extractmedia.component';
+import { AudioDropdownComponent } from './views/common/videomedia/audiodropdown/audiodropdown.component';
 import { VideoCopyComponent } from './views/youtubeextract/videocopy/videocopy.component'
 import { ExtractDetailsComponent } from './views/youtubeextract/extractdetails/extractdetails.component';
 import { ScriptDetailsComponent } from './views/youtubeextract/extractdetails/scriptdetails/scriptdetails.component';
 import { TitleDetailsComponent } from './views/youtubeextract/extractdetails/titledetails/titledetails.component';
+import { VideoMediaComponent } from './views/common/videomedia/videomedia.component';
 
 @NgModule({
     providers: [{
@@ -65,6 +67,8 @@ import { TitleDetailsComponent } from './views/youtubeextract/extractdetails/tit
         VideoUploadComponent,
         VideoScriptComponent,
         VideoMediaComponent,
+        AutoMediaComponent,
+        ExtractMediaComponent,
         AudioDropdownComponent,
         VideoCopyComponent,
         ExtractDetailsComponent,

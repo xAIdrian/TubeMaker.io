@@ -4,17 +4,15 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  OnChanges,
   OnInit,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { AutoContentModel } from '../../../../model/autocontent.model';
+import { ContentModel } from '../../../model/common/content.model';
 import { FormGroup } from '@angular/forms';
-import { VoiceService } from '../../../../service/voice.service';
+import { VoiceService } from '../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 import * as saveAs from 'file-saver';
-import { NavigationService } from '../../../../service/navigation.service';
+import { NavigationService } from '../../../service/navigation.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -49,7 +47,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   selectedMediaOption = 'Video';
 
   constructor(
-    private contentRepo: AutoContentModel,
+    private contentRepo: ContentModel,
     private voiceService: VoiceService,
     private navigationService: NavigationService,
     private translate: TranslateService,
@@ -94,7 +92,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
       return;
     }
 
-    const scriptValue = this.contentRepo.getCompleteScriptFromMap();
+    const scriptValue = this.contentRepo.getCompleteScript();
     if (scriptValue === null || scriptValue === '') {
       alert('Please enter a script before generating audio');
       return;

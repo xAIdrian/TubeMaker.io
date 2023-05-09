@@ -6,17 +6,17 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { NavigationService } from '../../../../service/navigation.service';
+import { NavigationService } from '../../../service/navigation.service';
 import {
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
 
-import { GptGeneratedMetaData } from '../../../../model/gpt/gptgeneratedvideo.model';
-import { ContentAutoService } from '../../../../service/content/auto.service';
-import{ AutoContentModel } from '../../../../model/autocontent.model';
-import { VideoDuration } from '../../../../model/autocreate/videoduration.model';
+import { GptGeneratedMetaData } from '../../../model/gpt/gptgeneratedvideo.model';
+import { ContentAutoService } from '../../../service/content/auto.service';
+import{ AutoContentModel } from '../../../model/autocontent.model';
+import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 
 @Component({
   selector: 'video-result',

@@ -93,7 +93,7 @@ export class AutoContentModel extends ContentModel {
     this.scriptMap.set(controlName, script);
   }
 
-  getCompleteScriptFromMap(): string {
+  getCompleteScript(): string {
     let script = '';
     // get all the values of the ordered hashmap in the same order
     let valuesInOrder = Array.from(this.scriptMap.keys()).map(key => this.scriptMap.get(key));
@@ -111,7 +111,7 @@ export class AutoContentModel extends ContentModel {
   }
 
   getScriptForDownload(givenFileName: string): Observable<{ blob: Blob; filename: string }> {
-    const completeScript = this.getCompleteScriptFromMap();
+    const completeScript = this.getCompleteScript();
     if (completeScript !== '') {
       new Error(`Script not available ${completeScript}`)
     }

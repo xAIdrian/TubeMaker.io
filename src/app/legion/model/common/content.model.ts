@@ -21,7 +21,10 @@ export abstract class ContentModel {
     private initTranslate: TranslateService
   ) { 
     this.translate = initTranslate
-   }
+  }
+
+  abstract getCompleteScript(): string;
+  abstract getScriptForDownload(givenFileName: string): Observable<{ blob: Blob; filename: string }>;
 
   getInitVideoNiche(headerKey: string, descriptionKey: string): Observable<VideoNiche>{
     return combineLatest([
