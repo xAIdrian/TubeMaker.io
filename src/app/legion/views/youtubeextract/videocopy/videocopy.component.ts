@@ -15,6 +15,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
 
     isLoading = false;
     showErrorState = false;
+    errorText = '';
 
     nicheFormGroup: FormGroup;
 
@@ -58,6 +59,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
             next: (error: any) => {
                 this.isLoading = false;
                 this.showErrorState = true;
+                this.errorText = error;
             }
         });
         this.extractDetailsService.getYoutubeVideosObserver().subscribe({

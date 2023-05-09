@@ -61,9 +61,15 @@ router.get("/:videoId", async (req, res) => {
           return throwError(() => new Error('🔥' + err));
         }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
-          const transcription = await transcribeAudio(filePath, info.videoDetails.description);
+          // Transcription
+          const transcription = await transcribeAudio(filePath);
+          if (transcription === undefined || transcription === '') {
+            deletefile(filePath);
+            res.status(500).json({ error: "Transcription Empty" });
+            return throwError(() => new Error('🔥' + 'No transcription found'));
+          }
+          // Translation
           const translation = await translationService.translateText(transcription);
-          
           if (translation !== undefined && translation !== '') {
             res.status(200).json({
               message: "success",
@@ -71,9 +77,10 @@ router.get("/:videoId", async (req, res) => {
                 translation: translation,
               }
             });
-            // deletefile(filePath)
+            deletefile(filePath)
           } else {
             deletefile(filePath);
+            res.status(500).json({ error: "Translations Empty" });
             return throwError(() => new Error('🔥' + 'No translation found'));
           }
         })
@@ -96,7 +103,7 @@ async function deletefile(filePath) {
   });
 }
 
-async function transcribeAudio(filePath, description) {
+async function transcribeAudio(filePath) {
   console.log("🚀 ~ file: transcribe.js:86 ~ transcribeAudio ~ Transcription In Progress!")
 
   // Call the OpenAI API to transcribe the audio

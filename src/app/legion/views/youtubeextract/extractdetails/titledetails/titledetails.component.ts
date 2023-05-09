@@ -42,9 +42,9 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
       this.changeDetectorRef.detectChanges();
     });
     this.infoFormGroup = this.formGroupBuilder.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      tags: ['', Validators.required],
+      title: ['Loading. Please wait...', Validators.required],
+      description: ['Loading. Please wait...', Validators.required],
+      tags: ['Loading. Please wait...', Validators.required],
     });
     this.extractDeatilsService.getVideoMetaData()
   }

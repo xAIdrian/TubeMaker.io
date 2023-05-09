@@ -107,7 +107,6 @@ function fetchVideoDetails(videoId) {
     fetch(apiUrl, params)
   ).pipe(
     mergeMap((res) => {
-      console.log("🚀 ~ file: youtube.js:114 ~ mergeMap ~ res:", res)
       if (res.ok) {
         return from(res.json());
       } else {
