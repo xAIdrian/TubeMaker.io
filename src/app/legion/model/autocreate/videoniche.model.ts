@@ -11,14 +11,9 @@ export function getDefaultVideoNiches(
 ): VideoNiche[] {
   return [
     {
-      name: translate.instant('video_style.top_5'),
-      header: translate.instant('video_style.top_5_header'),
-      description: translate.instant('video_style.top_5_description'),
-    },
-    {
-      name: translate.instant('video_style.tech'),
-      header: translate.instant('video_style.tech_header'),
-      description: translate.instant('video_style.tech_description'),
+      name: translate.instant('video_style.psychology'),
+      header: translate.instant('video_style.psychology_header'),
+      description: translate.instant('video_style.psychology_description'),
     },
     {
       name: translate.instant('video_style.story_telling'),

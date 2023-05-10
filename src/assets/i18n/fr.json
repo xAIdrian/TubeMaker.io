@@ -189,12 +189,16 @@
     "init_description": "Chaque vidéo nécessite une durée spécifique pour présenter l'information. Elle doit être captivante et engageante. N'oubliez pas d'aligner le style de votre vidéo avec les tendances éprouvées dans la niche choisie."
   },
   "video_style": {
+    "init_header": "Sélectionnez la niche pour votre vidéo",
+    "init_description": "Chaque vidéo nécessite un style et un ton spécifiques pour présenter l'information. Elle doit être captivante et engageante. N'oubliez pas d'aligner le style de votre vidéo avec les tendances éprouvées dans la niche choisie.",
+
     "top_5": "Top 5",
     "top_5_header": "Top 5 des compte-à-rebours",
     "top_5_description": "Cette niche consiste à créer des vidéos présentant des informations intéressantes, surprenantes ou obscures sous forme de liste. Le contenu peut couvrir divers sujets tels que l'histoire, la science ou la culture populaire. Les vidéos sans visage fonctionnent bien dans cette niche car l'accent est mis sur l'information et les visuels plutôt que sur le présentateur. Les créateurs peuvent monétiser grâce à la publicité, aux parrainages et au marketing d'affiliation.",
-    "tech": "Tech",
-    "tech_header": "Avis sur la technologie",
-    "tech_description": "Cette niche consiste à créer des vidéos qui passent en revue des produits technologiques, tels que les smartphones, les ordinateurs portables et les appareils photo. Le contenu peut couvrir divers sujets tels que l'histoire, la science ou la culture populaire. Les vidéos sans visage fonctionnent bien dans cette niche car l'accent est mis sur l'information et les visuels plutôt que sur le présentateur. Les créateurs peuvent monétiser grâce à la publicité, aux parrainages et au marketing d'affiliation.",
+
+    "psychology": "Psychologie",
+    "psychology_header": "Psychologie",
+    "psychology_description": "Les créateurs dans cette niche peuvent partager leurs propres expériences et leurs points de vue ou fournir des conseils et des orientations d'experts grâce à des interviews, des questions-réponses et des vidéos informatives. Cette niche a un large attrait auprès du public, car les gens cherchent toujours des moyens de mieux se comprendre eux-mêmes et les autres.",
 
     "story_telling": "Récits",
     "story_telling_header": "Récits captivants et engageants",
@@ -216,7 +220,61 @@
     "language_header": "Enseignement des langues",
     "language_description": "Utilisez l'IA pour créer des leçons et traduire des langues étrangères. Des millions d'utilisateurs se connectent chaque jour pour apprendre de nouvelles langues. Cela peut commencer par des phrases de base, la prononciation, les mots et la grammaire. Les leçons peuvent être des clips de 2 à 5 minutes. Pour sortir un peu des sentiers battus, le langage corporel est aussi techniquement une langue.",
 
-    "init_header": "Sélectionnez la niche pour votre vidéo",
-    "init_description": "Chaque vidéo nécessite un style et un ton spécifiques pour présenter l'information. Elle doit être captivante et engageante. N'oubliez pas d'aligner le style de votre vidéo avec les tendances éprouvées dans la niche choisie."
+    "virtual_reality": "Réalité virtuelle",
+    "virtual_reality_header": "Jeux en réalité virtuelle",
+    "virtual_reality_description": "Cette niche consiste à créer des vidéos qui présentent des jeux et des expériences en réalité virtuelle. Les vidéos peuvent être présentées à la première personne et peuvent inclure des commentaires ou des réactions du créateur. Les créateurs peuvent monétiser leur contenu grâce à la publicité, aux partenariats et au marketing d'affiliation."
+  },
+  "music_style": {
+    "covers": "Reprises de chansons",
+    "covers_header": "Reprises et remix de chansons",
+    "covers_description": "Cette niche consiste à créer des vidéos où le créateur interprète des reprises ou des remix de chansons populaires. Les vidéos peuvent être présentées dans différents styles, tels que acoustique, a cappella ou instrumental. Les créateurs peuvent monétiser leur contenu grâce à la publicité, aux partenariats et aux téléchargements numériques.",
+
+    "music_production": "Production musicale",
+    "music_production_header": "Tutoriels de production musicale",
+    "music_production_description": "Cette niche consiste à créer des vidéos qui apprennent aux spectateurs comment produire de la musique, y compris des tutoriels sur les logiciels, les techniques et les astuces. Les vidéos peuvent être présentées sous forme de guide pas à pas, et peuvent inclure des animations ou des visuels pour améliorer la démonstration. Les créateurs peuvent monétiser leur contenu grâce à la publicité, aux partenariats et aux téléchargements numériques.",
+
+    "music_reviews": "Critiques musicales",
+    "music_reviews_header": "Critiques et analyses musicales",
+    "music_reviews_description": "Cette niche consiste à créer des vidéos qui fournissent des critiques, des avis ou des analyses de musique et d'albums. Les vidéos peuvent être présentées avec un ton humoristique, critique ou informatif, et peuvent inclure des extraits ou des séquences du contenu original. Les créateurs peuvent monétiser leur contenu grâce à la publicité, aux partenariats et au marketing d'affiliation."
+  },
+  "food_experiments": {
+    "name": "Expériences culinaires",
+    "header": "Expérimentations culinaires",
+    "description": "Cette niche consiste à créer des vidéos qui explorent des combinaisons alimentaires ou des techniques de cuisine uniques, inattendues ou inhabituelles. Le contenu peut aller des démonstrations de recettes aux tests de goût, et peut intéresser les téléspectateurs qui aiment cuisiner ou essayer de nouveaux aliments. Les créateurs peuvent monétiser leur contenu grâce aux partenariats, au marketing d'affiliation ou en créant et vendant leurs propres livres de recettes ou produits."
+  },
+  "diy_life_hacks": {
+    "name": "Astuces de vie DIY",
+    "header": "Astuces DIY pour la vie quotidienne",
+    "description": "Cette niche consiste à créer des vidéos qui offrent des solutions créatives aux problèmes ou aux défis quotidiens, tels que l'organisation de la maison, le nettoyage ou les astuces de mode. Les créateurs peuvent monétiser leur contenu grâce aux partenariats, au marketing d'affiliation ou en créant et vendant leurs propres produits ou cours."
+  },
+  "sustainable_living": {
+    "name": "Vie durable",
+    "header": "Vivre de manière durable",
+    "description": "Cette niche implique de créer des vidéos axées sur la vie durable ou respectueuse de l'environnement, telles que des conseils de zéro déchet, d'énergie verte ou de mode durable. Les créateurs peuvent gagner de l'argent grâce à des parrainages, du marketing d'affiliation ou en créant et en vendant des produits ou des cours respectueux de l'environnement."
+  },
+  "brain_teasers": {
+    "name": "Casse-têtes",
+    "header": "Puzzles et casse-têtes",
+    "description": "Cette niche implique de créer des vidéos qui mettent au défi l'esprit des spectateurs avec des énigmes, des puzzles ou des casse-têtes. Le contenu peut aller des problèmes de mathématiques simples aux puzzles de logique complexes et peut plaire aux spectateurs qui aiment résoudre des problèmes ou relever des défis intellectuels. Les créateurs peuvent gagner de l'argent grâce à des parrainages, du marketing d'affiliation ou en créant et en vendant leurs propres livres ou jeux de puzzles."
+  },
+  "pet_parenting": {
+    "name": "Éducation des animaux de compagnie",
+    "header": "Soins et éducation des animaux de compagnie",
+    "description": "Cette niche implique de créer des vidéos offrant des conseils, des astuces et des idées sur les soins et l'éducation des animaux de compagnie. Le contenu peut aller des astuces de dressage aux critiques de produits et peut plaire aux spectateurs qui sont passionnés par leurs animaux de compagnie. Les créateurs peuvent gagner de l'argent grâce à des parrainages, du marketing d'affiliation ou en créant et en vendant leurs propres produits ou cours sur les soins aux animaux de compagnie."
+  },
+  "minimalism": {
+    "name": "Minimalisme",
+    "header": "Vivre de manière minimaliste",
+    "description": "Cette niche implique de créer des vidéos qui se concentrent sur le minimalisme et la simplification de la vie. Le contenu peut aller de l'organisation domestique à la mode et à la beauté et peut plaire aux spectateurs qui souhaitent simplifier leur vie et réduire le désordre. Les créateurs peuvent gagner de l'argent grâce à des parrainages, du marketing d'affiliation ou en créant et en vendant leurs propres produits minimalistes ou cours."
+  },
+  "art_history": {
+    "name": "Histoire de l'art",
+    "header": "Explorer l'histoire de l'art",
+    "description": "Cette niche implique de créer des vidéos qui explorent différentes époques, styles et mouvements de l'histoire de l'art. Le contenu peut aller de conférences éducatives à des critiques d'art et peut plaire aux spectateurs intéressés par l'histoire de l'art et la culture. Les créateurs peuvent gagner de l'argent grâce à des parrainages, du marketing d'affiliation ou en créant et en vendant leurs propres cours ou livres d'histoire de l'art."
+  },
+  "beauty_tutorials_mature_skin": {
+    "name": "Tutoriels de beauté pour la peau mature",
+    "header": "Conseils de beauté pour la peau mature",
+    "description": "Cette niche consiste à créer des vidéos qui fournissent des astuces et des tutoriels de beauté spécifiquement pour la peau mature. Les créateurs de cette niche partagent souvent des conseils pour les soins de la peau, le maquillage et la coiffure qui sont adaptés aux besoins des téléspectateurs plus âgés. La monétisation peut provenir de parrainages, de marketing d'affiliation ou de ventes de produits dérivés."
   }
 }

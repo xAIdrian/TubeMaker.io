@@ -158,22 +158,22 @@
     "long_description": "A deep dive into a topic, ideal for viewers seeking a comprehensive understanding of a topic.  Provides a balance between depth and brevity, allowing for detailed explanations without overwhelming the audience.",
     "very_long": "Very Long",
     "very_long_header": "For videos over 20 minutes",
-    "very_long_description": "A comprehensive look at a topic, ideal for viewers seeking a comprehensive understanding of a topic.  Provides a balance between depth and brevity, allowing for detailed explanations without overwhelming the audience. ",  
+    "very_long_description": "A comprehensive look at a topic, ideal for viewers seeking a comprehensive understanding of a topic.  Provides a balance between depth and brevity, allowing for detailed explanations without overwhelming the audience. ",
 
     "introduction": "Introduction",
     "attention_grabbing_hook": "Create a compelling, curiosity-piquing hook",
     "brief_introduction": "Set the stage for the problem or topic",
     "preview_key_points": "Preview the sections and key points to be covered",
-    
+
     "main_content": "Main Content",
-    "concise_explanation" : "Concise explanation of the key point or main idea",
+    "concise_explanation": "Concise explanation of the key point or main idea",
     "deliver_context": "Deliver context and background for understanding",
     "highlight_key_steps": "Highlight the most critical points or steps",
     "use_examples": "Support your argument with examples and evidence",
     "organize_subtext": "Organize content into relevant subtopics or steps",
     "in_depth_explanation": "Explore the topic or problem in-depth",
     "multiple_examples": "Present multiple examples and supporting evidence",
-    
+
     "actionable_takeaway": "Actionable Takeaway",
     "practical_tip": "Share a practical, valuable tip or insight for viewers",
 
@@ -204,9 +204,9 @@
     "top_5_header": "Top 5 Countdowns",
     "top_5_description": "This niche involves creating videos that present interesting, surprising, or obscure information in a list format. The content can span various topics, such as history, science, or pop culture. Faceless videos work well in this niche since the focus is on the information and visuals rather than the presenter. Creators can monetize through advertising, sponsorships, and affiliate marketing.",
 
-    "tech": "Tech",
-    "tech_header": "Tech Reviews",
-    "tech_description": "This niche involves creating videos that review tech products, such as smartphones, laptops, and cameras. The content can span various topics, such as history, science, or pop culture. Faceless videos work well in this niche since the focus is on the information and visuals rather than the presenter. Creators can monetize through advertising, sponsorships, and affiliate marketing.",
+    "psychology": "Psychology",
+    "psychology_header": "Psychology",
+    "psychology_description": "Creators in this niche may share their own experiences and insights or provide expert advice and guidance through interviews, Q&As, and informative videos. This niche has a wide audience appeal, as people are always looking for ways to better understand themselves and others.",
 
     "story_telling": "Story Telling",
     "story_telling_header": "Captivating and Engaging Narratives",
@@ -236,11 +236,11 @@
     "covers": "Song Covers",
     "covers_header": "Song Covers and Remixes",
     "covers_description": "This niche involves creating videos where the creator performs covers or remixes of popular songs. The videos can be presented in a variety of styles, such as acoustic, a cappella, or instrumental. Creators can monetize through advertising, sponsorships, and digital downloads.",
-    
+
     "music_production": "Music Production",
     "music_production_header": "Music Production Tutorials",
     "music_production_description": "This niche involves creating videos that teach viewers how to produce music, including tutorials on software, techniques, and tips. The videos can be presented in a how-to or walkthrough format, and can include animations or visuals to enhance the demonstration. Creators can monetize through advertising, sponsorships, and digital downloads.",
-    
+
     "music_reviews": "Music Reviews",
     "music_reviews_header": "Music Reviews and Critiques",
     "music_reviews_description": "This niche involves creating videos that provide critiques, reviews, or analysis of music and albums. The videos can be presented in a humorous, critical, or informative tone, and can include clips or footage from the original content. Creators can monetize through advertising, sponsorships, and affiliate marketing."
@@ -249,40 +249,40 @@
     "name": "Food Experiments",
     "header": "Experiments with Food",
     "description": "This niche involves creating videos that explore unique, unexpected, or unusual food combinations or cooking techniques. The content can range from recipe demos to taste tests, and may appeal to viewers who enjoy cooking or trying new foods. Creators can monetize through sponsorships, affiliate marketing, or creating and selling their own recipe books or products."
-    },
-    "diy_life_hacks": {
+  },
+  "diy_life_hacks": {
     "name": "DIY Life Hacks",
     "header": "Life Hacks DIY",
     "description": "This niche involves creating videos that offer creative solutions to everyday problems or challenges, such as home organization, cleaning, or fashion hacks. Creators can monetize through sponsorships, affiliate marketing, or by creating and selling their own products or courses."
-    },
-    "sustainable_living": {
+  },
+  "sustainable_living": {
     "name": "Sustainable Living",
     "header": "Living Sustainably",
     "description": "This niche involves creating videos that focus on sustainable or eco-friendly living, such as zero-waste tips, green energy, or sustainable fashion. Creators can monetize through sponsorships, affiliate marketing, or by creating and selling eco-friendly products or courses."
-    },
-    "brain_teasers": {
+  },
+  "brain_teasers": {
     "name": "Brain Teasers",
     "header": "Puzzles and Brain Teasers",
     "description": "This niche involves creating videos that challenge viewers' minds with riddles, puzzles, or brain teasers. The content can range from simple math problems to complex logic puzzles, and may appeal to viewers who enjoy problem-solving or intellectual challenges. Creators can monetize through sponsorships, affiliate marketing, or by creating and selling their own puzzle books or games."
-    },
-    "pet_parenting": {
+  },
+  "pet_parenting": {
     "name": "Pet Parenting",
     "header": "Pet Care and Parenting",
     "description": "This niche involves creating videos that offer advice, tips, and insights on pet care and pet parenting. The content can range from training tips to product reviews, and may appeal to viewers who are passionate about their pets. Creators can monetize through sponsorships, affiliate marketing, or by creating and selling their own pet care products or courses."
-    },
-    "minimalism": {
+  },
+  "minimalism": {
     "name": "Minimalism",
     "header": "Living a Minimalist Lifestyle",
     "description": "This niche involves creating videos that focus on minimalism and simplifying life. The content can range from home organization to fashion and beauty, and may appeal to viewers who are interested in simplifying their lives and reducing clutter. Creators can monetize through sponsorships, affiliate marketing, or by creating and selling their own minimalist products or courses."
-    },
-    "art_history": {
+  },
+  "art_history": {
     "name": "Art History",
     "header": "Exploring Art History",
     "description": "This niche involves creating videos that explore different eras, styles, and movements in art history. The content can range from educational lectures to art critiques and may appeal to viewers who are interested in art history and culture. Creators can monetize through sponsorships, affiliate marketing, or by creating and selling their own art history courses or books."
-    },
-    "beauty_tutorials_mature_skin": {
-      "name": "Beauty Tutorials for Mature Skin",
-      "header": "Beauty Tips for Mature Skin",
-      "description": "This niche is focused on providing beauty tips and tutorials specifically for mature skin. Creators in this niche often share tips and tricks for skincare, makeup, and hair care that are tailored to the needs of older viewers. Monetization can come from sponsorships, affiliate marketing, or merchandise sales."
-      }
+  },
+  "beauty_tutorials_mature_skin": {
+    "name": "Beauty Tutorials for Mature Skin",
+    "header": "Beauty Tips for Mature Skin",
+    "description": "This niche is focused on providing beauty tips and tutorials specifically for mature skin. Creators in this niche often share tips and tricks for skincare, makeup, and hair care that are tailored to the needs of older viewers. Monetization can come from sponsorships, affiliate marketing, or merchandise sales."
+  }
 }

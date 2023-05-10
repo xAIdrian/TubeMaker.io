@@ -73,7 +73,7 @@ import { VideoMediaComponent } from './views/common/videomedia/videomedia.compon
         VideoCopyComponent,
         ExtractDetailsComponent,
         ScriptDetailsComponent,
-        TitleDetailsComponent
+        TitleDetailsComponent,
     ],
     imports: [
         DragDropModule,

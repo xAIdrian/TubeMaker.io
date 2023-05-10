@@ -33,6 +33,10 @@
           Getting videos from Youtube
       </div>
 
+      <div stlye="margin-top: 2rem; align-items-center: ">
+
+      </div>
+
       <!-- Video Grid List -->
       <div class="grid-container" style="margin: 1rem;">
         <div class="grid-item" cListGroup *ngFor="let video of searchVideos" style="margin-top: 1rem;">
@@ -55,15 +59,21 @@
             <div class="row" style="margin: 0;">
               <div class="col-3">
                 <svg cIcon name="cibYoutube" style="width: 100%"></svg>
-                <p class="text-medium-emphasis" class="views"  style="width: 100%; text-align: center;">{{ video.statistics.viewCount }}</p>
+                <p class="text-medium-emphasis" class="views"  style="width: 100%; text-align: center;">
+                  {{ video.statistics?.viewCount ?? 'N/A' }}
+                </p>
               </div>
               <div class="col-3">
                 <svg cIcon name="cilThumbUp" style="width: 100%"></svg>
-                <p class="text-medium-emphasis" class="likes" style="width: 100%; text-align: center;">{{ video.statistics.likeCount }}</p>
+                <p class="text-medium-emphasis" class="likes" style="width: 100%; text-align: center;">
+                  {{ video.statistics?.likeCount ?? 'N/A' }}
+                </p>
               </div>
               <div class="col-3">
                 <svg cIcon name="cilCommentBubble" style="width: 100%"></svg>
-                <p class="text-medium-emphasis" class="comments" style="width: 100%; text-align: center;">{{ video.statistics.commentCount }}</p>
+                <p class="text-medium-emphasis" class="comments" style="width: 100%; text-align: center;">
+                  {{ video.statistics?.commentCount ?? 'N/A' }}
+                </p>
               </div>
             </div>
           </div>
