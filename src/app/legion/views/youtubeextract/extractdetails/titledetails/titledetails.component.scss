@@ -92,3 +92,30 @@ h5 {
     width: 100%;
     margin-bottom: 0.5rem;
 }
+
+input {
+    width: 100%;
+    height: auto;
+    border: none;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    height: auto;
+    border: none;
+    background-color: #F2F2F2;
+}
+
+.tags-textarea {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #F2F2F2;
+}
+
+.ai-button {
+    border: 1px solid gray; 
+    margin-left: 0.25rem; 
+    margin-right: 0.25rem;
+    display: inline-block;
+}

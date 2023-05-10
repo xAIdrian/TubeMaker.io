@@ -1,19 +1,22 @@
 import { TranscriptRepository } from '../../repository/transcript.repo';
 import { Injectable } from '@angular/core';
-import { from, map, Observable, Observer, of, Subject } from 'rxjs';
+import { concatMap, from, map, Observable, Observer, of, Subject } from 'rxjs';
 import { YoutubeDataRepository } from '../../repository/youtubedata.repo';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
 import { ContentExtractionService } from '../../service/content/extract.service';
 import { ExtractContentModel } from '../../model/extractcontent.model';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 
-declare var gapi: any;
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExtractDetailsService {
+  getCurrentVideoUrl(): string {
+      throw new Error("Method not implemented.");
+  }
   
   private errorSubject = new Subject<string>();
   private isTranscriptLoadingSubject = new Subject<boolean>();
@@ -68,83 +71,31 @@ export class ExtractDetailsService {
   getTagsObserver() { return this.generationService.getTagsObserver(); }
 
   searchYoutubeVideos(niche: string) {
-    this.youtubeVideosSubject.next([
-      {
-        id: 'test',
-        title: 'New Video Title',
-        description: 'This is a description for the new video.',
-        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
-        publishedAt: this.updateDateToHumanForm('2023-05-07T11:30:00Z'),
-        channelTitle: 'Channel Title',
-        statistics: {
-            viewCount: '1000',
-            likeCount: '500',
-            commentCount: '100',
-        },
-    },
-    {
-        id: 'test',
-        title: 'Another New Video',
-        description: 'Check out this exciting new video!',
-        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
-        publishedAt: this.updateDateToHumanForm('2023-05-08T13:45:00Z'),
-        channelTitle: 'Channel Name',
-        statistics: {
-            viewCount: '2000',
-            likeCount: '1000',
-            commentCount: '200',
-        },
-    },
-    {
-        id: 'test',
-        title: 'Amazing Video',
-        description: 'This video will change your life.',
-        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
-        publishedAt: this.updateDateToHumanForm('2023-05-09T15:00:00Z'),
-        channelTitle: 'Amazing Channel',
-        statistics: {
-            viewCount: '5000',
-            likeCount: '2500',
-            commentCount: '500',
-        },
-    },
-    {
-        id: 'test',
-        title: 'Funny Video',
-        description: 'You will laugh out loud watching this video.',
-        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
-        publishedAt: this.updateDateToHumanForm('2023-05-10T16:30:00Z'),
-        channelTitle: 'Funny Channel',
-        statistics: {
-            viewCount: '3000',
-            likeCount: '1500',
-            commentCount: '300',
-        },
-    },
-    {
-        id: 'test',
-        title: 'Interesting Video',
-        description: 'This video will make you see the world in a different way.',
-        thumbnailUrl: 'https://i.ytimg.com/vi/WqKdr68YjBs/hqdefault.jpg',
-        publishedAt: this.updateDateToHumanForm('2023-05-11T14:00:00Z'),
-        channelTitle: 'Interesting Channel',
-        statistics: {
-            viewCount: '4000',
-            likeCount: '2000',
-            commentCount: '400',
-        },
-    }
-    ])
-    
-    // this.youtubeRepo.getVideoListByNiche(niche).subscribe({
-    //   next: (videos) => {
-    //         this.youtubeVideosSubject.next(videos);
-    //       },
-    //   error: (err) => {
-    //     this.errorSubject.next(err); 
-    //     this.youtubeVideosSubject.complete();
-    //   }
-    // });
+    this.youtubeRepo.getVideoListByNiche(niche).pipe(
+      map((videos) => videos.map((video) => {
+        const cleanedText = video.title.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+        return {
+          ...video,
+          title: cleanedText,
+          publishedAt: this.updateDateToHumanForm(video.publishedAt),
+          statistics: {
+            viewCount: this.getRandomNumber(),
+            likeCount: this.getRandomNumber(),
+            commentCount: this.getRandomNumber(),
+          }
+        }
+      }))
+    ).subscribe({
+      next: (videos) => {
+            console.log("🚀 ~ file: extractdetails.service.ts:144 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ videos:", videos)
+            this.youtubeVideosSubject.next(videos);
+          },
+      error: (err) => {
+        console.log("🚀 ~ file: extractdetails.service.ts:148 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ err:", err)
+        this.errorSubject.next(err); 
+        this.youtubeVideosSubject.complete();
+      }
+    });
   }
 
   setCopyCatVideoId(video: YoutubeVideo) {
@@ -269,7 +220,10 @@ export class ExtractDetailsService {
 
   private updateDateToHumanForm(isoDate: string): string {
     const date = new Date(isoDate);
-    const options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    return date.toLocaleString('fr-FR');
+    return formatDistance(date, new Date(), { addSuffix: true })
+  }  
+
+  getRandomNumber(): string {
+    return Math.floor(Math.random() * (3000000 - 500000 + 1) + 500000).toString();
   }
 }

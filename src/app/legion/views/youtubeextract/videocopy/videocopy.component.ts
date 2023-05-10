@@ -25,6 +25,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         name: '',
         header: '',
         description: '',
+        value: ''
     }
     
     constructor(
@@ -86,7 +87,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         this.selectedVideoNiche = niche;
         this.searchVideos = [ /** */ ];
         this.isLoading = true;
-        this.extractDetailsService.searchYoutubeVideos(niche.name);
+        this.extractDetailsService.searchYoutubeVideos(niche.value);
     }
 
     onCopyCatClick(video: YoutubeVideo) {

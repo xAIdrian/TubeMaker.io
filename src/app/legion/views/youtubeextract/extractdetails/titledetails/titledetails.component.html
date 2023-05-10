@@ -1,100 +1,80 @@
 <div>
-    <h4>Improve Your Listing Data</h4>
-    <p class="text-medium-emphasis">
-      With your script completed you are ready to improve your listing data.  This is the first impression your audience will have of your video.  Make sure to use our tools to make it better.
-    </p>
-    <form [formGroup]="infoFormGroup">
-      <ng-template matStepLabel>Title</ng-template>
+  <form [formGroup]="infoFormGroup" style="padding-top: 1rem;;">
 
-      <h5>Title</h5>
-      <div class="section-row">
-        <div class="col-8">
-          <textarea 
-            autosize
-            style="height: 100%; margin-bottom: 0.5rem;" 
-            cFormControl 
-            formControlName="title">
-        </textarea>
-        </div>
-        <!-- Improve this with our Use AI dropdown. From the previous page -->
-        <div class="col-2">
-          <div style="margin-left: 1rem;">
-            <c-dropdown #dropdown direction="dropstart" variant="btn-group">
-                <button cButton cDropdownToggle color="primary" [disabled]="isTitleLoading">
-                        Use AI
-                <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
-                </button>
-                <ul cDropdownMenu class="custom-dropdown-menu">
-                    <li class="dropdown-header">Pick a way to improve this script:</li>
-                    <li><hr cDropdownDivider></li>
-                    <li><button cDropdownItem (click)="onTitleImproveClick('funnier')">Funnier</button></li>
-                    <li><button cDropdownItem (click)="onTitleImproveClick('formal')">Formal</button></li>
-                    <li><button cDropdownItem (click)="onTitleImproveClick('simpler')">Simpler</button></li>
-                    <li><button cDropdownItem (click)="onTitleImproveClick('expand')">Expand</button></li>
-                    <li><button cDropdownItem (click)="onTitleImproveClick('shorten')">Shorten</button></li>
-                </ul>
-            </c-dropdown>
-        </div>
-        </div>
+    <div class="section-row" style="align-items: center;">
+      <input sizing="lg" style="height: 100%; margin-bottom: 0.5rem; flex: 1;" cFormControl formControlName="title" />
+      <c-dropdown #dropdown direction="dropstart" variant="btn-group">
+        <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button" [disabled]="isTitleLoading">
+          Utiliser IA
+          <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
+        </button>
+        <ul cDropdownMenu class="custom-dropdown-menu">
+          <li class="dropdown-header">Pick a way to improve this script:</li>
+          <li>
+            <hr cDropdownDivider>
+          </li>
+          <li><button cDropdownItem (click)="onTitleImproveClick('funnier')">Plus amusant</button></li>
+          <li><button cDropdownItem (click)="onTitleImproveClick('formal')">Officiel</button></li>
+          <li><button cDropdownItem (click)="onTitleImproveClick('simpler')">Plus simple</button></li>
+          <li><button cDropdownItem (click)="onTitleImproveClick('expand')">Développer</button></li>
+          <li><button cDropdownItem (click)="onTitleImproveClick('shorten')">Raccourcir</button></li>
+        </ul>
+      </c-dropdown>
+      <div style="display: flex; align-items: center; padding: 0; margin:0">
+        <button class="ai-button" cButton shape="rounded-pill" color="light" (click)="copyTitle()">{{
+            'video_review_card.copy_button' | translate }}</button>
+        <c-badge color="danger" position="absolute" shape="rounded-pill"
+            [ngClass]="{'d-none': !showTitleBadge}">
+              {{ 'video_review_card.copied_badge' | translate }}
+          </c-badge>
       </div>
-
-      <h5>Description</h5>
-      <div class="section-row">
-        <div class="col-8">
-          <textarea  
-            autosize
-            style="height: 100%; margin-bottom: 0.5rem;" 
-            cFormControl 
-            formControlName="description" >
-          </textarea>
-        </div>
-        <div class="col-2">
-          <div style="margin-left: 1rem;">
-            <c-dropdown #dropdown direction="dropstart" variant="btn-group">
-                <button cButton cDropdownToggle color="primary" [disabled]="isDescLoading">
-                        Use AI
-                <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
-                </button>
-                <ul cDropdownMenu class="custom-dropdown-menu">
-                    <li class="dropdown-header">Pick a way to improve this script:</li>
-                    <li><hr cDropdownDivider></li>
-                    <li><button cDropdownItem (click)="onDescriptionImproveClick('funnier')">Funnier</button></li>
-                    <li><button cDropdownItem (click)="onDescriptionImproveClick('formal')">Formal</button></li>
-                    <li><button cDropdownItem (click)="onDescriptionImproveClick('simpler')">Simpler</button></li>
-                    <li><button cDropdownItem (click)="onDescriptionImproveClick('expand')">Expand</button></li>
-                    <li><button cDropdownItem (click)="onDescriptionImproveClick('shorten')">Shorten</button></li>
-                </ul>
-            </c-dropdown>
-          </div>
-        </div>
-      </div>
-
-      <h5>Tags</h5>
-      <div class="section-row">
-        <div class="col-8">
-          <textarea autosize style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags">
-        </textarea>
-        </div>
-        <div class="col-2">
-          <div style="margin-left: 0.5rem;">
-            <button cButton class="col-btn"color="primary" [disabled]="isTagsLoading"
-              (click)="rerollTags()">
-              <c-spinner *ngIf="isTagsLoading" size="sm"></c-spinner>
-                New
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-        <button cButton variant="outline" color="dark" matStepperPrevious>Go Back</button>
-        <button 
-          class="btn btn-primary" 
-          style="margin-left: 1rem;" 
-          matStepperNext 
-          (click)="onSubmitClick()">
-            Next Step
+      <div class="section-row" style="align-items: flex-start; background-color: #F2F2F2; margin-top: 1rem;  padding: 0.5rem; width: 100%; ">
+        <textarea autosize style="height: 100%;  margin-bottom: 0.5rem; flex: 1;" cFormControl
+          formControlName="description"></textarea>
+        <c-dropdown #dropdown direction="dropstart" variant="btn-group">
+          <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
+            [disabled]="isDescLoading">
+            Utiliser IA
+            <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
           </button>
+          <ul cDropdownMenu class="custom-dropdown-menu">
+            <li class="dropdown-header">Choisissez un moyen d'améliorer ce script:</li>
+            <li>
+              <hr cDropdownDivider>
+            </li>
+            <li><button cDropdownItem (click)="onDescriptionImproveClick('funnier')">Plus amusant</button></li>
+            <li><button cDropdownItem (click)="onDescriptionImproveClick('formal')">Officiel</button></li>
+            <li><button cDropdownItem (click)="onDescriptionImproveClick('simpler')">Plus simple</button></li>
+            <li><button cDropdownItem (click)="onDescriptionImproveClick('expand')">Développer</button></li>
+            <li><button cDropdownItem (click)="onDescriptionImproveClick('shorten')">Raccourcir</button></li>
+          </ul>
+        </c-dropdown>
+        <div style="display: flex; align-items: center; padding: 0; margin:0">
+          <button class="ai-button" cButton shape="rounded-pill" color="light"  (click)="copyDescription()">{{
+              'video_review_card.copy_button' | translate }}</button>
+          <c-badge color="danger" position="absolute" shape="rounded-pill"
+              [ngClass]="{'d-none': !showDescriptionBadge}">
+                {{ 'video_review_card.copied_badge' | translate }}
+            </c-badge>
+        </div>
       </div>
-    </form>
-  </div>
+      <div class="section-row" style="align-items: flex-start; background-color: #F2F2F2; padding: 0.5rem; width: 100%;">
+        <textarea class="tags-textarea" autosize style="height: 100%; margin-bottom: 0.5rem; margin-top: 1rem; flex: 1;"
+          cFormControl formControlName="tags">
+        </textarea>
+        <button cButton class="ai-button" shape="rounded-pill" color="light" [disabled]="isTagsLoading" (click)="rerollTags()">
+          <c-spinner *ngIf="isTagsLoading" size="sm"></c-spinner>
+          Nouveau
+        </button>
+        <div style="display: flex; align-items: center; padding: 0; margin:0">
+          <button class="ai-button" cButton shape="rounded-pill" color="light" (click)="copyTags()">{{
+              'video_review_card.copy_button' | translate }}</button>
+          <c-badge color="danger" position="absolute" shape="rounded-pill"
+              [ngClass]="{'d-none': !showTagsBadge}">
+                {{ 'video_review_card.copied_badge' | translate }}
+            </c-badge>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,62 +1,50 @@
-<div *ngIf="!parentIsLoading">
-    <h4>Your Script Is Ready</h4>
+<div *ngIf="!parentIsLoading" style="margin-top: 1rem;">
+    <h5>Edit Your Script</h5>
     <p class="text-medium-emphasis" style="padding-right: 1rem;;">
-        Customize your script by editing and rearranging the script sections. Enhance the quality with our AI tools,
-        taking
-        as much time as you need. When you are finished we will review your video title and description.
+        Customize your script by editing and rearranging the script sections. Enhance the quality with our AI tools.
     </p>
-    <ng-template matStepLabel>Edit</ng-template>
     <div cdkDropList (cdkDropListDropped)="onDrop($event)">
-        <div 
-            cdkDrag 
-            [cdkDragDisabled]="!dragIsEnabled" 
-            cdkDragLockAxis="y" 
-            *ngFor="let tran of transcriptSections; let i = index" 
-            class="section-row"
+        <div cdkDrag [cdkDragDisabled]="!dragIsEnabled" cdkDragLockAxis="y"
+            *ngFor="let tran of transcriptSections; let i = index" class="section-row"
             style="padding-bottom: 0.5rem; padding-top: 0.5rem; padding-right: 1rem;">
-                <div class="col-8">
-                    <div style="display: flex; justify-content: space-between; flex-direction: row;">
-                        <div cdkDragHandle>
-                            <svg cIcon name="cilApps" style="margin-top: 0.75rem;"></svg>
-                        </div>
-                        <textarea 
-                            autosize 
-                            cFormControl 
-                            [readOnly]="false"
-                            [(ngModel)]="transcriptSections[i].section">
+            <div class="col-8">
+                <div style="display: flex; justify-content: space-between; flex-direction: row;">
+                    <div cdkDragHandle>
+                        <svg cIcon name="cilApps" style="margin-top: 0.75rem;"></svg>
+                    </div>
+                    <textarea autosize cFormControl [readOnly]="false" [(ngModel)]="transcriptSections[i].section">
                         </textarea>
-                    </div>
                 </div>
-                <div class="col-1">
-                    <div style="display: flex; justify-content: center;">
-                        <c-dropdown #dropdown direction="dropstart" variant="btn-group">
-                            <button cButton cDropdownToggle color="primary"
-                                [disabled]="transcriptSections[i].isLoading" 
-                                style="margin-top: 0.75rem; margin-left: 1rem;">
-                                    Use AI
+            </div>
+            <div class="col-1">
+                <div style="display: flex; justify-content: center;">
+                    <c-dropdown #dropdown direction="dropstart" variant="btn-group">
+                        <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
+                            [disabled]="transcriptSections[i].isLoading">
+                            Use AI
                             <c-spinner *ngIf="transcriptSections[i].isLoading" size="sm"></c-spinner>
-                            </button>
-                            <ul cDropdownMenu class="custom-dropdown-menu">
-                                <li class="dropdown-header">Pick a way to improve this script:</li>
-                                <li><hr cDropdownDivider></li>
-                                <li><button cDropdownItem (click)="onImproveClick('funnier', transcriptSections[i], i)">Funnier</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('formal', transcriptSections[i], i)">Formal</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('simpler', transcriptSections[i], i)">Simpler</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('expand', transcriptSections[i], i)">Expand</button></li>
-                                <li><button cDropdownItem (click)="onImproveClick('shorten', transcriptSections[i], i)">Shorten</button></li>
-                            </ul>
-                        </c-dropdown>
-                    </div>
+                        </button>
+                        <ul cDropdownMenu class="custom-dropdown-menu">
+                            <li class="dropdown-header">Pick a way to improve this script:</li>
+                            <li>
+                                <hr cDropdownDivider>
+                            </li>
+                            <li><button cDropdownItem
+                                    (click)="onImproveClick('funnier', transcriptSections[i], i)">Funnier</button></li>
+                            <li><button cDropdownItem
+                                    (click)="onImproveClick('formal', transcriptSections[i], i)">Formal</button></li>
+                            <li><button cDropdownItem
+                                    (click)="onImproveClick('simpler', transcriptSections[i], i)">Simpler</button></li>
+                            <li><button cDropdownItem
+                                    (click)="onImproveClick('expand', transcriptSections[i], i)">Expand</button></li>
+                            <li><button cDropdownItem
+                                    (click)="onImproveClick('shorten', transcriptSections[i], i)">Shorten</button></li>
+                        </ul>
+                    </c-dropdown>
                 </div>
+            </div>
         </div>
         <div>
-
         </div>
-    </div>
-    <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem; ">
-        <button variant="outline" color="dark" cButton>Need Help?</button>
-        <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext (onClick)="onScriptSubmit()">
-            Next Step
-        </button>
     </div>
 </div>

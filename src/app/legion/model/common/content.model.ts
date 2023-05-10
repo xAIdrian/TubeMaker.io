@@ -35,7 +35,8 @@ export abstract class ContentModel {
         return of({
           name: '',
           header: header,
-          description: description
+          description: description,
+          value: '',
         });
       })
     )
