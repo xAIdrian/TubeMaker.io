@@ -37,6 +37,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     name: '',
     header: '',
     description: '',
+    value: ''
   }
   videoDurations: VideoDuration[] = [];
   selectedVideoDuration: VideoDuration = {

@@ -47,11 +47,11 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   selectedMediaOption = 'Video';
 
   constructor(
-    private contentRepo: ContentModel,
-    private voiceService: VoiceService,
-    private navigationService: NavigationService,
-    private translate: TranslateService,
-    private changeDetectorRef: ChangeDetectorRef
+    protected contentRepo: ContentModel,
+    protected voiceService: VoiceService,
+    protected navigationService: NavigationService,
+    protected translate: TranslateService,
+    protected changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

@@ -5,7 +5,7 @@ export interface YoutubeVideo {
     thumbnailUrl: string;
     publishedAt: string;
     channelTitle: string;
-    statistics: {
+    statistics?: {
         viewCount: string;
         likeCount: string;
         commentCount: string;
@@ -24,4 +24,5 @@ export interface YoutubeVideo {
         description: string;
     };
     defaultThumbnail?: string;
+    videoUrl?: string;
 }

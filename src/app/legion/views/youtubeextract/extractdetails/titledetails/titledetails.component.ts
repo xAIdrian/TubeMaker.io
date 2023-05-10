@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContentGenerationService } from '../../../../service/content/generation.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { ExtractDetailsService } from '../../extractdetails.service';
 
 @Component({
@@ -17,10 +17,15 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
   isDescLoading: boolean = false;
   isTagsLoading: boolean = false;
 
+  showTitleBadge = false;
+  showDescriptionBadge = false;
+  showTagsBadge = false;
+
   constructor(
     private formGroupBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private extractDeatilsService: ExtractDetailsService
+    private extractDeatilsService: ExtractDetailsService,
+    private clipboard: Clipboard
   ) {
     /** */
   }
@@ -38,13 +43,13 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
     });
     this.extractDeatilsService.getTagsObserver().subscribe((response) => {  
       this.isTagsLoading = false;
-      this.infoFormGroup.patchValue({ tags: response.join(', ').trim() })
+      this.infoFormGroup.patchValue({ tags: response.join(' #').trim() })
       this.changeDetectorRef.detectChanges();
     });
     this.infoFormGroup = this.formGroupBuilder.group({
-      title: ['Loading. Please wait...', Validators.required],
-      description: ['Loading. Please wait...', Validators.required],
-      tags: ['Loading. Please wait...', Validators.required],
+      title: ["Chargement...", Validators.required],
+      description: ["Chargement...", Validators.required],
+      tags: ["Chargement...", Validators.required],
     });
     this.extractDeatilsService.getVideoMetaData()
   }
@@ -80,5 +85,23 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
       this.infoFormGroup.value.description,
       this.infoFormGroup.value.tags,
     );
+  }
+
+  copyTitle() { 
+    this.showTitleBadge = true;
+    this.clipboard.copy(this.infoFormGroup.value.title);
+    setTimeout(() => this.showTitleBadge = false, 1000);  
+  }
+
+  copyDescription() { 
+    this.showDescriptionBadge = true;
+    this.clipboard.copy(this.infoFormGroup.value.description); 
+    setTimeout(() => this.showDescriptionBadge = false, 1000); 
+  }
+
+  copyTags() { 
+    this.showTagsBadge = true;
+    this.clipboard.copy(this.infoFormGroup.value.tags); 
+    setTimeout(() => this.showTagsBadge = false, 1000); 
   }
 }

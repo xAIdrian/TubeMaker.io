@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
-const { map, mergeMap, concatMap } = require("rxjs/operators");
+const axios = require("axios");
+const { map, mergeMap, concatMap, filter } = require("rxjs/operators");
 const { from, forkJoin, of } = require("rxjs");
 const { YOUTUBE_DATA_V3_KEY } = require("../../appsecrets");
 
@@ -11,6 +12,8 @@ const VIDEO_URL = `${BASE_URL}/videos`;
 
 const TranslationService = require("../service/translation.service");
 const translationService = new TranslationService();
+
+const englishRegex = /^[a-zA-Z\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
 
 router.get("/videos/:language", async (req, res) => {
   const language = req.params.language;
@@ -27,10 +30,11 @@ router.get("/videos/:language", async (req, res) => {
       (data) => {
         of(data).subscribe({
             next: (results) => {
-              console.log("🚀 ~ file: youtube.js:23 ~ router.get ~ data:", data)
+              console.log("🚀 ~ file: youtube.js:23 ~ router.get ~ data:", results)
               res.status(200).json(results);
             },
             error: (err) => {
+              console.log("🔥 ~ file: youtube.js:35 ~ of ~ err:", err)
               console.error(err);
               res.status(500).json(err);
             }
@@ -57,7 +61,7 @@ function fetchVideoList(niche, publishedAfter) {
 
   const queryParams = new URLSearchParams({
     part: "snippet",
-    maxResults: "12",
+    maxResults: "25",
     order: "viewCount",
     publishedAfter: publishedAfter,
     q: niche,
@@ -89,7 +93,6 @@ function fetchVideoList(niche, publishedAfter) {
  */
 function fetchVideoDetails(videoId) {
   const params = {
-    method: "GET",
     headers: {
       Accept: "application/json",
     },
@@ -103,17 +106,19 @@ function fetchVideoDetails(videoId) {
   });
 
   const apiUrl = `${VIDEO_URL}?${queryParams.toString()}`;
-  return from(
-    fetch(apiUrl, params)
-  ).pipe(
-    mergeMap((res) => {
-      if (res.ok) {
-        return from(res.json());
-      } else {
-        console.log(`Error updating video ${id}`);
-      }
-    })
-  );
+  return from(axios.get(apiUrl, {
+      params: queryParams,
+      ...params
+    })).pipe(
+      mergeMap((response) => {
+        try {
+          return from(response.data);
+        } catch (err) {
+          console.log("🔥 ~ file: youtube.js:115 ~ mergeMap ~ err:", err)
+          return of(null);
+        }
+      })
+    );
 }
 
 /**
@@ -148,7 +153,9 @@ function mapVideoListToDetails(videoList) {
 function fetchCompleteVideoData(language, niche, publishedAfter) {
   return fetchVideoList(niche, publishedAfter).pipe(
     map((data) => {
-      return data.items.map(async (item) => {
+      return data.items
+        .filter((item) => englishRegex.test(item.snippet.title ))
+        .map(async (item) => {
 
         let processedTitle = item.snippet.title;
         let processedDescription = item.snippet.description;
@@ -181,7 +188,7 @@ function fetchCompleteVideoData(language, niche, publishedAfter) {
       });
     }),
     concatMap((observables) => forkJoin(observables)),
-    mergeMap((videoList) => mapVideoListToDetails(videoList))
+    // mergeMap((videoList) => mapVideoListToDetails(videoList))
   );
   
 }

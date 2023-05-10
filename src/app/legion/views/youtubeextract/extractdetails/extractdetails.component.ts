@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 
 import { FormGroup } from "@angular/forms";
 import { ExtractDetailsService } from "../extractdetails.service";
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'extract-details',
@@ -18,15 +18,18 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     scriptFormGroup: FormGroup;
     isLinear: any;
+    videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/sRRE3tev-kQ');
 
     constructor(
-        private youtubeService: ExtractDetailsService,
+        private extractDetailsService: ExtractDetailsService,
+        private sanitizer: DomSanitizer,
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
     
     ngOnInit(): void {
         this.setupObservers();
         this.setupFormControls();
+        this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractDetailsService.getCurrentVideoUrl());
     }
 
     ngAfterContentInit(): void {
@@ -34,7 +37,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     }
 
     private setupObservers() {
-        this.youtubeService.getErrorObserver().subscribe({
+        this.extractDetailsService.getErrorObserver().subscribe({
             next: (error: any) => {
                 this.showErrorState = true;
                 this.errorText = error;
@@ -44,7 +47,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.youtubeService.getTranscriptIsLoadingObserver().subscribe({
+        this.extractDetailsService.getTranscriptIsLoadingObserver().subscribe({
             next: (isLoading: boolean) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:51 ~ ExtractDetailsComponent ~ this.youtubeService.getTranscriptIsLoadingObserver ~ isLoading:", isLoading)
                 this.transcriptIsLoading = isLoading;

@@ -8,6 +8,16 @@
     width: 100%;
 }
 
+.col-8 {
+    flex-basis: calc(85%);
+    max-width: calc(85%);
+}
+
+.col-1 {
+    flex-basis: calc(15%);
+    max-width: calc(15%);
+}
+
 textarea {
     width: 100%;
     height: auto;
@@ -20,10 +30,6 @@ textarea {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1rem;
-}
-
-::ng-deep .mat-horizontal-stepper-header {
-    pointer-events: none !important;
 }
 
 .d-flex {
