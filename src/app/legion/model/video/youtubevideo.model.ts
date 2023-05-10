@@ -24,4 +24,5 @@ export interface YoutubeVideo {
         description: string;
     };
     defaultThumbnail?: string;
+    videoUrl?: string;
 }

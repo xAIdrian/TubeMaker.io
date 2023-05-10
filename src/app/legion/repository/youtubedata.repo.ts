@@ -41,7 +41,7 @@ export class YoutubeDataRepository {
   }
 
   getVideoListByNiche(niche: string): Observable<YoutubeVideo[]> {
-    if (niche === 'Psychology') {
+    if (niche === 'psychology') {
       return of(fallbackYoutubeVideos);
     }
     const currentLang = this.translate.currentLang;

@@ -3,7 +3,6 @@
     <ul cDropdownMenu class="dropdown-list">
         <li *ngFor="let item of voiceOptions" (click)="onItemSelect($event, item)">
             <div class="dropdown-item d-flex align-items-center" (click)="onItemPlay(audioPlayer)">
-                <svg cIcon name="cilMediaPlay"></svg>
                 <p class="item-name text-medium-emphasis">{{ item.name }}</p>
                 <audio #audioPlayer controls hidden="true">
                     <source [src]="item.sampleUrl" type="audio/mpeg">

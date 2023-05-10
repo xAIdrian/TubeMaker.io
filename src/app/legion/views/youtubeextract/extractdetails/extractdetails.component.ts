@@ -18,7 +18,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     scriptFormGroup: FormGroup;
     isLinear: any;
-    videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/xAUJYP8tnRE');
+    videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/sRRE3tev-kQ');
 
     constructor(
         private extractDetailsService: ExtractDetailsService,
