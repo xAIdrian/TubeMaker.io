@@ -5,18 +5,15 @@ import { YoutubeDataRepository } from '../../repository/youtubedata.repo';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
-import { ContentExtractionService } from '../../service/content/extract.service';
+import { ExtractionContentService } from '../../service/content/extractcontent.service';
 import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+import { formatDistance } from 'date-fns'
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExtractDetailsService {
-  getCurrentVideoUrl(): string {
-      throw new Error("Method not implemented.");
-  }
   
   private errorSubject = new Subject<string>();
   private isTranscriptLoadingSubject = new Subject<boolean>();
@@ -28,7 +25,7 @@ export class ExtractDetailsService {
 
   constructor(
     private transcriptRepo: TranscriptRepository,
-    private generationService: ContentExtractionService,
+    private generationService: ExtractionContentService,
     private navigationService: NavigationService,
     private textSplitUtility: TextSplitUtility,
     private youtubeRepo: YoutubeDataRepository,
@@ -70,6 +67,10 @@ export class ExtractDetailsService {
   getDescriptionObserver() { return this.generationService.getDescriptionObserver(); }
   getTagsObserver() { return this.generationService.getTagsObserver(); }
 
+  getCurrentVideoUrl(): string {
+    throw new Error("Method not implemented.");
+  }
+
   searchYoutubeVideos(niche: string) {
     this.youtubeRepo.getVideoListByNiche(niche).pipe(
       map((videos) => videos.map((video) => {
@@ -99,19 +100,29 @@ export class ExtractDetailsService {
   }
 
   setCopyCatVideoId(video: YoutubeVideo) {
-    this.currentCopyCatVideo = video;
-    this.navigationService.navigateToExtractDetails();
+    this.extractContentRepo.setCurrentPageObject(video).subscribe({
+      next: (response) => {
+        this.currentCopyCatVideo = {
+          ...video,
+          parentId: response.id
+        };
+        this.navigationService.navigateToExtractDetails();
+      },
+      error: (err) => {
+        this.errorSubject.next(err);
+      }
+    });
   }
 
   getVideoTranscript() {
     console.log("🚀 ~ file: youtube.service.ts:90 ~ YoutubeService ~ getVideoTranscript ~ getVideoTranscript:", 'getVideoTranscript')
     if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
       this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
-      // return; // uncomment for prod
-    }
+      return; // uncomment for prod
+    } 
 
-    this.transcriptRepo.getTranscript('test').pipe(
-    // this.transcriptRepo.getTranscript(this.currentCopyCatVideo.id).pipe(
+    // this.transcriptRepo.getTranscript('test').pipe(
+    this.transcriptRepo.getTranscript(this.currentCopyCatVideo.id).pipe(
     ).subscribe({
       next: (response: { message: string, result: { translation: string }}) => {
         console.log("🚀 ~ file: extractdetails.service.ts:185 ~ ExtractDetailsService ~ getVideoTranscript ~ response:", response)
@@ -128,6 +139,8 @@ export class ExtractDetailsService {
 
         const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
         const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
+        this.extractContentRepo.updateCopyCatScript(splitParagraphs)
+
         console.log("🚀 ~ file: extractdetails.service.ts:178 ~ ExtractDetailsService ~ getVideoTranscript ~ splitParagraphs:", splitParagraphs)
         splitParagraphs.forEach((paragraph) => {
           uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
@@ -179,7 +192,6 @@ export class ExtractDetailsService {
         'I Helped 1,000 Deaf People Hear For The First Time',
         'Thanks to Lickd for providing the music for this video! Discover tracks for your YouTube videos here: https://go.lickd.co/mb1'
       )
-
       //test code above
       return
     }

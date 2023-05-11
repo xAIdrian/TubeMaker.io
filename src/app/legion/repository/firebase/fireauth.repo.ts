@@ -80,7 +80,7 @@ export class FireAuthRepository {
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
     };
-    return userRef.set(userData, {
+    return userRef.set(this.removeUndefinedProperties(user), {
       merge: true,
     });
   }
@@ -143,5 +143,14 @@ export class FireAuthRepository {
 
   async logout() {
     this.angularFireAuth.signOut();
+  }
+
+  private removeUndefinedProperties(obj: any): any {
+    return JSON.parse(JSON.stringify(obj, (key, value) => {
+      if (typeof value === 'undefined') {
+        return undefined; // Remove the property
+      }
+      return value;
+    }));
   }
 }

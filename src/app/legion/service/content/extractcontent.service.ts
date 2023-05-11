@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ContentGenerationService } from './generation.service';
+import { GenerateContentService } from './generation.service';
 import { GptRepository } from '../../repository/gpt.repo';
 import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContentExtractionService extends ContentGenerationService {
+export class ExtractionContentService extends GenerateContentService {
 
   constructor(
-    gptRepo: GptRepository,
-    private extractContentRepo: ExtractContentRepository
+    gptRepo: GptRepository
   ) {
     super(gptRepo);
   }

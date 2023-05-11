@@ -6,7 +6,7 @@ import { GptRepository } from '../../repository/gpt.repo';
 @Injectable({
   providedIn: 'root',
 })
-export abstract class ContentGenerationService {
+export abstract class GenerateContentService {
   
   errorSubject = new Subject<string>();
 

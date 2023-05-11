@@ -13,7 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { ContentAutoService } from '../../../service/content/auto.service';
+import { AutoContentService } from '../../../service/content/autocontent.service';
 import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 import { VideoMetadata } from 'src/app/legion/model/video/videometadata.model';
@@ -62,7 +62,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   gptResponseTags: string = 'Waiting for tags...';
 
   constructor(
-    private contentService: ContentAutoService,
+    private contentService: AutoContentService,
     private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,

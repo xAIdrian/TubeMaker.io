@@ -4,13 +4,13 @@ import { from, Observable, Subject, concatMap } from 'rxjs';
 import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { GptRepository } from '../../repository/gpt.repo';
 import { DurationSection } from '../../model/autocreate/videoduration.model';
-import { ContentGenerationService } from './generation.service';
+import { GenerateContentService } from './generation.service';
 import { VideoMetadata } from '../../model/video/videometadata.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContentAutoService extends ContentGenerationService {
+export class AutoContentService extends GenerateContentService {
 
   private gptGeneratedSummary: string = ''
 

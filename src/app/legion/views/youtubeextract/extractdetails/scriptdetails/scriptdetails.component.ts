@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { AfterContentInit, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
-import { ContentGenerationService } from "../../../../service/content/generation.service";
+import { GenerateContentService } from "../../../../service/content/generation.service";
 import { ExtractDetailsService } from "../../extractdetails.service";
 
 @Component({

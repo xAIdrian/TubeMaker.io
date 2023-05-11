@@ -7,11 +7,11 @@ export interface YoutubeVideoPage {
     id: string;
 
     youtubeVideo: YoutubeVideo;
-    metadata: VideoMetadata;
-    structuredScript: Map<string, string>;
-    listScript: string[];
+    metadata?: VideoMetadata;
+    structuredScript?: Map<string, string>;
+    listScript?: string[];
 
-    generatedAudioUrl: string;
+    generatedAudioUrl?: string;
 
     niche?: VideoNiche;
     duration?: VideoDuration;

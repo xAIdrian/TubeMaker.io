@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { ContentGenerationService } from '../../../service/content/generation.service';
+import { GenerateContentService } from '../../../service/content/generation.service';
 import {
   FormBuilder,
   FormGroup,
@@ -53,7 +53,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   hasInputError = false;
 
   constructor(
-    private gptService: ContentGenerationService,
+    private gptService: GenerateContentService,
     private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,

@@ -3,7 +3,7 @@ import {
   getDefaultVideoNiches,
   VideoNiche,
 } from '../../model/autocreate/videoniche.model';
-import { combineLatest, concatMap, map, Observable, of, Subject } from 'rxjs';
+import { combineLatest, concatMap, filter, map, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { FirestoreRepository } from '../firebase/firestore.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
@@ -20,7 +20,13 @@ export abstract class ContentRepository {
   protected translate: TranslateService;
   protected firestoreRepository: FirestoreRepository;
 
+  protected currentPageSubject = new Subject<YoutubeVideoPage>();
+  private getCurrentPageObserver(): Observable<YoutubeVideoPage> {
+    return this.currentPageSubject.asObservable();
+  }
+
   abstract collectionPath: string;
+  abstract getCompleteScript(): Observable<string>;
 
   constructor(
     initTranslate: TranslateService,
@@ -29,7 +35,7 @@ export abstract class ContentRepository {
     this.translate = initTranslate;
     this.firestoreRepository = initFirestoreRepository;
 
-    this.setWorkingPageObject().subscribe({
+    this.getCurrentPageObserver().subscribe({
       next: (youtubeVideoPage) => { 
         console.log("❤️‍🔥 ~ empty object created successfully")
         this.currentPage = youtubeVideoPage; 
@@ -39,9 +45,6 @@ export abstract class ContentRepository {
       }
     })
   }
-
-  abstract setWorkingPageObject(): Observable<YoutubeVideoPage>;
-  abstract getCompleteScript(): Observable<string>;
 
   getDefaultVideoNichesObserver(): Observable<VideoNiche[]> {
     return this.translate.getTranslation(this.translate.currentLang).pipe(
@@ -76,8 +79,10 @@ export abstract class ContentRepository {
       this.collectionPath,
       this.currentPage.id
     ).pipe(
+      //filiering for undefined
+      filter((data) => !!data),
       map((document) => {
-        return document.metadata;
+        return document.metadata as VideoMetadata;
       })
     )
   }

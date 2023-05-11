@@ -13,6 +13,7 @@ import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AUTO_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
 import * as shortId from 'shortid';
+import { th } from 'date-fns/locale';
 
 @Injectable({
   providedIn: 'root',
@@ -112,15 +113,19 @@ export class AutoContentRepository extends ContentRepository {
     ).pipe(
       map((doc) => {
         const scriptMap = doc.structuredScript;
-        // get all the values of the ordered hashmap in the same order
-        let valuesInOrder = Array.from(scriptMap.keys()).map(key => scriptMap.get(key));
-        // add all values to main string
-        valuesInOrder.map(value => {
-          if (value !== undefined && value !== null && value !== '') {
-            script += value + '\n\n';
-          }
-        });
-        return script;
+        if (scriptMap !== undefined && scriptMap !== null) {
+          // get all the values of the ordered hashmap in the same order
+          let valuesInOrder = Array.from(scriptMap.keys()).map(key => scriptMap.get(key));
+          // add all values to main string
+          valuesInOrder.map(value => {
+            if (value !== undefined && value !== null && value !== '') {
+              script += value + '\n\n';
+            }
+          });
+          return script;
+        } else {
+          throw new Error('scriptMap is undefined or null');
+        }
       })
     );
   }
