@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ContentModel } from '../../../model/common/content.model';
+import { ContentRepository } from '../../../repository/content/content.repo';
 import { FormGroup } from '@angular/forms';
 import { VoiceService } from '../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
@@ -47,7 +47,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   selectedMediaOption = 'Video';
 
   constructor(
-    protected contentRepo: ContentModel,
+    protected contentRepo: ContentRepository,
     protected voiceService: VoiceService,
     protected navigationService: NavigationService,
     protected translate: TranslateService,

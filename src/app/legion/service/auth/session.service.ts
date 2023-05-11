@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FirestoreRepository } from '../../repository/firebase/firestore.repo';
+import { UserFirestore } from '../../repository/firebase/user.firestore';
 import { NavigationService } from '../navigation.service';
 import { Observable, Subject, catchError, of } from 'rxjs';
 import { FirebaseUser } from '../../model/user/user.model';
@@ -16,7 +16,7 @@ export class SessionService {
     private errorSubject = new Subject<string>();
 
     constructor(
-        private fireStoreRepo: FirestoreRepository,
+        private fireStoreRepo: UserFirestore,
         private fireAuthRepo: FireAuthRepository,
         private navService: NavigationService
     ) { /** */ }

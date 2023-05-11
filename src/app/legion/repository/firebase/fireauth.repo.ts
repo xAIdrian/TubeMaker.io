@@ -9,14 +9,16 @@ import { Observable, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { FirebaseUser } from '../../model/user/user.model';
-import { PURCHASED_USERS, USERS_DOC } from './firebase.constants';
+import { PURCHASED_USERS_COL, USERS_COL } from './firebase.constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FireAuthRepository {
-  private userAuthObservable: any;
+  
+  public sessionUser?: FirebaseUser;
 
+  private userAuthObservable: any;
   private actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for this
     // URL must be in the authorized domains list in the Firebase Console.
@@ -35,18 +37,26 @@ export class FireAuthRepository {
   };
 
   constructor(
-    private fireAuth: AngularFireAuth,
-    private fireStore: AngularFirestore
+    private angularFireAuth: AngularFireAuth,
+    private angularFirestore: AngularFirestore
   ) {
-    this.userAuthObservable = this.fireAuth.authState;
+    this.userAuthObservable = this.angularFireAuth.authState;
+    this.userAuthObservable.subscribe((user: any) => {
+      if (user) {
+        this.sessionUser = user;
+        this.setUserData(user);
+      } else {
+        this.sessionUser = undefined;
+      }
+    });
   }
 
   isAuthenticated(): Observable<boolean> {
-    return of(true);
+    return of(this.sessionUser === undefined ? false : true);
   }
 
   verifyPurchaseEmail(email: string) {
-    return this.fireStore.doc<FirebaseUser>(`${PURCHASED_USERS}/${email}`).valueChanges()
+    return this.angularFirestore.doc<FirebaseUser>(`${PURCHASED_USERS_COL}/${email}`).valueChanges()
   }
 
   /* Setting up user data when sign in with username/password, 
@@ -54,8 +64,8 @@ export class FireAuthRepository {
    * provider in Firestore database using AngularFirestore + AngularFirestoreDocument service 
    */
   setUserData(user: any) {
-    const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(
-      `${USERS_DOC}/${user.uid}`
+    const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
+      `${USERS_COL}/${user.uid}`
     );
     const userData: FirebaseUser = {
       uid: user.uid,
@@ -70,11 +80,9 @@ export class FireAuthRepository {
   }
 
   // Sign out
-  signOut() {
-    return this.fireAuth.signOut().then(() => {
-      localStorage.removeItem('user');
-      // this.router.navigate(['sign-in']);
-    });
+  async signOut() {
+    await this.angularFireAuth.signOut();
+    localStorage.removeItem('user');
   }
 
   sendSignInLinkToEmail(email: string) {
@@ -128,6 +136,6 @@ export class FireAuthRepository {
   }
 
   async logout() {
-    this.fireAuth.signOut();
+    this.angularFireAuth.signOut();
   }
 }

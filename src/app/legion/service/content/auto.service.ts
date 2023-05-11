@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, Subject, concatMap } from 'rxjs';
-import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
+import { VideoMetadata } from '../../model/response/videometadata.model';
 
-import { AutoContentModel } from '../../model/autocontent.model';
+import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { GptRepository } from '../../repository/gpt.repo';
 import { DurationSection } from '../../model/autocreate/videoduration.model';
 import { ContentGenerationService } from './generation.service';
@@ -21,13 +21,13 @@ export class ContentAutoService extends ContentGenerationService {
     label: string
   }>();
   private completeDetailsSubject = new Subject<{
-    meta: GptGeneratedMetaData,
+    meta: VideoMetadata,
     // script: GptGeneratedScriptData
   }>();
 
   constructor(
     gptRepo: GptRepository,
-    private contentRepo: AutoContentModel
+    private contentRepo: AutoContentRepository
   ) {
     super(gptRepo);
   }
@@ -38,7 +38,7 @@ export class ContentAutoService extends ContentGenerationService {
     label: string
   }> { return this.scriptProgressSubject.asObservable();  }
   getCompleteResultsObserver(): Observable<{
-    meta: GptGeneratedMetaData
+    meta: VideoMetadata
   }> { return this.completeDetailsSubject.asObservable();  }
 
   updateNewTopic() {
@@ -61,7 +61,7 @@ export class ContentAutoService extends ContentGenerationService {
       || this.contentRepo.getCurrentVideoDuration() === undefined
     ) { throw new Error('Sources video is undefined'); }
 
-    let compeleteMetaData: GptGeneratedMetaData = {
+    let compeleteMetaData: VideoMetadata = {
       id: '',
       summary: '',
       title: '',
@@ -134,7 +134,7 @@ export class ContentAutoService extends ContentGenerationService {
    * @returns 
    */
   checkForCompleteResultsCompletion(
-    completedMetaData: GptGeneratedMetaData
+    completedMetaData: VideoMetadata
   ) {
     if (
       completedMetaData.id !== '' 

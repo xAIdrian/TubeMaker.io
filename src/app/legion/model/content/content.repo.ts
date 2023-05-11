@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import {
   getDefaultVideoNiches,
   VideoNiche,
-} from '../autocreate/videoniche.model';
+} from '../../model/autocreate/videoniche.model';
 import { combineLatest, concatMap, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export abstract class ContentModel {
+export abstract class ContentRepository {
   
   currentNiche: VideoNiche;
 

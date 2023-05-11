@@ -13,9 +13,9 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { GptGeneratedMetaData } from '../../../model/gpt/gptgeneratedvideo.model';
+import { VideoMetadata } from '../../../model/response/videometadata.model';
 import { ContentAutoService } from '../../../service/content/auto.service';
-import{ AutoContentModel } from '../../../model/autocontent.model';
+import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 
 @Component({
@@ -63,7 +63,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   constructor(
     private contentService: ContentAutoService,
-    private contentRepo: AutoContentModel,
+    private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -123,7 +123,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     });
 
     this.contentService.getCompleteResultsObserver().subscribe(
-      (response: { meta: GptGeneratedMetaData }) => {
+      (response: { meta: VideoMetadata }) => {
         this.infoFormGroup.setValue({
           title: response.meta.title.replace('"', '').trim(),
           description: response.meta.description.trim(),

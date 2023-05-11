@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, Subject, concatMap } from 'rxjs';
-import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
+import { VideoMetadata } from '../../model/response/videometadata.model';
 
-import { AutoContentModel } from '../../model/autocontent.model';
+import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { GptRepository } from '../../repository/gpt.repo';
 import { DurationSection } from '../../model/autocreate/videoduration.model';
-import { ContentModel } from '../../model/common/content.model';
+import { ContentRepository } from '../../repository/content/content.repo';
 
 @Injectable({
   providedIn: 'root',

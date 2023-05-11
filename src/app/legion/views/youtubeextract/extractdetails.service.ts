@@ -6,7 +6,7 @@ import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
 import { ContentExtractionService } from '../../service/content/extract.service';
-import { ExtractContentModel } from '../../model/extractcontent.model';
+import { ExtractContentRepository } from '../../model/extractcontent.repo';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 
 
@@ -32,7 +32,7 @@ export class ExtractDetailsService {
     private navigationService: NavigationService,
     private textSplitUtility: TextSplitUtility,
     private youtubeRepo: YoutubeDataRepository,
-    private extractContentRepo: ExtractContentModel
+    private extractContentRepo: ExtractContentRepository
   ) {}
 
   getErrorObserver(): Observable<string> {
