@@ -3,6 +3,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormGroup } from "@angular/forms";
 import { ExtractDetailsService } from "../extractdetails.service";
 import { DomSanitizer } from '@angular/platform-browser';
+import { ExtractMediaComponent } from "./videomedia/extractmedia.component";
+import { TitleDetailsComponent } from "./titledetails/titledetails.component";
+import { ScriptDetailsComponent } from "./scriptdetails/scriptdetails.component";
 
 @Component({
     selector: 'extract-details',
@@ -11,6 +14,13 @@ import { DomSanitizer } from '@angular/platform-browser';
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class ExtractDetailsComponent implements OnInit, AfterContentInit {
+
+    @ViewChild('extract-media') mediaChild: ExtractMediaComponent
+    @ViewChild('title-details') titleChild: TitleDetailsComponent
+    @ViewChild('script-details') scriptChild: ScriptDetailsComponent
+
+    hasUnsavedChanges = true;
+    liveDemoVisible = false;
 
     transcriptIsLoading = true;
     showErrorState = false;
@@ -47,12 +57,50 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
                 this.changeDetectorRef.detectChanges();
             }
         });
+        this.extractDetailsService.getKickBackErrorObserver().subscribe({
+            next: (error: any) => {
+                this.showErrorState = true;
+                this.errorText = error;
+            },
+        });
         this.extractDetailsService.getTranscriptIsLoadingObserver().subscribe({
             next: (isLoading: boolean) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:51 ~ ExtractDetailsComponent ~ this.youtubeService.getTranscriptIsLoadingObserver ~ isLoading:", isLoading)
                 this.transcriptIsLoading = isLoading;
             }
         });
+    }
+
+    onReset() {
+        this.extractDetailsService.navigateHome();
+    }
+
+    onSave() {
+        this.hasUnsavedChanges = true;
+
+        const generatedVoice = this.mediaChild.generatedAudioUrl;
+        const title = this.titleChild.titleFormGroup.value.title;
+        const description = this.titleChild.titleFormGroup.value.description;
+        const tags = this.titleChild.titleFormGroup.value.tags;
+        const script = this.scriptChild.transcriptSections.map((uiSection) => {
+            return uiSection.section;
+        })
+        this.extractDetailsService.submitSave(
+            generatedVoice,
+            title,
+            description,
+            tags,
+            script
+        )
+    }
+
+    toggleLiveDemo() {
+        this.liveDemoVisible = !this.liveDemoVisible;
+    }
+
+    confirmToReturn() {
+        this.liveDemoVisible = false
+        this.extractDetailsService.navigateHome();
     }
 
     private setupFormControls() {

@@ -1,8 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
-import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
+import{ AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { Router } from '@angular/router';
-import { NavigationService } from '../../../service/navigation.service';
-import { YoutubeVideoPage } from 'src/app/legion/model/youtubevideopage.model';
+import { NavigationService } from '../../service/navigation.service';
+import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
+
 @Component({
     selector: 'video-list',
     templateUrl: './videolist.component.html',

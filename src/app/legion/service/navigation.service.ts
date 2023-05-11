@@ -14,15 +14,15 @@ export class NavigationService {
   }
   
   navigateToCreateVideo() {
-    this.router.navigate(['maker/autos/create']);
+    this.router.navigate(['maker/auto']);
   }
 
   navigateToResults() {
-    this.router.navigate(['maker/autos/details']);
+    this.router.navigate(['maker/auto/details']);
   }
 
   navigateToUploadVideo() {
-    this.router.navigate(['maker/autos/upload']);
+    this.router.navigate(['maker/auto/upload']);
   }
 
   navigateToLander() {

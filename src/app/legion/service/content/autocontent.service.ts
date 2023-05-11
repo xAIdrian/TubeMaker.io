@@ -62,7 +62,6 @@ export class AutoContentService extends GenerateContentService {
     ) { throw new Error('Sources video is undefined'); }
 
     let compeleteMetaData: VideoMetadata = {
-      parentId: '',
       summary: '',
       title: '',
       description: '',
@@ -78,7 +77,6 @@ export class AutoContentService extends GenerateContentService {
       } else {
         const requestSummary = response.result.summary;
 
-        compeleteMetaData.parentId = response.result.id;
         compeleteMetaData.summary = requestSummary;
         this.gptGeneratedSummary = requestSummary;
         this.contentProgressSubject.next(25);
@@ -137,8 +135,7 @@ export class AutoContentService extends GenerateContentService {
     completedMetaData: VideoMetadata
   ) {
     if (
-      completedMetaData.parentId !== '' 
-      && completedMetaData.title !== '' 
+      completedMetaData.title !== '' 
       && completedMetaData.description !== ''
       && completedMetaData.tags.length > 0
     ) {

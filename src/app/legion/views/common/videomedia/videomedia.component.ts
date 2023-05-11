@@ -34,9 +34,6 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
       this.audioDropdown = content;
     }
   }
-
-  audioFormGroup: FormGroup;
-
   generateAudioLoading = false;
   generatedAudioIsVisible = false;
   generatedAudioUrl: string;

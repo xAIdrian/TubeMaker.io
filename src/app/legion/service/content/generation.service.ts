@@ -11,14 +11,14 @@ export abstract class GenerateContentService {
   errorSubject = new Subject<string>();
 
   //field value observables
-  topicSubject = new Subject<String>();
-  titleSubject = new Subject<String>();
-  descriptionSubject = new Subject<String>();
+  topicSubject = new Subject<string>();
+  titleSubject = new Subject<string>();
+  descriptionSubject = new Subject<string>();
   scriptSectionSubject = new Subject<{
     scriptSection: string
     position: string | number
   }>();
-  tagsSubject = new Subject<String[]>();
+  tagsSubject = new Subject<string[]>();
 
   constructor(
     protected gptRepo: GptRepository

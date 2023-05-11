@@ -98,7 +98,7 @@ export class AutoContentRepository extends ContentRepository {
   updateScriptMap(controlName: string, script: string) {
     this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
-      this.currentPage.id,
+      this.currentPage?.id ?? '',
       {
         structuredScript: { controlName: script }
       }
@@ -109,7 +109,7 @@ export class AutoContentRepository extends ContentRepository {
     let script = '';
     return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
       this.collectionPath, 
-      this.currentPage.id
+      this.currentPage?.id ?? ''
     ).pipe(
       map((doc) => {
         const scriptMap = doc.structuredScript;
@@ -172,7 +172,7 @@ export class AutoContentRepository extends ContentRepository {
 
     this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
-      this.currentPage.id,
+      this.currentPage?.id ?? '',
       {
         structuredScript: scriptMap
       }

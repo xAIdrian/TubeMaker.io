@@ -1,6 +1,4 @@
 export interface StructuredScript {
-  parentId: string;
-
   introduction: string;
   mainContent: string;
   conclusion: string;

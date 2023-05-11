@@ -1,6 +1,5 @@
 export interface YoutubeVideo {
     id: string;
-    parentId?: string;
 
     title: string;
     description: string;

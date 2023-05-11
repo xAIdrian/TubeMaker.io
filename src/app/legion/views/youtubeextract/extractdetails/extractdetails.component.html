@@ -68,5 +68,29 @@
     <title-details></title-details>
     <script-details [parentIsLoading]="transcriptIsLoading"></script-details>
 
+    <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+      <button cButton variant="outline" color="dark" (click)="onReset()">Back</button>
+      <button 
+        class="btn btn-primary" 
+        style="margin-left: 1rem;" 
+        (click)="onSave()">
+          Save
+        </button>
+    </div>
+
+    <!-- Kickback Modal -->
+    <ng-template #liveDemo>
+      <button (click)="toggleLiveDemo()" cButton>Launch demo modal</button>
+      <c-modal backdrop="static"  id="liveDemoModal" [visible]="liveDemoVisible">
+        <c-modal-header>
+          <h5 cModalTitle>This Won't Work!</h5>
+        </c-modal-header>
+        <c-modal-body>Unfortunately, this video does not have a script!  We've found that videos with spoken word perform the best so let's go back and pick a new video.</c-modal-body>
+        <c-modal-footer>
+          <button cButton color="primary" (onClick)="confirmToReturn()">Find Another Video</button>
+        </c-modal-footer>
+      </c-modal>
+    </ng-template>
+
   </c-card-body>
 </c-card>

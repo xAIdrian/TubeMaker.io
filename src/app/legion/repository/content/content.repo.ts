@@ -14,7 +14,7 @@ import { VideoMetadata } from '../../model/video/videometadata.model';
 })
 export abstract class ContentRepository {
   
-  protected currentPage: YoutubeVideoPage;
+  protected currentPage?: YoutubeVideoPage;
   protected currentNiche: VideoNiche;
 
   protected translate: TranslateService;
@@ -77,7 +77,7 @@ export abstract class ContentRepository {
   getMetaData(): Observable<VideoMetadata> {
     return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
       this.collectionPath,
-      this.currentPage.id
+      this.currentPage?.id ?? ''
     ).pipe(
       //filiering for undefined
       filter((data) => !!data),
@@ -102,15 +102,29 @@ export abstract class ContentRepository {
     );
   }
 
-  submitInfos(title: string, description: string, tags: string) {
+  submitCompleteInfos(
+    generatedAudioUrl: string,
+    title: string, 
+    description: string, 
+    tags: string,
+    script: string[]
+  ) {
     return this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
-      this.currentPage.id,
+      this.currentPage?.id ?? '',
       {
-        title: title,
-        description: description,
-        tags: tags,
+        generatedAudioUrl: generatedAudioUrl,
+        metadata: {
+          title: title,
+          description: description,
+          tags: tags
+        }, 
+        listScript: script
       }
     )
+  }
+
+  clearCurrentPage() {
+    this.currentPage = undefined;
   }
 }

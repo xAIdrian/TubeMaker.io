@@ -76,7 +76,7 @@ import { ExtractDetailsService } from "../../extractdetails.service";
     }
 
     onScriptSubmit() {
-        this.extractDetailsService.submitScript(this.transcriptSections);
+        // this.extractDetailsService.submitScript(this.transcriptSections);
     }
 
     private toggleLoading(section: { isLoading: boolean, section: string }) {

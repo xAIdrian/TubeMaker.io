@@ -59,7 +59,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
       },
       {
         name: translate.instant('navigation.brand_new'),
-        url: '/maker/autos',
+        url: '/maker/auto',
+        iconComponent: { name: 'cil-media-play' }
+      },
+      {
+        name: translate.instant('navigation.view_videos'),
+        url: '/maker/list',
         iconComponent: { name: 'cil-media-play' }
       },
       {

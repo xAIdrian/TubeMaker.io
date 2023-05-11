@@ -62,10 +62,16 @@ router.get("/:videoId", async (req, res) => {
         }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
           // Transcription
-          const transcription = await transcribeAudio(filePath);
+          const transcription = '';
+          try {
+            transcription = await transcribeAudio(filePath);
+          } catch (error) {
+            deletefile(filePath);
+            res.status(505).json({ error: "Transcription Failed Because of No Sound" });
+          }
           if (transcription === undefined || transcription === '') {
             deletefile(filePath);
-            res.status(500).json({ error: "Transcription Empty" });
+            res.status(505).json({ error: "Transcription Empty" });
             return throwError(() => new Error('🔥' + 'No transcription found'));
           }
           // Translation

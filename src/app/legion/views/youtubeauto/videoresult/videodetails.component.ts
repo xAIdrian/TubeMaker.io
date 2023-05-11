@@ -217,11 +217,11 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   }
 
   onInfoSectionClick() {
-    this.contentRepo.submitInfos(
-      this.infoFormGroup.value.title,
-      this.infoFormGroup.value.description,
-      this.infoFormGroup.value.tags,
-    );
+    // this.contentRepo.submitInfos(
+    //   this.infoFormGroup.value.title,
+    //   this.infoFormGroup.value.description,
+    //   this.infoFormGroup.value.tags,
+    // );
   }
 
   goToReview() {

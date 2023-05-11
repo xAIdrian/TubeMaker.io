@@ -37,7 +37,7 @@ import {
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IconModule } from '@coreui/icons-angular';
 import { LegionRoutingModule } from './legion-routing.module';
-import { VideoListComponent } from './views/youtubeauto/videolist/videolist.component';
+import { VideoListComponent } from './views/videolist/videolist.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './views/youtubeauto/videocreate/videocreate.component';
 import { VideoDetailsComponent } from './views/youtubeauto/videoresult/videodetails.component';
@@ -53,6 +53,8 @@ import { ExtractDetailsComponent } from './views/youtubeextract/extractdetails/e
 import { ScriptDetailsComponent } from './views/youtubeextract/extractdetails/scriptdetails/scriptdetails.component';
 import { TitleDetailsComponent } from './views/youtubeextract/extractdetails/titledetails/titledetails.component';
 import { VideoMediaComponent } from './views/common/videomedia/videomedia.component';
+import { ConfirmationDialogComponent } from './views/common/confirmationdialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     providers: [{
@@ -74,6 +76,7 @@ import { VideoMediaComponent } from './views/common/videomedia/videomedia.compon
         ExtractDetailsComponent,
         ScriptDetailsComponent,
         TitleDetailsComponent,
+        ConfirmationDialogComponent
     ],
     imports: [
         DragDropModule,
@@ -113,7 +116,8 @@ import { VideoMediaComponent } from './views/common/videomedia/videomedia.compon
         MatButtonToggleModule,
         ModalModule,
         ButtonGroupComponent,
-        TranslateModule
+        TranslateModule,
+        MatDialogModule
     ]
 })
 export class LegionModule {/* */}
