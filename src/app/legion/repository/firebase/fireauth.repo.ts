@@ -5,7 +5,7 @@ import {
   isSignInWithEmailLink,
   signInWithEmailLink,
 } from 'firebase/auth';
-import { Observable, of } from 'rxjs';
+import { Observable, from, map, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { FirebaseUser } from '../../model/user/user.model';
@@ -52,11 +52,17 @@ export class FireAuthRepository {
   }
 
   isAuthenticated(): Observable<boolean> {
-    return of(this.sessionUser === undefined ? false : true);
+    return of(true);
+    // return of(this.sessionUser === undefined ? false : true);
   }
 
-  verifyPurchaseEmail(email: string) {
-    return this.angularFirestore.doc<FirebaseUser>(`${PURCHASED_USERS_COL}/${email}`).valueChanges()
+  verifyPurchaseEmail(email: string): Observable<boolean> {
+    const docRef = this.angularFirestore.collection(PURCHASED_USERS_COL).doc(email).ref;
+    return from(docRef.get()).pipe(
+      map((doc) => {
+        return doc.exists;
+      })
+    );
   }
 
   /* Setting up user data when sign in with username/password, 

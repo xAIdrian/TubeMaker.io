@@ -46,12 +46,17 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.title = this.contentRepo.getTitle();
-    this.description = this.contentRepo.getDescription();
-    this.tags = this.contentRepo.getTags();
-    this.script = this.contentRepo.getCompleteScript();
-
-    this.changeDetectorRef.detectChanges();
+    this.contentRepo.getMetaData().subscribe({
+      next: (response) => {
+        this.title = response.title;
+        this.description = response.description;
+        this.tags = response.tags.join(' #');
+        this.changeDetectorRef.detectChanges();
+      },
+      error: (error) => {
+        //TODO
+      }
+    })
   }
 
   copyTitle() { 

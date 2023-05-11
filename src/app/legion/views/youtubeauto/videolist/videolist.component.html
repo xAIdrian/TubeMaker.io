@@ -11,12 +11,12 @@
       <div cListGroupItem>
         <div class="d-flex justify-content-between align-items-center">
           <div class="title-published">
-            <p class="mb-1">{{ video.title }}</p>
+            <p class="mb-1">{{ video.youtubeVideo.title }}</p>
           </div>
         </div>
         <div class="description">
-          <small>{{ video.channelTitle }}</small>
-          <small class="published">{{ 'video_list.published' | translate }}: {{ video.publishedAt }}</small>
+          <small>{{ video.youtubeVideo.channelTitle }}</small>
+          <small class="published">{{ 'video_list.published' | translate }}: {{ video.youtubeVideo.publishedAt }}</small>
         </div>
       </div>
     </div>

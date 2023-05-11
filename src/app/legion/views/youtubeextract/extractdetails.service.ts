@@ -6,7 +6,7 @@ import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
 import { ContentExtractionService } from '../../service/content/extract.service';
-import { ExtractContentRepository } from '../../model/extractcontent.repo';
+import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 
 

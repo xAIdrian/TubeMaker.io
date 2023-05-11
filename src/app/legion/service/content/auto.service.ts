@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, Subject, concatMap } from 'rxjs';
-import { VideoMetadata } from '../../model/response/videometadata.model';
 
 import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { GptRepository } from '../../repository/gpt.repo';
 import { DurationSection } from '../../model/autocreate/videoduration.model';
 import { ContentGenerationService } from './generation.service';
+import { VideoMetadata } from '../../model/video/videometadata.model';
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +62,7 @@ export class ContentAutoService extends ContentGenerationService {
     ) { throw new Error('Sources video is undefined'); }
 
     let compeleteMetaData: VideoMetadata = {
-      id: '',
+      parentId: '',
       summary: '',
       title: '',
       description: '',
@@ -78,7 +78,7 @@ export class ContentAutoService extends ContentGenerationService {
       } else {
         const requestSummary = response.result.summary;
 
-        compeleteMetaData.id = response.result.id;
+        compeleteMetaData.parentId = response.result.id;
         compeleteMetaData.summary = requestSummary;
         this.gptGeneratedSummary = requestSummary;
         this.contentProgressSubject.next(25);
@@ -137,7 +137,7 @@ export class ContentAutoService extends ContentGenerationService {
     completedMetaData: VideoMetadata
   ) {
     if (
-      completedMetaData.id !== '' 
+      completedMetaData.parentId !== '' 
       && completedMetaData.title !== '' 
       && completedMetaData.description !== ''
       && completedMetaData.tags.length > 0

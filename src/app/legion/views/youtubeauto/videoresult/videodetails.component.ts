@@ -13,10 +13,10 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { VideoMetadata } from '../../../model/response/videometadata.model';
 import { ContentAutoService } from '../../../service/content/auto.service';
 import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
+import { VideoMetadata } from 'src/app/legion/model/video/videometadata.model';
 
 @Component({
   selector: 'video-result',

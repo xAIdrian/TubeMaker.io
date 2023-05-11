@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, Subject, concatMap } from 'rxjs';
-import { VideoMetadata } from '../../model/response/videometadata.model';
 
-import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { GptRepository } from '../../repository/gpt.repo';
-import { DurationSection } from '../../model/autocreate/videoduration.model';
-import { ContentRepository } from '../../repository/content/content.repo';
 
 @Injectable({
   providedIn: 'root',

@@ -3,28 +3,31 @@ import { ContentRepository } from './content.repo';
 import { Observable, concatMap, from, map, of } from 'rxjs';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { EXTRACT_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
-import shortId  from 'shortid';
+import * as shortId  from 'shortid';
       
 @Injectable({
   providedIn: 'root',
 })
 export class ExtractContentRepository extends ContentRepository {
   
-  collectionPath: string = EXTRACT_YOUTUBE_VIDEO_PAGE_COL;
-
-  private joinedScript: string = '';
+  collectionPath: string = 'extract_pages';
 
   setWorkingPageObject(): Observable<YoutubeVideoPage> {
     const newDoc = { id: shortId.generate().toString() } as YoutubeVideoPage 
+    console.log(EXTRACT_YOUTUBE_VIDEO_PAGE_COL)
     return from(this.firestoreRepository.createUsersDocument(
-      this.collectionPath,
+      'extract_pages',
       newDoc.id,
       newDoc
     ))
   }
 
   updateCopyCatScript(scriptArray: string[]) {
-    this.joinedScript = scriptArray.join('\n\n');
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage.id,
+      { listScript: scriptArray })
+      //todo this needs success observer
   }
 
   getCompleteScript(): Observable<string> {

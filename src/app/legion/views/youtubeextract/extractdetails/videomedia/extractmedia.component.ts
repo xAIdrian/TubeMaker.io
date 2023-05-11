@@ -3,7 +3,7 @@ import { VideoMediaComponent } from "../../../common/videomedia/videomedia.compo
 import { TranslateService } from "@ngx-translate/core";
 import { NavigationService } from "../../../../service/navigation.service";
 import { VoiceService } from "../../../../service/voice.service";
-import { ExtractContentRepository } from "../../../../model/extractcontent.repo";
+import { ExtractContentRepository } from "../../../../repository/content/extractcontent.repo";
 
 @Component({
   selector: 'extract-media',

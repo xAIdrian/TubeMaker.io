@@ -9,7 +9,11 @@ import { filter, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { FireAuthRepository } from './fireauth.repo';
 import { USERS_COL } from './firebase.constants';
+import { Inject, Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class FirestoreRepository {
   constructor(
     private firestore: AngularFirestore,
@@ -23,6 +27,7 @@ export class FirestoreRepository {
     data: T,
     userId: string = this.fireAuthRepository.sessionUser?.uid || ''
   ): Promise<T> {
+    console.log('createUsersDocument', collectionPath, documentKey, data, userId)
     const docRef = this.firestore
       .collection(USERS_COL)
       .doc(userId)

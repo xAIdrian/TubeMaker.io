@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
-import{ ExtractContentRepository } from '../../../model/extractcontent.repo';
+import{ ExtractContentRepository } from '../../../repository/content/extractcontent.repo';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
 import { VideoNiche } from '../../../model/autocreate/videoniche.model';

@@ -92,18 +92,11 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
       return;
     }
 
-    const scriptValue = this.contentRepo.getCompleteScript();
-    if (scriptValue === null || scriptValue === '') {
-      alert('Please enter a script before generating audio');
-      return;
-    }
-
     this.generatedAudioIsVisible = false;
     this.generateAudioLoading = true;
 
     this.voiceService.generateTextToSpeech(
-      this.selectedVoice.name,
-      scriptValue
+      this.selectedVoice.name
     ).subscribe({
       next: (response) => {
         console.log(response)

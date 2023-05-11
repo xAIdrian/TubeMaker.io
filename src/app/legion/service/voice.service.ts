@@ -10,6 +10,7 @@ import {
   concatMap,
   of,
 } from 'rxjs';
+import { ContentRepository } from '../repository/content/content.repo';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,7 +22,8 @@ export class VoiceService {
 
   constructor(
     private firebaseRepository: FirebaseStorageRepository,
-    private voiceRepository: VoiceRepository
+    private voiceRepository: VoiceRepository,
+    private contentRepository: ContentRepository
   ) {}
 
   getErrorObserver(): Observable<string> {
@@ -50,8 +52,17 @@ export class VoiceService {
    * @param name 
    * @param scriptValue 
    */
-  generateTextToSpeech(name: string, scriptValue: string): Observable<Blob> {
-    return this.voiceRepository.getListOfVoices().pipe(
+  generateTextToSpeech(name: string): Observable<Blob> {
+    let completeScript = ''
+    return this.contentRepository.getCompleteScript().pipe(
+      map((scriptValue) => {
+        if (scriptValue === null || scriptValue === '') {
+          this.erroSubject.next('Script Is Empty.');
+        } else {
+          completeScript = scriptValue;
+        }
+      }),
+      concatMap((_scriptValue) => this.voiceRepository.getListOfVoices()),
       map((response: { message: string, result: { name: string, id: string }[]}) => {
         if (response.message !== 'success') {
           this.erroSubject.next('Error getting voices');
@@ -64,7 +75,7 @@ export class VoiceService {
         return voiceObj?.id
       }),
       concatMap((voice) => {
-        return this.voiceRepository.getTextToSpeechSteam(voice ?? '', scriptValue)
+        return this.voiceRepository.getTextToSpeechSteam(voice ?? '', completeScript)
       })
     );
   }

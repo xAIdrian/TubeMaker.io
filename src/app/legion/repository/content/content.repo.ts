@@ -35,7 +35,7 @@ export abstract class ContentRepository {
         this.currentPage = youtubeVideoPage; 
       },
       error: (err) => { 
-        console.log("❤️‍🔥 ~ empty object created successfully", err) 
+        console.log("❤️‍🔥 ~ empty object error", err) 
       }
     })
   }

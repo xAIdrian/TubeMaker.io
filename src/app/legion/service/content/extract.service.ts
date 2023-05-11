@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ContentGenerationService } from './generation.service';
 import { GptRepository } from '../../repository/gpt.repo';
-import { ExtractContentRepository } from '../../model/extractcontent.repo';
+import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ export class ContentExtractionService extends ContentGenerationService {
 
   constructor(
     gptRepo: GptRepository,
-    private contentRepo: ExtractContentRepository
+    private extractContentRepo: ExtractContentRepository
   ) {
     super(gptRepo);
   }

@@ -43,6 +43,6 @@ export class LanderComponent implements OnInit {
 
   successCallback(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     console.log("🚀 ~ file: login.component.ts:23 ~ LoginComponent ~ successCallback ~ signinSuccessData:", signinSuccessData)
-    this.sessionService.verifyEmailPurchase(signinSuccessData)
+    this.sessionService.verifyEmail(signinSuccessData)
   }
 }
