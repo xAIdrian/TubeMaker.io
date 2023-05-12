@@ -15,7 +15,7 @@ export class CanDeactivateGuard implements CanDeactivate<any> {
     if (component.hasUnsavedChanges) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
-        data: 'You have unsaved changes. Do you want to leave without saving?'
+        data: 'It is easier than ever to make money on youtube. Have you posted your content on Youtube?  You can always come back later and make changes.'
       });
 
       return dialogRef.afterClosed();

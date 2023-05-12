@@ -1,11 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, AfterViewInit, ViewChildren } from "@angular/core";
 
 import { FormGroup } from "@angular/forms";
 import { ExtractDetailsService } from "../extractdetails.service";
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ExtractMediaComponent } from "./videomedia/extractmedia.component";
 import { TitleDetailsComponent } from "./titledetails/titledetails.component";
 import { ScriptDetailsComponent } from "./scriptdetails/scriptdetails.component";
+import { Observable, endWith, filter, flatMap, interval, of, takeUntil, takeWhile, timer } from "rxjs";
+import { VideoMediaComponent } from "../../common/videomedia/videomedia.component";
 
 @Component({
     selector: 'extract-details',
@@ -13,22 +15,20 @@ import { ScriptDetailsComponent } from "./scriptdetails/scriptdetails.component"
     styleUrls: ['./extractdetails.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class ExtractDetailsComponent implements OnInit, AfterContentInit {
-
-    @ViewChild('extract-media') mediaChild: ExtractMediaComponent
-    @ViewChild('title-details') titleChild: TitleDetailsComponent
-    @ViewChild('script-details') scriptChild: ScriptDetailsComponent
+export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
 
     hasUnsavedChanges = true;
-    liveDemoVisible = false;
+
+    isKickbackVisible = false;
+    kickbackText = 'Are you sure you want to return to the home page?';
 
     transcriptIsLoading = true;
-    showErrorState = false;
+    isErrorVisible = false;
     errorText = '';
 
     scriptFormGroup: FormGroup;
     isLinear: any;
-    videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/sRRE3tev-kQ');
+    videoEmbedUrl: SafeResourceUrl;
 
     constructor(
         private extractDetailsService: ExtractDetailsService,
@@ -39,17 +39,21 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     ngOnInit(): void {
         this.setupObservers();
         this.setupFormControls();
-        this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractDetailsService.getCurrentVideoUrl());
     }
-
+    
     ngAfterContentInit(): void {
+        this.changeDetectorRef.detectChanges();
+    }
+    
+    ngAfterViewInit(): void {
+        this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractDetailsService.getCurrentVideoUrl());
         this.changeDetectorRef.detectChanges();
     }
 
     private setupObservers() {
         this.extractDetailsService.getErrorObserver().subscribe({
             next: (error: any) => {
-                this.showErrorState = true;
+                this.isErrorVisible = true;
                 this.errorText = error;
             },
             complete: () => {
@@ -58,9 +62,13 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
             }
         });
         this.extractDetailsService.getKickBackErrorObserver().subscribe({
-            next: (error: any) => {
-                this.showErrorState = true;
-                this.errorText = error;
+            next: (message: string) => {
+                if (message === '') {
+                    this.isKickbackVisible = false;
+                } else {
+                    this.isKickbackVisible = true;
+                    this.kickbackText = message;
+                }
             },
         });
         this.extractDetailsService.getTranscriptIsLoadingObserver().subscribe({
@@ -75,31 +83,13 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
         this.extractDetailsService.navigateHome();
     }
 
-    onSave() {
-        this.hasUnsavedChanges = true;
-
-        const generatedVoice = this.mediaChild.generatedAudioUrl;
-        const title = this.titleChild.titleFormGroup.value.title;
-        const description = this.titleChild.titleFormGroup.value.description;
-        const tags = this.titleChild.titleFormGroup.value.tags;
-        const script = this.scriptChild.transcriptSections.map((uiSection) => {
-            return uiSection.section;
-        })
-        this.extractDetailsService.submitSave(
-            generatedVoice,
-            title,
-            description,
-            tags,
-            script
-        )
-    }
-
     toggleLiveDemo() {
-        this.liveDemoVisible = !this.liveDemoVisible;
+        this.isKickbackVisible = !this.isKickbackVisible;
     }
 
     confirmToReturn() {
-        this.liveDemoVisible = false
+        this.hasUnsavedChanges = false;
+        this.isKickbackVisible = false
         this.extractDetailsService.navigateHome();
     }
 

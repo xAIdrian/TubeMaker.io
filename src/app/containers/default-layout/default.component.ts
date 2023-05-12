@@ -42,7 +42,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   private updateNavItems(translate: TranslateService) {
-    console.log("🚀 ~ file: default.component.ts:37 ~ DefaultComponent ~ updateNavItems ~ translate:", translate)
     this.navItems = [
       {
         name: translate.instant('navigation.create'),

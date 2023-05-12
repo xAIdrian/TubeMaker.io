@@ -36,7 +36,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   }
   generateAudioLoading = false;
   generatedAudioIsVisible = false;
-  generatedAudioUrl: string;
+  generatedAudioUrl: string = '';
 
   voiceOptions: { name: string; sampleUrl: string }[] = [];
   selectedVoice: { name: string; sampleUrl: string };
@@ -67,9 +67,6 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.voiceService.getVoices();
-    console.log(
-      '🚀 ~ file: videomedia.component.ts:64 ~ VideoMediaComponent ~ ngAfterContentInit ~ ngAfterContentInit:'
-    );
     this.changeDetectorRef.detectChanges();
   }
 

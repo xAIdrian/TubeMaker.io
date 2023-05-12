@@ -116,13 +116,12 @@ export class FirestoreRepository {
     documentKey: string,
     data: Partial<T>,
     userId: string = this.fireAuthRepository.sessionUser?.uid || ''
-  ): Promise<void> {
+  ): Promise<boolean> {
     const docRef = this.firestore
       .collection(USERS_COL)
       .doc(userId)
       .collection(collectionPath)
       .doc<T>(documentKey);
-    await docRef.update(this.sanitizeObject(data));
     if (!environment.production) {
       console.groupCollapsed(
         `❤️‍🔥 Firestore Service [${collectionPath}] [updateUserDocument]`
@@ -130,6 +129,17 @@ export class FirestoreRepository {
       console.log(`❤️‍🔥 [${userId}]`, data);
       console.groupEnd();
     }
+    return new Promise<boolean>((resolve, reject) => {
+      docRef.update(this.sanitizeObject(data)
+        .then(() => {
+          console.log('❤️‍🔥 Request succeeded');
+          resolve(true); // Resolving the Promise with a boolean value indicating success
+        })
+        .catch((error: any) => {
+          console.error('❤️‍🔥 Request failed', error);
+          resolve(false); // Resolving the Promise with a boolean value indicating failure
+        }));
+    });
   }
 
   async updateUsersDocumentMap(

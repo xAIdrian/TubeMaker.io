@@ -37,7 +37,7 @@ export class ExtractContentRepository extends ContentRepository {
       this.collectionPath,
       this.currentPage?.id ?? '',
       { listScript: scriptArray }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 78 ~ ExtractContentRepository ~ err", err))
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 40 ~ ExtractContentRepository ~ err", err))
   }
 
   updateTitle(newTitle: string) {
@@ -45,7 +45,7 @@ export class ExtractContentRepository extends ContentRepository {
       this.collectionPath,
       this.currentPage?.id ?? '',
       { "metadata.title": newTitle }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 78 ~ ExtractContentRepository ~ err", err))
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 48 ~ ExtractContentRepository ~ err", err))
   }
 
   updateDescription(newDescription: string) {
@@ -53,7 +53,7 @@ export class ExtractContentRepository extends ContentRepository {
       this.collectionPath,
       this.currentPage?.id ?? '',
       { "metadata.description": newDescription }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 78 ~ ExtractContentRepository ~ err", err))
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 56 ~ ExtractContentRepository ~ err", err))
   }
 
   updateTags(newTags: string[]) {
@@ -61,7 +61,7 @@ export class ExtractContentRepository extends ContentRepository {
       this.collectionPath,
       this.currentPage?.id ?? '',
       { "metadata.tags": newTags }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 78 ~ ExtractContentRepository ~ err", err))
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 64 ~ ExtractContentRepository ~ err", err))
   }
 
   getCompleteScript(): Observable<string> {
@@ -73,7 +73,7 @@ export class ExtractContentRepository extends ContentRepository {
         return doc.listScript?.join('\n\n') ?? '';
       }),
       catchError((err) => {
-        console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 92 ~ ExtractContentRepository ~ catchError ~ err", err)
+        console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 76 ~ ExtractContentRepository ~ catchError ~ err", err)
         throw new Error(err);
       })
     )

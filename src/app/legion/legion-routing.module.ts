@@ -27,7 +27,7 @@ const routes: Routes = [
         data: {
             title: "Transcript"
         },
-        // canDeactivate: [CanDeactivateGuard]
+        canDeactivate: [CanDeactivateGuard]
     },
     {
         path: "list",

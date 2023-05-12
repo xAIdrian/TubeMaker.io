@@ -11,7 +11,6 @@ import {
 import { YoutubeVideo } from '../model/video/youtubevideo.model';
 import axios, { AxiosRequestConfig } from 'axios';
 import { TranslateService } from '@ngx-translate/core';
-import { fallbackYoutubeVideos } from './test/test.data';
 
 // import { YOUTUBE_CLIENT_ID } from '../../appsecrets';
 
@@ -41,9 +40,6 @@ export class YoutubeDataRepository {
   }
 
   getVideoListByNiche(niche: string): Observable<YoutubeVideo[]> {
-    if (niche === 'psychology') {
-      return of(fallbackYoutubeVideos);
-    }
     const currentLang = this.translate.currentLang;
     const config: AxiosRequestConfig = {
         method: 'get',
@@ -57,10 +53,6 @@ export class YoutubeDataRepository {
         map((response) => {
             console.log("🚀 ~ file: youtubedata.repo.ts:54 ~ YoutubeDataRepository ~ map ~ response:", response.data)
             return response.data;
-        }),
-        catchError((error) => {
-            console.log("🚀 ~ file: youtubedata.repo.ts:59 ~ YoutubeDataRepository ~ catchError ~ error:", error)
-            return of(fallbackYoutubeVideos);
         })
     );
   }

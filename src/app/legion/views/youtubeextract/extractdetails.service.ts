@@ -15,7 +15,7 @@ import { formatDistance } from 'date-fns'
 export class ExtractDetailsService {
   
   private errorSubject = new Subject<string>();
-  private kickBackErrorSubject = new Subject<boolean>();
+  private kickBackErrorSubject = new Subject<string>();
   private isTranscriptLoadingSubject = new Subject<boolean>();
 
   private youtubeVideosSubject = new Subject<YoutubeVideo[]>();
@@ -36,7 +36,7 @@ export class ExtractDetailsService {
     return this.errorSubject.asObservable();
   }
 
-  getKickBackErrorObserver(): Observable<boolean> {
+  getKickBackErrorObserver(): Observable<string> {
     return this.kickBackErrorSubject.asObservable();
   }
 
@@ -90,7 +90,7 @@ export class ExtractDetailsService {
   }
 
   getCurrentVideoUrl(): string {
-    throw new Error("Method not implemented.");
+    return `https://www.youtube.com/embed/${this.currentCopyCatVideo.id}`
   }
 
   searchYoutubeVideos(niche: string) {
@@ -170,7 +170,7 @@ export class ExtractDetailsService {
       },
       error: (err) => {
         if (err = 'Error: Request failed with status code 505') {
-          this.kickBackErrorSubject.next(true);
+          this.kickBackErrorSubject.next('Seems like the video you selected is not available for translation. Please select another video.');
         } else {
           console.log("🔥 ~ file: extractdetails.service.ts:122 ~ ExtractDetailsService ~ getVideoTranscript ~ err:", err)
           this.errorSubject.next(err);
@@ -183,20 +183,19 @@ export class ExtractDetailsService {
     this.generationService.optimizeNewScriptIndex(prompt, section, index);
   }
 
-  // submitScript(transcriptSections: { isLoading: boolean; section: string; }[]) {
-  //   of(transcriptSections).pipe(
-  //     map((sections) => {
-  //       const script: string[] = [];
-  //       sections.forEach((section) => {
-  //         script.push(section.section.trim());
-  //       });
-  //       return script
-  //     })
-  //   ).subscribe((scriptArray: string[]) => {
-  //     this.extractContentRepo.updateCopyCatScript(scriptArray)
-  //   });
-  //   this.navigationService.navigateToTitleDetails();
-  // }
+  updateScript(transcriptSections: { isLoading: boolean; section: string; }[]) {
+    of(transcriptSections).pipe(
+      map((sections) => {
+        const script: string[] = [];
+        sections.forEach((section) => {
+          script.push(section.section.trim());
+        });
+        return script
+      })
+    ).subscribe((scriptArray: string[]) => {
+      this.extractContentRepo.updateCopyCatScript(scriptArray)
+    });
+  }
 
   getVideoMetaData() {
     if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
@@ -254,7 +253,16 @@ export class ExtractDetailsService {
     tags: string,
     script: string[]
   ) {
-    this.extractContentRepo.submitCompleteInfos(generatedAudioUrl, title, description, tags, script);
+    this.extractContentRepo
+      .submitCompleteInfos(generatedAudioUrl, title, description, tags, script)
+      .subscribe({
+        next: (response) => {
+          this.kickBackErrorSubject.next('Save successful.');
+        },
+        error: (err) => {
+          this.errorSubject.next(err);
+        }
+      })
   }
 
   clearCurrentVideoPage() {

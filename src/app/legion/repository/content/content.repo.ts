@@ -3,7 +3,7 @@ import {
   getDefaultVideoNiches,
   VideoNiche,
 } from '../../model/autocreate/videoniche.model';
-import { combineLatest, concatMap, filter, map, Observable, of, Subject } from 'rxjs';
+import { combineLatest, concatMap, filter, from, map, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { FirestoreRepository } from '../firebase/firestore.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
@@ -108,8 +108,8 @@ export abstract class ContentRepository {
     description: string, 
     tags: string,
     script: string[]
-  ) {
-    return this.firestoreRepository.updateUsersDocument(
+  ): Observable<boolean> {
+    return from(this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
       this.currentPage?.id ?? '',
       {
@@ -121,7 +121,7 @@ export abstract class ContentRepository {
         }, 
         listScript: script
       }
-    )
+    ))
   }
 
   clearCurrentPage() {

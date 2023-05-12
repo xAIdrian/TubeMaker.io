@@ -62,17 +62,12 @@ router.get("/:videoId", async (req, res) => {
         }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
           // Transcription
-          const transcription = '';
-          try {
-            transcription = await transcribeAudio(filePath);
-          } catch (error) {
-            deletefile(filePath);
-            res.status(505).json({ error: "Transcription Failed Because of No Sound" });
-          }
+          const transcription = await transcribeAudio(filePath);
+          
           if (transcription === undefined || transcription === '') {
             deletefile(filePath);
-            res.status(505).json({ error: "Transcription Empty" });
-            return throwError(() => new Error('🔥' + 'No transcription found'));
+            res.status(505).json({ error: "Transcription Unavailable" });
+            // return throwError(() => new Error('🔥' + 'No transcription found'));
           }
           // Translation
           const translation = await translationService.translateText(transcription);
@@ -87,7 +82,7 @@ router.get("/:videoId", async (req, res) => {
           } else {
             deletefile(filePath);
             res.status(500).json({ error: "Translations Empty" });
-            return throwError(() => new Error('🔥' + 'No translation found'));
+            // return throwError(() => new Error('🔥' + 'No translation found'));
           }
         })
     })
@@ -111,25 +106,30 @@ async function deletefile(filePath) {
 
 async function transcribeAudio(filePath) {
   console.log("🚀 ~ file: transcribe.js:86 ~ transcribeAudio ~ Transcription In Progress!")
-
-  // Call the OpenAI API to transcribe the audio
-  const response = await openai.createTranscription(
-    fs.createReadStream(filePath),
-    "whisper-1",
-    undefined, // The prompt to use for transcription.
-    "json", // The format of the transcription.
-    1, // Temperature
-    "en" // Language
-  );
-
-  // Parse the response and extract the transcribed text
-  const transcript = response.data.text;
-  console.log(
-    "🚀 ~ file: transcribe.js:45 ~ transcribeAudio ~ response:",
-    transcript
-  );
-
-  return transcript;
+  try {
+    // Call the OpenAI API to transcribe the audio
+    const response = await openai.createTranscription(
+      fs.createReadStream(filePath),
+      "whisper-1",
+      undefined, // The prompt to use for transcription.
+      "json", // The format of the transcription.
+      1, // Temperature
+      "en" // Language
+    );
+  
+    // Parse the response and extract the transcribed text
+    const transcript = response.data.text;
+    console.log(
+      "🚀 ~ file: transcribe.js:45 ~ transcribeAudio ~ response:",
+      transcript
+    );
+  
+    return transcript;
+    
+  } catch (error) {
+    deletefile(filePath);
+    return ''
+  }
 }
 
 module.exports = router;
