@@ -11,7 +11,7 @@ import { ExtractDetailsService } from '../../extractdetails.service';
 })
 export class TitleDetailsComponent implements OnInit, AfterContentInit {
 
-  infoFormGroup: FormGroup;
+  titleFormGroup: FormGroup;
 
   isTitleLoading: boolean = false;
   isDescLoading: boolean = false;
@@ -33,25 +33,25 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
   ngOnInit() {
     this.extractDeatilsService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
-      this.infoFormGroup.patchValue({ title: response.replace('"', '').trim() })
+      this.titleFormGroup.patchValue({ title: response.replace('"', '').trim() })
       this.changeDetectorRef.detectChanges();
     });
     this.extractDeatilsService.getDescriptionObserver().subscribe((response) => {
       this.isDescLoading = false;
-      this.infoFormGroup.patchValue({ description: response.trim() })
+      this.titleFormGroup.patchValue({ description: response.trim() })
       this.changeDetectorRef.detectChanges();
     });
     this.extractDeatilsService.getTagsObserver().subscribe((response) => {  
       this.isTagsLoading = false;
-      this.infoFormGroup.patchValue({ tags: response.join(' #').trim() })
+      this.titleFormGroup.patchValue({ tags: response.join(' #').trim() })
       this.changeDetectorRef.detectChanges();
     });
-    this.infoFormGroup = this.formGroupBuilder.group({
+    this.titleFormGroup = this.formGroupBuilder.group({
       title: ["Chargement...", Validators.required],
       description: ["Chargement...", Validators.required],
       tags: ["Chargement...", Validators.required],
     });
-    this.extractDeatilsService.getVideoMetaData()
+    // this.extractDeatilsService.getVideoMetaData()
   }
 
   ngAfterContentInit() {
@@ -62,7 +62,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
     this.isTitleLoading = true;
     this.extractDeatilsService.updateTitle(
       prompt,
-      this.infoFormGroup.value.title,
+      this.titleFormGroup.value.title,
     );
   }
 
@@ -70,7 +70,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
     this.isDescLoading = true;
     this.extractDeatilsService.updateDescription(
       prompt,
-      this.infoFormGroup.value.description,
+      this.titleFormGroup.value.description,
     );
   }
 
@@ -79,29 +79,21 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
     this.extractDeatilsService.updateTags()
   }
 
-  onSubmitClick() {
-    this.extractDeatilsService.submitInfos(
-      this.infoFormGroup.value.title,
-      this.infoFormGroup.value.description,
-      this.infoFormGroup.value.tags,
-    );
-  }
-
   copyTitle() { 
     this.showTitleBadge = true;
-    this.clipboard.copy(this.infoFormGroup.value.title);
+    this.clipboard.copy(this.titleFormGroup.value.title);
     setTimeout(() => this.showTitleBadge = false, 1000);  
   }
 
   copyDescription() { 
     this.showDescriptionBadge = true;
-    this.clipboard.copy(this.infoFormGroup.value.description); 
+    this.clipboard.copy(this.titleFormGroup.value.description); 
     setTimeout(() => this.showDescriptionBadge = false, 1000); 
   }
 
   copyTags() { 
     this.showTagsBadge = true;
-    this.clipboard.copy(this.infoFormGroup.value.tags); 
+    this.clipboard.copy(this.titleFormGroup.value.tags); 
     setTimeout(() => this.showTagsBadge = false, 1000); 
   }
 }

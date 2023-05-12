@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { FirestoreRepository } from '../../repository/firebase/firestore.repo';
 import { NavigationService } from '../navigation.service';
 import { Observable, Subject, catchError, of } from 'rxjs';
 import { FirebaseUser } from '../../model/user/user.model';
+import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
+import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
 
 const LANGUAGE_PREF = 'language'
 
@@ -14,7 +15,7 @@ export class SessionService {
     private errorSubject = new Subject<string>();
 
     constructor(
-        private fireStoreRepo: FirestoreRepository,
+        private fireAuthRepo: FireAuthRepository,
         private navService: NavigationService
     ) { /** */ }
 
@@ -30,22 +31,31 @@ export class SessionService {
         return localStorage.getItem(LANGUAGE_PREF);
     }
 
-    verifyPurchaseEmail(email: string) {
-        this.fireStoreRepo.verifyPurchaseEmail(email).subscribe({
-            next: (user: FirebaseUser | undefined) => {
-                if (user) {
-                    this.navService.navigateToCopyCat();
-                } else {
-                    this.errorSubject.next('You are not authorized to use this application. Please contact the developer.');
+    verifyEmail(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+        const email = signinSuccessData.authResult.user?.email;
+        console.log("🚀 ~ file: session.service.ts:36 ~ SessionService ~ verifyEmail ~ email:", signinSuccessData.authResult.user)
+
+        if (email !== undefined && email !== '') {
+            this.fireAuthRepo.verifyPurchaseEmail(email!!).subscribe({
+                next: (userExists) => {
+                    if (userExists) {
+                        this.fireAuthRepo.setUserData(signinSuccessData.authResult.user?.toJSON());
+                        console.log("🚀 ~ file: session.service.ts:49 ~ SessionService ~ this.fireAuthRepo.verifyPurchaseEmail ~ PURCHAED: GOING TO COPYCAT")
+                        this.navService.navigateToCopyCat();
+                    } else {
+                        this.fireAuthRepo.signOut();
+                        console.log("🚀 ~ file: session.service.ts:53 ~ SessionService ~ this.fireAuthRepo.verifyPurchaseEmail ~ USER NOT PURCHASED")
+                        this.errorSubject.next('You are not authorized to use this application. Please contact us.');
+                    }
+                },
+                error: (error) => { 
+                    console.log('🔥' + error);
+                    this.fireAuthRepo.signOut();
+                    this.errorSubject.next(error);
                 }
-            },
-            error: (error) => { 
-                console.log(error);
-              this.errorSubject.next(error);
-            },
-            complete: () => { 
-                console.log('complete');
-            }
-        })
+            })
+        } else {
+            this.errorSubject.next('We couldn\'t create your account. Please contact us.');
+        }
     }
 }

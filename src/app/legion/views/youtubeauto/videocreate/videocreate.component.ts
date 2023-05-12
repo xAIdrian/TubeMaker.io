@@ -5,14 +5,14 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { ContentGenerationService } from '../../../service/content/generation.service';
+import { GenerateContentService } from '../../../service/content/generation.service';
 import {
   FormBuilder,
   FormGroup,
   Validators
 } from '@angular/forms';
 import { NavigationService } from '../../../service/navigation.service';
-import{ AutoContentModel } from '../../../model/autocontent.model';
+import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoNiche as VideoNiche } from '../../../model/autocreate/videoniche.model';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 
@@ -53,8 +53,8 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   hasInputError = false;
 
   constructor(
-    private gptService: ContentGenerationService,
-    private contentRepo: AutoContentModel,
+    private gptService: GenerateContentService,
+    private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { ContentGenerationService } from "../../../../service/content/generation.service";
-import{ AutoContentModel } from '../../../../model/autocontent.model';
+import { GenerateContentService } from "../../../../service/content/generation.service";
+import{ AutoContentRepository } from '../../../../repository/content/autocontent.repo';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../../../model/autocreate/videoduration.model";
 
@@ -19,8 +19,8 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
   currentVideoDuration: VideoDuration; 
 
   constructor(
-    private gptService: ContentGenerationService,
-    private contentRepo: AutoContentModel,
+    private gptService: GenerateContentService,
+    private contentRepo: AutoContentRepository,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
     this.currentVideoDuration = contentRepo.getCurrentVideoDuration();

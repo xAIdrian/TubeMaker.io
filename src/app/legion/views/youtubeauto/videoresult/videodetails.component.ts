@@ -13,10 +13,10 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { GptGeneratedMetaData } from '../../../model/gpt/gptgeneratedvideo.model';
-import { ContentAutoService } from '../../../service/content/auto.service';
-import{ AutoContentModel } from '../../../model/autocontent.model';
+import { AutoContentService } from '../../../service/content/autocontent.service';
+import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
+import { VideoMetadata } from 'src/app/legion/model/video/videometadata.model';
 
 @Component({
   selector: 'video-result',
@@ -62,8 +62,8 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   gptResponseTags: string = 'Waiting for tags...';
 
   constructor(
-    private contentService: ContentAutoService,
-    private contentRepo: AutoContentModel,
+    private contentService: AutoContentService,
+    private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -123,7 +123,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     });
 
     this.contentService.getCompleteResultsObserver().subscribe(
-      (response: { meta: GptGeneratedMetaData }) => {
+      (response: { meta: VideoMetadata }) => {
         this.infoFormGroup.setValue({
           title: response.meta.title.replace('"', '').trim(),
           description: response.meta.description.trim(),
@@ -217,11 +217,11 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   }
 
   onInfoSectionClick() {
-    this.contentRepo.submitInfos(
-      this.infoFormGroup.value.title,
-      this.infoFormGroup.value.description,
-      this.infoFormGroup.value.tags,
-    );
+    // this.contentRepo.submitInfos(
+    //   this.infoFormGroup.value.title,
+    //   this.infoFormGroup.value.description,
+    //   this.infoFormGroup.value.tags,
+    // );
   }
 
   goToReview() {

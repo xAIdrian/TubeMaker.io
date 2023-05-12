@@ -1,4 +1,4 @@
-<c-card class="error-container" *ngIf="showErrorState" style="margin-bottom: 1rem;">
+<c-card class="error-container" *ngIf="isErrorVisible" style="margin-bottom: 1rem;">
   <div class="text-area">
       <p>{{ errorText }}</p>
   </div>
@@ -67,6 +67,10 @@
 
     <title-details></title-details>
     <script-details [parentIsLoading]="transcriptIsLoading"></script-details>
+
+    <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+      <button cButton variant="outline" color="dark" (click)="onReset()">Back</button>
+    </div>
 
   </c-card-body>
 </c-card>

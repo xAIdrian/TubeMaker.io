@@ -1,5 +1,7 @@
 export interface FirebaseUser {
+    uid: string;
     email: string;
-    id: number;
-    productId: number;
-}
+    displayName: string;
+    photoURL: string;
+    emailVerified: boolean;
+ }

@@ -1,7 +1,6 @@
 <c-card class="mb-4">
   <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
     <strong>{{ 'video_list.welcome' | translate }}</strong>
-    <button type="button" class="btn btn-primary" (click)="newVideoOnClick()">{{ 'video_list.publish_videos_title' | translate }}</button>
   </div>
   <c-card-body>
     <p class="text-medium-emphasis small">
@@ -11,12 +10,12 @@
       <div cListGroupItem>
         <div class="d-flex justify-content-between align-items-center">
           <div class="title-published">
-            <p class="mb-1">{{ video.title }}</p>
+            <p class="mb-1">{{ video.youtubeVideo.title }}</p>
           </div>
         </div>
         <div class="description">
-          <small>{{ video.channelTitle }}</small>
-          <small class="published">{{ 'video_list.published' | translate }}: {{ video.publishedAt }}</small>
+          <small>{{ video.youtubeVideo.channelTitle }}</small>
+          <small class="published">{{ 'video_list.published' | translate }}: {{ video.youtubeVideo.publishedAt }}</small>
         </div>
       </div>
     </div>

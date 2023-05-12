@@ -1,12 +1,12 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { VideoListComponent } from "./views/youtubeauto/videolist/videolist.component";
+import { VideoListComponent } from "./views/videolist/videolist.component";
 import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreate.component";
 import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails.component";
 import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
 import { ExtractDetailsComponent } from "./views/youtubeextract/extractdetails/extractdetails.component";
-import { TitleDetailsComponent } from "./views/youtubeextract/extractdetails/titledetails/titledetails.component";
+import { CanDeactivateGuard } from "./service/auth/deactivate.guard";
 
 const routes: Routes = [
     {
@@ -26,17 +26,11 @@ const routes: Routes = [
         component: ExtractDetailsComponent,
         data: {
             title: "Transcript"
-        }
+        },
+        canDeactivate: [CanDeactivateGuard]
     },
     {
-        path: "copycat/titles",
-        component: TitleDetailsComponent,
-        data: {
-            title: "Listing"
-        }
-    },
-    {
-        path: "autos",
+        path: "list",
         component: VideoListComponent,
         data: {
             title: "Your Videos"
@@ -44,21 +38,21 @@ const routes: Routes = [
         pathMatch: "prefix"
     },
     {
-        path: "autos/create",
+        path: "auto",
         component: VideoCreateComponent,
         data: {
             title: "Create"
         }
     },
     {
-        path: "autos/details",
+        path: "auto/details",
         component: VideoDetailsComponent,
         data: {
             title: "Details"
         }
     },
     {
-        path: "autos/upload",
+        path: "auto/upload",
         component: VideoUploadComponent,
         data: {
             title: "Upload"

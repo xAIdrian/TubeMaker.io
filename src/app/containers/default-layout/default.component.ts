@@ -42,7 +42,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   private updateNavItems(translate: TranslateService) {
-    console.log("🚀 ~ file: default.component.ts:37 ~ DefaultComponent ~ updateNavItems ~ translate:", translate)
     this.navItems = [
       {
         name: translate.instant('navigation.create'),
@@ -59,7 +58,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
       },
       {
         name: translate.instant('navigation.brand_new'),
-        url: '/maker/autos',
+        url: '/maker/auto',
+        iconComponent: { name: 'cil-media-play' }
+      },
+      {
+        name: translate.instant('navigation.view_videos'),
+        url: '/maker/list',
         iconComponent: { name: 'cil-media-play' }
       },
       {
@@ -94,9 +98,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
 
   onLogoutEvent() {
     if (this.isLoggedIn) {
-      console.log("🚀 ~ LOGGEDIN: default.component.ts:34 ~ DefaultComponent ~ onLogoutEvent ~ onLogoutEvent:")
+      console.log("🚀 ~ onLogoutEvent ~ onLogoutEvent:")
       this.angularFireAuth.signOut()
-      this.router.navigate(['']);
+      this.router.navigate(['./pages/lander']);
     }
   }
 

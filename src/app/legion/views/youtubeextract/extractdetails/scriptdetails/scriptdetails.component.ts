@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { AfterContentInit, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
-import { ContentGenerationService } from "../../../../service/content/generation.service";
+import { GenerateContentService } from "../../../../service/content/generation.service";
 import { ExtractDetailsService } from "../../extractdetails.service";
 
 @Component({
@@ -56,12 +56,13 @@ import { ExtractDetailsService } from "../../extractdetails.service";
                 this.transcriptSections[section.sectionIndex] = updateElement;
                 this.toggleLoading(updateElement);
                 this.changeDetectorRef.detectChanges();
+                this.extractDetailsService.updateScript(this.transcriptSections);
             }
         });
     }
 
     ngAfterContentInit() {
-        this.extractDetailsService.getVideoTranscript();
+        // this.extractDetailsService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
     }
 
@@ -73,10 +74,7 @@ import { ExtractDetailsService } from "../../extractdetails.service";
 
     onDrop(event: CdkDragDrop<string[]>) {
         moveItemInArray(this.transcriptSections, event.previousIndex, event.currentIndex);
-    }
-
-    onScriptSubmit() {
-        this.extractDetailsService.submitScript(this.transcriptSections);
+        this.extractDetailsService.updateScript(this.transcriptSections);
     }
 
     private toggleLoading(section: { isLoading: boolean, section: string }) {

@@ -1,8 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
-import{ AutoContentModel } from '../../../model/autocontent.model';
-import { UserVideo } from '../../../model/video/uservideo.model';
+import{ AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { Router } from '@angular/router';
-import { NavigationService } from '../../../service/navigation.service';
+import { NavigationService } from '../../service/navigation.service';
+import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
+
 @Component({
     selector: 'video-list',
     templateUrl: './videolist.component.html',
@@ -11,11 +12,11 @@ import { NavigationService } from '../../../service/navigation.service';
 })
 export class VideoListComponent implements OnInit, AfterContentInit {
 
-    videos: UserVideo[] = [];
+    videos: YoutubeVideoPage[] = [];
     
     constructor(
         private router: Router,
-        private contentRepo: AutoContentModel,
+        private contentRepo: AutoContentRepository,
         private navigationService: NavigationService,
         private changeDetectorRef: ChangeDetectorRef
     ) { }

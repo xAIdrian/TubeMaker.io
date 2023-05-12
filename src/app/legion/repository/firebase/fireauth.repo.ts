@@ -5,16 +5,20 @@ import {
   isSignInWithEmailLink,
   signInWithEmailLink,
 } from 'firebase/auth';
-import { Observable, of } from 'rxjs';
+import { Observable, from, map, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { FirebaseUser } from '../../model/user/user.model';
+import { PURCHASED_USERS_COL, USERS_COL } from './firebase.constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FireAuthRepository {
-  private userAuthObservable: any;
+  
+  public sessionUser?: FirebaseUser;
 
+  private userAuthObservable: any;
   private actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for this
     // URL must be in the authorized domains list in the Firebase Console.
@@ -33,13 +37,58 @@ export class FireAuthRepository {
   };
 
   constructor(
-    private angularFireAuth: AngularFireAuth
+    private angularFireAuth: AngularFireAuth,
+    private angularFirestore: AngularFirestore
   ) {
     this.userAuthObservable = this.angularFireAuth.authState;
+    this.userAuthObservable.subscribe((user: any) => {
+      if (user) {
+        this.sessionUser = user;
+        this.setUserData(user);
+      } else {
+        this.sessionUser = undefined;
+      }
+    });
   }
 
   isAuthenticated(): Observable<boolean> {
     return of(true);
+    // return of(this.sessionUser === undefined ? false : true);
+  }
+
+  verifyPurchaseEmail(email: string): Observable<boolean> {
+    const docRef = this.angularFirestore.collection(PURCHASED_USERS_COL).doc(email).ref;
+    return from(docRef.get()).pipe(
+      map((doc) => {
+        return doc.exists;
+      })
+    );
+  }
+
+  /* Setting up user data when sign in with username/password, 
+   * sign up with username/password and sign in with social auth  
+   * provider in Firestore database using AngularFirestore + AngularFirestoreDocument service 
+   */
+  setUserData(user: any) {
+    const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
+      `${USERS_COL}/${user.uid}`
+    );
+    const userData: FirebaseUser = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+    };
+    return userRef.set(this.removeUndefinedProperties(user), {
+      merge: true,
+    });
+  }
+
+  // Sign out
+  async signOut() {
+    await this.angularFireAuth.signOut();
+    localStorage.removeItem('user');
   }
 
   sendSignInLinkToEmail(email: string) {
@@ -94,5 +143,14 @@ export class FireAuthRepository {
 
   async logout() {
     this.angularFireAuth.signOut();
+  }
+
+  private removeUndefinedProperties(obj: any): any {
+    return JSON.parse(JSON.stringify(obj, (key, value) => {
+      if (typeof value === 'undefined') {
+        return undefined; // Remove the property
+      }
+      return value;
+    }));
   }
 }

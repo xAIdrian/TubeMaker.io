@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, Subject, concatMap } from 'rxjs';
-import { GptGeneratedMetaData } from '../../model/gpt/gptgeneratedvideo.model';
 
-import { AutoContentModel } from '../../model/autocontent.model';
 import { GptRepository } from '../../repository/gpt.repo';
-import { DurationSection } from '../../model/autocreate/videoduration.model';
-import { ContentModel } from '../../model/common/content.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export abstract class ContentGenerationService {
+export abstract class GenerateContentService {
   
   errorSubject = new Subject<string>();
 
   //field value observables
-  topicSubject = new Subject<String>();
-  titleSubject = new Subject<String>();
-  descriptionSubject = new Subject<String>();
+  topicSubject = new Subject<string>();
+  titleSubject = new Subject<string>();
+  descriptionSubject = new Subject<string>();
   scriptSectionSubject = new Subject<{
     scriptSection: string
     position: string | number
   }>();
-  tagsSubject = new Subject<String[]>();
+  tagsSubject = new Subject<string[]>();
 
   constructor(
     protected gptRepo: GptRepository

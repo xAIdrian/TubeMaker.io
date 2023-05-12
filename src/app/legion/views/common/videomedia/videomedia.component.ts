@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ContentModel } from '../../../model/common/content.model';
+import { ContentRepository } from '../../../repository/content/content.repo';
 import { FormGroup } from '@angular/forms';
 import { VoiceService } from '../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
@@ -34,12 +34,9 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
       this.audioDropdown = content;
     }
   }
-
-  audioFormGroup: FormGroup;
-
   generateAudioLoading = false;
   generatedAudioIsVisible = false;
-  generatedAudioUrl: string;
+  generatedAudioUrl: string = '';
 
   voiceOptions: { name: string; sampleUrl: string }[] = [];
   selectedVoice: { name: string; sampleUrl: string };
@@ -47,7 +44,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
   selectedMediaOption = 'Video';
 
   constructor(
-    protected contentRepo: ContentModel,
+    protected contentRepo: ContentRepository,
     protected voiceService: VoiceService,
     protected navigationService: NavigationService,
     protected translate: TranslateService,
@@ -70,9 +67,6 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.voiceService.getVoices();
-    console.log(
-      '🚀 ~ file: videomedia.component.ts:64 ~ VideoMediaComponent ~ ngAfterContentInit ~ ngAfterContentInit:'
-    );
     this.changeDetectorRef.detectChanges();
   }
 
@@ -92,18 +86,11 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
       return;
     }
 
-    const scriptValue = this.contentRepo.getCompleteScript();
-    if (scriptValue === null || scriptValue === '') {
-      alert('Please enter a script before generating audio');
-      return;
-    }
-
     this.generatedAudioIsVisible = false;
     this.generateAudioLoading = true;
 
     this.voiceService.generateTextToSpeech(
-      this.selectedVoice.name,
-      scriptValue
+      this.selectedVoice.name
     ).subscribe({
       next: (response) => {
         console.log(response)

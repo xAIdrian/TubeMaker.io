@@ -92,6 +92,7 @@ router.post("/summary/:language", async (req, res, next) => {
   res.status(200).json({
     message: "success",
     result: {
+      //we can remove this later
       id: shortid.generate(),
       summary: gptSummary
     }

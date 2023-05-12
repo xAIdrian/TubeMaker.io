@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
-import{ ExtractContentModel } from '../../../model/extractcontent.model';
+import{ ExtractContentRepository } from '../../../repository/content/extractcontent.repo';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
 import { VideoNiche } from '../../../model/autocreate/videoniche.model';
@@ -29,7 +29,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     }
     
     constructor(
-        private contentModel: ExtractContentModel,
+        private contentModel: ExtractContentRepository,
         private extractDetailsService: ExtractDetailsService,
         private _formBuilder: FormBuilder,
         private changeDetectorRef: ChangeDetectorRef
@@ -41,6 +41,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
+        this.extractDetailsService.clearCurrentVideoPage()
         this.changeDetectorRef.detectChanges();
     }
 

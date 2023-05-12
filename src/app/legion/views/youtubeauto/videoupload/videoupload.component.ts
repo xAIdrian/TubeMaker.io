@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationService } from '../../../service/navigation.service';
-import{ AutoContentModel } from '../../../model/autocontent.model';
+import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { ExtractDetailsService } from '../../youtubeextract/extractdetails.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
@@ -30,7 +30,7 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   showScriptBadge = false;
   
   constructor(
-    private contentRepo: AutoContentModel,
+    private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef,
     private youtubeService: ExtractDetailsService,
@@ -46,12 +46,17 @@ export class VideoUploadComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.title = this.contentRepo.getTitle();
-    this.description = this.contentRepo.getDescription();
-    this.tags = this.contentRepo.getTags();
-    this.script = this.contentRepo.getCompleteScript();
-
-    this.changeDetectorRef.detectChanges();
+    this.contentRepo.getMetaData().subscribe({
+      next: (response) => {
+        this.title = response.title;
+        this.description = response.description;
+        this.tags = response.tags.join(' #');
+        this.changeDetectorRef.detectChanges();
+      },
+      error: (error) => {
+        //TODO
+      }
+    })
   }
 
   copyTitle() { 

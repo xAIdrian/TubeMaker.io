@@ -3,7 +3,7 @@ import { VideoMediaComponent } from "../../../common/videomedia/videomedia.compo
 import { TranslateService } from "@ngx-translate/core";
 import { NavigationService } from "../../../../service/navigation.service";
 import { VoiceService } from "../../../../service/voice.service";
-import { AutoContentModel } from "../../../../model/autocontent.model";
+import { AutoContentRepository } from "../../../../repository/content/autocontent.repo";
 
 @Component({
   selector: 'auto-media',
@@ -14,7 +14,7 @@ import { AutoContentModel } from "../../../../model/autocontent.model";
 export class AutoMediaComponent extends VideoMediaComponent {
 
   constructor(
-    contentRepo: AutoContentModel,
+    contentRepo: AutoContentRepository,
     voiceService: VoiceService,
     navigationService: NavigationService,
     translate: TranslateService,

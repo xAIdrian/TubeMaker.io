@@ -54,13 +54,15 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR } from "@angular/fire/compat/auth";
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
   signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     {
-      requireDisplayName: true,
+      requireDisplayName: false,
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
     }
   ],
@@ -89,6 +91,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ...APP_CONTAINERS,
   ],
   imports: [
+    MatDialogModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
