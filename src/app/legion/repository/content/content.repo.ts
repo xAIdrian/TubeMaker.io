@@ -127,4 +127,17 @@ export abstract class ContentRepository {
   clearCurrentPage() {
     this.currentPage = undefined;
   }
+
+  getVideosList(): Observable<YoutubeVideoPage[]> {
+    return this.firestoreRepository
+      .getUsersCollection<YoutubeVideoPage>(this.collectionPath)
+      .pipe(
+        map((documents) => {
+          return documents.map((document) => {
+            return document as YoutubeVideoPage;
+          })
+        }
+      )
+    )
+  }
 }

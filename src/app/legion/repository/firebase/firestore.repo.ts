@@ -78,6 +78,27 @@ export class FirestoreRepository {
     );
   }
 
+  getUsersCollection<T>(
+    collectionPath: string,
+    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
+  ): Observable<T[]> {
+    const collectionRef = this.firestore
+      .collection(USERS_COL)
+      .doc(userId)
+      .collection<T>(collectionPath);
+    return collectionRef.valueChanges().pipe(
+      tap((data) => {
+        if (!environment.production) {
+          console.groupCollapsed(
+            `❤️‍🔥 Firestore Streaming [${collectionPath}] [getUserCollection] [${userId}]`
+          );
+          console.log(data);
+          console.groupEnd();
+        }
+      })
+    );
+  }
+
   getUsersDocumentAsMap(
     collectionPath: string,
     documentKey: string,
