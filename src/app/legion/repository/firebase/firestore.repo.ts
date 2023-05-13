@@ -32,8 +32,11 @@ export class FirestoreRepository {
       .doc(userId)
       .collection(collectionPath)
       .doc<T>();
-      // .doc<T>(documentKey);
+    // The initial creation of our object and the update of the ID
     await docRef.set(this.sanitizeObject(data));
+    data = this.update(data, 'id', docRef.ref.id)
+    // After the ID is updated, we update the object again
+    await this.updateUsersDocument<T>(collectionPath, docRef.ref.id, data, userId);
 
     if (!environment.production) {
       console.groupCollapsed(
@@ -42,7 +45,6 @@ export class FirestoreRepository {
       console.log(`❤️‍🔥 [${userId}]`, data);
       console.groupEnd();
     }
-    data = this.update(data, 'id', docRef.ref.id)
     return data;
   }
 

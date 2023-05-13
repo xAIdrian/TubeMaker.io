@@ -48,6 +48,8 @@ export class YoutubeDataRepository {
             niche: niche,
             publishedAfter: this.getTwoWeeksAgoIsoDate(),
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
     };
     return from(axios(config)).pipe(
         map((response) => { return response.data;  })

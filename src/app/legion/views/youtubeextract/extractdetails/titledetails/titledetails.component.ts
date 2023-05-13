@@ -64,7 +64,11 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
     if (changes['parentVideoId']) {
       this.parentVideoId = changes['parentVideoId'].currentValue;
       if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
-        this.extractDeatilsService.getVideoMetaData();
+        if (this.parentVideoId == '') {
+          this.extractDeatilsService.getNewVideoMetaData();
+        } else {
+          this.extractDeatilsService.getVideoMetaData();
+        }
       }
     }
   }

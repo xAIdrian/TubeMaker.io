@@ -135,7 +135,10 @@ async function transcribeAudio(filePath) {
       undefined, // The prompt to use for transcription.
       "json", // The format of the transcription.
       1, // Temperature
-      "en" // Language
+      "en", // Language
+      {
+        maxBodyLength: 25 * 1024 * 1024,
+      },
     );
     // Parse the response and extract the transcribed text
     const transcript = response.data.text;

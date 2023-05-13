@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import{ HomeService } from './home.service';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
+import { match } from 'assert';
 
 @Component({
     selector: 'home',
@@ -47,6 +48,13 @@ throw new Error('Method not implemented.');
     }
 
     onItemSelectedEvent(video: YoutubeVideo) {
-        //here we take the video id and match it with the video id in the list of pages
+        console.log("🚀 ~ file: home.component.ts:51 ~ HomeComponent ~ onItemSelectedEvent ~ video:", video)
+        const matchingPage = this.videos.filter((videoPage) => { 
+            console.log("🚀 ~ file: home.component.ts:52 ~ HomeComponent ~ matchingPage ~ videoPage:", videoPage)
+            return videoPage.youtubeVideo.id === video.id 
+        } )[0];
+        if (matchingPage !== undefined) {
+            this.homeService.videoPageSelected(matchingPage.id ?? '');
+        }
     }
 }

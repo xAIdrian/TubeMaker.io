@@ -8,7 +8,7 @@ import { TitleDetailsComponent } from "./titledetails/titledetails.component";
 import { ScriptDetailsComponent } from "./scriptdetails/scriptdetails.component";
 import { Observable, endWith, filter, flatMap, interval, of, takeUntil, takeWhile, timer } from "rxjs";
 import { VideoMediaComponent } from "../../common/videomedia/videomedia.component";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 import { YoutubeVideoPage } from "src/app/legion/model/youtubevideopage.model";
 
 @Component({
@@ -18,8 +18,6 @@ import { YoutubeVideoPage } from "src/app/legion/model/youtubevideopage.model";
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
-
-    hasUnsavedChanges = true;
 
     isKickbackVisible = false;
     kickbackText = 'Are you sure you want to return to the home page?';
@@ -46,21 +44,23 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
         // if (localStorage.getItem('detailsId') !== null && localStorage.getItem('detailsId') !== '') {
         //     console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ ngOnInit ~ localStorage.getItem('detailsId'):", localStorage.getItem('detailsId'))
         //     pathId = localStorage.getItem('detailsId')!!;
-        // } else {
-        //     console.log("🚀 ~ file: extractdetails.component.ts:51 ~ ExtractDetailsComponent ~ ngOnInit ~ this.activatedRoute.snapshot.paramMap.get('id'):", this.activatedRoute.snapshot.paramMap.get('id'))
-        //     pathId = this.activatedRoute.snapshot.paramMap.get('id') ?? ''
-        // }
-
-        this.extractDetailsService.getCurrentPage(pathId).subscribe({
-            next: (page: YoutubeVideoPage) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:62 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ page:", page)
-                this.currentPageId = page.id ?? '';
-            },
-            error: (error: any) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:65 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ error:", error)
-                this.isErrorVisible = true;
-                this.errorText = error;
-            }
+        // } 
+        this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+            console.log("🚀 ~ file: extractdetails.component.ts:49 ~ ExtractDetailsComponent ~ this.activatedRoute.paramMap.subscribe ~ params:", params)
+            if (params.has('id')) {
+                pathId = params.get('id')!!;
+            } 
+            this.extractDetailsService.getCurrentPage(pathId).subscribe({
+                next: (page: YoutubeVideoPage) => {
+                    console.log("🚀 ~ file: extractdetails.component.ts:62 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ page:", page)
+                    this.currentPageId = page.id ?? '';
+                },
+                error: (error: any) => {
+                    console.log("🚀 ~ file: extractdetails.component.ts:65 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ error:", error)
+                    this.isErrorVisible = true;
+                    this.errorText = error;
+                }
+            });
         });
 
         this.setupObservers();
@@ -113,10 +113,8 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
         this.isKickbackVisible = !this.isKickbackVisible;
     }
 
-    confirmToReturn() {
-        this.hasUnsavedChanges = false;
-        this.isKickbackVisible = false
-        this.extractDetailsService.navigateHome();
+    isCurrentVideoPresent() {
+        return this.extractDetailsService.isCurrentVideoPresent();
     }
 
     private setupFormControls() {

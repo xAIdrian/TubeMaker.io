@@ -41,4 +41,9 @@ export class HomeService {
       }
     });
   }
+
+  videoPageSelected(pageId: string) {
+    console.log("🚀 ~ file: home.service.ts:46 ~ HomeService ~ videoPageSelected ~ videoPageSelected:", pageId)
+    this.navigationService.navigateToExtractDetails(pageId);
+  }
 }

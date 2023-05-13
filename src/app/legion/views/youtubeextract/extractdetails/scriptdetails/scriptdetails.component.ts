@@ -70,7 +70,11 @@ import { ExtractDetailsService } from "../../extractdetails.service";
         if (changes['parentVideoId']) {
             this.parentVideoId = changes['parentVideoId'].currentValue;
             if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
-                this.extractDetailsService.getVideoTranscript();
+                if (this.parentVideoId === '') {
+                    this.extractDetailsService.getNewVideoTranscript();
+                } else {
+                    this.extractDetailsService.getVideoTranscript();
+                }
             }
         }
     }

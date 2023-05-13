@@ -94,11 +94,14 @@ export class ExtractDetailsService {
   }
 
   getCurrentVideoUrl(): string {
+    if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
+      this.navigationService.navigateToCopyCat();
+    }
     return `https://www.youtube.com/embed/${this.currentCopyCatVideo.id}`
   }
 
-  downloadVideoWithUrl(url: any) {
-    throw new Error('Method not implemented.');
+  isCurrentVideoPresent() {
+    return this.currentCopyCatVideo !== null && this.currentCopyCatVideo !== undefined;
   }
 
   searchYoutubeVideos(niche: string) {
@@ -142,7 +145,7 @@ export class ExtractDetailsService {
     });
   }
 
-  getVideoTranscript() {
+  getNewVideoTranscript() {
     if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
       this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
       return; // uncomment for prod
@@ -183,6 +186,30 @@ export class ExtractDetailsService {
     });
   }
 
+  getVideoTranscript() {
+    this.extractContentRepo.getCompleteScript().subscribe({
+      next: (script) => {
+        if (script === null || script === undefined || script.length === 0) {
+          this.getNewVideoTranscript();
+          return;
+        } else {
+          const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
+          const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(script)
+
+          splitParagraphs.forEach((paragraph) => {
+            uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
+          });
+
+          this.videoTranscriptSubject.next(uiPreppedResponse);
+          this.isTranscriptLoadingSubject.next(false);
+        }
+      },
+      error: (err) => {
+        this.errorSubject.next(err);
+      }
+    });
+  }
+
   updateNewScriptIndex(prompt: string, section: string, index: number) {
     this.generationService.optimizeNewScriptIndex(prompt, section, index);
   }
@@ -201,7 +228,7 @@ export class ExtractDetailsService {
     });
   }
 
-  getVideoMetaData() {
+  getNewVideoMetaData() {
     if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
       this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
       return
@@ -219,6 +246,19 @@ export class ExtractDetailsService {
       this.currentCopyCatVideo.title,
       this.currentCopyCatVideo.description
     );
+  }
+
+  getVideoMetaData() {
+    this.extractContentRepo.getMetaData().subscribe({
+      next: (response) => {
+        this.generationService.titleSubject.next(response.title);
+        this.generationService.descriptionSubject.next(response.description);
+        this.generationService.tagsSubject.next(response.tags);
+      },
+      error: (err) => {
+        this.errorSubject.next(err);  
+      }
+    });
   }
 
   updateTitle(prompt: string, current: string) { 
