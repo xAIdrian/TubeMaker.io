@@ -18,12 +18,12 @@ export class HomeComponent implements OnInit, AfterContentInit {
     
     constructor(
         private homeService: HomeService,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
     ) { }
 
     ngOnInit() {
         this.homeService.getCompleteVideoListObserver().subscribe((response) => {
-            this.isLoading = false;
+            this.isLoading = false
             this.videos = response;
             this.youtubeVideos = this.videos.map((videoPage) => {
                 return videoPage.youtubeVideo;
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
         });
     }
 
-    ngAfterContentInit(): void {
+    ngAfterContentInit() {
         this.homeService.getCompleteVideoList();
         this.changeDetectorRef.detectChanges();
     }

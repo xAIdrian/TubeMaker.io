@@ -3,7 +3,6 @@ import { ContentRepository } from './content.repo';
 import { Observable, catchError, concatMap, from, map, of, tap } from 'rxjs';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { EXTRACT_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
-import * as shortId  from 'shortid';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
       
 @Injectable({
@@ -15,13 +14,11 @@ export class ExtractContentRepository extends ContentRepository {
 
   setCurrentPageObject(newYoutubeVideo: YoutubeVideo): Observable<YoutubeVideoPage> {
     const newDoc: YoutubeVideoPage = {
-      id: shortId.generate().toString(),
       youtubeVideo: newYoutubeVideo
     } 
     console.log(EXTRACT_YOUTUBE_VIDEO_PAGE_COL)
     return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
       'extract_pages',
-      newDoc.id,
       newDoc
     )).pipe(
       tap((page) => this.currentPageSubject.next(page)),

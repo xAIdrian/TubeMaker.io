@@ -85,6 +85,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     onVideoOptionSelected(niche: VideoNiche) {
         this.selectedVideoNiche = niche;
         this.isLoading = true;
+        this.youtubeVideos = [];
         this.extractDetailsService.searchYoutubeVideos(niche.value);
     }
 

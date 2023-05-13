@@ -97,3 +97,13 @@ div.stretchy-wrapper>div {
     right: 0;
 
 }
+
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    height: 80vh;
+    /* Set the container height to occupy the full viewport height */
+}

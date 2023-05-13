@@ -23,7 +23,7 @@ export class FirestoreRepository {
   // Create a single data object under a user ID
   async createUsersDocument<T>(
     collectionPath: string,
-    documentKey: string,
+    // documentKey: string,
     data: T,
     userId: string = this.fireAuthRepository.sessionUser?.uid || ''
   ): Promise<T> {
@@ -31,7 +31,8 @@ export class FirestoreRepository {
       .collection(USERS_COL)
       .doc(userId)
       .collection(collectionPath)
-      .doc<T>(documentKey);
+      .doc<T>();
+      // .doc<T>(documentKey);
     await docRef.set(this.sanitizeObject(data));
     if (!environment.production) {
       console.groupCollapsed(

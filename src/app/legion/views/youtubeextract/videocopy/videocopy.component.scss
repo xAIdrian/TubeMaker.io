@@ -52,15 +52,16 @@ mat-button-toggle-group {
     padding-top: 1rem;
 }
 
-.empty-state {
+.center-container {
     margin: 0;
     padding: 0;
     display: block;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 80vh;
     text-align: center;
     orientation: vertical;
+    transform: translateY(20%);
 
     h1 {
         font-size: 3rem;
