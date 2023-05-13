@@ -4,7 +4,7 @@ import { VideoNiche } from "./autocreate/videoniche.model";
 import { VideoDuration } from "./autocreate/videoduration.model";
 
 export interface YoutubeVideoPage {
-    id: string;
+    id?: string;
 
     youtubeVideo: YoutubeVideo;
     metadata?: VideoMetadata;

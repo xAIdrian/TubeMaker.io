@@ -48,12 +48,11 @@ export class YoutubeDataRepository {
             niche: niche,
             publishedAfter: this.getTwoWeeksAgoIsoDate(),
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
     };
     return from(axios(config)).pipe(
-        map((response) => {
-            console.log("🚀 ~ file: youtubedata.repo.ts:54 ~ YoutubeDataRepository ~ map ~ response:", response.data)
-            return response.data;
-        })
+        map((response) => { return response.data;  })
     );
   }
 

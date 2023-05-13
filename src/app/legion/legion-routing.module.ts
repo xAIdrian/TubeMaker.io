@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { VideoListComponent } from "./views/videolist/videolist.component";
+import { HomeComponent } from "./views/home/home.component";
 import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreate.component";
 import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails.component";
 import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
@@ -30,8 +30,16 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateGuard]
     },
     {
+        path: "copycat/details/:id",
+        component: ExtractDetailsComponent,
+        data: {
+            title: "Transcript"
+        },
+        canDeactivate: [CanDeactivateGuard]
+    },
+    {
         path: "list",
-        component: VideoListComponent,
+        component: HomeComponent,
         data: {
             title: "Your Videos"
         },

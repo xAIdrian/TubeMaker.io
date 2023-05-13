@@ -12,8 +12,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AUTO_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
-import * as shortId from 'shortid';
-import { th } from 'date-fns/locale';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +40,6 @@ export class AutoContentRepository extends ContentRepository {
 
   setWorkingPageObject(): Observable<YoutubeVideoPage> {
     const newDoc = { 
-      id: shortId.generate().toString(),
       structuredScript: new Map<string, string>([
         //controlName -> script section
         ['introduction', ''],
@@ -56,7 +53,6 @@ export class AutoContentRepository extends ContentRepository {
     } as YoutubeVideoPage;
     return from(this.firestoreRepository.createUsersDocument(
       this.collectionPath,
-      newDoc.id,
       newDoc
     ))
   }

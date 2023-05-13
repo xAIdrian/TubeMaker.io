@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { AfterContentInit, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
+import { AfterContentInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { GenerateContentService } from "../../../../service/content/generation.service";
 import { ExtractDetailsService } from "../../extractdetails.service";
 
@@ -7,9 +7,10 @@ import { ExtractDetailsService } from "../../extractdetails.service";
     selector: 'script-details',
     templateUrl: './scriptdetails.component.html',
     styleUrls: ['./scriptdetails.component.scss']
-}) export class ScriptDetailsComponent implements AfterContentInit, OnInit {
+}) export class ScriptDetailsComponent implements AfterContentInit, OnInit, OnChanges {
 
     @Input() parentIsLoading: boolean;
+    @Input() parentVideoId: string;
 
     transcriptSections: { isLoading: boolean, section: string }[] = [];
 
@@ -25,7 +26,6 @@ import { ExtractDetailsService } from "../../extractdetails.service";
     ngOnInit() {
         this.extractDetailsService.getErrorObserver().subscribe({
             next: (error) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", error)
                 this.showErrorToast = true;
                 this.errorToastText = error;
                 this.changeDetectorRef.detectChanges();
@@ -62,8 +62,21 @@ import { ExtractDetailsService } from "../../extractdetails.service";
     }
 
     ngAfterContentInit() {
-        // this.extractDetailsService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        console.log(changes);
+        if (changes['parentVideoId']) {
+            this.parentVideoId = changes['parentVideoId'].currentValue;
+            if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
+                if (this.parentVideoId === '') {
+                    this.extractDetailsService.getNewVideoTranscript();
+                } else {
+                    this.extractDetailsService.getVideoTranscript();
+                }
+            }
+        }
     }
 
     onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
 import { VideoMediaComponent } from "../../../common/videomedia/videomedia.component";
 import { TranslateService } from "@ngx-translate/core";
 import { NavigationService } from "../../../../service/navigation.service";

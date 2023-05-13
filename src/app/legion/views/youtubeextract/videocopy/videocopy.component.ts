@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import{ ExtractContentRepository } from '../../../repository/content/extractcontent.repo';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
@@ -19,8 +19,8 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
 
     nicheFormGroup: FormGroup;
 
+    youtubeVideos: YoutubeVideo[] = [];
     videoNiches: VideoNiche[] = [];
-    searchVideos: YoutubeVideo[] = [];
     selectedVideoNiche: VideoNiche = {
         name: '',
         header: '',
@@ -66,10 +66,8 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         });
         this.extractDetailsService.getYoutubeVideosObserver().subscribe({
             next: (videos: YoutubeVideo[]) => {
-                console.log("🚀 ~ file: videocopy.component.ts:64 ~ VideoCopyComponent ~ this.extractDetailsService.getYoutubeVideosObserver ~ videos:", videos)
-                console.log(videos);
                 this.isLoading = false;
-                this.searchVideos = videos;
+                this.youtubeVideos = videos;
             },
             complete: () => {
                 this.isLoading = false;
@@ -78,22 +76,27 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         });
     }
 
-    private setupFormGroups() {
-        this.nicheFormGroup = this._formBuilder.group({
-            selectedNiche: ['', Validators.required]
-        });
+    onUrlDownload() {
+        this.extractDetailsService.downloadVideoWithUrl(this.nicheFormGroup.value.url);
     }
 
     onVideoOptionSelected(niche: VideoNiche) {
         this.selectedVideoNiche = niche;
-        this.searchVideos = [ /** */ ];
         this.isLoading = true;
+        this.youtubeVideos = [];
         this.extractDetailsService.searchYoutubeVideos(niche.value);
     }
 
-    onCopyCatClick(video: YoutubeVideo) {
+    onItemSelectedEvent(video: YoutubeVideo) {
         if (video !== undefined) {
             this.extractDetailsService.setCopyCatVideoId(video);
         }
+    }
+
+    private setupFormGroups() {
+        this.nicheFormGroup = this._formBuilder.group({
+            url : [''],
+            selectedNiche: ['', Validators.required]
+        });
     }
 }

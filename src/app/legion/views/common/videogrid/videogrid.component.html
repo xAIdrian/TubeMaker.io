@@ -1,0 +1,21 @@
+<!-- Video Grid List -->
+<div class="grid-container" style="margin: 1rem;">
+  <div class="grid-item" cListGroup *ngFor="let video of videos" style="margin-top: 1rem;">
+    <!-- Thumbnail Formatter -->
+    <div class="stretchy-wrapper">
+      <div class="hover-overlay">
+        <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onVideoClick(video)">Copy
+          Cat</button>
+        <img class="myimageoverlap" [src]="video.thumbnailUrl" alt="Responsive image"
+          style="overflow: hidden; width:100%;" />
+      </div>
+    </div>
+    <!-- Thumbnail Text -->
+    <div style="padding: 1rem;">
+      <h5>{{ video.title }}</h5>
+      <p class="text-mediumemphasis" style="margin: 0">@{{ video.channelTitle }}</p>
+      <p class="text-medium-emphasis small" class="published">{{ 'video_list.published' | translate }}: {{
+        video.publishedAt }}</p>
+    </div>
+  </div>
+</div>
