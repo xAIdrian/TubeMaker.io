@@ -30,6 +30,14 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateGuard]
     },
     {
+        path: "copycat/details/:id",
+        component: ExtractDetailsComponent,
+        data: {
+            title: "Transcript"
+        },
+        canDeactivate: [CanDeactivateGuard]
+    },
+    {
         path: "list",
         component: HomeComponent,
         data: {

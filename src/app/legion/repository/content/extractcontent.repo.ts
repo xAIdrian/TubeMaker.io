@@ -16,7 +16,6 @@ export class ExtractContentRepository extends ContentRepository {
     const newDoc: YoutubeVideoPage = {
       youtubeVideo: newYoutubeVideo
     } 
-    console.log(EXTRACT_YOUTUBE_VIDEO_PAGE_COL)
     return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
       'extract_pages',
       newDoc

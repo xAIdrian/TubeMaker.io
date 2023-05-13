@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-const PARA_LENGTH = 600;
+const PARA_LENGTH = 1000;
 
 @Injectable({
     providedIn: 'root',
@@ -31,21 +31,20 @@ export class TextSplitUtility {
         const punct = words?.match(/[\.\?!][^\w\s]*/)?.[0];
         const text = words && punct ? words + punct : '';
     
-        if (text && punct && punct.startsWith('?')) {
-          // sentence is a question, force into own paragraph
-          if (para) {
-            // close prev paragraph
-            ret.push(para);
-            para = '';
-          }
-          ret.push(text); // new paragraph is just the question
-          continue;
-        }
+        // if (text && punct && punct.startsWith('?')) {
+        //   // sentence is a question, force into own paragraph
+        //   if (para) {
+        //     // close prev paragraph
+        //     ret.push(para);
+        //     para = '';
+        //   }
+        //   ret.push(text); // new paragraph is just the question
+        //   continue;
+        // }
         if (para) {
           const commaPos = text.indexOf(',');
-    
-          if (para.length + text.length > PARA_LENGTH // hit length limit on paragraph
-            || (commaPos !== -1 && commaPos < 10)) { // sentence starts with introductory word, probable new thought/paragraph
+          //hit the pretermined length
+          if (para.length + text.length > PARA_LENGTH) { 
             ret.push(para);
             para = '';
           }

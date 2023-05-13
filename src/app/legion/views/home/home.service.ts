@@ -36,7 +36,9 @@ export class HomeService {
         const joinedList = [...firstList, ...secondList];
         this.completeVideoListSubject.next(joinedList);
       },
-      error: (error) => {}
+      error: (error) => {
+        this.errorSubject.next(error);
+      }
     });
   }
 }

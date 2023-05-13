@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ExtractDetailsService } from '../../extractdetails.service';
@@ -9,8 +9,10 @@ import { ExtractDetailsService } from '../../extractdetails.service';
   styleUrls: ['./titledetails.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class TitleDetailsComponent implements OnInit, AfterContentInit {
+export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChanges {
 
+  @Input() parentVideoId: string;
+  
   titleFormGroup: FormGroup;
 
   isTitleLoading: boolean = false;
@@ -51,11 +53,20 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit {
       description: ["Chargement...", Validators.required],
       tags: ["Chargement...", Validators.required],
     });
-    this.extractDeatilsService.getVideoMetaData()
   }
 
   ngAfterContentInit() {
     this.changeDetectorRef.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
+    if (changes['parentVideoId']) {
+      this.parentVideoId = changes['parentVideoId'].currentValue;
+      if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
+        this.extractDeatilsService.getVideoMetaData();
+      }
+    }
   }
 
   onTitleImproveClick(prompt: string) {

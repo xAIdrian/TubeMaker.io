@@ -76,10 +76,8 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         });
     }
 
-    private setupFormGroups() {
-        this.nicheFormGroup = this._formBuilder.group({
-            selectedNiche: ['', Validators.required]
-        });
+    onUrlDownload() {
+        this.extractDetailsService.downloadVideoWithUrl(this.nicheFormGroup.value.url);
     }
 
     onVideoOptionSelected(niche: VideoNiche) {
@@ -93,5 +91,12 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         if (video !== undefined) {
             this.extractDetailsService.setCopyCatVideoId(video);
         }
+    }
+
+    private setupFormGroups() {
+        this.nicheFormGroup = this._formBuilder.group({
+            url : [''],
+            selectedNiche: ['', Validators.required]
+        });
     }
 }

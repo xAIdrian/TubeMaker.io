@@ -61,12 +61,12 @@
       </div>
       
       <div class="col-1">
-        <extract-media></extract-media>
+        <extract-media [parentVideoId]="currentPageId"></extract-media>
       </div>
     </div>
 
-    <title-details></title-details>
-    <script-details [parentIsLoading]="transcriptIsLoading"></script-details>
+    <title-details [parentVideoId]="currentPageId"></title-details>
+    <script-details [parentIsLoading]="transcriptIsLoading" [parentVideoId]="currentPageId"></script-details>
 
     <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
       <button cButton variant="outline" color="dark" (click)="onReset()">Back</button>

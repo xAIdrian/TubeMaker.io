@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class NavigationService {
-  navigateToCopyCatMedia() {
-    throw new Error('Method not implemented.');
-  }
   
-  constructor(private router: Router) {
-
-  }
+  constructor(
+    private router: Router
+  ) { /** */ }
   
   navigateToCreateVideo() {
     this.router.navigate(['maker/auto']);
@@ -33,8 +31,13 @@ export class NavigationService {
     this.router.navigate(['maker/copycat']);
   }
 
-  navigateToExtractDetails() {
-    this.router.navigate(['maker/copycat/details']);
+  navigateToExtractDetails(id: string = '') {
+    if (id === '') {
+      this.router.navigate(['maker/copycat/details']);
+    } else {
+      // localStorage.setItem('detailsId', id);
+      this.router.navigate(['maker/copycat/details', id]);
+    }
   }
 
   navigateToTitleDetails() {

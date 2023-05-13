@@ -7,16 +7,11 @@
 
 <!-- Main Body -->
 <c-card>
+  <div class="d-flex justify-content-between align-items-center" style="margin-top: 1rem; margin-left: 1rem;">
+    <h5>Copy Popular Videos</h5>
+  </div>
   <c-card-body style="min-height: 80vh">
     <form [formGroup]="nicheFormGroup">
-
-      <!-- Search Bar -->
-      <c-input-group class="mb-3" style="padding: 1rem;">
-        <button cButton color="primary" id="button-addon1" type="button" variant="outline">
-          <svg cIcon name="cilMagnifyingGlass"></svg>
-        </button>
-        <input aria-describedby="button-addon1" aria-label="Search bar" cFormControl placeholder="Search..." />
-      </c-input-group>
 
       <!-- Niche Selection -->
       <mat-button-toggle-group formControlName="selectedNiche">

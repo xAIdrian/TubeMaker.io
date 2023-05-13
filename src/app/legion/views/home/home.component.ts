@@ -10,6 +10,12 @@ import { YoutubeVideo } from '../../model/video/youtubevideo.model';
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class HomeComponent implements OnInit, AfterContentInit {
+newCopyCat() {
+throw new Error('Method not implemented.');
+}
+newBrandNew() {
+throw new Error('Method not implemented.');
+}
 
     isLoading = true;
 
@@ -36,7 +42,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit() {
-        this.homeService.getCompleteVideoList();
+        this.homeService.getCompleteVideoList()
         this.changeDetectorRef.detectChanges();
     }
 

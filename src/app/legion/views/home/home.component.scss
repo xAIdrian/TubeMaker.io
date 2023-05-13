@@ -29,6 +29,7 @@
 .row {
     display: flex;
     flex-wrap: wrap;
+    orientation: horizontal;
 }
 
 .col-3 {
@@ -98,12 +99,14 @@ div.stretchy-wrapper>div {
 
 }
 
-.centered-container {
-    display: flex;
+.center-container {
+    display: block;
     justify-content: center;
     align-items: center;
 
     text-align: center;
     height: 80vh;
+
+    transform: translateY(20%);
     /* Set the container height to occupy the full viewport height */
 }

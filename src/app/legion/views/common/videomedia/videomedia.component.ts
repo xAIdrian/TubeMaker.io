@@ -4,7 +4,10 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { ContentRepository } from '../../../repository/content/content.repo';
@@ -21,7 +24,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./videomedia.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoMediaComponent implements OnInit, AfterContentInit {
+export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges {
 
   @ViewChild('audioPlayer', {static: false}) audioPlayer: ElementRef;
   private audioDropdown: AudioDropdownComponent;
@@ -34,6 +37,8 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
       this.audioDropdown = content;
     }
   }
+  @Input() parentVideoId: string;
+  
   generateAudioLoading = false;
   generatedAudioIsVisible = false;
   generatedAudioUrl: string = '';
@@ -51,7 +56,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
     protected changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.voiceService.getErrorObserver().subscribe((response) => {
       this.generateAudioLoading = false;
       alert(response);
@@ -63,11 +68,26 @@ export class VideoMediaComponent implements OnInit, AfterContentInit {
     this.translate.onLangChange.subscribe(() => {
       this.voiceService.getVoices();
     });
+    this.contentRepo.getGeneratedAudioUrlObserver().subscribe((response) => {
+      this.generatedAudioUrl = response;
+      this.changeDetectorRef.detectChanges();
+    });
   }
 
-  ngAfterContentInit(): void {
+  ngAfterContentInit() {
     this.voiceService.getVoices();
     this.changeDetectorRef.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
+    if (changes['parentVideoId']) {
+      // Perform any additional logic or update the view as needed
+      this.parentVideoId = changes['parentVideoId'].currentValue;
+      if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
+        this.contentRepo.getGeneratedAudioUrl(this.parentVideoId)
+      }
+    }
   }
 
   onVoiceSelected(voice: { name: string, sampleUrl: string }) {

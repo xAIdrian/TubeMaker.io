@@ -8,6 +8,8 @@ import { TitleDetailsComponent } from "./titledetails/titledetails.component";
 import { ScriptDetailsComponent } from "./scriptdetails/scriptdetails.component";
 import { Observable, endWith, filter, flatMap, interval, of, takeUntil, takeWhile, timer } from "rxjs";
 import { VideoMediaComponent } from "../../common/videomedia/videomedia.component";
+import { ActivatedRoute } from "@angular/router";
+import { YoutubeVideoPage } from "src/app/legion/model/youtubevideopage.model";
 
 @Component({
     selector: 'extract-details',
@@ -30,13 +32,37 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
     isLinear: any;
     videoEmbedUrl: SafeResourceUrl;
 
+    currentPageId: string;
+
     constructor(
         private extractDetailsService: ExtractDetailsService,
         private sanitizer: DomSanitizer,
+        private activatedRoute: ActivatedRoute, 
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
     
     ngOnInit(): void {
+        let pathId: string = '';
+        // if (localStorage.getItem('detailsId') !== null && localStorage.getItem('detailsId') !== '') {
+        //     console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ ngOnInit ~ localStorage.getItem('detailsId'):", localStorage.getItem('detailsId'))
+        //     pathId = localStorage.getItem('detailsId')!!;
+        // } else {
+        //     console.log("🚀 ~ file: extractdetails.component.ts:51 ~ ExtractDetailsComponent ~ ngOnInit ~ this.activatedRoute.snapshot.paramMap.get('id'):", this.activatedRoute.snapshot.paramMap.get('id'))
+        //     pathId = this.activatedRoute.snapshot.paramMap.get('id') ?? ''
+        // }
+
+        this.extractDetailsService.getCurrentPage(pathId).subscribe({
+            next: (page: YoutubeVideoPage) => {
+                console.log("🚀 ~ file: extractdetails.component.ts:62 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ page:", page)
+                this.currentPageId = page.id ?? '';
+            },
+            error: (error: any) => {
+                console.log("🚀 ~ file: extractdetails.component.ts:65 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ error:", error)
+                this.isErrorVisible = true;
+                this.errorText = error;
+            }
+        });
+
         this.setupObservers();
         this.setupFormControls();
     }

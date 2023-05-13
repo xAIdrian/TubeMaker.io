@@ -79,7 +79,7 @@ router.post("", async (req, res) => {
               translation = await translationService.translateText(transcription);
 
               if (translation !== undefined && translation !== '') {
-                console.log("🚀 ~ file: transcribe.js:82 ~ translation:")
+                console.log("🚀 ~ file: transcribe.js:82 ~ translation:", translation)
                 res.status(200).json({
                   message: "success",
                   result: {
@@ -94,7 +94,7 @@ router.post("", async (req, res) => {
                 return;
               }
             } else {
-              console.log("🔥 ~ file: transcribe.js:82 ~ translation:")
+              console.log("🔥 ~ file: transcribe.js:97 ~ transcription:", translation)
               res.status(200).json({
                 message: "success",
                 result: {
@@ -137,16 +137,9 @@ async function transcribeAudio(filePath) {
       1, // Temperature
       "en" // Language
     );
-  
     // Parse the response and extract the transcribed text
     const transcript = response.data.text;
-    console.log(
-      "🚀 ~ file: transcribe.js:45 ~ transcribeAudio ~ response:",
-      transcript
-    );
-  
     return transcript;
-    
   } catch (error) {
     console.log("🚀 ~ file: transcribe.js:151 ~ transcribeAudio ~ error:", error)
     deletefile(filePath);
