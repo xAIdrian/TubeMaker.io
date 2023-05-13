@@ -37,7 +37,7 @@ import {
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IconModule } from '@coreui/icons-angular';
 import { LegionRoutingModule } from './legion-routing.module';
-import { VideoListComponent } from './views/videolist/videolist.component';
+import { HomeComponent } from './views/home/home.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './views/youtubeauto/videocreate/videocreate.component';
 import { VideoDetailsComponent } from './views/youtubeauto/videoresult/videodetails.component';
@@ -55,6 +55,8 @@ import { TitleDetailsComponent } from './views/youtubeextract/extractdetails/tit
 import { VideoMediaComponent } from './views/common/videomedia/videomedia.component';
 import { ConfirmationDialogComponent } from './views/common/confirmationdialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { VideoGridComponent } from './views/common/videogrid/videogrid.component';
+import { StatsRowComponent } from './views/common/statsrow/statsrow.component';
 
 @NgModule({
     providers: [{
@@ -63,7 +65,7 @@ import { MatDialogModule } from '@angular/material/dialog';
         multi: true
     }],
     declarations: [
-        VideoListComponent,
+        HomeComponent,
         VideoCreateComponent,
         VideoDetailsComponent,
         VideoUploadComponent,
@@ -76,7 +78,9 @@ import { MatDialogModule } from '@angular/material/dialog';
         ExtractDetailsComponent,
         ScriptDetailsComponent,
         TitleDetailsComponent,
-        ConfirmationDialogComponent
+        ConfirmationDialogComponent,
+        VideoGridComponent,
+        StatsRowComponent
     ],
     imports: [
         DragDropModule,

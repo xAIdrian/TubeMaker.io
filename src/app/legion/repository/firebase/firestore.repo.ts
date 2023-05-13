@@ -151,7 +151,7 @@ export class FirestoreRepository {
       console.groupEnd();
     }
     return new Promise<boolean>((resolve, reject) => {
-      docRef.update(this.sanitizeObject(data)
+      docRef.update(this.sanitizeObject(data))
         .then(() => {
           console.log('❤️‍🔥 Request succeeded');
           resolve(true); // Resolving the Promise with a boolean value indicating success
@@ -159,7 +159,7 @@ export class FirestoreRepository {
         .catch((error: any) => {
           console.error('❤️‍🔥 Request failed', error);
           resolve(false); // Resolving the Promise with a boolean value indicating failure
-        }));
+        });
     });
   }
 
@@ -174,9 +174,7 @@ export class FirestoreRepository {
       .doc(userId)
       .collection(collectionPath)
       .doc(documentKey);
-  
-    // const dataObject = Object.fromEntries(data);
-  
+    
     await docRef.update(this.sanitizeObject(data));
   
     if (!environment.production) {
@@ -240,7 +238,7 @@ export class FirestoreRepository {
     documentId: string,
     data: Partial<T>
   ): Promise<void> {
-    const document: AngularFirestoreDocument<T> = this.firestore
+    const document = this.firestore
       .collection<T>(collectionName)
       .doc<T>(documentId);
     return document.update(this.sanitizeObject(data));

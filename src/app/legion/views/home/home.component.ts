@@ -1,34 +1,34 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
-import{ VideoListService } from './videolist.service';
+import{ HomeService } from './home.service';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 
 @Component({
-    selector: 'video-list',
-    templateUrl: './videolist.component.html',
-    styleUrls: ['./videolist.component.scss'],
+    selector: 'home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class VideoListComponent implements OnInit, AfterContentInit {
+export class HomeComponent implements OnInit, AfterContentInit {
 
     videos: YoutubeVideoPage[] = [];
     
     constructor(
-        private videoListService: VideoListService,
+        private homeService: HomeService,
         private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
-        this.videoListService.getCompleteVideoListObserver().subscribe((response) => {
+        this.homeService.getCompleteVideoListObserver().subscribe((response) => {
             this.videos = response;
             this.changeDetectorRef.detectChanges();
         });
-        this.videoListService.getErrorObserver().subscribe((response) => {
+        this.homeService.getErrorObserver().subscribe((response) => {
             alert(response);
         });
     }
 
     ngAfterContentInit(): void {
-        this.videoListService.getCompleteVideoList();
+        this.homeService.getCompleteVideoList();
         this.changeDetectorRef.detectChanges();
     }
 }

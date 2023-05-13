@@ -62,7 +62,7 @@ import { ExtractDetailsService } from "../../extractdetails.service";
     }
 
     ngAfterContentInit() {
-        // this.extractDetailsService.getVideoTranscript();
+        this.extractDetailsService.getVideoTranscript();
         this.changeDetectorRef.detectChanges();
     }
 

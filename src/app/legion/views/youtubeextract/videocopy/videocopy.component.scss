@@ -13,7 +13,7 @@
 
 ::ng-deep .mat-button-toggle-group::-webkit-scrollbar {
     display: none;
-}  
+}
 
 mat-button-toggle-group {
     display: flex;
@@ -24,7 +24,7 @@ mat-button-toggle-group {
     margin: 1rem;
     border: none;
     orientation: horizontal;
-    
+
     mat-button-toggle {
         margin-right: 0.25rem;
         border-radius: 1rem;
@@ -52,78 +52,6 @@ mat-button-toggle-group {
     padding-top: 1rem;
 }
 
-.row {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .col-3 {
-    flex-grow: 1;
-    flex-basis: 0;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-.hover-overlay {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    background-color: black;
-}
-
-.hover-overlay:hover .mybuttonoverlap{
-    display: block;
-}
-
-.hover-overlay:hover .myimageoverlap {
-    opacity: 0.7;
-}
-
-.mybuttonoverlap {
-    position: absolute;
-    z-index: 2;
-    display: none;
-    width: 60%;
-    height: 30%;
-    font-size: 1.5rem;
-    border-radius: 1rem;
-    color: white;
-}
-
-.grid-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.grid-item {
-    width: 24%;
-    margin: 2px;
-}
-
-h4 {
-    padding-top: 2rem;
-}
-
-div.stretchy-wrapper {
-    width: 100%;
-    padding-bottom: 56.25%;
-    /* 16:9 */
-    position: relative;
-    overflow: hidden;
-}
-
-div.stretchy-wrapper>div {
-    position: absolute;
-    top: -16.75%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    
-}
-
 .empty-state {
     margin: 0;
     padding: 0;
@@ -139,16 +67,16 @@ div.stretchy-wrapper>div {
         margin-top: 2rem;
         margin-bottom: 1rem;
         color: #333;
-      }
-    
-      p {
+    }
+
+    p {
         font-size: 1.5rem;
         margin-bottom: 2rem;
         color: #666;
-      }
-    
-      svg {
+    }
+
+    svg {
         width: 8rem;
         height: 8rem;
-      }
+    }
 }

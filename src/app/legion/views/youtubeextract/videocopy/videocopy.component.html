@@ -27,7 +27,7 @@
       </mat-button-toggle-group>
 
       <!-- Empty State -->
-      <div class="empty-state" stlye="width:100%; height: 100%" *ngIf="isLoading === false && searchVideos.length <= 0">
+      <div class="empty-state" stlye="width:100%; height: 100%" *ngIf="isLoading === false && youtubeVideos.length <= 0">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.5 11C20.5 9.5 19.5 8.5 18 8.5C16.5 8.5 15.5 9.5 15.5 11C15.5 12.5 16.5 13.5 18 13.5C19.5 13.5 20.5 12.5 20.5 11ZM14.5 11C14.5 8.8 16.3 7 18.5 7C20.7 7 22.5 8.8 22.5 11C22.5 13.2 20.7 15 18.5 15C16.3 15 14.5 13.2 14.5 11ZM2.5 11C2.5 8.8 4.3 7 6.5 7C8.7 7 10.5 8.8 10.5 11C10.5 13.2 8.7 15 6.5 15C4.3 15 2.5 13.2 2.5 11ZM12.5 11C12.5 9.3 10.8 8 8.5 8C6.2 8 4.5 9.3 4.5 11C4.5 12.7 6.2 14 8.5 14C10.8 14 12.5 12.7 12.5 11Z" fill="currentColor"></path>
         </svg>
@@ -42,51 +42,8 @@
           À la recherche des vidéos les plus virales...
       </div>
 
-      <div stlye="margin-top: 2rem; align-items-center: ">
-
-      </div>
-
-      <!-- Video Grid List -->
-      <div class="grid-container" style="margin: 1rem;">
-        <div class="grid-item" cListGroup *ngFor="let video of searchVideos" style="margin-top: 1rem;">
-          <!-- Thumbnail Formatter -->
-          <div class="stretchy-wrapper">
-            <div class="hover-overlay">
-              <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onCopyCatClick(video)">Copy
-                Cat</button>
-              <img class="myimageoverlap" [src]="video.thumbnailUrl" alt="Responsive image"
-                style="overflow: hidden; width:100%;" />
-            </div>
-          </div>
-          <!-- Thumbnail Text -->
-          <div style="padding: 1rem;">
-            <h5>{{ video.title }}</h5>
-            <p class="text-mediumemphasis" style="margin: 0">@{{ video.channelTitle }}</p>
-            <p class="text-medium-emphasis small" class="published">{{ 'video_list.published' | translate }}: {{
-              video.publishedAt }}</p>
-            <!-- View Count Icons -->  
-            <div class="row" style="margin: 0;">
-              <div class="col-3">
-                <svg cIcon name="cibYoutube" style="width: 100%"></svg>
-                <p class="text-medium-emphasis" class="views"  style="width: 100%; text-align: center;">
-                  {{ video.statistics?.viewCount ?? 'N/A' }}
-                </p>
-              </div>
-              <div class="col-3">
-                <svg cIcon name="cilThumbUp" style="width: 100%"></svg>
-                <p class="text-medium-emphasis" class="likes" style="width: 100%; text-align: center;">
-                  {{ video.statistics?.likeCount ?? 'N/A' }}
-                </p>
-              </div>
-              <div class="col-3">
-                <svg cIcon name="cilCommentBubble" style="width: 100%"></svg>
-                <p class="text-medium-emphasis" class="comments" style="width: 100%; text-align: center;">
-                  {{ video.statistics?.commentCount ?? 'N/A' }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div stlye="margin-top: 2rem;" *ngIf="!isLoading">
+        <video-grid [parentVideos]="youtubeVideos" (itemSelectEvent)="onItemSelectedEvent($event)"></video-grid>
       </div>
     </form>
   </c-card-body>

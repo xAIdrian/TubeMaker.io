@@ -50,10 +50,7 @@ export class YoutubeDataRepository {
         },
     };
     return from(axios(config)).pipe(
-        map((response) => {
-            console.log("🚀 ~ file: youtubedata.repo.ts:54 ~ YoutubeDataRepository ~ map ~ response:", response.data)
-            return response.data;
-        })
+        map((response) => { return response.data;  })
     );
   }
 

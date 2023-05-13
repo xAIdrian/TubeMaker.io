@@ -8,7 +8,7 @@ import { NavigationService } from '../../service/navigation.service';
 @Injectable({
   providedIn: 'root',
 })
-export class VideoListService {
+export class HomeService {
 
   private errorSubject = new Subject<string>();
   private completeVideoListSubject = new Subject<YoutubeVideoPage[]>();

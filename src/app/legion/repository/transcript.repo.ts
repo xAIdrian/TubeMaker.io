@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import axios, { AxiosRequestConfig } from 'axios';
 import { Observable, from, map } from 'rxjs';
 
@@ -9,12 +10,19 @@ import { Observable, from, map } from 'rxjs';
 })
 export class TranscriptRepository {
 
-    constructor() { /** */ }
+    constructor(
+        private translate: TranslateService
+    ) { /** */ }
 
     getTranscript(videoId: string): Observable<{ message: string, result: { translation: string }}> {
+        const language = this.translate.currentLang;
         const config: AxiosRequestConfig = {
-            method: 'get',
-            url: `http://localhost:3000/api/download/${videoId}`
+            method: 'post',
+            url: `http://localhost:3000/api/download/`,
+            data: {
+                'videoId': videoId,
+                'language': language,
+            }
         };
         return from(axios(config)).pipe(
             map((response) => {

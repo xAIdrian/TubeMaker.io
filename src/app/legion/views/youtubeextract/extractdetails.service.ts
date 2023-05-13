@@ -110,11 +110,10 @@ export class ExtractDetailsService {
       }))
     ).subscribe({
       next: (videos) => {
-            console.log("🚀 ~ file: extractdetails.service.ts:144 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ videos:", videos)
             this.youtubeVideosSubject.next(videos);
           },
       error: (err) => {
-        console.log("🚀 ~ file: extractdetails.service.ts:148 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ err:", err)
+        console.log("🔥 ~ file: extractdetails.service.ts:148 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ err:", err)
         this.errorSubject.next(err); 
         this.youtubeVideosSubject.complete();
       }
@@ -134,7 +133,6 @@ export class ExtractDetailsService {
   }
 
   getVideoTranscript() {
-    console.log("🚀 ~ file: youtube.service.ts:90 ~ YoutubeService ~ getVideoTranscript ~ getVideoTranscript:", 'getVideoTranscript')
     if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
       this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
       return; // uncomment for prod
@@ -144,15 +142,12 @@ export class ExtractDetailsService {
     this.transcriptRepo.getTranscript(this.currentCopyCatVideo.id).pipe(
     ).subscribe({
       next: (response: { message: string, result: { translation: string }}) => {
-        console.log("🚀 ~ file: extractdetails.service.ts:185 ~ ExtractDetailsService ~ getVideoTranscript ~ response:", response)
         if (response.message !== 'success' || response.result.translation === '') {
           this.errorSubject.next(response.message);
-          this.errorSubject.complete();
           return;
         }
         if (response.result.translation === '') {
           this.errorSubject.next('No transcript found.');
-          this.errorSubject.complete();
           return;
         }
 
@@ -160,7 +155,6 @@ export class ExtractDetailsService {
         const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
         this.extractContentRepo.updateCopyCatScript(splitParagraphs)
 
-        console.log("🚀 ~ file: extractdetails.service.ts:178 ~ ExtractDetailsService ~ getVideoTranscript ~ splitParagraphs:", splitParagraphs)
         splitParagraphs.forEach((paragraph) => {
           uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
         });

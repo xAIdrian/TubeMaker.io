@@ -22,8 +22,12 @@ const translationService = new TranslationService();
 
 const storagePath = './backend/audio'
 
-router.get("/:videoId", async (req, res) => {
-  const videoId = req.params.videoId;
+router.post("", async (req, res) => {
+  console.log("🚀 ~ file: transcribe.js:26 ~ router.get ~ req:", req.body)
+  const reqBody = req.body;
+
+  const videoId = reqBody.videoId;
+  const language = reqBody.language;
 
   const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
   const options = {
@@ -61,33 +65,50 @@ router.get("/:videoId", async (req, res) => {
           return throwError(() => new Error('🔥' + err));
         }).on("end", async function () {
           console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
-          // Transcription
+
           const transcription = await transcribeAudio(filePath);
           
           if (transcription === undefined || transcription === '') {
             deletefile(filePath);
             res.status(505).json({ error: "Transcription Unavailable" });
-            // return throwError(() => new Error('🔥' + 'No transcription found'));
-          }
-          // Translation
-          const translation = await translationService.translateText(transcription);
-          if (translation !== undefined && translation !== '') {
-            res.status(200).json({
-              message: "success",
-              result: {
-                translation: translation,
-              }
-            });
-            deletefile(filePath)
+            return;
           } else {
-            deletefile(filePath);
-            res.status(500).json({ error: "Translations Empty" });
-            // return throwError(() => new Error('🔥' + 'No translation found'));
+            let translation = transcription;
+
+            if (language === 'fr') {
+              translation = await translationService.translateText(transcription);
+
+              if (translation !== undefined && translation !== '') {
+                console.log("🚀 ~ file: transcribe.js:82 ~ translation:")
+                res.status(200).json({
+                  message: "success",
+                  result: {
+                    translation: translation,
+                  }
+                });
+                deletefile(filePath)
+              } else {
+                console.log('🔥 Translation Empty')
+                deletefile(filePath);
+                res.status(500).json({ error: "Translations Empty" });
+                return;
+              }
+            } else {
+              console.log("🔥 ~ file: transcribe.js:82 ~ translation:")
+              res.status(200).json({
+                message: "success",
+                result: {
+                  translation: translation,
+                }
+              });
+              deletefile(filePath)
+            }
           }
         })
     })
   ).subscribe({
     error: (err) => {
+      console.error(`🔥 ${err}`);
       console.error(err);
       res.status(500).json({ error: "Internal server error" });
     }
@@ -127,8 +148,9 @@ async function transcribeAudio(filePath) {
     return transcript;
     
   } catch (error) {
+    console.log("🚀 ~ file: transcribe.js:151 ~ transcribeAudio ~ error:", error)
     deletefile(filePath);
-    return ''
+    return '';
   }
 }
 
