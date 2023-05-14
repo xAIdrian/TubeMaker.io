@@ -33,6 +33,7 @@ export class AutoContentService extends GenerateContentService {
   }
 
   getContentProgressObserver(): Observable<number> { return this.contentProgressSubject.asObservable();  }
+  
   getScriptProgressObserver(): Observable<{
     increment: number,
     label: string

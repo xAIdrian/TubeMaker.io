@@ -13,7 +13,7 @@ import { YoutubeService } from "../../common/youtube.service";
     styleUrls: ['./details.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class DetailsComponent implements OnInit, AfterContentInit {
+export abstract class DetailsComponent implements OnInit, AfterContentInit {
 
     isKickbackVisible = false;
     kickbackText = 'Are you sure you want to return to the home page?';
@@ -62,14 +62,13 @@ export class DetailsComponent implements OnInit, AfterContentInit {
         });
 
         this.setupObservers();
-        this.setupFormControls();
     }
     
     ngAfterContentInit(): void {
         this.changeDetectorRef.detectChanges();
     }
 
-    private setupObservers() {
+    setupObservers() {
         this.youtubeService.getErrorObserver().subscribe({
             next: (error: any) => {
                 this.isErrorVisible = true;
@@ -104,9 +103,5 @@ export class DetailsComponent implements OnInit, AfterContentInit {
 
     toggleLiveDemo() {
         this.isKickbackVisible = !this.isKickbackVisible;
-    }
-
-    private setupFormControls() {
-        this.scriptFormGroup = new FormGroup({});
     }
 }

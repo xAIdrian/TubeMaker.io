@@ -3,6 +3,7 @@ import { DetailsComponent } from "../../common/details/details.component";
 import { YoutubeExtractService } from "../youtubeextract.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'youtube-extract',
@@ -28,6 +29,10 @@ export class ExtractDetailsComponent extends DetailsComponent implements AfterCo
     override ngAfterContentInit(): void {
         super.ngAfterContentInit();
         this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractService.getCurrentVideoUrl());
+    }
+
+    setupFormControls() {
+        this.scriptFormGroup = new FormGroup({});
     }
 
     isCurrentVideoPresent() {

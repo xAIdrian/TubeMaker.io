@@ -40,13 +40,12 @@ import { LegionRoutingModule } from './legion-routing.module';
 import { HomeComponent } from './views/home/home.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './views/youtubeauto/videocreate/videocreate.component';
-import { VideoDetailsComponent } from './views/youtubeauto/videoresult/videodetails.component';
+import { AutoDetailsComponent } from './views/youtubeauto/videoresult/autodetails.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './repository/cors.interceptor';
 import { VideoScriptComponent } from './views/youtubeauto/videoresult/videoscript/videoscript.component';
 import { AudioDropdownComponent } from './views/common/videomedia/audiodropdown/audiodropdown.component';
 import { VideoCopyComponent } from './views/youtubeextract/videocopy/videocopy.component'
-import { DetailsComponent } from './views/common/details/details.component';
 import { ScriptDetailsComponent } from './views/youtubeextract/extractdetails/scriptdetails/scriptdetails.component';
 import { VideoMediaComponent } from './views/common/videomedia/videomedia.component';
 import { ConfirmationDialogComponent } from './views/dialogs/confirmationdialog.component';
@@ -64,14 +63,12 @@ import { TitleDetailsComponent } from './views/common/titledetails/titledetails.
     }],
     declarations: [
         HomeComponent,
-        DetailsComponent,
         VideoCreateComponent,
-        VideoDetailsComponent,
+        AutoDetailsComponent,
         VideoScriptComponent,
         VideoMediaComponent,
         AudioDropdownComponent,
         VideoCopyComponent,
-        DetailsComponent,
         ExtractDetailsComponent,
         ScriptDetailsComponent,
         TitleDetailsComponent,

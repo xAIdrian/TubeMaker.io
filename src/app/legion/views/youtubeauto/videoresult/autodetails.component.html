@@ -1,0 +1,29 @@
+<c-card class="error-container" *ngIf="isErrorVisible" style="margin-bottom: 1rem;">
+  <div class="text-area">
+      <p>{{ errorText }}</p>
+  </div>
+</c-card>
+
+<c-card class="mb-4">
+  <c-card-body>
+    <div class="row">
+      <div class="col-8">
+        <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+        <img>
+        <!-- this is an image -->
+        <title-details [parentVideoId]="currentPageId"></title-details>
+      </div>
+      
+      <div class="col-1">
+        <video-media [parentVideoId]="currentPageId"></video-media>
+      </div>
+    </div>
+
+    <script-details [parentIsLoading]="transcriptIsLoading" [parentVideoId]="currentPageId"></script-details>
+
+    <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
+      <button cButton variant="outline" color="dark" (click)="onReset()">Back</button>
+    </div>
+
+  </c-card-body>
+</c-card>

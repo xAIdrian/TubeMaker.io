@@ -10,9 +10,13 @@
         <form [formGroup]="topicFormGroup" class="d-flex align-items-center">
           <ng-template matStepLabel>{{ 'video_wizard.topic' | translate }}</ng-template>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-info" style="padding-right: 2rem; padding-left: 2rem; margin-right: 1rem;;"
-              [disabled]="topicLoading" (click)="reRollTopic()">
-              <c-spinner *ngIf="topicLoading" size="sm" color="white"></c-spinner>
+            <button 
+              class="btn btn-info" 
+              style="padding-right: 2rem; padding-left: 2rem; margin-right: 1rem;;"
+              [disabled]="topicLoading" 
+              (click)="reRollTopic()"
+              variant="outline">
+              <c-spinner *ngIf="topicLoading" size="sm"></c-spinner>
               {{ 'video_wizard.get_an_idea' | translate }}
             </button>
           </div>

@@ -14,25 +14,45 @@ import { YoutubeService } from '../common/youtube.service';
 export class YoutubeAutoService extends YoutubeService {
 
   private isInDebugMode: boolean = false;
-
-  checkCurrentTopic() {
-    if (this.contentRepo.getCurrentTopic() === undefined && !this.isInDebugMode) {
-      this.navigationService.navigateToCreateVideo();
-      return
-    }
-  }
-
   
   constructor(
-    private gptService: AutoContentService,
-    navigationService: NavigationService,
-    contentRepo: AutoContentRepository,
+    protected override generationService: AutoContentService,
+    protected override navigationService: NavigationService,
+    protected autoContentRepo: AutoContentRepository
   ) {
     super(
-      gptService,
+      generationService,
       navigationService,
-      contentRepo
+      autoContentRepo
     )
+  }
+
+  getInitVideoDurationObserver() {
+    return this.autoContentRepo.getInitVideoDurationObserver();
+  }
+  getTopicObserver() {
+    return this.generationService.getTopicObserver();
+  }
+  getDefaultVideoNichesObserver() {
+    return this.contentRepo.getDefaultVideoNichesObserver();
+  }
+  getDefaultVideoDurationsObserver() {
+    return this.autoContentRepo.getDefaultVideoDurationsObserver();
+  }
+  getErrorObservable() {
+    return this.errorSubject.asObservable();
+  }
+  getScriptProgressObserver() {
+    return this.generationService.getScriptProgressObserver();
+  }
+  getCompleteResultsObserver() {
+    return this.generationService.getCompleteResultsObserver();
+  }
+  getScriptSectionObserver() {
+    return this.generationService.getScriptSectionObserver();
+  }
+  getContentProgressObserver() {
+    return this.generationService.getContentProgressObserver();
   }
 
   getInitVideoNiche() {
@@ -41,31 +61,28 @@ export class YoutubeAutoService extends YoutubeService {
       'video_style.init_description'
     );
   }
-  getInitVideoDurationObserver() {
-    return this.contentRepo.getInitVideoDurationObserver();
-  }
-  getTopicObserver() {
-    return this.gptService.getTopicObserver();
-  }
-  getDefaultVideoNichesObserver() {
-    return this.contentRepo.getDefaultVideoNichesObserver();
-  }
-  getDefaultVideoDurationsObserver() {
-    return this.contentRepo.getDefaultVideoDurationsObserver();
-  }
-  getErrorObservable() {
-    return this.errorSubject.asObservable();
-  }
 
   reRollTopic() {
-    this.gptService.updateNewTopic();
+    this.generationService.updateNewTopic();
   }
+  
+  generateVideoContentWithAI() {
+    this.generationService.generateVideoContentWithAI();
+  }
+
+  checkCurrentTopic() {
+    if (this.autoContentRepo.getCurrentTopic() === undefined && !this.isInDebugMode) {
+      this.navigationService.navigateToCreateVideo();
+      return
+    }
+  }
+
   submitCreate(
     topic: string,
     selectedStyle: VideoNiche,
     selectedDuration: VideoDuration
   ) {
-    this.contentRepo.submitInputs(topic, selectedStyle, selectedDuration).subscribe({
+    this.autoContentRepo.submitInputs(topic, selectedStyle, selectedDuration).subscribe({
       next: (response) => {
         this.navigationService.navigateToResults();
       },
@@ -73,5 +90,12 @@ export class YoutubeAutoService extends YoutubeService {
         console.log(error);
       }
     })
+  }
+
+  override getNewVideoMetaData(): void {
+    throw new Error('Method not implemented.');
+  }
+  override updateTags(): void {
+    throw new Error('Method not implemented.');
   }
 }

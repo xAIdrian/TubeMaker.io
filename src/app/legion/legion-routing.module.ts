@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./views/home/home.component";
 import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreate.component";
-import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails.component";
+import { AutoDetailsComponent } from "./views/youtubeauto/videoresult/autodetails.component";
 import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
 import { DetailsComponent } from "./views/common/details/details.component";
@@ -54,7 +54,7 @@ const routes: Routes = [
     },
     {
         path: "auto/details",
-        component: VideoDetailsComponent,
+        component: AutoDetailsComponent,
         data: {
             title: "Details"
         }
