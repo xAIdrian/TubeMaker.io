@@ -3,7 +3,7 @@ import{ ExtractContentRepository } from '../../../repository/content/extractcont
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
 import { VideoNiche } from '../../../model/autocreate/videoniche.model';
-import { ExtractDetailsService } from '../extractdetails.service';
+import { YoutubeExtractService } from '../youtubeextract.service';
 
 @Component({
     selector: 'video-copy',
@@ -30,7 +30,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     
     constructor(
         private contentModel: ExtractContentRepository,
-        private extractDetailsService: ExtractDetailsService,
+        private extractService: YoutubeExtractService,
         private _formBuilder: FormBuilder,
         private changeDetectorRef: ChangeDetectorRef
     ) { }
@@ -41,7 +41,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
-        this.extractDetailsService.clearCurrentVideoPage()
+        this.extractService.clearCurrentVideoPage()
         this.changeDetectorRef.detectChanges();
     }
 
@@ -57,14 +57,14 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         this.contentModel.getDefaultVideoNichesObserver().subscribe({
             next: (videoNiches: VideoNiche[]) => this.videoNiches = videoNiches
         });
-        this.extractDetailsService.getErrorObserver().subscribe({
+        this.extractService.getErrorObserver().subscribe({
             next: (error: any) => {
                 this.isLoading = false;
                 this.showErrorState = true;
                 this.errorText = error;
             }
         });
-        this.extractDetailsService.getYoutubeVideosObserver().subscribe({
+        this.extractService.getYoutubeVideosObserver().subscribe({
             next: (videos: YoutubeVideo[]) => {
                 this.isLoading = false;
                 this.youtubeVideos = videos;
@@ -80,12 +80,12 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         this.selectedVideoNiche = niche;
         this.isLoading = true;
         this.youtubeVideos = [];
-        this.extractDetailsService.searchYoutubeVideos(niche.value);
+        this.extractService.searchYoutubeVideos(niche.value);
     }
 
     onItemSelectedEvent(video: YoutubeVideo) {
         if (video !== undefined) {
-            this.extractDetailsService.setCopyCatVideoId(video);
+            this.extractService.setCopyCatVideoId(video);
         }
     }
 

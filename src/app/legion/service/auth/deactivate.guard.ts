@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../../views/common/confirmationdialog.component';
+import { ConfirmationDialogComponent } from '../../views/dialogs/confirmationdialog.component';
 
 @Injectable({
   providedIn: 'root'

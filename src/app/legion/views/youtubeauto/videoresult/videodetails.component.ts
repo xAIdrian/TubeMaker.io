@@ -17,6 +17,7 @@ import { AutoContentService } from '../../../service/content/autocontent.service
 import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 import { VideoMetadata } from 'src/app/legion/model/video/videometadata.model';
+import { YoutubeAutoService } from '../youtubeauto.service';
 
 @Component({
   selector: 'video-result',
@@ -25,10 +26,6 @@ import { VideoMetadata } from 'src/app/legion/model/video/videometadata.model';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
-
-  //debug variable to be removed
-  isInDebugMode: boolean = true;
-  ////////////////////////////
   
   scriptFormGroup: FormGroup;
   currentVideoDuration: VideoDuration;
@@ -40,48 +37,28 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   isLinear: any;
   hasInputError = false;
-  contentGenerationIsLoading: boolean = !this.isInDebugMode //should be set to true in production;
-
-  isTitleLoading: boolean = false;
-  isTitleOptimizing: boolean = false;
-
-  isDescLoading: boolean = false;
-  isDescOptimizing: boolean = false;
+  // contentGenerationIsLoading: boolean = !this.isInDebugMode //should be set to true in production;
 
   isScriptLoading: boolean = false;
   isScriptOptimizing: boolean = false;
 
-  isTagsLoading: boolean = false;
-  isTagsOptimizing: boolean = false;
-
   infoFormGroup: FormGroup;
 
-  gptResponseTitle: string = 'Waiting for title...';
-  gptResponseDescription: string = 'Waiting for desc...';
-  gptResponseScript: string = 'Waiting for script...';
-  gptResponseTags: string = 'Waiting for tags...';
-
   constructor(
-    private contentService: AutoContentService,
-    private contentRepo: AutoContentRepository,
-    private navigationService: NavigationService,
+    private autoService: YoutubeAutoService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    if (this.contentRepo.getCurrentTopic() === undefined && !this.isInDebugMode) {
-      this.navigationService.navigateToCreateVideo();
-      return
-    }
-
+    this.autoService.checkCurrentTopic();
     this.setupObservers();
     this.setupFormGroups();
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-    
+    this.autoService.
     if (!this.isInDebugMode) { this.contentService.generateVideoContentWithAI(); }
   }
 

@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { AfterContentInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { GenerateContentService } from "../../../../service/content/generation.service";
-import { ExtractDetailsService } from "../../extractdetails.service";
+import { YoutubeService } from "../../../common/youtube.service";
+import { YoutubeExtractService } from "../../youtubeextract.service";
 
 @Component({
     selector: 'script-details',
@@ -19,19 +19,19 @@ import { ExtractDetailsService } from "../../extractdetails.service";
     errorToastText = ''
 
     constructor(
-        private extractDetailsService: ExtractDetailsService,
+        private extractService: YoutubeExtractService,
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
 
     ngOnInit() {
-        this.extractDetailsService.getErrorObserver().subscribe({
+        this.extractService.getErrorObserver().subscribe({
             next: (error) => {
                 this.showErrorToast = true;
                 this.errorToastText = error;
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.extractDetailsService.getVideoTranscriptObserver().subscribe({
+        this.extractService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
@@ -40,7 +40,7 @@ import { ExtractDetailsService } from "../../extractdetails.service";
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.extractDetailsService.getScriptSectionObserver().subscribe({
+        this.extractService.getScriptSectionObserver().subscribe({
             next: (section) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", section)
                 const updateElement = {
@@ -56,7 +56,7 @@ import { ExtractDetailsService } from "../../extractdetails.service";
                 this.transcriptSections[section.sectionIndex] = updateElement;
                 this.toggleLoading(updateElement);
                 this.changeDetectorRef.detectChanges();
-                this.extractDetailsService.updateScript(this.transcriptSections);
+                this.extractService.updateScript(this.transcriptSections);
             }
         });
     }
@@ -71,9 +71,9 @@ import { ExtractDetailsService } from "../../extractdetails.service";
             this.parentVideoId = changes['parentVideoId'].currentValue;
             if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
                 if (this.parentVideoId === '') {
-                    this.extractDetailsService.getNewVideoTranscript();
+                    this.extractService.getNewVideoTranscript();
                 } else {
-                    this.extractDetailsService.getVideoTranscript();
+                    this.extractService.getVideoTranscript();
                 }
             }
         }
@@ -81,13 +81,13 @@ import { ExtractDetailsService } from "../../extractdetails.service";
 
     onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {
         this.toggleLoading(section);
-        this.extractDetailsService.updateNewScriptIndex(prompt, section.section, index);
+        this.extractService.updateNewScriptIndex(prompt, section.section, index);
         this.changeDetectorRef.detectChanges();
     }
 
     onDrop(event: CdkDragDrop<string[]>) {
         moveItemInArray(this.transcriptSections, event.previousIndex, event.currentIndex);
-        this.extractDetailsService.updateScript(this.transcriptSections);
+        this.extractService.updateScript(this.transcriptSections);
     }
 
     private toggleLoading(section: { isLoading: boolean, section: string }) {

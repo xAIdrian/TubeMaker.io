@@ -6,20 +6,33 @@ import { AutoContentService } from '../../service/content/autocontent.service';
 import { VideoDuration } from '../../model/autocreate/videoduration.model';
 import { VideoNiche } from '../../model/autocreate/videoniche.model';
 import { Observable, Subject } from 'rxjs';
+import { YoutubeService } from '../common/youtube.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class VideoDetailsService {
+export class YoutubeAutoService extends YoutubeService {
 
-  private errorSubject = new Subject<string>()
+  private isInDebugMode: boolean = false;
+
+  checkCurrentTopic() {
+    if (this.contentRepo.getCurrentTopic() === undefined && !this.isInDebugMode) {
+      this.navigationService.navigateToCreateVideo();
+      return
+    }
+  }
+
   
   constructor(
     private gptService: AutoContentService,
-    private contentRepo: AutoContentRepository,
-    private navigationService: NavigationService
+    navigationService: NavigationService,
+    contentRepo: AutoContentRepository,
   ) {
-    /** */
+    super(
+      gptService,
+      navigationService,
+      contentRepo
+    )
   }
 
   getInitVideoNiche() {

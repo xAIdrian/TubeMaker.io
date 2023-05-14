@@ -8,15 +8,12 @@ import { TextSplitUtility } from '../../helper/textsplit.utility';
 import { ExtractionContentService } from '../../service/content/extractcontent.service';
 import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
 import { formatDistance } from 'date-fns'
+import { YoutubeService } from '../common/youtube.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ExtractDetailsService {
-  
-  private errorSubject = new Subject<string>();
-  private kickBackErrorSubject = new Subject<string>();
-  private isTranscriptLoadingSubject = new Subject<boolean>();
+export class YoutubeExtractService extends YoutubeService {
 
   private youtubeVideosSubject = new Subject<YoutubeVideo[]>();
   private videoTranscriptSubject = new Subject<{ isLoading: boolean, section: string }[]>();
@@ -24,24 +21,18 @@ export class ExtractDetailsService {
   private currentCopyCatVideo: YoutubeVideo;
 
   constructor(
+    protected override generationService: ExtractionContentService,
+    protected override navigationService: NavigationService,
     private transcriptRepo: TranscriptRepository,
-    private generationService: ExtractionContentService,
-    private navigationService: NavigationService,
     private textSplitUtility: TextSplitUtility,
     private youtubeRepo: YoutubeDataRepository,
     private extractContentRepo: ExtractContentRepository
-  ) {}
-
-  getErrorObserver(): Observable<string> {
-    return this.errorSubject.asObservable();
-  }
-
-  getKickBackErrorObserver(): Observable<string> {
-    return this.kickBackErrorSubject.asObservable();
-  }
-
-  getTranscriptIsLoadingObserver(): Observable<boolean> {
-    return this.isTranscriptLoadingSubject.asObservable();
+  ) {
+    super(
+      generationService,
+      navigationService,
+      extractContentRepo
+    );
   }
 
   getYoutubeVideosObserver(): Observable<YoutubeVideo[]> {
@@ -65,32 +56,6 @@ export class ExtractDetailsService {
         }
       })
     );
-  }
-
-  getTitleObserver() { 
-    return this.generationService.getTitleObserver().pipe(
-      tap((title) => {
-        this.extractContentRepo.updateTitle(title)
-      })
-    ); 
-  }
-  getDescriptionObserver() { 
-    return this.generationService.getDescriptionObserver().pipe(
-      tap((description) => {
-        this.extractContentRepo.updateDescription(description)
-      })
-    ); 
-  }
-  getTagsObserver() { 
-    return this.generationService.getTagsObserver().pipe(
-      tap((tags) => {
-        this.extractContentRepo.updateTags(tags)
-      })
-    ); 
-  }
-
-  getCurrentPage(id: string) {
-    return this.extractContentRepo.getCurrentPage(id)
   }
 
   getCurrentVideoUrl(): string {
@@ -210,22 +175,11 @@ export class ExtractDetailsService {
     });
   }
 
-  updateNewScriptIndex(prompt: string, section: string, index: number) {
-    this.generationService.optimizeNewScriptIndex(prompt, section, index);
-  }
-
-  updateScript(transcriptSections: { isLoading: boolean; section: string; }[]) {
-    of(transcriptSections).pipe(
-      map((sections) => {
-        const script: string[] = [];
-        sections.forEach((section) => {
-          script.push(section.section.trim());
-        });
-        return script
-      })
-    ).subscribe((scriptArray: string[]) => {
-      this.extractContentRepo.updateCopyCatScript(scriptArray)
-    });
+  updateTags() {
+    this.generationService.getNewTags(
+      this.currentCopyCatVideo.title,
+      this.currentCopyCatVideo.description
+    );
   }
 
   getNewVideoMetaData() {
@@ -248,51 +202,22 @@ export class ExtractDetailsService {
     );
   }
 
-  getVideoMetaData() {
-    this.extractContentRepo.getMetaData().subscribe({
-      next: (response) => {
-        this.generationService.titleSubject.next(response.title);
-        this.generationService.descriptionSubject.next(response.description);
-        this.generationService.tagsSubject.next(response.tags);
-      },
-      error: (err) => {
-        this.errorSubject.next(err);  
-      }
-    });
+  updateNewScriptIndex(prompt: string, section: string, index: number) {
+    this.generationService.optimizeNewScriptIndex(prompt, section, index);
   }
 
-  updateTitle(prompt: string, current: string) { 
-    this.generationService.optimizeTitle(prompt, current); 
-  }
-
-  updateDescription(prompt: string, current: string) { 
-    this.generationService.optimizeDescription(prompt, current); 
-  }
-
-  updateTags() {
-    this.generationService.getNewTags(
-      this.currentCopyCatVideo.title,
-      this.currentCopyCatVideo.description
-    );
-  }
-
-  submitSave(
-    generatedAudioUrl: string,
-    title: string, 
-    description: string, 
-    tags: string,
-    script: string[]
-  ) {
-    this.extractContentRepo
-      .submitCompleteInfos(generatedAudioUrl, title, description, tags, script)
-      .subscribe({
-        next: (response) => {
-          this.kickBackErrorSubject.next('Save successful.');
-        },
-        error: (err) => {
-          this.errorSubject.next(err);
-        }
+  updateScript(transcriptSections: { isLoading: boolean; section: string; }[]) {
+    of(transcriptSections).pipe(
+      map((sections) => {
+        const script: string[] = [];
+        sections.forEach((section) => {
+          script.push(section.section.trim());
+        });
+        return script
       })
+    ).subscribe((scriptArray: string[]) => {
+      this.extractContentRepo.updateCopyCatScript(scriptArray)
+    });
   }
 
   clearCurrentVideoPage() {
@@ -301,10 +226,6 @@ export class ExtractDetailsService {
 
   getRandomNumber(): string {
     return Math.floor(Math.random() * (3000000 - 500000 + 1) + 500000).toString();
-  }
-  
-  navigateHome() {
-    this.navigationService.navigateToCopyCat();
   }
 
   private updateDateToHumanForm(isoDate: string): string {

@@ -8,12 +8,10 @@ import {
 } from '@angular/core';
 import {
   Component,
-  OnInit,
   AfterContentInit,
   ChangeDetectorRef,
 } from '@angular/core';
 import { YoutubeVideo } from 'src/app/legion/model/video/youtubevideo.model';
-import { ExtractDetailsService } from '../../youtubeextract/extractdetails.service';
 
 @Component({
   selector: 'video-grid',

@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { ExtractDetailsService } from '../../extractdetails.service';
+import { YoutubeService } from '../youtube.service';
 
 @Component({
   selector: 'title-details',
@@ -28,31 +28,34 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
   constructor(
     private formGroupBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private extractDeatilsService: ExtractDetailsService,
+    private youtubeService: YoutubeService,
     private clipboard: Clipboard
   ) {
     /** */
   }
 
   ngOnInit() {
-    this.extractDeatilsService.getTitleObserver().subscribe((response) => {
+    this.youtubeService.getTitleObserver().subscribe((response) => {
       this.loadingCount ++;
       this.isTitleLoading = false;
       this.titleFormGroup.patchValue({ title: response.replace('\"', '').trim() })
       this.changeDetectorRef.detectChanges();
     });
-    this.extractDeatilsService.getDescriptionObserver().subscribe((response) => {
+    
+    this.youtubeService.getDescriptionObserver().subscribe((response) => {
       this.loadingCount ++;
       this.isDescLoading = false;
       this.titleFormGroup.patchValue({ description: response.trim() })
       this.changeDetectorRef.detectChanges();
     });
-    this.extractDeatilsService.getTagsObserver().subscribe((response) => {  
+
+    this.youtubeService.getTagsObserver().subscribe((response) => {  
       this.loadingCount ++;
       this.isTagsLoading = false;
       this.titleFormGroup.patchValue({ tags: response.join(' #').trim() })
       this.changeDetectorRef.detectChanges();
     });
+
     this.titleFormGroup = this.formGroupBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
@@ -70,9 +73,9 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
       this.parentVideoId = changes['parentVideoId'].currentValue;
       if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
         if (this.parentVideoId === '') {
-          this.extractDeatilsService.getNewVideoMetaData();
+          this.youtubeService.getNewVideoMetaData();
         } else {
-          this.extractDeatilsService.getVideoMetaData();
+          this.youtubeService.getNewVideoMetaData();
         }
       }
     }
@@ -80,7 +83,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
 
   onTitleImproveClick(prompt: string) {
     this.isTitleLoading = true;
-    this.extractDeatilsService.updateTitle(
+    this.youtubeService.updateTitle(
       prompt,
       this.titleFormGroup.value.title,
     );
@@ -88,7 +91,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
 
   onDescriptionImproveClick(prompt: string) {
     this.isDescLoading = true;
-    this.extractDeatilsService.updateDescription(
+    this.youtubeService.updateDescription(
       prompt,
       this.titleFormGroup.value.description,
     );
@@ -96,7 +99,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
 
   rerollTags() {
     this.isTagsLoading = true;
-    this.extractDeatilsService.updateTags()
+    this.youtubeService.updateTags()
   }
 
   copyTitle() { 

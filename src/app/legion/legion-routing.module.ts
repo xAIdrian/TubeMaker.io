@@ -5,7 +5,7 @@ import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreat
 import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails.component";
 import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
-import { ExtractDetailsComponent } from "./views/youtubeextract/extractdetails/extractdetails.component";
+import { DetailsComponent } from "./views/common/details/details.component";
 import { CanDeactivateGuard } from "./service/auth/deactivate.guard";
 
 const routes: Routes = [
@@ -23,7 +23,7 @@ const routes: Routes = [
     },
     {
         path: "copycat/details",
-        component: ExtractDetailsComponent,
+        component: DetailsComponent,
         data: {
             title: "Transcript"
         },
@@ -31,7 +31,7 @@ const routes: Routes = [
     },
     {
         path: "copycat/details/:id",
-        component: ExtractDetailsComponent,
+        component: DetailsComponent,
         data: {
             title: "Transcript"
         },

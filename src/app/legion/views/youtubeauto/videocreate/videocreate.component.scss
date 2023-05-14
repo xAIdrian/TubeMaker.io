@@ -18,33 +18,30 @@
 .d-flex {
   padding-top: 1rem;
 }
-
 mat-button-toggle-group {
-  padding-top: 2rem;
   display: flex;
-  flex-wrap: wrap;
+  overflow: scroll;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  min-width: 100%;
   margin: 1rem;
   border: none;
-  orientation: vertical;
-  display: block; // display the buttons as block elements for vertical orientation
+  orientation: horizontal;
 
   mat-button-toggle {
-    margin: 0.5rem;
-    margin-top: 5px; // add a margin to the top of each button
-    border-radius: 10px;
-    color: #333;
-    font-size: 1rem;
-    display: block;  
+      margin-right: 0.25rem;
+      border-radius: 1rem;
+      color: #333;
 
-    border: 1px solid #333 !important;
-    background-color: transparent;
-    color: #333;
+      border: 1px solid #333 !important;
+      background-color: transparent;
+      color: #333;
 
-    &.mat-button-toggle-checked {
-      background-color: #007bff;
-      color: #fff;
-      border: 1px solid #007bff !important;
-    }
+      &.mat-button-toggle-checked {
+          background-color: black;
+          color: #fff;
+          border: 1px solid black !important;
+      }
   }
 }
 
@@ -67,15 +64,8 @@ mat-button-toggle-group {
   pointer-events: none !important;
 }
 
-.col-8 {
-  flex-basis: calc(66.66667% - 20px);
-  max-width: calc(66.66667% - 20px);
-  margin: 1rem;
-}
-
-.col-4 {
-  flex-basis: calc(33.33333% - 20px);
-  max-width: calc(33.33333% - 20px);
+::ng-deep .mat-button-toggle-group::-webkit-scrollbar {
+  display: none;
 }
 
 h4 {

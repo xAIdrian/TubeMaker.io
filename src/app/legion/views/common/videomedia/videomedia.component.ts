@@ -59,13 +59,16 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
       this.generatedAudioIsLoading = false;
       alert(response);
     });
+    
     this.voiceService.getVoiceSamplesObserver().subscribe((response) => {
       this.audioDropdown.populateList(response);
       this.changeDetectorRef.detectChanges();
     });
+
     this.translate.onLangChange.subscribe(() => {
       this.voiceService.getVoices();
     });
+
     this.contentRepo.getGeneratedAudioUrlObserver().subscribe((response) => {
       this.generatedAudioUrl = response;
       this.changeDetectorRef.detectChanges();
