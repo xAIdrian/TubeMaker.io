@@ -7,52 +7,59 @@ import { VideoDuration } from '../../model/autocreate/videoduration.model';
 import { VideoNiche } from '../../model/autocreate/videoniche.model';
 import { Observable, Subject } from 'rxjs';
 import { YoutubeService } from '../common/youtube.service';
+import { YoutubeVideo } from '../../model/video/youtubevideo.model';
+import { TranscriptRepository } from '../../repository/transcript.repo';
+import { TextSplitUtility } from '../../helper/textsplit.utility';
 
 @Injectable({
   providedIn: 'root',
 })
 export class YoutubeAutoService extends YoutubeService {
 
-  private isInDebugMode: boolean = false;
+  override currentCopyCatVideo: YoutubeVideo;
   
   constructor(
-    protected override generationService: AutoContentService,
     protected override navigationService: NavigationService,
-    protected autoContentRepo: AutoContentRepository
+    protected override transcriptRepo: TranscriptRepository,
+    protected override textSplitUtility: TextSplitUtility,
+    protected autoGenerationService: AutoContentService,
+    protected autoContentRepo: AutoContentRepository,
   ) {
     super(
-      generationService,
+      autoGenerationService,
       navigationService,
-      autoContentRepo
-    )
+      autoContentRepo,
+      transcriptRepo,
+      textSplitUtility,
+    );
   }
 
   getInitVideoDurationObserver() {
     return this.autoContentRepo.getInitVideoDurationObserver();
   }
+  
   getTopicObserver() {
     return this.generationService.getTopicObserver();
   }
+
   getDefaultVideoNichesObserver() {
     return this.contentRepo.getDefaultVideoNichesObserver();
   }
+
   getDefaultVideoDurationsObserver() {
     return this.autoContentRepo.getDefaultVideoDurationsObserver();
   }
+
   getErrorObservable() {
     return this.errorSubject.asObservable();
   }
+
   getScriptProgressObserver() {
-    return this.generationService.getScriptProgressObserver();
+    return this.autoGenerationService.getScriptProgressObserver();
   }
-  getCompleteResultsObserver() {
-    return this.generationService.getCompleteResultsObserver();
-  }
-  getScriptSectionObserver() {
-    return this.generationService.getScriptSectionObserver();
-  }
+  
   getContentProgressObserver() {
-    return this.generationService.getContentProgressObserver();
+    return this.autoGenerationService.getContentProgressObserver();
   }
 
   getInitVideoNiche() {
@@ -63,15 +70,15 @@ export class YoutubeAutoService extends YoutubeService {
   }
 
   reRollTopic() {
-    this.generationService.updateNewTopic();
+    this.autoGenerationService.updateNewTopic();
   }
   
   generateVideoContentWithAI() {
-    this.generationService.generateVideoContentWithAI();
+    this.autoGenerationService.generateVideoContentWithAI();
   }
 
   checkCurrentTopic() {
-    if (this.autoContentRepo.getCurrentTopic() === undefined && !this.isInDebugMode) {
+    if (this.autoContentRepo.getCurrentTopic() === undefined) {
       this.navigationService.navigateToCreateVideo();
       return
     }
@@ -97,5 +104,9 @@ export class YoutubeAutoService extends YoutubeService {
   }
   override updateTags(): void {
     throw new Error('Method not implemented.');
+  }
+
+  goToHomePage() {
+    this.navigationService.navigateToCreateVideo();
   }
 }

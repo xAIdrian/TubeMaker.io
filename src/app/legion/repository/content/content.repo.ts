@@ -3,7 +3,7 @@ import {
   getDefaultVideoNiches,
   VideoNiche,
 } from '../../model/autocreate/videoniche.model';
-import { combineLatest, concatMap, filter, from, map, Observable, of, Subject, tap } from 'rxjs';
+import { catchError, combineLatest, concatMap, filter, from, map, Observable, of, Subject, tap } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { FirestoreRepository } from '../firebase/firestore.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
@@ -31,7 +31,6 @@ export abstract class ContentRepository {
   }
 
   abstract collectionPath: string;
-  abstract getCompleteScript(): Observable<string>;
 
   constructor(
     initTranslate: TranslateService,
@@ -200,5 +199,28 @@ export abstract class ContentRepository {
       this.currentPage?.id ?? '',
       { "metadata.tags": newTags }
     ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 64 ~ ExtractContentRepository ~ err", err))
+  }
+
+  updateCopyCatScript(scriptArray: string[]) {
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage?.id ?? '',
+      { listScript: scriptArray }
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 40 ~ ExtractContentRepository ~ err", err))
+  }
+
+  getCompleteScript(): Observable<string> {
+    return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
+      this.collectionPath,
+      this.currentPage?.id ?? ''
+    ).pipe(
+      map((doc) => {
+        return doc.listScript?.join('\n\n') ?? '';
+      }),
+      catchError((err) => {
+        console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 76 ~ ExtractContentRepository ~ catchError ~ err", err)
+        throw new Error(err);
+      })
+    )
   }
 }

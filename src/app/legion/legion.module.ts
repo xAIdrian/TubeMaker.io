@@ -43,7 +43,6 @@ import { VideoCreateComponent } from './views/youtubeauto/videocreate/videocreat
 import { AutoDetailsComponent } from './views/youtubeauto/videoresult/autodetails.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './repository/cors.interceptor';
-import { VideoScriptComponent } from './views/youtubeauto/videoresult/videoscript/videoscript.component';
 import { AudioDropdownComponent } from './views/common/videomedia/audiodropdown/audiodropdown.component';
 import { VideoCopyComponent } from './views/youtubeextract/videocopy/videocopy.component'
 import { ScriptDetailsComponent } from './views/youtubeextract/extractdetails/scriptdetails/scriptdetails.component';
@@ -54,6 +53,7 @@ import { VideoGridComponent } from './views/common/videogrid/videogrid.component
 import { StatsRowComponent } from './views/common/youtubestatsrow/statsrow.component';
 import { ExtractDetailsComponent } from './views/youtubeextract/extractdetails/extractdetails.component';
 import { TitleDetailsComponent } from './views/common/titledetails/titledetails.component';
+import { DetailsComponent } from './views/common/details/details.component';
 
 @NgModule({
     providers: [{
@@ -62,19 +62,18 @@ import { TitleDetailsComponent } from './views/common/titledetails/titledetails.
         multi: true
     }],
     declarations: [
-        HomeComponent,
-        VideoCreateComponent,
-        AutoDetailsComponent,
-        VideoScriptComponent,
-        VideoMediaComponent,
-        AudioDropdownComponent,
         VideoCopyComponent,
         ExtractDetailsComponent,
-        ScriptDetailsComponent,
-        TitleDetailsComponent,
-        ConfirmationDialogComponent,
+        AutoDetailsComponent,
+        HomeComponent,
+        VideoCreateComponent,
+        VideoMediaComponent,
+        AudioDropdownComponent,
         VideoGridComponent,
-        StatsRowComponent
+        TitleDetailsComponent,
+        ScriptDetailsComponent,
+        ConfirmationDialogComponent,
+        StatsRowComponent,
     ],
     imports: [
         DragDropModule,

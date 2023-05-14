@@ -107,30 +107,30 @@ export class AutoContentRepository extends ContentRepository {
     );
   }
 
-  getCompleteScript(): Observable<string> {
-    let script = '';
-    return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
-      this.collectionPath, 
-      this.currentPage?.id ?? ''
-    ).pipe(
-      map((doc) => {
-        const scriptMap = doc.structuredScript;
-        if (scriptMap !== undefined && scriptMap !== null) {
-          // get all the values of the ordered hashmap in the same order
-          let valuesInOrder = Array.from(scriptMap.keys()).map(key => scriptMap.get(key));
-          // add all values to main string
-          valuesInOrder.map(value => {
-            if (value !== undefined && value !== null && value !== '') {
-              script += value + '\n\n';
-            }
-          });
-          return script;
-        } else {
-          throw new Error('scriptMap is undefined or null');
-        }
-      })
-    );
-  }
+  // getCompleteScript(): Observable<string> {
+  //   let script = '';
+  //   return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
+  //     this.collectionPath, 
+  //     this.currentPage?.id ?? ''
+  //   ).pipe(
+  //     map((doc) => {
+  //       const scriptMap = doc.structuredScript;
+  //       if (scriptMap !== undefined && scriptMap !== null) {
+  //         // get all the values of the ordered hashmap in the same order
+  //         let valuesInOrder = Array.from(scriptMap.keys()).map(key => scriptMap.get(key));
+  //         // add all values to main string
+  //         valuesInOrder.map(value => {
+  //           if (value !== undefined && value !== null && value !== '') {
+  //             script += value + '\n\n';
+  //           }
+  //         });
+  //         return script;
+  //       } else {
+  //         throw new Error('scriptMap is undefined or null');
+  //       }
+  //     })
+  //   );
+  // }
 
   getTotalNumberOfPoints(): number {
     return this.scriptTotalNumberOfPoints;

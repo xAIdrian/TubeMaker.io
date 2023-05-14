@@ -1,7 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { AfterContentInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { YoutubeService } from "../../../common/youtube.service";
-import { YoutubeExtractService } from "../../youtubeextract.service";
+import { YoutubeService } from "../youtube.service";
 
 @Component({
     selector: 'script-details',
@@ -19,19 +18,19 @@ import { YoutubeExtractService } from "../../youtubeextract.service";
     errorToastText = ''
 
     constructor(
-        private extractService: YoutubeExtractService,
+        private youtubeService: YoutubeService,
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
 
     ngOnInit() {
-        this.extractService.getErrorObserver().subscribe({
+        this.youtubeService.getErrorObserver().subscribe({
             next: (error) => {
                 this.showErrorToast = true;
                 this.errorToastText = error;
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.extractService.getVideoTranscriptObserver().subscribe({
+        this.youtubeService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
@@ -40,7 +39,7 @@ import { YoutubeExtractService } from "../../youtubeextract.service";
                 this.changeDetectorRef.detectChanges();
             }
         });
-        this.extractService.getScriptSectionObserver().subscribe({
+        this.youtubeService.getScriptSectionObserver().subscribe({
             next: (section) => {
                 console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", section)
                 const updateElement = {
@@ -56,7 +55,7 @@ import { YoutubeExtractService } from "../../youtubeextract.service";
                 this.transcriptSections[section.sectionIndex] = updateElement;
                 this.toggleLoading(updateElement);
                 this.changeDetectorRef.detectChanges();
-                this.extractService.updateScript(this.transcriptSections);
+                this.youtubeService.updateScript(this.transcriptSections);
             }
         });
     }
@@ -71,9 +70,11 @@ import { YoutubeExtractService } from "../../youtubeextract.service";
             this.parentVideoId = changes['parentVideoId'].currentValue;
             if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
                 if (this.parentVideoId === '') {
-                    this.extractService.getNewVideoTranscript();
+                    this.youtubeService.getNewVideoTranscript();
+                } else if () {
+
                 } else {
-                    this.extractService.getVideoTranscript();
+                    this.youtubeService.getVideoTranscript();
                 }
             }
         }
@@ -81,13 +82,13 @@ import { YoutubeExtractService } from "../../youtubeextract.service";
 
     onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {
         this.toggleLoading(section);
-        this.extractService.updateNewScriptIndex(prompt, section.section, index);
+        this.youtubeService.updateNewScriptIndex(prompt, section.section, index);
         this.changeDetectorRef.detectChanges();
     }
 
     onDrop(event: CdkDragDrop<string[]>) {
         moveItemInArray(this.transcriptSections, event.previousIndex, event.currentIndex);
-        this.extractService.updateScript(this.transcriptSections);
+        this.youtubeService.updateScript(this.transcriptSections);
     }
 
     private toggleLoading(section: { isLoading: boolean, section: string }) {

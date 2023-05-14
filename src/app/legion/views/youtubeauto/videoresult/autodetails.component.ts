@@ -107,45 +107,5 @@ export class AutoDetailsComponent extends DetailsComponent implements OnInit, Af
         }, 1000);
       }
     });
-
-    this.autoService.getCompleteResultsObserver().subscribe(
-      (response: { meta: VideoMetadata }) => {
-        this.infoFormGroup.setValue({
-          title: response.meta.title.replace('"', '').trim(),
-          description: response.meta.description.trim(),
-          tags: response.meta.tags.join(', ').trim(),
-        });
-      }
-    );
-
-    this.autoService.getScriptSectionObserver().subscribe((response) => {      
-      console.log("🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.contentService.getScriptSectionObserver ~ response:", response)
-      switch (response.position) { 
-        case 'introduction':
-          this.scriptFormGroup.patchValue({ introduction: response.scriptSection })
-          break;
-        case 'mainContent':
-          this.scriptFormGroup.patchValue({ mainContent: response.scriptSection })
-          break;
-        case 'conclusion':
-          this.scriptFormGroup.patchValue({ conclusion: response.scriptSection })
-          break;
-        case 'questions':
-          this.scriptFormGroup.patchValue({ questions: response.scriptSection })
-          break;
-        case 'opinions':
-          this.scriptFormGroup.patchValue({ opinions: response.scriptSection })
-          break;
-        case 'caseStudies':
-          this.scriptFormGroup.patchValue({ caseStudies: response.scriptSection })
-          break;
-        case 'actionables':
-          this.scriptFormGroup.patchValue({ actionables: response.scriptSection })
-          break;
-        default:
-          console.log("🔥 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.contentService.getScriptSectionObserver ~ default:")
-          break;
-      }
-    });
   }
 }

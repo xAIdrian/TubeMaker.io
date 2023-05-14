@@ -27,27 +27,4 @@ export class ExtractContentRepository extends ContentRepository {
       })
     );
   }
-
-  updateCopyCatScript(scriptArray: string[]) {
-    this.firestoreRepository.updateUsersDocument(
-      this.collectionPath,
-      this.currentPage?.id ?? '',
-      { listScript: scriptArray }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 40 ~ ExtractContentRepository ~ err", err))
-  }
-
-  getCompleteScript(): Observable<string> {
-    return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
-      this.collectionPath,
-      this.currentPage?.id ?? ''
-    ).pipe(
-      map((doc) => {
-        return doc.listScript?.join('\n\n') ?? '';
-      }),
-      catchError((err) => {
-        console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 76 ~ ExtractContentRepository ~ catchError ~ err", err)
-        throw new Error(err);
-      })
-    )
-  }
 }

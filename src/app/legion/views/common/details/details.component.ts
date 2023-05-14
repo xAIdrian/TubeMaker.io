@@ -13,7 +13,7 @@ import { YoutubeService } from "../../common/youtube.service";
     styleUrls: ['./details.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export abstract class DetailsComponent implements OnInit, AfterContentInit {
+export class DetailsComponent implements OnInit, AfterContentInit {
 
     isKickbackVisible = false;
     kickbackText = 'Are you sure you want to return to the home page?';
@@ -98,7 +98,7 @@ export abstract class DetailsComponent implements OnInit, AfterContentInit {
     }
 
     onReset() {
-        this.youtubeService.navigateHome();
+        this.youtubeService.goToHomePage();
     }
 
     toggleLiveDemo() {

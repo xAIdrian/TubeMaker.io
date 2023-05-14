@@ -31,10 +31,6 @@ export class ExtractDetailsComponent extends DetailsComponent implements AfterCo
         this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractService.getCurrentVideoUrl());
     }
 
-    setupFormControls() {
-        this.scriptFormGroup = new FormGroup({});
-    }
-
     isCurrentVideoPresent() {
         return this.extractService.isCurrentVideoPresent();
     }

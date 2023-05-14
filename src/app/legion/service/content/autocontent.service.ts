@@ -20,10 +20,6 @@ export class AutoContentService extends GenerateContentService {
     increment: number,
     label: string
   }>();
-  private completeDetailsSubject = new Subject<{
-    meta: VideoMetadata,
-    // script: GptGeneratedScriptData
-  }>();
 
   constructor(
     gptRepo: GptRepository,
@@ -33,14 +29,11 @@ export class AutoContentService extends GenerateContentService {
   }
 
   getContentProgressObserver(): Observable<number> { return this.contentProgressSubject.asObservable();  }
-  
+
   getScriptProgressObserver(): Observable<{
     increment: number,
     label: string
   }> { return this.scriptProgressSubject.asObservable();  }
-  getCompleteResultsObserver(): Observable<{
-    meta: VideoMetadata
-  }> { return this.completeDetailsSubject.asObservable();  }
 
   updateNewTopic() {
     console.log("🚀 ~ file: gpt.service.ts:63 ~ GptService ~ updateNewTopic ~ updateNewTopic:")
@@ -140,9 +133,6 @@ export class AutoContentService extends GenerateContentService {
       && completedMetaData.description !== ''
       && completedMetaData.tags.length > 0
     ) {
-      this.completeDetailsSubject.next({ meta: completedMetaData});
-      console.log("🚀 ~ file: gpt.service.ts:266 ~ GptService ~ completedMetaData:", completedMetaData)
-      
       this.contentRepo.getCurrentVideoDuration().sections.forEach((section) => {
         console.log("💵 ~ file: gpt.service.ts:271 ~ GptService ~ this.contentRepo.getCurrentVideoDuration ~ section:", section)
         this.getNewScriptSection(section);
