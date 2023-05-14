@@ -11,12 +11,6 @@ import { match } from 'assert';
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class HomeComponent implements OnInit, AfterContentInit {
-newCopyCat() {
-throw new Error('Method not implemented.');
-}
-newBrandNew() {
-throw new Error('Method not implemented.');
-}
 
     isLoading = true;
 
@@ -56,5 +50,13 @@ throw new Error('Method not implemented.');
         if (matchingPage !== undefined) {
             this.homeService.videoPageSelected(matchingPage.id ?? '');
         }
+    }
+
+    newCopyCat() {
+        this.homeService.goToCopyCat();
+    }
+
+    newBrandNew() {
+        this.homeService.goToAutoCreate();
     }
 }
