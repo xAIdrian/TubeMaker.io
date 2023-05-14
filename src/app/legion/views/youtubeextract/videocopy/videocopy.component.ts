@@ -76,10 +76,6 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
         });
     }
 
-    onUrlDownload() {
-        this.extractDetailsService.downloadVideoWithUrl(this.nicheFormGroup.value.url);
-    }
-
     onVideoOptionSelected(niche: VideoNiche) {
         this.selectedVideoNiche = niche;
         this.isLoading = true;

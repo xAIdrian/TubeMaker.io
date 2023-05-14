@@ -54,7 +54,8 @@ export class VoiceService {
    */
   generateTextToSpeech(name: string): Observable<Blob> {
     let completeScript = ''
-    return this.contentRepository.getCompleteScriptAsArray().pipe(
+    
+    return this.contentRepository.getCompleteScript().pipe(
       map((scriptValue) => {
         if (scriptValue === null || scriptValue === '') {
           this.erroSubject.next('Script Is Empty.');

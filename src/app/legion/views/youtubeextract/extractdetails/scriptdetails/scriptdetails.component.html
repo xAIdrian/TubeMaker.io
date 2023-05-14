@@ -1,3 +1,7 @@
+<div *ngIf="parentIsLoading" stlye="margin: 1rem;">
+    <c-spinner></c-spinner>
+    <p style="color: gray">Loading your videos...</p>
+</div>
 <div *ngIf="!parentIsLoading" style="margin-top: 1rem;">
     <h5>Edit Your Script</h5>
     <p class="text-medium-emphasis" style="padding-right: 1rem;;">
