@@ -38,7 +38,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
     this.extractDeatilsService.getTitleObserver().subscribe((response) => {
       this.loadingCount ++;
       this.isTitleLoading = false;
-      this.titleFormGroup.patchValue({ title: response.replace('"', '').trim() })
+      this.titleFormGroup.patchValue({ title: response.replace('\"', '').trim() })
       this.changeDetectorRef.detectChanges();
     });
     this.extractDeatilsService.getDescriptionObserver().subscribe((response) => {
@@ -69,7 +69,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
     if (changes['parentVideoId']) {
       this.parentVideoId = changes['parentVideoId'].currentValue;
       if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
-        if (this.parentVideoId == '') {
+        if (this.parentVideoId === '') {
           this.extractDeatilsService.getNewVideoMetaData();
         } else {
           this.extractDeatilsService.getVideoMetaData();

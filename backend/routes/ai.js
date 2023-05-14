@@ -623,7 +623,7 @@ async function getNewOutputCompletion(prompt, maxRetries = 3) {
   throw new Error("Max retries exceeded for error:", innerError);
 }
 
-async function getOptimizedOutputCompletion(prompt) {
+async function getOptimizedOutputCompletion(prompt, maxRetries = 3) {
   let retryCount = 0; //implement retry mechanism
   let innerError = '';
 
@@ -711,7 +711,7 @@ function improvePromptCompletion(filename, inputParam) {
   }
 
   rawPrompt = readTextFileToPrompt(filename);
-  properPrompt = rawPrompt.replace("SOURCE", inputParam);
+  properPrompt = rawPrompt.replace("<<SOURCE>>", inputParam);
   return getOptimizedOutputCompletion(properPrompt);
 }
 

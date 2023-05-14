@@ -8,8 +8,8 @@
     <p></p>
     <div>
       <button cButton variant="outline" style="width: 100%;" variant="outline" color="info"
-        [disabled]="generateAudioLoading" (click)="generateTextToSpeech()">
-        <c-spinner *ngIf="generateAudioLoading" size="sm"></c-spinner>
+        [disabled]="generatedAudioIsLoading" (click)="generateTextToSpeech()">
+        <c-spinner *ngIf="generatedAudioIsLoading" size="sm"></c-spinner>
         {{ 'media_selection_form.video_option.generate_ai_narration_button' | translate }}
       </button>
       <audio #audioPlayer class="flex-grow-1" style="width: 100%; margin-top: 1rem;" controls>
