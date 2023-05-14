@@ -11,6 +11,7 @@ import {
   of,
 } from 'rxjs';
 import { ContentRepository } from '../repository/content/content.repo';
+import { ExtractContentRepository } from '../repository/content/extractcontent.repo';
 @Injectable({
   providedIn: 'root',
 })
@@ -23,7 +24,7 @@ export class VoiceService {
   constructor(
     private firebaseRepository: FirebaseStorageRepository,
     private voiceRepository: VoiceRepository,
-    private contentRepository: ContentRepository
+    private contentRepository: ExtractContentRepository
   ) {}
 
   getErrorObserver(): Observable<string> {
@@ -54,7 +55,8 @@ export class VoiceService {
    */
   generateTextToSpeech(name: string): Observable<Blob> {
     let completeScript = ''
-    return this.contentRepository.getCompleteScriptAsArray().pipe(
+
+    return this.contentRepository.getCompleteScript().pipe(
       map((scriptValue) => {
         if (scriptValue === null || scriptValue === '') {
           this.erroSubject.next('Script Is Empty.');

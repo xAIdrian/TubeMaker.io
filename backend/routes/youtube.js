@@ -23,6 +23,7 @@ router.get("/videos/:language", async (req, res) => {
 
   if (reqNiche === undefined || reqNiche === null || reqNiche === "") {
     res.status(400).json({ error: "Missing niche parameter" });
+    return;
   }
 
   try {
@@ -45,6 +46,59 @@ router.get("/videos/:language", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+
+/**
+ * Complete wrapper for our fetch functions
+ * @returns 
+ */
+function fetchCompleteVideoData(language, niche, publishedAfter) {
+  if (!language || !niche || !publishedAfter) {
+    throw new Error("Invalid input parameters.");
+  }
+
+  return fetchVideoList(niche, publishedAfter).pipe(
+    map((data) => {
+      return data.items
+        .filter((item) => englishRegex.test(item.snippet.title ))
+        .map(async (item) => {
+
+        let processedTitle = item.snippet.title;
+        let processedDescription = item.snippet.description;
+  
+        if (language === 'fr') {
+          if (processedTitle !== undefined && processedTitle !== null && processedTitle !== "") {
+            processedTitle = await translationService.translateText(processedTitle);
+          }
+          if (processedDescription !== undefined && processedDescription !== null && processedDescription !== "") {
+            processedDescription = await translationService.translateText(processedDescription);
+          }
+          return {
+            id: item.id.videoId,
+            title: processedTitle,
+            description: processedDescription,
+            thumbnailUrl: item.snippet.thumbnails.high.url,
+            publishedAt: item.snippet.publishTime,
+            channelTitle: item.snippet.channelTitle,
+          }
+        } else {
+          return {
+            id: item.id.videoId,
+            title: processedTitle,
+            description: processedDescription,
+            thumbnailUrl: item.snippet.thumbnails.high.url,
+            publishedAt: item.snippet.publishTime,
+            channelTitle: item.snippet.channelTitle,
+          };
+        }
+      });
+    }),
+    concatMap((observables) => forkJoin(observables)),
+    // mergeMap((videoList) => mapVideoListToDetails(videoList))
+  );
+}
+
+
 /**
  * Gets our list of videos from the YouTube API and checks for errors
  * @param {string} apiUrl 
@@ -52,6 +106,10 @@ router.get("/videos/:language", async (req, res) => {
  * @returns 
  */
 function fetchVideoList(niche, publishedAfter) {
+  if (!niche || !publishedAfter) {
+    throw new Error("Invalid input parameters.");
+  }
+
   const params = {
     method: "GET",
     headers: {
@@ -78,8 +136,11 @@ function fetchVideoList(niche, publishedAfter) {
     mergeMap((res) => {
       if (res.ok) {
         return from(res.json());
+      } else if (res.status === 403) {
+        throw new Error("YouTube Data API quota exceeded. Please try again later.");
+        //create unique error for quota exceeded that will logged by Crashylitics
       } else {
-        res.status(500).json(res.json());
+        throw new Error("Failed to fetch video list from the YouTube Data API.");
       }
     })
   );
@@ -92,6 +153,10 @@ function fetchVideoList(niche, publishedAfter) {
  * @returns Observable<>
  */
 function fetchVideoDetails(videoId) {
+  if (!videoId) {
+    throw new Error("Invalid input parameters.");
+  }
+
   const params = {
     headers: {
       Accept: "application/json",
@@ -144,53 +209,6 @@ function mapVideoListToDetails(videoList) {
   ));
 
   return forkJoin(updateObservables);
-}
-
-/**
- * Complete wrapper for our fetch functions
- * @returns 
- */
-function fetchCompleteVideoData(language, niche, publishedAfter) {
-  return fetchVideoList(niche, publishedAfter).pipe(
-    map((data) => {
-      return data.items
-        .filter((item) => englishRegex.test(item.snippet.title ))
-        .map(async (item) => {
-
-        let processedTitle = item.snippet.title;
-        let processedDescription = item.snippet.description;
-  
-        if (language === 'fr') {
-          if (processedTitle !== undefined && processedTitle !== null && processedTitle !== "") {
-            processedTitle = await translationService.translateText(processedTitle);
-          }
-          if (processedDescription !== undefined && processedDescription !== null && processedDescription !== "") {
-            processedDescription = await translationService.translateText(processedDescription);
-          }
-          return {
-            id: item.id.videoId,
-            title: processedTitle,
-            description: processedDescription,
-            thumbnailUrl: item.snippet.thumbnails.high.url,
-            publishedAt: item.snippet.publishTime,
-            channelTitle: item.snippet.channelTitle,
-          }
-        } else {
-          return {
-            id: item.id.videoId,
-            title: processedTitle,
-            description: processedDescription,
-            thumbnailUrl: item.snippet.thumbnails.high.url,
-            publishedAt: item.snippet.publishTime,
-            channelTitle: item.snippet.channelTitle,
-          };
-        }
-      });
-    }),
-    concatMap((observables) => forkJoin(observables)),
-    // mergeMap((videoList) => mapVideoListToDetails(videoList))
-  );
-  
 }
 
 module.exports = router;

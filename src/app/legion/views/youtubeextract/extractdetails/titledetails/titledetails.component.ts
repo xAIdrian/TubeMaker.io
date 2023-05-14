@@ -23,6 +23,8 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
   showDescriptionBadge = false;
   showTagsBadge = false;
 
+  loadingCount = 0;
+
   constructor(
     private formGroupBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
@@ -34,24 +36,27 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
 
   ngOnInit() {
     this.extractDeatilsService.getTitleObserver().subscribe((response) => {
+      this.loadingCount ++;
       this.isTitleLoading = false;
-      this.titleFormGroup.patchValue({ title: response.replace('"', '').trim() })
+      this.titleFormGroup.patchValue({ title: response.replace('\"', '').trim() })
       this.changeDetectorRef.detectChanges();
     });
     this.extractDeatilsService.getDescriptionObserver().subscribe((response) => {
+      this.loadingCount ++;
       this.isDescLoading = false;
       this.titleFormGroup.patchValue({ description: response.trim() })
       this.changeDetectorRef.detectChanges();
     });
     this.extractDeatilsService.getTagsObserver().subscribe((response) => {  
+      this.loadingCount ++;
       this.isTagsLoading = false;
       this.titleFormGroup.patchValue({ tags: response.join(' #').trim() })
       this.changeDetectorRef.detectChanges();
     });
     this.titleFormGroup = this.formGroupBuilder.group({
-      title: ["Chargement...", Validators.required],
-      description: ["Chargement...", Validators.required],
-      tags: ["Chargement...", Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      tags: ['', Validators.required],
     });
   }
 
@@ -64,7 +69,7 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
     if (changes['parentVideoId']) {
       this.parentVideoId = changes['parentVideoId'].currentValue;
       if (this.parentVideoId !== undefined && this.parentVideoId !== null) {
-        if (this.parentVideoId == '') {
+        if (this.parentVideoId === '') {
           this.extractDeatilsService.getNewVideoMetaData();
         } else {
           this.extractDeatilsService.getVideoMetaData();

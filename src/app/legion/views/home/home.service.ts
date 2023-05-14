@@ -46,4 +46,12 @@ export class HomeService {
     console.log("🚀 ~ file: home.service.ts:46 ~ HomeService ~ videoPageSelected ~ videoPageSelected:", pageId)
     this.navigationService.navigateToExtractDetails(pageId);
   }
+
+  goToCopyCat() {
+    this.navigationService.navigateToCopyCat();
+  }
+
+  goToAutoCreate() {
+    this.navigationService.navigateToCreateVideo();
+  }
 }

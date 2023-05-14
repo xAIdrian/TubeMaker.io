@@ -11,7 +11,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ContentRepository } from '../../../repository/content/content.repo';
-import { FormGroup } from '@angular/forms';
 import { VoiceService } from '../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
 import * as saveAs from 'file-saver';
@@ -39,8 +38,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
   }
   @Input() parentVideoId: string;
   
-  generateAudioLoading = false;
-  generatedAudioIsVisible = false;
+  generatedAudioIsLoading = false;
   generatedAudioUrl: string = '';
 
   voiceOptions: { name: string; sampleUrl: string }[] = [];
@@ -58,7 +56,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
 
   ngOnInit() {
     this.voiceService.getErrorObserver().subscribe((response) => {
-      this.generateAudioLoading = false;
+      this.generatedAudioIsLoading = false;
       alert(response);
     });
     this.voiceService.getVoiceSamplesObserver().subscribe((response) => {
@@ -106,15 +104,15 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
       return;
     }
 
-    this.generatedAudioIsVisible = false;
-    this.generateAudioLoading = true;
+    this.generatedAudioIsLoading = false;
+    this.generatedAudioIsLoading = true;
 
     this.voiceService.generateTextToSpeech(
       this.selectedVoice.name
     ).subscribe({
       next: (response) => {
         console.log(response)
-        this.generatedAudioIsVisible = true;
+        this.generatedAudioIsLoading = true;
         this.generatedAudioUrl = URL.createObjectURL(response);
 
         this.audioPlayer.nativeElement.load();
@@ -125,7 +123,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
       },
       complete: () => {
         console.log('complete')
-        this.generateAudioLoading = false;
+        this.generatedAudioIsLoading = false;
       }
     });
   }

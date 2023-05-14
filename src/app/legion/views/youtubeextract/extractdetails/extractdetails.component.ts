@@ -49,18 +49,20 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
             console.log("🚀 ~ file: extractdetails.component.ts:49 ~ ExtractDetailsComponent ~ this.activatedRoute.paramMap.subscribe ~ params:", params)
             if (params.has('id')) {
                 pathId = params.get('id')!!;
-            } 
-            this.extractDetailsService.getCurrentPage(pathId).subscribe({
-                next: (page: YoutubeVideoPage) => {
-                    console.log("🚀 ~ file: extractdetails.component.ts:62 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ page:", page)
-                    this.currentPageId = page.id ?? '';
-                },
-                error: (error: any) => {
-                    console.log("🚀 ~ file: extractdetails.component.ts:65 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ error:", error)
-                    this.isErrorVisible = true;
-                    this.errorText = error;
-                }
-            });
+                this.extractDetailsService.getCurrentPage(pathId).subscribe({
+                    next: (page: YoutubeVideoPage) => {
+                        console.log("🚀 ~ file: extractdetails.component.ts:62 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ page:", page)
+                        this.currentPageId = page.id ?? '';
+                    },
+                    error: (error: any) => {
+                        console.log("🚀 ~ file: extractdetails.component.ts:65 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ error:", error)
+                        this.isErrorVisible = true;
+                        this.errorText = error;
+                    }
+                });
+            } else {
+                this.currentPageId = '';
+            }
         });
 
         this.setupObservers();

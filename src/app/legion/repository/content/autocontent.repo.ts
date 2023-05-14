@@ -6,7 +6,7 @@ import {
   getDefaultVideoDurations,
   VideoDuration,
 } from '../../model/autocreate/videoduration.model';
-import { catchError, combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
+import { catchError, combineLatest, concatMap, from, map, Observable, of, tap } from 'rxjs';
 import{ ContentRepository } from './content.repo';
 import { TranslateService } from '@ngx-translate/core';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
@@ -18,7 +18,7 @@ import { AUTO_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
 })
 export class AutoContentRepository extends ContentRepository {
 
-  override collectionPath: string = AUTO_YOUTUBE_VIDEO_PAGE_COL;
+  override collectionPath: string = 'auto_pages';
 
   scriptTotalNumberOfPoints: number = 0;
   
@@ -38,7 +38,7 @@ export class AutoContentRepository extends ContentRepository {
     ],
   };
 
-  setWorkingPageObject(): Observable<YoutubeVideoPage> {
+  setCurrentPageObject(): Observable<YoutubeVideoPage> {
     const newDoc = { 
       structuredScript: new Map<string, string>([
         //controlName -> script section
@@ -51,10 +51,16 @@ export class AutoContentRepository extends ContentRepository {
         ['conclusion', ''],
       ]) 
     } as YoutubeVideoPage;
-    return from(this.firestoreRepository.createUsersDocument(
-      this.collectionPath,
+    return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
+      'auto_pages',
       newDoc
-    ))
+    )).pipe(
+      tap((page) => this.currentPageSubject.next(page)),
+      catchError((err) => {
+        console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 58 ~ ExtractContentRepository ~ catchError ~ err", err)
+        throw new Error(err);
+      })
+    );
   }
 
   getInitVideoDurationObserver() {
@@ -134,7 +140,7 @@ export class AutoContentRepository extends ContentRepository {
     topic: string,
     videoStyle: VideoNiche,
     videoDuration: VideoDuration
-  ) {
+  ): Observable<YoutubeVideoPage> {
     this.scriptTotalNumberOfPoints = 0;
 
     this.currentTopic = topic
@@ -146,6 +152,8 @@ export class AutoContentRepository extends ContentRepository {
         this.scriptTotalNumberOfPoints++;
       });
     });
+
+    return this.setCurrentPageObject();
   }
 
   submitScriptSections(

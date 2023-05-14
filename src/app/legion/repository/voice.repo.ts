@@ -3,9 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import {
   Observable,
-  throwError,
-  Subject,
-  catchError,
   of,
 } from 'rxjs';
 @Injectable({

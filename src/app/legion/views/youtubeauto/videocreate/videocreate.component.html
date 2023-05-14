@@ -1,6 +1,6 @@
 <c-card class="mb-4">
   <c-card-body  style="min-height: 80vh">
-    <mat-horizontal-stepper [linear]="isLinear" #stepper style="padding: 1rem;">
+    <mat-horizontal-stepper [linear]="true" #stepper style="padding: 1rem;">
 
       <mat-step [stepControl]="topicFormGroup">
         <h4>{{ 'video_wizard.pick_your_video_subject' | translate }}</h4>
@@ -91,9 +91,9 @@
         </form>
       </mat-step>
     </mat-horizontal-stepper>
-    <c-card class="container" *ngIf="hasInputError" style="margin-bottom: 1rem;">
+    <c-card class="container" *ngIf="hasError" style="margin-bottom: 1rem;">
       <div class="text-area">
-          <p>{{ 'video_editor.error_message.complete_forms' | translate }}</p>
+          <p>{{ inputErrorText }}</p>
       </div>
   </c-card>
   </c-card-body>

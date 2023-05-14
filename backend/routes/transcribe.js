@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const { of, map, from, throwError, concatMap, subscribe } = require("rxjs");
-
+const util = require('util');
+const unlink = util.promisify(fs.unlink);
 const ytdl = require("ytdl-core");
 
 const ffmpegPath = require("ffmpeg-static");
@@ -29,6 +30,13 @@ router.post("", async (req, res) => {
   const videoId = reqBody.videoId;
   const language = reqBody.language;
 
+  if (!videoId || !language) {
+    res.status(400).json({
+      message: "Video ID and language are required.",
+    });
+    return; // Stop further execution
+  }
+
   const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
   const options = {
     filter: "audioonly",
@@ -36,93 +44,85 @@ router.post("", async (req, res) => {
     format: "mp3",
   };
 
-  //test code
-  if (videoId === 'test') { 
-    res.status(200).json({
-      message: "success",
-      result: {
-        //our extrememely long sample response
-        translation: "Artificial Intelligence(AI) is an increasingly important technology that is poised to change the world in countless ways. From automating routine tasks to predicting disease outbreaks and developing new materials, AI has the potential to revolutionize every industry and every aspect of our lives. To fully take advantage of the incredible potential of AI, individuals and organizations need to stay informed about new developments in the field and invest in training and resources that will allow them to harness the power of this transformative technology. One of the keys to unlocking the power of AI is staying abreast of new developments and innovations in the field. There is a wealth of information available online and in print about the latest advances in AI, and it is essential for individuals and businesses to stay up- to - date on the latest trends and breakthroughs. This can include attending conferences and events, reading research papers, and following industry experts and thought leaders on social media and other platforms. Another important step to take is to invest in the necessary resources and infrastructure to take full advantage of AI. This can include purchasing hardware and software solutions that are optimized for AI workloads, hiring data scientists and other experts in the field, and investing in cloud computing services that can handle the massive amounts of data required for AI projects. Organizations that are willing to invest in these resources and build out their capabilities in AI will be better positioned to take advantage of the opportunities that this technology offers. Finally, partnering with other organizations and experts in the field can be a powerful way to accelerate progress in AI and stay ahead of the curve. This can include collaborating with other businesses in your industry to share data and insights, working with academic institutions to conduct research and develop new technologies, and seeking out partnerships with AI startups and other companies that are on the cutting edge of the field. In conclusion, the potential of AI is enormous, and those who are able to take advantage of this technology will be better positioned to succeed in the years to come. By staying informed, investing in resources and infrastructure, and partnering with others in the field, individuals and businesses can be among the first to fully embrace the power of AI and use it to create new opportunities and achieve their goals. With AI, the possibilities are endless, and the only limit is our imagination."
-      }
-    });
-    const videoUrl = 'https://www.youtube.com/watch?v=XzLgw2Y8gNw'
-    return;
-  }
+  try {
+    from(ytdl.getInfo(videoUrl, options)).pipe(
+      concatMap(async (info) => {
+        console.log('Start processing download...')
+        
+        const stream = ytdl.downloadFromInfo(info, options);
+        const cleanedString = info.videoDetails.title.replace(/[^a-zA-Z0-9 ]/g, '').trim().replace(/\s+/g, '_');
+        const filename = `${cleanedString}.mp3`;
+        const filePath = `${storagePath}/${filename}`;
 
+        ffmpeg(stream)
+          .toFormat("mp3")
+          .saveToFile(filePath)
+          .on("error", function (err) {
+            return throwError(() => new Error('🔥' + err));
+          }).on("end", async function () {
+            console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
 
-  from(ytdl.getInfo(videoUrl, options)).pipe(
-    concatMap(async (info) => {
-      console.log('Start processing download...')
-      const stream = ytdl.downloadFromInfo(info, options);
-      const cleanedString = info.videoDetails.title.replace(/[^a-zA-Z0-9 ]/g, '').trim().replace(/\s+/g, '_');
-      const filename = `${cleanedString}.mp3`;
-      const filePath = `${storagePath}/${filename}`;
+            const transcription = await transcribeAudio(filePath);
+            
+            if (transcription === undefined || transcription === '') {
+              deleteFile(filePath);
+              res.status(404).json({ error: "Transcription Unavailable" });
+              return;
+            } else {
+              let translation = transcription;
 
-      ffmpeg(stream)
-        .toFormat("mp3")
-        .saveToFile(filePath)
-        .on("error", function (err) {
-          return throwError(() => new Error('🔥' + err));
-        }).on("end", async function () {
-          console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
+              if (language === 'fr') {
+                translation = await translationService.translateText(transcription);
 
-          const transcription = await transcribeAudio(filePath);
-          
-          if (transcription === undefined || transcription === '') {
-            deletefile(filePath);
-            res.status(505).json({ error: "Transcription Unavailable" });
-            return;
-          } else {
-            let translation = transcription;
-
-            if (language === 'fr') {
-              translation = await translationService.translateText(transcription);
-
-              if (translation !== undefined && translation !== '') {
-                console.log("🚀 ~ file: transcribe.js:82 ~ translation:", translation)
+                if (translation !== undefined && translation !== '') {
+                  console.log("🚀 ~ file: transcribe.js:82 ~ translation:", translation)
+                  res.status(200).json({
+                    message: "success",
+                    result: {
+                      translation: translation,
+                    }
+                  });
+                  deleteFile(filePath)
+                } else {
+                  console.log('🔥 Translation Empty')
+                  deleteFile(filePath);
+                  res.status(500).json({ error: "Translations Empty" });
+                  return;
+                }
+              } else {
+                console.log("🔥 ~ file: transcribe.js:97 ~ transcription:", translation)
                 res.status(200).json({
                   message: "success",
                   result: {
                     translation: translation,
                   }
                 });
-                deletefile(filePath)
-              } else {
-                console.log('🔥 Translation Empty')
-                deletefile(filePath);
-                res.status(500).json({ error: "Translations Empty" });
-                return;
+                deleteFile(filePath)
               }
-            } else {
-              console.log("🔥 ~ file: transcribe.js:97 ~ transcription:", translation)
-              res.status(200).json({
-                message: "success",
-                result: {
-                  translation: translation,
-                }
-              });
-              deletefile(filePath)
             }
-          }
-        })
+          })
+      })
+    ).subscribe({
+      error: (err) => {
+        console.error(`🔥 ${err}`);
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+      }
     })
-  ).subscribe({
-    error: (err) => {
-      console.error(`🔥 ${err}`);
-      console.error(err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  })
+  } catch (error) {
+    console.log("🔥 ~ file: transcribe.js:151 ~ transcribeAudio ~ error:", error)
+    deleteFile(filePath);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
-async function deletefile(filePath) {
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
+async function deleteFile(filePath) {
+  try {
+    await unlink(filePath);
     console.log(`File ${filePath} has been deleted.`);
-  });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function transcribeAudio(filePath) {
@@ -145,7 +145,7 @@ async function transcribeAudio(filePath) {
     return transcript;
   } catch (error) {
     console.log("🚀 ~ file: transcribe.js:151 ~ transcribeAudio ~ error:", error)
-    deletefile(filePath);
+    deleteFile(filePath);
     return '';
   }
 }

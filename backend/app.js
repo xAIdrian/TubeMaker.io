@@ -31,6 +31,10 @@ app.use((req, res, next) => {
     )
     next();
 });
+app.use((err, req, res, next) => {
+    console.error("🔥 Error:", err);
+    res.status(501).json({ error: "Uknown error caught by middleware" });
+});
 
 app.use("/api/openai", openaiRoutes)
 app.use("/api/voices", voiceRoutes)

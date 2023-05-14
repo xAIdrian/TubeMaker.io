@@ -58,6 +58,7 @@
             player.stopVideo();
           }
         </script>
+        <title-details [parentVideoId]="currentPageId"></title-details>
       </div>
       
       <div class="col-1">
@@ -65,7 +66,6 @@
       </div>
     </div>
 
-    <title-details [parentVideoId]="currentPageId"></title-details>
     <script-details [parentIsLoading]="transcriptIsLoading" [parentVideoId]="currentPageId"></script-details>
 
     <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">

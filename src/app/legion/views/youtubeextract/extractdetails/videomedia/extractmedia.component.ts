@@ -14,7 +14,7 @@ import { ExtractContentRepository } from "../../../../repository/content/extract
 export class ExtractMediaComponent extends VideoMediaComponent {
 
   constructor(
-    contentRepo: ExtractContentRepository,
+    contentRepo: ExtractContentRepository, 
     voiceService: VoiceService,
     navigationService: NavigationService,
     translate: TranslateService,

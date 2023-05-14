@@ -22,9 +22,9 @@
               style="width: 100%" 
               variant="outline" 
               color="primary"
-              [disabled]="generateAudioLoading"
+              [disabled]="generatedAudioIsLoading"
               (click)="generateTextToSpeech()">
-              <c-spinner *ngIf="generateAudioLoading" size="sm"></c-spinner>
+              <c-spinner *ngIf="generatedAudioIsLoading" size="sm"></c-spinner>
               {{ 'media_selection_form.video_option.generate_ai_narration_button' | translate }}
             </button>
             <audio #audioPlayer class="flex-grow-1" style="margin: 1rem; width: 100%;" controls>

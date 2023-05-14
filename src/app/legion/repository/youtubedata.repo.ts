@@ -32,10 +32,10 @@ export class YoutubeDataRepository {
     /** */
     }
 
-  private getTwoWeeksAgoIsoDate(): string {
-    const twoWeeksAgo = new Date();
-    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
-    const isoDate = twoWeeksAgo.toISOString();
+  private oneMonthAgoIsoDate(): string {
+    const oneMonthAgoDate = new Date();
+    oneMonthAgoDate.setDate(oneMonthAgoDate.getDate() - 30);
+    const isoDate = oneMonthAgoDate.toISOString();
     return isoDate;
   }
 
@@ -46,7 +46,7 @@ export class YoutubeDataRepository {
         url: `http://localhost:3000/api/youtube/videos/${currentLang}`,
         params: {
             niche: niche,
-            publishedAfter: this.getTwoWeeksAgoIsoDate(),
+            publishedAfter: this.oneMonthAgoIsoDate(),
         },
         maxContentLength: Infinity,
         maxBodyLength: Infinity

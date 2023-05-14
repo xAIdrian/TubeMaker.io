@@ -13,8 +13,9 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../../../service/navigation.service';
 import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
-import { VideoNiche as VideoNiche } from '../../../model/autocreate/videoniche.model';
+import { VideoNiche } from '../../../model/autocreate/videoniche.model';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
+import { VideoDetailsService } from '../videodetails.service';
 
 @Component({
   selector: 'video-create',
@@ -24,10 +25,8 @@ import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 })
 export class VideoCreateComponent implements OnInit, AfterContentInit {
 
-  promptQuery: any;
   gptResponse: string = 'Waiting for response...';
 
-  isLinear: any;
   topicFormGroup: FormGroup;
   styleFormGroup: FormGroup;
   durationFormGroup: FormGroup;
@@ -46,16 +45,13 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     description: '',
     sections: []
   }
-  moneyOptions = [ 'Ad Sense',  'Affiliate' ]
-  selectedMonitizationOption = '';
 
   topicLoading: boolean = false;
-  hasInputError = false;
+  hasError = false;
+  inputErrorText = 'Please fill out all fields.';
 
   constructor(
-    private gptService: GenerateContentService,
-    private contentRepo: AutoContentRepository,
-    private navigationService: NavigationService,
+    private videoDetailsService: VideoDetailsService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
@@ -82,32 +78,33 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   }
 
   private setupObservers() {
-    this.contentRepo.getInitVideoNiche(
-      'video_style.init_header',
-      'video_style.init_description'
-    ).subscribe((response) => {
+    this.videoDetailsService.getInitVideoNiche().subscribe((response) => {
       this.selectedVideoNiche = response;
     });
-    this.contentRepo.getInitVideoDurationObserver().subscribe((response) => {
+    this.videoDetailsService.getInitVideoDurationObserver().subscribe((response) => {
       this.selectedVideoDuration = response;
     });
-    this.gptService.getTopicObserver().subscribe((response) => {
+    this.videoDetailsService.getTopicObserver().subscribe((response) => {
       this.topicLoading = false;
       this.topicFormGroup.setValue({
         topic: response.replace('"', '').trim()
       })
     });
-    this.contentRepo.getDefaultVideoNichesObserver().subscribe((response) => {
+    this.videoDetailsService.getDefaultVideoNichesObserver().subscribe((response) => {
       this.videoNiches = response;
     });
-    this.contentRepo.getDefaultVideoDurationsObserver().subscribe((response) => {
+    this.videoDetailsService.getDefaultVideoDurationsObserver().subscribe((response) => {
       this.videoDurations = response;
+    });
+    this.videoDetailsService.getErrorObservable().subscribe((response) => {
+      this.hasError = true;
+      this.inputErrorText = response;
     });
   }
 
   reRollTopic() { 
     this.topicLoading = true;
-    // this.gptService.updateNewTopic() 
+    this.videoDetailsService.reRollTopic();
   }
 
   onVideoOptionSelected(option: VideoNiche) {
@@ -118,25 +115,20 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.selectedVideoDuration = option;
   }
 
-  onMoneyOptionSelected(selectedOption: string) {
-    this.selectedMonitizationOption = selectedOption
-  }
-
   onSubmit() {
     this.topicFormGroup.markAsTouched();
     this.styleFormGroup.markAsTouched();
     this.durationFormGroup.markAsTouched();
 
     if (this.topicFormGroup.invalid || this.styleFormGroup.invalid || this.durationFormGroup.invalid) {
-      this.hasInputError = true;
+      this.hasError = true;
     } else {
-      this.hasInputError = false;
-      this.contentRepo.submitInputs(
+      this.hasError = false;
+      this.videoDetailsService.submitCreate(
         this.topicFormGroup.value.topic,
         this.styleFormGroup.value.selectedStyle,
         this.durationFormGroup.value.selectedDuration
-      );
-      this.navigationService.navigateToResults();
+      )
     }
   }
 }
