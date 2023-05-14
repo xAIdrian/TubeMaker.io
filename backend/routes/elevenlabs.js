@@ -6,6 +6,8 @@ const { ELEVEN_LABS_API_KEY } = require("../../appsecrets");
 const router = express.Router();
 
 const ELEVEN_BASE_URL = 'https://api.elevenlabs.io'
+const MONOLINGUAL_MODEL = 'eleven_monolingual_v1'
+const MULTILINGUAL_MODEL = 'eleven_multilingual_v1'
 
 router.get('', async (req, res) => {
   try {
@@ -17,26 +19,26 @@ router.get('', async (req, res) => {
     });
 
     if ("voices" in response.data) {
-      const mappedVoices = response.data.voices.map(voice => {
-        return {
-          id: voice.voice_id,
-          name: voice.name
-        };
-      });
+      const mappedVoices = response.data.voices.map((voice) => ({
+        id: voice.voice_id,
+        name: voice.name,
+      }));
       res.status(200).json({
-        "message": "success",
-        "result": mappedVoices
+        message: "success",
+        result: mappedVoices
       });
     } else {
       res.status(422).json({
-        "message": "validation error",
-        "result": response.data
+        message: "validation error",
+        result: response.data
       })
     }
   } catch (error) {
-    console.error(error);
+    console.log("🔥 ~ file: elevenlabs.js:37 ~ router.get ~ error:", error)
+    
     res.status(500).send({
-      "result": error.message,
+      message: 'something went wrong in voices',
+      result: error.message,
     });
   }
 });
@@ -45,13 +47,21 @@ router.post('/:id/:language', async (req, res) => {
   console.log("🚀 ~ file: elevenlabs.js:45 ~ router.post ~ req:", req.body)
   const voiceId = req.params.id;
   const language = req.params.language
+
+  if (language !== 'en' || language !== 'fr') {
+    res.status(422).json({
+      message: "Language not supported.",
+    });
+    return; // Stop further execution
+  }
+
   if (language === 'en') {
-    modelId = "eleven_monolingual_v1"
+    modelId = MONOLINGUAL_MODEL;
   } else if (language === 'fr') {
-    modelId = "eleven_multilingual_v1"
+    modelId = MULTILINGUAL_MODEL;
   } else {
     res.status(422).json({
-      "message": "language not supported"
+      message: "language not supported"
     })
   }
 
@@ -76,24 +86,31 @@ router.post('/:id/:language', async (req, res) => {
         'Content-Type': 'audio/mpeg'
       })
       const stream = await streamResponse.body
-      await pipeline(stream, res, (err) => {
+      pipeline(stream, res, (err) => {
         if (err) {
-          console.error('Pipeline failed.', err);
+          console.error('🔥 Pipeline failed.', err);
           res.status(500).json({
             "message": "pipeline failed",
             "result": err
-          })
+          });
         } else {
           console.log('Pipeline succeeded.');
         }
+      }).catch(error => {
+        console.log("🔥 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error);
+        res.status(500).json({
+          message: "Pipeline failed.",
+          result: error,
+        });
       })
       // streamResponse.body.pipe(res)
-    }, (errorStatus, response) => {
+    },
+    (errorStatus, response) => {
       res.status(errorStatus).json(response)
     })
   }).catch(error => {
     // handle any errors that occurred during the request here
-    console.log("🚀 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error)
+    console.log("🔥 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error)
     res.status(500).json({
       "message": "pipeline failed",
       "result": err
@@ -113,6 +130,12 @@ async function handleResponse(
   errorCallback
 ) {
   try {
+    if (!fetchResponse) { throw new Error("🔥 Fetch response is required."); }
+    if (typeof callback !== "function" && !(callback instanceof Promise)) {
+      throw new Error("🔥 Callback must be a function or a promise.");
+    }
+    if (typeof errorCallback !== "function") { throw new Error("🔥 Error callback must be a function.");  }
+    
     if (fetchResponse.ok) {
       return callback(fetchResponse);
 
@@ -131,8 +154,5 @@ async function handleResponse(
     errorCallback(500, fetchResponse.json())
   }
 }
-
-
-
 
 module.exports = router;

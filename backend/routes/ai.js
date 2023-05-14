@@ -43,13 +43,13 @@ router.get("/topic/:language", async (req, res, next) => {
       console.log("🔥 ~ file: ai.js:31 ~ router.get ~ error.response:", error.response);
       res.status(500).json({
         message: "API call failed",
-        error: error.response.data,
+        result: error.response.data,
       });
     } else {
       console.log("🔥 ~ file: ai.js:34 ~ router.get ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
-        error: error.message,
+        result: error.message,
       });
     }
   }
@@ -114,19 +114,19 @@ router.post("/summary/:language", async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log("🚀 ~ file: ai.js:34 ~ router.post ~ error:", error);
+    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
   
     if (error.response) {
       console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
       res.status(500).json({
         message: "API call failed",
-        error: error.response.data,
+        result: error.response.data,
       });
     } else {
       console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
-        error: error.message,
+        result: error.message,
       });
     }
   }
@@ -189,19 +189,19 @@ router.post("/new/title/:language", async (req, res, next) => {
       result: { title: gptTitle },
     });
   } catch (error) {
-    console.log("🚀 ~ file: ai.js:34 ~ router.post ~ error:", error);
+    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
   
     if (error.response) {
       console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
       res.status(400).json({
         message: "API call failed",
-        error: error.response.data,
+        result: error.response.data,
       });
     } else {
       console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
-        error: error.message,
+        result: error.message,
       });
     }
   }
@@ -258,19 +258,19 @@ router.post("/improve/title/:language", async (req, res, next) => {
       result: { title: gptTitle },
     });
   } catch (error) {
-    console.log("🚀 ~ file: ai.js:34 ~ router.post ~ error:", error);
+    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
   
     if (error.response) {
       console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
       res.status(500).json({
         message: "API call failed",
-        error: error.response.data,
+        result: error.response.data,
       });
     } else {
       console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
-        error: error.message,
+        result: error.message,
       });
     }
   }
@@ -333,6 +333,7 @@ router.post("/new/description/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while generating the description.",
+      result: error.message
     });
   }
 });
@@ -378,6 +379,7 @@ router.post("/improve/description/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while improving the description.",
+      result: error.message
     });
   }
 });
@@ -421,6 +423,7 @@ router.post("/new/script/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while generating the script.",
+      result: error.message
     });
   }
 });
@@ -473,6 +476,7 @@ router.post("/improve/script/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while improving the script.",
+      result: error.message
     });
   }
 });
@@ -515,6 +519,7 @@ router.post("/new/tags/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while generating new tags.",
+      result: error.message
     });
   }
 });
@@ -560,6 +565,7 @@ router.post("/improve/tags/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while improving tags.",
+      result: error.message
     });
   }
 });
