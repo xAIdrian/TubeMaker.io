@@ -23,7 +23,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
     private router: Router,
     private angularFireAuth: AngularFireAuth,
     private translate: TranslateService,
-    private changeDetectorRef: ChangeDetectorRef,
   ) { /** */ }
 
   ngOnInit() {
@@ -38,7 +37,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.updateNavItems(this.translate);
-    this.changeDetectorRef.detectChanges();
   }
 
   private updateNavItems(translate: TranslateService) {

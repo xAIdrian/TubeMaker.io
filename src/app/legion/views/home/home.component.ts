@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
     ngOnInit() {
         this.homeService.getCompleteVideoListObserver().subscribe((response) => {
+            console.log("🚀 ~ file: home.component.ts:27 ~ HomeComponent ~ this.homeService.getCompleteVideoListObserver ~ response:", response)
             this.isLoading = false
             this.videos = response;
             this.youtubeVideos = this.videos.map((videoPage) => {

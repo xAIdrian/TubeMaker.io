@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
-import { Subject, combineLatest } from 'rxjs';
+import { Subject, combineLatest, switchMap } from 'rxjs';
 import { NavigationService } from '../../service/navigation.service';
+import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,8 @@ export class HomeService {
   constructor(
     private navigationService: NavigationService,
     private autoContentRepository: AutoContentRepository,
-    private extractContentRepository: ExtractContentRepository
+    private extractContentRepository: ExtractContentRepository,
+    private authRepo: FireAuthRepository
   ) {}
 
   getErrorObserver() {
@@ -28,10 +30,12 @@ export class HomeService {
   }
 
   getCompleteVideoList() {
-    combineLatest([
-      this.autoContentRepository.getVideosList(),
-      this.extractContentRepository.getVideosList()
-    ]).subscribe({
+    this.authRepo.getUserAuthObservable().pipe(
+      switchMap(() => combineLatest([
+        this.autoContentRepository.getVideosList(),
+        this.extractContentRepository.getVideosList()
+      ]))
+    ).subscribe({
       next: ([firstList, secondList]) => {
         const joinedList = [...firstList, ...secondList];
         this.completeVideoListSubject.next(joinedList);

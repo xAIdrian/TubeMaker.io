@@ -1,9 +1,12 @@
 Your task is to craft a compelling and attention-grabbing title for a YouTube video that focuses on the following text in the style of <<STYLE>>.
 Your title should capture the essence of the text while also being unique and creative enough to stand out among other videos. 
 It should entice viewers to click on the video and watch it in its entirety by using persuasive language, humor, or a sense of urgency.
+Your output must have no quotation marks. Analyze your output, you are required to remove quotation marks if they are present.
+
 
 <<FEED>>
 
 Your task is to craft a compelling and attention-grabbing title for a YouTube video that focuses on the ABOVE text in the style of <<STYLE>>. 
 Your title should capture the essence of the text while also being unique and creative enough to stand out among other videos. 
 It should entice viewers to click on the video and watch it in its entirety by using persuasive language, humor, or a sense of urgency.
+Your output must have no quotation marks. Analyze your output, you are required to remove quotation marks if they are present.

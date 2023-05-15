@@ -3,9 +3,8 @@ import {
   getAuth,
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
-  signInWithEmailLink,
 } from 'firebase/auth';
-import { Observable, from, map, of } from 'rxjs';
+import { Observable, Subject, from, map, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { FirebaseUser } from '../../model/user/user.model';
@@ -15,10 +14,10 @@ import { PURCHASED_USERS_COL, USERS_COL } from './firebase.constants';
   providedIn: 'root',
 })
 export class FireAuthRepository {
-  
-  public sessionUser?: FirebaseUser;
 
-  private userAuthObservable: any;
+  public sessionUser?: FirebaseUser;
+  private userSubject: Subject<FirebaseUser> = new Subject<FirebaseUser>();
+
   private actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for this
     // URL must be in the authorized domains list in the Firebase Console.
@@ -40,15 +39,20 @@ export class FireAuthRepository {
     private angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore
   ) {
-    this.userAuthObservable = this.angularFireAuth.authState;
-    this.userAuthObservable.subscribe((user: any) => {
+    this.angularFireAuth.authState.subscribe((user: any) => {
+      console.log("🚀 ~ file: fireauth.repo.ts:52 ~ FireAuthRepository ~ this.userAuthObservable.subscribe ~ user:", user)
       if (user) {
         this.sessionUser = user;
         this.setUserData(user);
+        this.userSubject.next(user);
       } else {
         this.sessionUser = undefined;
       }
     });
+  }
+
+  getUserAuthObservable(): Observable<FirebaseUser> {
+    return this.userSubject.asObservable();
   }
 
   isAuthenticated(): Observable<boolean> {
