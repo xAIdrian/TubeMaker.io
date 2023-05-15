@@ -73,14 +73,11 @@ export class AutoContentService extends GenerateContentService {
     duration: VideoDuration
   ) {
     console.log("🚀 ~ file: gpt.service.ts:192 ~ GptService ~ generateVideoContentWithAI ~ generateVideoContentWithAI:")
-    if (
-      topic === undefined
-      || niche === undefined
-      || duration === undefined
-    ) { 
+    if (topic === undefined || niche === undefined || duration === undefined) { 
       console.log("🔥 ~ file: gpt.service.ts:197 ~ GptService ~ generateVideoContentWithAI ~ this.contentRepo.getCurrentVideoNiche():", 'missing input')
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
-     }
+      return;
+    }
 
     let compeleteMetaData: VideoMetadata = {
       summary: '',
@@ -100,7 +97,6 @@ export class AutoContentService extends GenerateContentService {
 
         compeleteMetaData.summary = requestSummary;
         this.gptGeneratedSummary = requestSummary;
-        this.contentRepo.updateSummary(this.gptGeneratedSummary);
 
         this.contentProgressSubject.next(25);
         

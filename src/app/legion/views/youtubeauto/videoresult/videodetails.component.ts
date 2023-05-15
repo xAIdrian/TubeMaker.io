@@ -82,6 +82,10 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     this.scriptProgressValue = 0;
   }
 
+  isCurrentVideoPresent() {
+    return this.videoDetailsService.hasVideoData();
+  }
+
   setupObservers() {
     this.videoDetailsService.getContentProgressObserver().subscribe((response) => {
       this.contentProgressValue = this.contentProgressValue + response;
@@ -119,7 +123,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
         this.infoFormGroup.setValue({
           title: response.meta.title.replace('"', '').trim(),
           description: response.meta.description.trim(),
-          tags: response.meta.tags.join(', ').trim(),
+          tags: response.meta.tags.join(' #').trim(),
         });
       }
     );

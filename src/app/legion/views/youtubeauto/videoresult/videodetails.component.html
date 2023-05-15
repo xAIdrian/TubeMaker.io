@@ -35,9 +35,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-2">
-          <auto-media></auto-media>
 
           <!-- Metadata Section -->
           <form [formGroup]="infoFormGroup">
@@ -108,7 +105,7 @@
             <div class="metadata-row">
               <textarea autosize style="height: 100%; margin-bottom: 0.5rem; background-color: #F2F2F2;" cFormControl
                 formControlName="tags">
-        </textarea>
+              </textarea>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
                 <button cButton class="ai-button" shape="rounded-pill" color="light" [disabled]="isTagsLoading"
                   (click)="rerollTags()">
@@ -117,8 +114,11 @@
                 </button>
               </div>
             </div>
-
           </form>
+
+        </div>
+        <div class="col-2">
+          <auto-media></auto-media>
         </div>
       </div>
 

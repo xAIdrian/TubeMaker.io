@@ -88,14 +88,6 @@ export class AutoContentRepository extends ContentRepository {
       {  [property]: script  }
     );
   }
-
-  updateSummary(gptGeneratedSummary: string) {
-    this.firestoreRepository.updateUsersDocument(
-      this.collectionPath,
-      this.currentPage?.id ?? '',
-      {  summary: gptGeneratedSummary  }
-    );
-  }
   
   updateCompleteMetaData(completedMetaData: VideoMetadata) {
     this.firestoreRepository.updateUsersDocument(

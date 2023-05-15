@@ -38,6 +38,10 @@ export class VideoDetailsService {
     /** */
   }
 
+  hasVideoData(): boolean {
+    return this.contentService.getTotalScriptPoints() > 0;
+  }
+
   getInitVideoNiche() {
     return this.contentRepo.getInitVideoNiche(
       'video_style.init_header',
@@ -92,15 +96,12 @@ export class VideoDetailsService {
   getScriptSectionObserver() {
     return this.contentService.getScriptSectionObserver();
   }
-
   getCurrentTopic(): string {
     return this.currentTopic;
   }
-
   getCurrentVideoDuration(): VideoDuration {
     return this.currentDuration;
   }
-
   reRollTopic() {
     this.contentService.updateNewTopic();
   }
@@ -171,6 +172,6 @@ export class VideoDetailsService {
   }
 
   updateScriptSection(prompt: string, section: DurationSection) {
-    throw new Error("Method not implemented.");
+    // this.contentRepo.updateScriptSection(prompt, section);
   }
 }
