@@ -11,6 +11,9 @@ import { DurationSection, VideoDuration } from "../../../../model/autocreate/vid
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoScriptComponent implements AfterContentInit, OnChanges {
+onImproveClick(arg0: string,_t10: DurationSection) {
+throw new Error('Method not implemented.');
+}
 
   @Input() parentScriptFormGroup: FormGroup;
   

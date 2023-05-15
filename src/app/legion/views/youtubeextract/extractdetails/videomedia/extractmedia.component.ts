@@ -7,7 +7,7 @@ import { ExtractContentRepository } from "../../../../repository/content/extract
 
 @Component({
   selector: 'extract-media',
-  templateUrl: './extractmedia.component.html',
+  templateUrl: '../../../common/videomedia/videomedia.component.html',
   styleUrls: ['../../../common/videomedia/videomedia.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })

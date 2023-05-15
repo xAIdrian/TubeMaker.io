@@ -1,36 +1,42 @@
 <div>
   <h4>{{ 'improve_script_with_ai.title' | translate }}</h4>
-  <strong>{{ currentVideoDuration.name }}</strong>
   <p class="text-medium-emphasis">{{ currentVideoDuration.description }}</p>
   <form [formGroup]="parentScriptFormGroup">
 
     <div *ngFor="let section of currentVideoDuration.sections">
-      <h5>{{ section.name }}</h5>
-      <div class="row">
+      <div style="display: flex; flex-grow: 1;">
         <textarea 
           autosize
-          style="height: auto; margin-bottom: 0.5rem;" 
+          style="height: auto; margin-bottom: 0.5rem; width: 100%; border: none;" 
           cFormControl 
           formControlName="{{ section.controlName }}">
         </textarea>
+        <div style="display: flex; align-items: center;">
+          <c-dropdown #dropdown direction="dropstart" variant="btn-group">
+              <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
+                  [disabled]="section.isLoading">
+                  Use AI
+                  <c-spinner *ngIf="section.isLoading" size="sm"></c-spinner>
+              </button>
+              <ul cDropdownMenu class="custom-dropdown-menu">
+                  <li class="dropdown-header">Pick a way to improve this script:</li>
+                  <li>
+                      <hr cDropdownDivider>
+                  </li>
+                  <li><button cDropdownItem
+                          (click)="onImproveClick('funnier', section)">Funnier</button></li>
+                  <li><button cDropdownItem
+                          (click)="onImproveClick('formal', section)">Formal</button></li>
+                  <li><button cDropdownItem
+                          (click)="onImproveClick('simpler', section)">Simpler</button></li>
+                  <li><button cDropdownItem
+                          (click)="onImproveClick('expand', section)">Expand</button></li>
+                  <li><button cDropdownItem
+                          (click)="onImproveClick('shorten', section)">Shorten</button></li>
+              </ul>
+          </c-dropdown>
       </div>
-    </div>
-    <br />
-    <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-      <button 
-        cButton 
-        variant="outline" 
-        color="dark" 
-        matStepperPrevious>
-        {{ 'improve_script_with_ai.go_back_button' | translate }}
-      </button>
-      <button 
-        class="btn btn-primary" 
-        style="margin-left: 1rem;" 
-        matStepperNext
-        (click)="onScriptSectionClick()">
-          {{ 'improve_script_with_ai.next_step_button' | translate }}
-        </button>
+      </div>
     </div>
   </form>
 </div>

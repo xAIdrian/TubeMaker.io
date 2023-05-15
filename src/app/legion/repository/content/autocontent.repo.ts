@@ -32,29 +32,36 @@ export class AutoContentRepository extends ContentRepository {
         name: 'please wait',
         controlName: 'introduction',
         isLoading: false,
-        isOptimizing: false,
         points: [],
       },
     ],
   };
 
   setCurrentPageObject(): Observable<YoutubeVideoPage> {
-    const newDoc = { 
-      structuredScript: new Map<string, string>([
-        //controlName -> script section
-        ['introduction', ''],
-        ['mainContent', ''],
-        ['caseStudies', ''],
-        ['opinions', ''],
-        ['questions', ''],
-        ['actionables', ''],
-        ['conclusion', ''],
-      ]) 
-    } as YoutubeVideoPage;
+    const structuredScript = new Map<string, string>([
+      //controlName -> script section
+      ['introduction', ''],
+      ['mainContent', ''],
+      ['caseStudies', ''],
+      ['opinions', ''],
+      ['questions', ''],
+      ['actionables', ''],
+      ['conclusion', ''],
+    ]) 
     return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
       'auto_pages',
-      newDoc
+      { /** */ } as YoutubeVideoPage
     )).pipe(
+      tap((doc) => {
+        if (doc.id === undefined) {
+          throw new Error('🔥 doc.id is undefined')
+        }
+        this.firestoreRepository.updateUsersDocumentMap(
+          'auto_pages',
+          doc.id,
+          structuredScript
+        );
+      }),
       tap((page) => this.currentPageSubject.next(page)),
       catchError((err) => {
         console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 58 ~ ExtractContentRepository ~ catchError ~ err", err)

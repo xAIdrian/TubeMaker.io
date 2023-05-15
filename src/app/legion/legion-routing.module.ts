@@ -3,7 +3,6 @@ import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./views/home/home.component";
 import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreate.component";
 import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails.component";
-import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
 import { ExtractDetailsComponent } from "./views/youtubeextract/extractdetails/extractdetails.component";
 import { CanDeactivateGuard } from "./service/auth/deactivate.guard";
@@ -57,13 +56,6 @@ const routes: Routes = [
         component: VideoDetailsComponent,
         data: {
             title: "Details"
-        }
-    },
-    {
-        path: "auto/upload",
-        component: VideoUploadComponent,
-        data: {
-            title: "Upload"
         }
     }
 ];

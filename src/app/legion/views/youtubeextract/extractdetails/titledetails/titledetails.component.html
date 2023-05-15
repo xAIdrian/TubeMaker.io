@@ -4,7 +4,7 @@
       <c-spinner></c-spinner>
       <p style="color: gray">Loading your videos...</p>
     </div>
-    <div class="section-row" style="align-items: center;" *ngIf="loadingCount <= 3">
+    <div class="section-row" style="align-items: center;" *ngIf="loadingCount >= 3">
       <input sizing="lg" style="height: 100%; margin-bottom: 0.5rem; flex: 1;" cFormControl formControlName="title" />
       <c-dropdown #dropdown direction="dropstart" variant="btn-group">
         <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button" [disabled]="isTitleLoading">

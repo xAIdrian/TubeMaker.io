@@ -184,8 +184,8 @@ export class FirestoreRepository {
       .doc(userId)
       .collection(collectionPath)
       .doc(documentKey);
-    
-    await docRef.update(this.sanitizeObject(data));
+    const objMap = Object.fromEntries(data);
+    await docRef.update(this.sanitizeObject({ structuredMap: objMap}));
   
     if (!environment.production) {
       console.groupCollapsed(

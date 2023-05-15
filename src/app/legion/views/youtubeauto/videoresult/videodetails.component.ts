@@ -17,6 +17,7 @@ import { AutoContentService } from '../../../service/content/autocontent.service
 import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 import { VideoMetadata } from 'src/app/legion/model/video/videometadata.model';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'video-result',
@@ -43,28 +44,20 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   contentGenerationIsLoading: boolean = !this.isInDebugMode //should be set to true in production;
 
   isTitleLoading: boolean = false;
-  isTitleOptimizing: boolean = false;
-
   isDescLoading: boolean = false;
-  isDescOptimizing: boolean = false;
-
-  isScriptLoading: boolean = false;
-  isScriptOptimizing: boolean = false;
-
   isTagsLoading: boolean = false;
-  isTagsOptimizing: boolean = false;
+  isScriptLoading: boolean = false;
 
   infoFormGroup: FormGroup;
 
-  gptResponseTitle: string = 'Waiting for title...';
-  gptResponseDescription: string = 'Waiting for desc...';
-  gptResponseScript: string = 'Waiting for script...';
-  gptResponseTags: string = 'Waiting for tags...';
+  showTitleBadge = false;
+  showDescriptionBadge = false;
 
   constructor(
     private contentService: AutoContentService,
     private contentRepo: AutoContentRepository,
     private navigationService: NavigationService,
+    private clipboard: Clipboard,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
   ) {}
@@ -131,21 +124,22 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
         });
       }
     );
+
     this.contentService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
-      this.isTitleOptimizing = false;
       this.infoFormGroup.patchValue({ title: response.replace('"', '').trim() })
     });
+
     this.contentService.getDescriptionObserver().subscribe((response) => {
       this.isDescLoading = false;
-      this.isDescOptimizing = false;
       this.infoFormGroup.patchValue({ description: response.trim() })
     });
+
     this.contentService.getTagsObserver().subscribe((response) => {  
       this.isTagsLoading = false;
-      this.isTagsOptimizing = false;
       this.infoFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
+
     this.contentService.getScriptSectionObserver().subscribe((response) => {      
       console.log("🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.contentService.getScriptSectionObserver ~ response:", response)
       switch (response.position) { 
@@ -183,6 +177,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       description: ['', Validators.required],
       tags: ['', Validators.required],
     });
+
     this.scriptFormGroup = this._formBuilder.group({
       introduction: ['', Validators.required],
       mainContent: ['', Validators.required],
@@ -194,34 +189,34 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     });
   }
 
+  onTitleImproveClick(arg0: string) {
+    
+    this.isTitleLoading = true;
+  }
+
+  copyTitle() {
+    this.showTitleBadge = true;
+    this.clipboard.copy(this.infoFormGroup.value.title);
+    setTimeout(() => this.showTitleBadge = false, 1000); 
+  }
+
+  onDescriptionImproveClick(arg0: string) {
+    this.isDescLoading = true;
+  }
+
+  copyDescription() {
+    this.showTitleBadge = true;
+    this.clipboard.copy(this.infoFormGroup.value.description);
+    setTimeout(() => this.showDescriptionBadge = false, 1000); 
+  }
+
   onScriptFormGroupChange(childFormGroup: FormGroup) {
     this.scriptFormGroup = childFormGroup;
   }
 
-  rerollTitle() {
-    this.isTitleLoading = true;
-    this.infoFormGroup.patchValue({ title: 'Please wait...' })
-    // this.contentService.getNewTitle();
-  }
-
-  rerollDescription() {
-    this.isDescLoading = true;
-    this.infoFormGroup.patchValue({ description: 'Please wait...' })
-    // this.contentService.getNewDescription();
-  }
-
   rerollTags() {
     this.isTagsLoading = true;
-    this.infoFormGroup.patchValue({ tags: 'Please wait...' })
     // this.contentService.getNewTags();
-  }
-
-  onInfoSectionClick() {
-    // this.contentRepo.submitInfos(
-    //   this.infoFormGroup.value.title,
-    //   this.infoFormGroup.value.description,
-    //   this.infoFormGroup.value.tags,
-    // );
   }
 
   goToReview() {
