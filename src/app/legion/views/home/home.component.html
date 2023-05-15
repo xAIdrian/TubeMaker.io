@@ -1,12 +1,12 @@
 <c-card class="mb-4">
   <div class="d-flex justify-content-between align-items-center" style="margin: 1rem;">
-    <h5>Your Videos</h5>
+    <h5>{{ 'extract.your_videos' | translate }}</h5>
     <div class="d-flex">
       <button cButton color="primary" style="margin-right: 1rem;" (click)="newBrandNew()">
-          Brand New
+          {{ 'navigation.brand_new' | translate }}
         </button>
         <button class="btn btn-primary" (click)="newCopyCat()">
-          Copy Cat
+          {{ 'navigation.copy_cat' | translate }}
         </button>
     </div>
   </div>
@@ -28,11 +28,10 @@
         <path fill="#4788c7" d="M23 30A1 1 0 1 0 23 32A1 1 0 1 0 23 30Z"></path>
       </svg>
       <h5 style="padding-top: 1rem;">
-        Welcome Home. Let's get started by adding a video to your list.
+        {{ 'extract.no_videos' | translate }}
       </h5>
       <p class="text-medium-emphasis" style="max-width: 600px; text-align: center; justify-self: center; margin: 0 auto;">
-        TubeMaker will extract the transcript from the video and allow you to edit it. Just decide if
-        you want to copy from the top performing videos from around the world or create a script from scratch!
+        {{ 'extract.no_videos_description' | translate }}
       </p>
       <!-- Loading State -->
       <!-- <div *ngIf="isLoading">

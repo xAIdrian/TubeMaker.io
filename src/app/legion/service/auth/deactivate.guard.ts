@@ -14,8 +14,7 @@ export class CanDeactivateGuard implements CanDeactivate<any> {
   canDeactivate(component: any): Observable<boolean> | boolean {
     if (component.isCurrentVideoPresent()) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        width: '400px',
-        data: 'It is easier than ever to make money on youtube. Have you posted your content on Youtube?  You can always come back later and make changes.'
+        width: '400px'
       });
 
       return dialogRef.afterClosed();

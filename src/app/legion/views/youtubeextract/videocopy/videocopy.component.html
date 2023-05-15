@@ -8,7 +8,7 @@
 <!-- Main Body -->
 <c-card>
   <div class="d-flex justify-content-between align-items-center" style="margin-top: 1rem; margin-left: 1rem;">
-    <h5>Copy Popular Videos</h5>
+    <h5>{{ 'extract.copy_popular_videos' | translate }}</h5>
   </div>
   <c-card-body style="min-height: 80vh">
     <form [formGroup]="nicheFormGroup">
@@ -38,12 +38,12 @@
             </path>
           </svg>
           <h1>TubeMaker</h1>
-          <p>To start making your own Youtube videos select one of the niches above or paste a youtube link</p>
+          <p>{{ 'extract.tubemaker_instructions' | translate }}</p>
         </div>
         <!-- Loading State -->
         <div *ngIf="isLoading">
           <c-spinner></c-spinner>
-          <p style="color: gray">Loading your videos...</p>
+          <p style="color: gray">{{ 'extract.loading' | translate }}</p>
         </div>
       </div>
 

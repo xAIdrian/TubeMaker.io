@@ -285,5 +285,31 @@
     "name": "Beauty Tutorials for Mature Skin",
     "header": "Beauty Tips for Mature Skin",
     "description": "This niche is focused on providing beauty tips and tutorials specifically for mature skin. Creators in this niche often share tips and tricks for skincare, makeup, and hair care that are tailored to the needs of older viewers. Monetization can come from sponsorships, affiliate marketing, or merchandise sales."
+  },
+  "extract": {
+    "copy_cat": "Copy Cat",
+    "your_videos": "Your Videos",
+    "no_videos": "Welcome Home. Let's get started by adding a video to your list.",
+    "no_videos_description": "TubeMaker will extract the transcript from the video and allow you to edit it. Just decide if you want to copy from the top performing videos from around the world or create a script from scratch!",
+    "copy_popular_videos": "Copy Popular Videos",
+    "tubemaker_instructions": "To start making your own Youtube videos select one of the niches above or paste a youtube link",
+    "loading": "Loading Your Videos...",
+    "back": "Back",
+    "use_ai": "Use AI",
+    "choose_how_to_improve": "Choose how you want to improve this",
+    "funnier": "Funnier",
+    "formal": "Formal",
+    "simpler": "Simpler",
+    "expand": "Expand",
+    "shorten": "Shorten",
+    "edit_your_script": "Edit Your Script",
+    "edit_your_script_description": "You can edit your script here by editing and rearranging the script sections. Improve the quality with our AI tools.",
+    "select_voice": "Select a Voice"
+  },
+  "confirmation_dialog": {
+    "title": "Are you sure?",
+    "description": "It is easier than ever to make money on youtube. Have you posted your content on Youtube?  You can always come back later and make changes.",
+    "leave": "Go To Home",
+    "stay": "Continue Editing"
   }
 }

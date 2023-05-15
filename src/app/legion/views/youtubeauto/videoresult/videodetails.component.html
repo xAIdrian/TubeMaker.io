@@ -45,19 +45,19 @@
               <c-dropdown #dropdown direction="dropstart" variant="btn-group">
                 <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
                   [disabled]="isTitleLoading">
-                  Use AI
+                  {{ 'extract.use_ai' | translate }}
                   <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
                 </button>
                 <ul cDropdownMenu class="custom-dropdown-menu">
-                  <li class="dropdown-header">Pick a way to improve this script:</li>
+                  <li class="dropdown-header">{{ 'extract.choose_how_to_improve' | translate }}</li>
                   <li>
                     <hr cDropdownDivider>
                   </li>
-                  <li><button cDropdownItem (click)="onTitleImproveClick('funnier')">Plus amusant</button></li>
-                  <li><button cDropdownItem (click)="onTitleImproveClick('formal')">Officiel</button></li>
-                  <li><button cDropdownItem (click)="onTitleImproveClick('simpler')">Plus simple</button></li>
-                  <li><button cDropdownItem (click)="onTitleImproveClick('expand')">Développer</button></li>
-                  <li><button cDropdownItem (click)="onTitleImproveClick('shorten')">Raccourcir</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('funnier')">{{ 'extract.funnier' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('formal')">{{ 'extract.formal' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('simpler')">{{ 'extract.simpler' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('expand')">{{ 'extract.expand' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('shorten')">{{ 'extract.shorten' | translate }}</button></li>
                 </ul>
               </c-dropdown>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
@@ -77,19 +77,19 @@
               <c-dropdown #dropdown direction="dropstart" variant="btn-group">
                 <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
                   [disabled]="isDescLoading">
-                  Use AI
+                  {{ 'extract.use_ai' | translate }}
                   <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
                 </button>
                 <ul cDropdownMenu class="custom-dropdown-menu">
-                  <li class="dropdown-header">Edit Your Script</li>
+                  <li class="dropdown-header">{{ 'extract.edit_your_script' | translate }}</li>
                   <li>
                     <hr cDropdownDivider>
                   </li>
-                  <li><button cDropdownItem (click)="onDescriptionImproveClick('funnier')">Plus amusant</button></li>
-                  <li><button cDropdownItem (click)="onDescriptionImproveClick('formal')">Officiel</button></li>
-                  <li><button cDropdownItem (click)="onDescriptionImproveClick('simpler')">Plus simple</button></li>
-                  <li><button cDropdownItem (click)="onDescriptionImproveClick('expand')">Développer</button></li>
-                  <li><button cDropdownItem (click)="onDescriptionImproveClick('shorten')">Raccourcir</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('funnier')">{{ 'extract.funnier' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('formal')">{{ 'extract.formal' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('simpler')">{{ 'extract.simpler' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('expand')">{{ 'extract.expand' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('shorten')">{{ 'extract.shorten' | translate }}</button></li>
                 </ul>
               </c-dropdown>
               <div style="display: flex; align-items: center; padding: 0; margin:0">

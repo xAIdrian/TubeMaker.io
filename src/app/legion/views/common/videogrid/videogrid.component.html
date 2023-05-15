@@ -4,8 +4,9 @@
     <!-- Thumbnail Formatter -->
     <div class="stretchy-wrapper">
       <div class="hover-overlay">
-        <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onVideoClick(video)">Copy
-          Cat</button>
+        <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onVideoClick(video)">
+          {{ 'extract.copy_cat' | translate }}
+        </button>
         <img class="myimageoverlap" [src]="video.thumbnailUrl" alt="Responsive image"
           style="overflow: hidden; width:100%;" />
       </div>

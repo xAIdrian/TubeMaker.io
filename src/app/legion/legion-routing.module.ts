@@ -17,14 +17,14 @@ const routes: Routes = [
         path: "copycat",
         component: VideoCopyComponent,
         data: {
-            title: "Copy Cat"
+            title: "Imitateur"
         },
     },
     {
         path: "copycat/details",
         component: ExtractDetailsComponent,
         data: {
-            title: "Transcript"
+            title: "Transcription"
         },
         canDeactivate: [CanDeactivateGuard]
     },
@@ -32,7 +32,7 @@ const routes: Routes = [
         path: "copycat/details/:id",
         component: ExtractDetailsComponent,
         data: {
-            title: "Transcript"
+            title: "Transcription"
         },
         canDeactivate: [CanDeactivateGuard]
     },
@@ -40,7 +40,7 @@ const routes: Routes = [
         path: "list",
         component: HomeComponent,
         data: {
-            title: "Your Videos"
+            title: "Vos vidéos"
         },
         pathMatch: "prefix"
     },
@@ -48,14 +48,14 @@ const routes: Routes = [
         path: "auto",
         component: VideoCreateComponent,
         data: {
-            title: "Create"
+            title: "Créer"
         }
     },
     {
         path: "auto/details",
         component: VideoDetailsComponent,
         data: {
-            title: "Details"
+            title: "Détails"
         }
     }
 ];

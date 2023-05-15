@@ -15,24 +15,24 @@
           <c-dropdown #dropdown direction="dropstart" variant="btn-group">
               <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
                   [disabled]="section.isLoading">
-                  Use AI
+                  {{ 'extract.use_ai' | translate }}
                   <c-spinner *ngIf="section.isLoading" size="sm"></c-spinner>
               </button>
               <ul cDropdownMenu class="custom-dropdown-menu">
-                  <li class="dropdown-header">Pick a way to improve this script:</li>
+                  <li class="dropdown-header">{{ 'extract.choose_how_to_improve' | translate }}</li>
                   <li>
                       <hr cDropdownDivider>
                   </li>
                   <li><button cDropdownItem
-                          (click)="onImproveClick('funnier', section)">Funnier</button></li>
+                          (click)="onImproveClick('funnier', section)">{{ 'extract.funnier' | translate }}</button></li>
                   <li><button cDropdownItem
-                          (click)="onImproveClick('formal', section)">Formal</button></li>
+                          (click)="onImproveClick('formal', section)">{{ 'extract.formal' | translate }}</button></li>
                   <li><button cDropdownItem
-                          (click)="onImproveClick('simpler', section)">Simpler</button></li>
+                          (click)="onImproveClick('simpler', section)">{{ 'extract.simpler' | translate }}</button></li>
                   <li><button cDropdownItem
-                          (click)="onImproveClick('expand', section)">Expand</button></li>
+                          (click)="onImproveClick('expand', section)">{{ 'extract.expand' | translate }}</button></li>
                   <li><button cDropdownItem
-                          (click)="onImproveClick('shorten', section)">Shorten</button></li>
+                          (click)="onImproveClick('shorten', section)">{{ 'extract.shorten' | translate }}rten</button></li>
               </ul>
           </c-dropdown>
       </div>
