@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AUTO_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
+import { VideoMetadata } from '../../model/video/videometadata.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,23 +20,6 @@ import { AUTO_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
 export class AutoContentRepository extends ContentRepository {
 
   override collectionPath: string = 'auto_pages';
-
-  scriptTotalNumberOfPoints: number = 0;
-  
-  currentTopic: string;
-  currentDuration: VideoDuration = {
-    name: 'please wait',
-    header: '',
-    description: '',
-    sections: [
-      {
-        name: 'please wait',
-        controlName: 'introduction',
-        isLoading: false,
-        points: [],
-      },
-    ],
-  };
 
   setCurrentPageObject(): Observable<YoutubeVideoPage> {
     const structuredScript = new Map<string, string>([
@@ -96,21 +80,28 @@ export class AutoContentRepository extends ContentRepository {
     )
   }
 
-  getCurrentTopic(): string {
-    return this.currentTopic;
-  }
-
-  getCurrentVideoDuration(): VideoDuration {
-    return this.currentDuration;
-  }
-
   updateScriptMap(controlName: string, script: string) {
+    const property = `structuredScript.${controlName}`;
     this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
       this.currentPage?.id ?? '',
-      {
-        structuredScript: { controlName: script }
-      }
+      {  [property]: script  }
+    );
+  }
+
+  updateSummary(gptGeneratedSummary: string) {
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage?.id ?? '',
+      {  summary: gptGeneratedSummary  }
+    );
+  }
+  
+  updateCompleteMetaData(completedMetaData: VideoMetadata) {
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage?.id ?? '',
+      {  metadata: completedMetaData  }
     );
   }
 
@@ -137,30 +128,6 @@ export class AutoContentRepository extends ContentRepository {
         }
       })
     );
-  }
-
-  getTotalNumberOfPoints(): number {
-    return this.scriptTotalNumberOfPoints;
-  }
-
-  submitInputs(
-    topic: string,
-    videoStyle: VideoNiche,
-    videoDuration: VideoDuration
-  ): Observable<YoutubeVideoPage> {
-    this.scriptTotalNumberOfPoints = 0;
-
-    this.currentTopic = topic
-    super.currentNiche = videoStyle
-    this.currentDuration = videoDuration
-
-    this.currentDuration.sections.forEach((section) => {
-      section.points.forEach((point) => {
-        this.scriptTotalNumberOfPoints++;
-      });
-    });
-
-    return this.setCurrentPageObject();
   }
 
   submitScriptSections(

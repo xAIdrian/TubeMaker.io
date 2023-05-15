@@ -15,7 +15,6 @@ import { VideoMetadata } from '../../model/video/videometadata.model';
 export abstract class ContentRepository {
   
   protected currentPage?: YoutubeVideoPage;
-  protected currentNiche: VideoNiche;
 
   protected translate: TranslateService;
   protected firestoreRepository: FirestoreRepository;
@@ -61,10 +60,6 @@ export abstract class ContentRepository {
         return of(getDefaultVideoNiches(this.translate));
       })
     )
-  }
-
-  getCurrentVideoNiche(): VideoNiche {
-    return this.currentNiche;
   }
 
   getInitVideoNiche(headerKey: string, descriptionKey: string): Observable<VideoNiche>{
@@ -176,5 +171,29 @@ export abstract class ContentRepository {
         }
       )
     )
+  }
+
+  updateTitle(newTitle: string) {
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage?.id ?? '',
+      { "metadata.title": newTitle }
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 48 ~ ExtractContentRepository ~ err", err))
+  }
+
+  updateDescription(newDescription: string) {
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage?.id ?? '',
+      { "metadata.description": newDescription }
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 56 ~ ExtractContentRepository ~ err", err))
+  }
+
+  updateTags(newTags: string[]) {
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage?.id ?? '',
+      { "metadata.tags": newTags }
+    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 64 ~ ExtractContentRepository ~ err", err))
   }
 }

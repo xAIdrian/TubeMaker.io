@@ -13,8 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { AutoContentService } from '../../../service/content/autocontent.service';
-import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
+import { VideoDetailsService } from '../videodetails.service';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 import { VideoMetadata } from 'src/app/legion/model/video/videometadata.model';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -28,7 +27,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
 
   //debug variable to be removed
-  isInDebugMode: boolean = true;
+  isInDebugMode: boolean = false;
   ////////////////////////////
   
   scriptFormGroup: FormGroup;
@@ -52,10 +51,10 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
   showTitleBadge = false;
   showDescriptionBadge = false;
+  showTagsBadge = false;
 
   constructor(
-    private contentService: AutoContentService,
-    private contentRepo: AutoContentRepository,
+    private videoDetailsService: VideoDetailsService,
     private navigationService: NavigationService,
     private clipboard: Clipboard,
     private _formBuilder: FormBuilder,
@@ -63,7 +62,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   ) {}
 
   ngOnInit(): void {
-    if (this.contentRepo.getCurrentTopic() === undefined && !this.isInDebugMode) {
+    if (this.videoDetailsService.getCurrentTopic() === undefined && !this.isInDebugMode) {
       this.navigationService.navigateToCreateVideo();
       return
     }
@@ -75,7 +74,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
     
-    if (!this.isInDebugMode) { this.contentService.generateVideoContentWithAI(); }
+    if (!this.isInDebugMode) { this.videoDetailsService.generateVideoContentWithAI(); }
   }
 
   ngAfterViewInit(): void {
@@ -84,7 +83,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
   }
 
   setupObservers() {
-    this.contentService.getContentProgressObserver().subscribe((response) => {
+    this.videoDetailsService.getContentProgressObserver().subscribe((response) => {
       this.contentProgressValue = this.contentProgressValue + response;
       if (this.contentProgressValue === 0) {
         this.contentProgressLabel = 'Researching the competition...';
@@ -99,7 +98,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       }
       this.changeDetectorRef.detectChanges();
     });
-    this.contentService.getScriptProgressObserver().subscribe((response) => {
+    this.videoDetailsService.getScriptProgressObserver().subscribe((response) => {
       this.scriptProgressValue = this.scriptProgressValue + response.increment;
       console.log("🚀 ~ file: videodetails.component.ts:116 ~ VideoDetailsComponent ~ this.contentService.getScriptProgressObserver ~ response:", response)
       console.log("🚀 ~ file: videodetails.component.ts:124 ~ VideoDetailsComponent ~ this.contentService.getScriptProgressObserver ~ scriptProgressValue:", this.scriptProgressValue)
@@ -115,7 +114,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       }
     });
 
-    this.contentService.getCompleteResultsObserver().subscribe(
+    this.videoDetailsService.getCompleteResultsObserver().subscribe(
       (response: { meta: VideoMetadata }) => {
         this.infoFormGroup.setValue({
           title: response.meta.title.replace('"', '').trim(),
@@ -125,22 +124,22 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
       }
     );
 
-    this.contentService.getTitleObserver().subscribe((response) => {
+    this.videoDetailsService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
       this.infoFormGroup.patchValue({ title: response.replace('"', '').trim() })
     });
 
-    this.contentService.getDescriptionObserver().subscribe((response) => {
+    this.videoDetailsService.getDescriptionObserver().subscribe((response) => {
       this.isDescLoading = false;
       this.infoFormGroup.patchValue({ description: response.trim() })
     });
 
-    this.contentService.getTagsObserver().subscribe((response) => {  
+    this.videoDetailsService.getTagsObserver().subscribe((response) => {  
       this.isTagsLoading = false;
       this.infoFormGroup.patchValue({ tags: response.join(', ').trim() })
     });
 
-    this.contentService.getScriptSectionObserver().subscribe((response) => {      
+    this.videoDetailsService.getScriptSectionObserver().subscribe((response) => {      
       console.log("🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.contentService.getScriptSectionObserver ~ response:", response)
       switch (response.position) { 
         case 'introduction':
@@ -189,9 +188,32 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     });
   }
 
-  onTitleImproveClick(arg0: string) {
-    
+  onScriptFormGroupChange(childFormGroup: FormGroup) {
+    this.scriptFormGroup = childFormGroup;
+  }
+
+  onTitleImproveClick(prompt: string) {
     this.isTitleLoading = true;
+    this.videoDetailsService.updateTitle(
+      prompt,
+      this.infoFormGroup.value.title
+    )
+  }
+
+  onDescriptionImproveClick(prompt: string) {
+    this.isDescLoading = true;
+    this.videoDetailsService.updateDescription(
+      prompt,
+      this.infoFormGroup.value.description
+    )
+  }
+
+  rerollTags() {
+    this.isTagsLoading = true;
+    this.videoDetailsService.updateTags(
+      this.infoFormGroup.value.title,
+      this.infoFormGroup.value.description
+    )
   }
 
   copyTitle() {
@@ -200,23 +222,16 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     setTimeout(() => this.showTitleBadge = false, 1000); 
   }
 
-  onDescriptionImproveClick(arg0: string) {
-    this.isDescLoading = true;
-  }
-
   copyDescription() {
     this.showTitleBadge = true;
     this.clipboard.copy(this.infoFormGroup.value.description);
     setTimeout(() => this.showDescriptionBadge = false, 1000); 
   }
 
-  onScriptFormGroupChange(childFormGroup: FormGroup) {
-    this.scriptFormGroup = childFormGroup;
-  }
-
-  rerollTags() {
-    this.isTagsLoading = true;
-    // this.contentService.getNewTags();
+  copyTags() {
+    this.showTagsBadge = true;
+    this.clipboard.copy(this.infoFormGroup.value.tags);
+    setTimeout(() => this.showTagsBadge = false, 1000);
   }
 
   goToReview() {
