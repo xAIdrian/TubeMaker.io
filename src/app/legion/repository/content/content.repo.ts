@@ -125,17 +125,13 @@ export abstract class ContentRepository {
     )
   }
 
-  getScriptForDownload(givenFileName: string): Observable<{ blob: Blob; filename: string }> {
+  getScriptForDownload(givenFileName: string): Observable<string> {
     return this.getCompleteScript().pipe(
       concatMap((completeScript) => {
-        if (completeScript !== '') {
-          throw new Error(`Script not available ${completeScript}`)
+        if (completeScript === '') {
+          throw new Error(`Script not available ${completeScript}`);
         }
-        const blob = new Blob([completeScript], { type: 'text/plain' });
-        return of({
-          blob: blob,
-          filename: givenFileName.replaceAll(' ', '_').replaceAll(':', '').replaceAll("'", '').replaceAll('"', '') + '.txt',
-        });
+        return of(completeScript);
       })
     );
   }

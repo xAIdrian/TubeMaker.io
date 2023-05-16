@@ -35,7 +35,7 @@ export class NavigationService {
     if (id === '') {
       this.router.navigate(['maker/copycat/details']);
     } else {
-      // localStorage.setItem('detailsId', id);
+      // localStorage.setItem('detailsId', id); for page refresh mid-edit
       this.router.navigate(['maker/copycat/details', id]);
     }
   }

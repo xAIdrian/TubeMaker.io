@@ -1,5 +1,15 @@
 <div>
-  <h4>{{ 'improve_script_with_ai.title' | translate }}</h4>
+  <div style="display: flex; align-items: center; justify-content: space-between;">
+    <h4>{{ 'improve_script_with_ai.title' | translate }}</h4>
+    <div style="display: flex; align-items: center; padding: 0; margin:0">
+      <button class="ai-button" cButton shape="rounded-pill" color="light" (click)="copyScript()">{{
+        'video_review_card.copy_script_button' | translate }}</button>
+      <c-badge color="danger" position="absolute" shape="rounded-pill"
+        [ngClass]="{'d-none': !showScriptBadge}">
+        {{ 'video_review_card.copied_badge' | translate }}
+      </c-badge>
+    </div>
+  </div>
   <p class="text-medium-emphasis">{{ currentVideoDuration.description }}</p>
   <form [formGroup]="parentScriptFormGroup">
 

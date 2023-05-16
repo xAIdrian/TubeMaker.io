@@ -108,6 +108,7 @@
     "tags_label": "Tags",
     "script_label": "Script",
     "copy_button": "Copier",
+    "copy_script_button": "Copier le script complet",
     "copied_badge": "Copié!",
     "reset_media_button": "Réinitialiser les médias",
     "reset_content_button": "Réinitialiser le contenu"

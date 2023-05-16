@@ -24,7 +24,7 @@
     "script_outline": "Script Outline",
     "similar_channels": "Similar Channels",
     "monthly_revenue": "Monthly Revenue",
-    "topic": "topic",
+    "topic": "Topic",
     "pick_your_video_subject": "Pick Your Video Subject",
     "enter_topic_instructions": "Simply enter your video topic into the box below, or our AI will a topic for you!",
     "get_an_idea": "Get an Idea",
@@ -117,6 +117,7 @@
     "tags_label": "Tags",
     "script_label": "Script",
     "copy_button": "Copy",
+    "copy_script_button": "Copy Complete Script",
     "copied_badge": "Copied!",
     "reset_media_button": "Reset Media",
     "reset_content_button": "Reset Content"

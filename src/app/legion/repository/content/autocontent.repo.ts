@@ -109,7 +109,7 @@ export class AutoContentRepository extends ContentRepository {
         const scriptMap = doc.structuredScript;
         if (scriptMap !== undefined && scriptMap !== null) {
           // get all the values of the ordered hashmap in the same order
-          let valuesInOrder = Array.from(scriptMap.keys()).map(key => scriptMap.get(key));
+          let valuesInOrder = [...scriptMap.keys()].map(key => scriptMap.get(key));
           // add all values to main string
           valuesInOrder.map(value => {
             if (value !== undefined && value !== null && value !== '') {
