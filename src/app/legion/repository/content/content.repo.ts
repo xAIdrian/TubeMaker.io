@@ -4,7 +4,7 @@ import {
   VideoNiche,
 } from '../../model/autocreate/videoniche.model';
 import { combineLatest, concatMap, filter, from, map, Observable, of, Subject, tap } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { FirestoreRepository } from '../firebase/firestore.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { VideoMetadata } from '../../model/video/videometadata.model';
@@ -20,6 +20,8 @@ export abstract class ContentRepository {
   protected firestoreRepository: FirestoreRepository;
 
   protected currentPageSubject = new Subject<YoutubeVideoPage>();
+  protected defaultNichesSubject = new Subject<VideoNiche[]>();
+
   getCurrentPageObserver(): Observable<YoutubeVideoPage> {
     return this.currentPageSubject.asObservable();
   }
@@ -54,12 +56,21 @@ export abstract class ContentRepository {
     })
   }
 
+  getDefaultVideoNiches() {
+    this.translate.onLangChange.pipe(
+      concatMap((event: LangChangeEvent) => this.translate.getTranslation(event.lang))
+    ).subscribe({
+      next: (res) => {
+        this.defaultNichesSubject.next(getDefaultVideoNiches(this.translate));
+      },
+      error: (err) => {
+        console.log("~ getDefaultVideoNiches error", err)
+      }
+    })
+  }
+
   getDefaultVideoNichesObserver(): Observable<VideoNiche[]> {
-    return this.translate.getTranslation(this.translate.currentLang).pipe(
-      concatMap((res) => {
-        return of(getDefaultVideoNiches(this.translate));
-      })
-    )
+    return this.defaultNichesSubject.asObservable();
   }
 
   getInitVideoNiche(headerKey: string, descriptionKey: string): Observable<VideoNiche>{
@@ -115,7 +126,7 @@ export abstract class ContentRepository {
         const blob = new Blob([completeScript], { type: 'text/plain' });
         return of({
           blob: blob,
-          filename: givenFileName.replace(' ', '_').replace(':', '').replace("'", '').replace('"', '') + '.txt',
+          filename: givenFileName.replaceAll(' ', '_').replaceAll(':', '').replaceAll("'", '').replaceAll('"', '') + '.txt',
         });
       })
     );

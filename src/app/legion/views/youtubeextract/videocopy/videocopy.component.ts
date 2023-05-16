@@ -42,6 +42,7 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
 
     ngAfterContentInit(): void {
         this.extractDetailsService.clearCurrentVideoPage()
+        this.contentModel.getDefaultVideoNiches();
         this.changeDetectorRef.detectChanges();
     }
 

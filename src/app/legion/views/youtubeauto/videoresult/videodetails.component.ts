@@ -121,7 +121,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
     this.videoDetailsService.getCompleteResultsObserver().subscribe(
       (response: { meta: VideoMetadata }) => {
         this.infoFormGroup.setValue({
-          title: response.meta.title.replace('"', '').trim(),
+          title: response.meta.title.replaceAll('"', '').trim(),
           description: response.meta.description.trim(),
           tags: response.meta.tags.join(' #').trim(),
         });
@@ -130,7 +130,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit, AfterVie
 
     this.videoDetailsService.getTitleObserver().subscribe((response) => {
       this.isTitleLoading = false;
-      this.infoFormGroup.patchValue({ title: response.replace('"', '').trim() })
+      this.infoFormGroup.patchValue({ title: response.trim() })
     });
 
     this.videoDetailsService.getDescriptionObserver().subscribe((response) => {

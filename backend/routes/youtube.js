@@ -17,7 +17,6 @@ const englishRegex = /^[a-zA-Z\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
 
 router.get("/videos/:language", async (req, res) => {
   const language = req.params.language;
-  //language check here
   const reqNiche = req.query.niche;
   const reqPublishedAtfter = req.query.publishedAfter;
 
