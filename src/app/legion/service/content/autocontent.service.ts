@@ -3,9 +3,10 @@ import { from, Observable, Subject, concatMap } from 'rxjs';
 
 import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { GptRepository } from '../../repository/gpt.repo';
-import { DurationSection } from '../../model/autocreate/videoduration.model';
+import { DurationSection, VideoDuration } from '../../model/autocreate/videoduration.model';
 import { GenerateContentService } from './generation.service';
 import { VideoMetadata } from '../../model/video/videometadata.model';
+import { VideoNiche } from '../../model/autocreate/videoniche.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ import { VideoMetadata } from '../../model/video/videometadata.model';
 export class AutoContentService extends GenerateContentService {
 
   private gptGeneratedSummary: string = ''
+  private totalScriptPoints: number = 0;
 
   //state observables
   private contentProgressSubject = new Subject<number>();
@@ -53,13 +55,29 @@ export class AutoContentService extends GenerateContentService {
     });
   }
 
-  generateVideoContentWithAI() {
+  setTotalScriptPoints(duration: VideoDuration) {
+    duration.sections.forEach((section) => {
+      section.points.forEach((point) => {
+        this.totalScriptPoints++;
+      });
+    });
+  }
+
+  resetTotalScriptPoints() {
+    this.totalScriptPoints = 0;
+  }
+
+  generateVideoContentWithAI(
+    topic: string,
+    niche: VideoNiche,
+    duration: VideoDuration
+  ) {
     console.log("🚀 ~ file: gpt.service.ts:192 ~ GptService ~ generateVideoContentWithAI ~ generateVideoContentWithAI:")
-    if (
-      this.contentRepo.getCurrentTopic() === undefined
-      || this.contentRepo.getCurrentVideoNiche() === undefined
-      || this.contentRepo.getCurrentVideoDuration() === undefined
-    ) { throw new Error('Sources video is undefined'); }
+    if (topic === undefined || niche === undefined || duration === undefined) { 
+      console.log("🔥 ~ file: gpt.service.ts:197 ~ GptService ~ generateVideoContentWithAI ~ this.contentRepo.getCurrentVideoNiche():", 'missing input')
+      this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
+      return;
+    }
 
     let compeleteMetaData: VideoMetadata = {
       summary: '',
@@ -69,7 +87,7 @@ export class AutoContentService extends GenerateContentService {
     };
 
     this.gptRepo.getSummaryObservable({
-      prompt: this.contentRepo.getCurrentTopic()
+      prompt: topic
     }).subscribe((response) => {
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
@@ -79,11 +97,12 @@ export class AutoContentService extends GenerateContentService {
 
         compeleteMetaData.summary = requestSummary;
         this.gptGeneratedSummary = requestSummary;
+
         this.contentProgressSubject.next(25);
         
         this.gptRepo.postNewTitleObservable({
           summary: requestSummary,
-          style: this.contentRepo.getCurrentVideoNiche().name
+          style: niche.name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -91,13 +110,17 @@ export class AutoContentService extends GenerateContentService {
           } else {
             compeleteMetaData.title = response.result.title;
             this.contentProgressSubject.next(25);
-            this.checkForCompleteResultsCompletion(compeleteMetaData);
+            this.checkForCompleteResultsCompletion(
+              compeleteMetaData,
+              niche,
+              duration
+            );
           }
         });
 
         this.gptRepo.postNewDescriptionObservable({
           summary: requestSummary,
-          style: this.contentRepo.getCurrentVideoNiche().name
+          style: niche.name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -105,13 +128,17 @@ export class AutoContentService extends GenerateContentService {
           } else {
             compeleteMetaData.description = response.result.description;
             this.contentProgressSubject.next(25);
-            this.checkForCompleteResultsCompletion(compeleteMetaData);
+            this.checkForCompleteResultsCompletion(
+              compeleteMetaData,
+              niche,
+              duration
+            );
           }
         });
 
         this.gptRepo.postNewTagsObservable({
           summary: requestSummary,
-          style: this.contentRepo.getCurrentVideoNiche().name
+          style: niche.name
         }).subscribe((response) => {
           if (response.message !== 'success') {
             this.errorSubject.next(response.message);
@@ -119,7 +146,11 @@ export class AutoContentService extends GenerateContentService {
           } else {
             compeleteMetaData.tags = response.result.tags.split(',');
             this.contentProgressSubject.next(25);
-            this.checkForCompleteResultsCompletion(compeleteMetaData);
+            this.checkForCompleteResultsCompletion(
+              compeleteMetaData,
+              niche,
+              duration
+            );
           }
         });
       }
@@ -132,24 +163,30 @@ export class AutoContentService extends GenerateContentService {
    * @returns 
    */
   checkForCompleteResultsCompletion(
-    completedMetaData: VideoMetadata
+    metadata: VideoMetadata,
+    niche: VideoNiche,
+    duration: VideoDuration
   ) {
     if (
-      completedMetaData.title !== '' 
-      && completedMetaData.description !== ''
-      && completedMetaData.tags.length > 0
+      metadata.title !== '' 
+      && metadata.description !== ''
+      && metadata.tags.length > 0
     ) {
-      this.completeDetailsSubject.next({ meta: completedMetaData});
-      console.log("🚀 ~ file: gpt.service.ts:266 ~ GptService ~ completedMetaData:", completedMetaData)
+      this.contentRepo.updateCompleteMetaData(metadata);
+      this.completeDetailsSubject.next({ meta: metadata});
+      console.log("🚀 ~ file: gpt.service.ts:266 ~ GptService ~ completedMetaData:", metadata)
       
-      this.contentRepo.getCurrentVideoDuration().sections.forEach((section) => {
+      duration.sections.forEach((section: DurationSection) => {
         console.log("💵 ~ file: gpt.service.ts:271 ~ GptService ~ this.contentRepo.getCurrentVideoDuration ~ section:", section)
-        this.getNewScriptSection(section);
+        this.getNewScriptSection(niche, section);
       });
     }
   }
 
-  getNewScriptSection(section: DurationSection) {
+  getNewScriptSection(
+    niche: VideoNiche,
+    section: DurationSection
+  ) {
     //improve error being sent back here
     if (this.gptGeneratedSummary === '') {
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
@@ -164,7 +201,7 @@ export class AutoContentService extends GenerateContentService {
         
         return this.gptRepo.postNewScriptSectionObservable({
           summary: this.gptGeneratedSummary,
-          style: this.contentRepo.getCurrentVideoNiche().name,
+          style: niche.name,
           point: sectionPoint,
         });
       })
@@ -179,7 +216,7 @@ export class AutoContentService extends GenerateContentService {
 
       //here we are managing the loading state of the view and the final nav point
       const progressItem = {
-        increment: 100 / this.contentRepo.getTotalNumberOfPoints(),
+        increment: 100 / this.getTotalScriptPoints(),
         label: this.generateLoadingMessage(),
       }
       this.scriptProgressSubject.next(progressItem);
@@ -193,6 +230,10 @@ export class AutoContentService extends GenerateContentService {
         });
       }
     });
+  }
+
+  getTotalScriptPoints(): number {
+    return this.totalScriptPoints;
   }
 
   generateLoadingMessage(): string {

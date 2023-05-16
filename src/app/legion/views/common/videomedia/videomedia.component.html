@@ -1,148 +1,30 @@
 <div>
   <form>
-    <div class="row">
-      <div class="col-4">
-        <mat-button-toggle-group value="Video">
-          <mat-button-toggle *ngFor="let mediaOption of mediaOptions" [value]="mediaOption"
-            (click)="onMediaOptionSelected(mediaOption)">{{ mediaOption }}</mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-      <div class="col-8">
-        <div *ngIf="selectedMediaOption === 'Video'">
-          <h4>{{ 'media_selection_form.video_option.title' | translate }}</h4>
-          <p class="text-medium-emphasis">
-            {{ 'media_selection_form.video_option.description' | translate }}
-          </p>
-          <audio-dropdown #audiochild (voiceSelected)="onVoiceSelected($event)"></audio-dropdown>
-          <p></p>
-          <div >
-            <button 
-              cButton
-              variant="outline" 
-              style="width: 100%" 
-              variant="outline" 
-              color="primary"
-              [disabled]="generatedAudioIsLoading"
-              (click)="generateTextToSpeech()">
-              <c-spinner *ngIf="generatedAudioIsLoading" size="sm"></c-spinner>
-              {{ 'media_selection_form.video_option.generate_ai_narration_button' | translate }}
-            </button>
-            <audio #audioPlayer class="flex-grow-1" style="margin: 1rem; width: 100%;" controls>
-              <source [src]="generatedAudioUrl" type="audio/mpeg">
-              {{ 'media_selection_form.video_option.audio_not_supported_message' | translate }}
-            </audio>
-          </div>
-          <p></p>
-          <button 
-              cButton
-              variant="outline" 
-              style="width: 100%" 
-              variant="outline" 
-              color="primary"
-              (click)="downloadTextFile()">
-              {{ 'media_selection_form.video_option.download_script_button' | translate }}
-            </button>
-          <br />
-          <h4>{{ 'media_selection_form.video_option.edit_in_descript_title' | translate }}</h4><br />
-          <p class="text-medium-emphasis">
-            {{ 'media_selection_form.video_option.edit_in_descript_description' | translate }}
-          </p>
-          <button 
-            cButton
-            variant="outline"  
-            color="primary"
-            style="width: 100%" 
-            (click)="descriptButtonClicked()">
-            {{ 'media_selection_form.video_option.edit_in_descript_button' | translate }}
-          </button>
-        </div>
-
-        <div *ngIf="selectedMediaOption === 'Thumbnail'">
-          <div class="grid-container" style="padding-top: 2rem;">
-            <div class="grid-item">
-              <div class="responsive-wrapper">
-                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0g7iFaU/view?embed"
-                  frameborder="0"></iframe>
-              </div>
-              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="primary"
-                href="https://www.canva.com/design/DAFg0g7iFaU/r17BFd44EDBdpayWyKrnQg/edit?utm_content=DAFg0g7iFaU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-                target="_blank">
-                  {{ 'media_selection_form.thumbnail_option.edit_thumbnail_buttons' | translate }}
-              </a>
-            </div>
-            <div class="grid-item">
-              <div class="responsive-wrapper">
-                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0qAz46Q/view?embed"
-                  frameborder="0"></iframe>
-              </div>
-              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="primary"
-                href="https://www.canva.com/design/DAFg0qAz46Q/L4M5HjasBM6H2yQIYEUsfg/edit?utm_content=DAFg0qAz46Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-                target="_blank">
-                  {{ 'media_selection_form.thumbnail_option.edit_thumbnail_buttons' | translate }}
-              </a>
-            </div>
-            <div class="grid-item">
-              <div class="responsive-wrapper">
-                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0qpS228/view?embed"
-                  frameborder="0"></iframe>
-              </div>
-              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="primary"
-                href="https://www.canva.com/design/DAFg0qpS228/HC7MUiBXS9Q1PJocqzOTNg/edit?utm_content=DAFg0qpS228&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-                target="_blank">
-                  {{ 'media_selection_form.thumbnail_option.edit_thumbnail_buttons' | translate }}
-              </a>
-            </div>
-            <div class="grid-item">
-              <div class="responsive-wrapper">
-                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0jHKpT0/view?embed"
-                  frameborder="0"></iframe>
-              </div>
-              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="primary"
-                href="https://www.canva.com/design/DAFg0jHKpT0/NzysEvkx0ORQTe5fzkDh4w/edit?utm_content=DAFg0jHKpT0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-                target="_blank">
-                  {{ 'media_selection_form.thumbnail_option.edit_thumbnail_buttons' | translate }}
-                </a>
-            </div>
-            <div class="grid-item">
-              <div class="responsive-wrapper">
-                <iframe loading="lazy" src="https://www.canva.com/design/DAFg08A6ApE/view?embed"
-                  frameborder="0"></iframe>
-              </div>
-              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="primary"
-                href="https://www.canva.com/design/DAFg08A6ApE/RB29GcwLgd6W0GpkvjkNxA/edit?utm_content=DAFg08A6ApE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-                target="_blank">
-                  {{ 'media_selection_form.thumbnail_option.edit_thumbnail_buttons' | translate }}
-                </a>
-            </div>
-            <div class="grid-item">
-              <div class="responsive-wrapper">
-                <iframe loading="lazy" src="https://www.canva.com/design/DAFg0_bcsik/view?embed"
-                  frameborder="0"></iframe>
-              </div>
-              <a cButton class="me-1" style="height: fit-content; width: 100%; margin-top:0.5rem; margin-bottom: 1rem;"
-                variant="outline" color="primary"
-                href="https://www.canva.com/design/DAFg0_bcsik/whqApc5ek7brC7nYuZWN0w/edit?utm_content=DAFg0_bcsik&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-                target="_blank">
-                  {{ 'media_selection_form.thumbnail_option.edit_thumbnail_buttons' | translate }}
-                </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <br />
-    <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-      <button cButton variant="outline" color="dark" matStepperPrevious>
-        {{ 'media_selection_form.go_back_button' | translate }}
+    <h6>{{ 'media_selection_form.video_option.title' | translate }}</h6>
+    <p style="margin-bottom: 0.5rem;">{{ 'media_selection_form.video_option.description' | translate }}</p>
+    <audio-dropdown #audiochild (voiceSelected)="onVoiceSelected($event)"></audio-dropdown>
+    <p></p>
+    <div>
+      <button cButton variant="outline" style="width: 100%;" variant="outline" color="info"
+        [disabled]="generatedAudioIsLoading" (click)="generateTextToSpeech()">
+        <c-spinner *ngIf="generatedAudioIsLoading" size="sm"></c-spinner>
+        {{ 'media_selection_form.video_option.generate_ai_narration_button' | translate }}
       </button>
-      <button class="btn btn-primary" style="margin-left: 1rem;" (click)="goToReview()">
-        {{ 'media_selection_form.review_video_button' | translate }}  
-      </button>
+      <audio #audioPlayer class="flex-grow-1" style="width: 100%; margin-top: 1rem;" controls>
+        <source [src]="generatedAudioUrl" type="audio/mpeg">
+        {{ 'media_selection_form.video_option.audio_not_supported_message' | translate }}
+      </audio>
     </div>
+    <br/>
+    <button cButton variant="outline" style="width: 100%" variant="outline" color="info"
+      (click)="downloadTextFile()">
+      {{ 'media_selection_form.video_option.download_script_button' | translate }}
+    </button>
+    <br/>
+    <h6 style="margin-top: 1rem;">{{ 'media_selection_form.video_option.edit_in_descript_title' | translate }}</h6>
+    <p style="margin-bottom: 0.5rem;">{{ 'media_selection_form.video_option.edit_in_descript_description' | translate }}</p>
+    <button cButton variant="outline" color="info" style="width: 100%; padding: 0.5rem;" (click)="descriptButtonClicked()">
+      {{ 'media_selection_form.video_option.edit_in_descript_button' | translate }}
+    </button>
   </form>
 </div>

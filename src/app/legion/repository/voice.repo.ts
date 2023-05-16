@@ -22,14 +22,17 @@ export class VoiceRepository {
   }
 
   getTextToSpeechSteam(
-    voiceId: string,
+    myVoiceId: string,
     scriptValue: string
   ): Observable<Blob> {
-    if (voiceId === null || voiceId === undefined || voiceId === '') {
+    if (myVoiceId === null || myVoiceId === undefined || myVoiceId === '') {
+      console.log("🚀 ~ file: voice.repo.ts:29 ~ VoiceRepository ~ myVoiceId === null:", myVoiceId === null)
       return of(new Blob())
     }
     const currLang = this.translate.currentLang;
     const reqBody = {
+      'voiceId': myVoiceId,
+      'language': currLang,
       'text': scriptValue
     }
     const headers = new HttpHeaders({
@@ -41,7 +44,7 @@ export class VoiceRepository {
       responseType: 'blob' as const
     }
     return this.http.post(
-      `http://localhost:3000/api/voices/${voiceId}/${currLang}`,
+      `http://localhost:3000/api/voices/`,
       reqBody,
       options
     );

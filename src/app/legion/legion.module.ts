@@ -41,7 +41,6 @@ import { HomeComponent } from './views/home/home.component';
 import { DocsComponentsModule } from "../../components/docs-components.module";
 import { VideoCreateComponent } from './views/youtubeauto/videocreate/videocreate.component';
 import { VideoDetailsComponent } from './views/youtubeauto/videoresult/videodetails.component';
-import { VideoUploadComponent } from './views/youtubeauto/videoupload/videoupload.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CorsInterceptor } from './repository/cors.interceptor';
 import { VideoScriptComponent } from './views/youtubeauto/videoresult/videoscript/videoscript.component';
@@ -68,7 +67,6 @@ import { StatsRowComponent } from './views/common/statsrow/statsrow.component';
         HomeComponent,
         VideoCreateComponent,
         VideoDetailsComponent,
-        VideoUploadComponent,
         VideoScriptComponent,
         VideoMediaComponent,
         AutoMediaComponent,

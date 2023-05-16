@@ -36,30 +36,6 @@ export class ExtractContentRepository extends ContentRepository {
     ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 40 ~ ExtractContentRepository ~ err", err))
   }
 
-  updateTitle(newTitle: string) {
-    this.firestoreRepository.updateUsersDocument(
-      this.collectionPath,
-      this.currentPage?.id ?? '',
-      { "metadata.title": newTitle }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 48 ~ ExtractContentRepository ~ err", err))
-  }
-
-  updateDescription(newDescription: string) {
-    this.firestoreRepository.updateUsersDocument(
-      this.collectionPath,
-      this.currentPage?.id ?? '',
-      { "metadata.description": newDescription }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 56 ~ ExtractContentRepository ~ err", err))
-  }
-
-  updateTags(newTags: string[]) {
-    this.firestoreRepository.updateUsersDocument(
-      this.collectionPath,
-      this.currentPage?.id ?? '',
-      { "metadata.tags": newTags }
-    ).catch((err) => console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 64 ~ ExtractContentRepository ~ err", err))
-  }
-
   getCompleteScript(): Observable<string> {
     return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
       this.collectionPath,

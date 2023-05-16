@@ -87,7 +87,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.videoDetailsService.getTopicObserver().subscribe((response) => {
       this.topicLoading = false;
       this.topicFormGroup.setValue({
-        topic: response.replace('"', '').trim()
+        topic: response.replaceAll('"', '').trim()
       })
     });
     this.videoDetailsService.getDefaultVideoNichesObserver().subscribe((response) => {

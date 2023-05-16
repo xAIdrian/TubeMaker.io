@@ -1,8 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GenerateContentService } from "../../../../service/content/generation.service";
-import{ AutoContentRepository } from '../../../../repository/content/autocontent.repo';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../../../model/autocreate/videoduration.model";
+import { VideoDetailsService } from "../../videodetails.service";
 
 @Component({
   selector: 'video-script',
@@ -19,11 +18,10 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
   currentVideoDuration: VideoDuration; 
 
   constructor(
-    private gptService: GenerateContentService,
-    private contentRepo: AutoContentRepository,
-    private changeDetectorRef: ChangeDetectorRef,
+    private videoDetailsService: VideoDetailsService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
-    this.currentVideoDuration = contentRepo.getCurrentVideoDuration();
+    this.currentVideoDuration = videoDetailsService.getCurrentVideoDuration();
   }
 
   /**
@@ -40,32 +38,9 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
     this.changeDetectorRef.detectChanges();
   }
 
-  onScriptSectionClick() {
-    console.log("🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ onScriptSectionClick ~ onScriptSectionClick:", this.parentScriptFormGroup)
-    
-    this.contentRepo.submitScriptSections(
-      this.parentScriptFormGroup.value.introduction,
-      this.parentScriptFormGroup.value.mainContent,
-      this.parentScriptFormGroup.value.caseStudies,
-      this.parentScriptFormGroup.value.opinions,
-      this.parentScriptFormGroup.value.actionables,
-      this.parentScriptFormGroup.value.conclusion
-    )
+  onImproveClick(prompt: string, section: DurationSection) {
+    this.videoDetailsService.updateScriptSection(prompt, section);
   }
 
-  // onRerollSection(section: DurationSection) {
-  //   const controlName = section.controlName
-  //   this.parentScriptFormGroup.patchValue({ controlName: 'Please wait...' })
-  //   this.gptService.getNewScriptSection(section, false)
-  // }
-
-  // onOptimizeSection(section: DurationSection) {
-  //   const controlName = section.controlName
-  //   this.gptService.optimizeScriptSection(
-  //     section,
-  //     this.parentFormGroup.get(section.controlName)?.value
-  //   )
-  //   this.parentFormGroup.patchValue({ controlName: 'Optimizing with AI..' })
-  // }
 }
 

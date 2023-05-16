@@ -277,5 +277,31 @@
     "name": "Tutoriels de beauté pour la peau mature",
     "header": "Conseils de beauté pour la peau mature",
     "description": "Cette niche consiste à créer des vidéos qui fournissent des astuces et des tutoriels de beauté spécifiquement pour la peau mature. Les créateurs de cette niche partagent souvent des conseils pour les soins de la peau, le maquillage et la coiffure qui sont adaptés aux besoins des téléspectateurs plus âgés. La monétisation peut provenir de parrainages, de marketing d'affiliation ou de ventes de produits dérivés."
-  }
+  },
+  "extract": {
+    "copy_cat": "Imitateur",
+    "your_videos": "Vos Vidéos",
+    "no_videos": "Bienvenue chez vous. Commençons par ajouter une vidéo à votre liste.",
+    "no_videos_description": "TubeMaker extraira la transcription de la vidéo et vous permettra de l'éditer. Vous pouvez choisir de copier les vidéos les plus performantes du monde entier ou créer un script à partir de zéro !",
+    "copy_popular_videos": "Copier les Vidéos Populaires",
+    "tubemaker_instructions": "Pour commencer à créer vos propres vidéos YouTube, sélectionnez l'une des niches ci-dessus ou collez un lien YouTube.",
+    "loading": "Chargement de vos vidéos...",
+    "back": "Retour",
+    "use_ai": "Utiliser l'IA",
+    "choose_how_to_improve": "Choisissez comment vous souhaitez améliorer ceci",
+    "funnier": "Plus Drôle",
+    "formal": "Formel",
+    "simpler": "Plus Simple",
+    "expand": "Élargir",
+    "shorten": "Raccourcir",
+    "edit_your_script": "Modifier Votre Script",
+    "edit_your_script_description": "Vous pouvez modifier votre script ici en modifiant et réorganisant les sections du script. Améliorez la qualité avec nos outils d'IA.",
+    "select_voice": "Sélectionnez une voix"
+    },
+    "confirmation_dialog": {
+      "title": "Êtes-vous sûr(e) ?",
+      "description": "Il est plus facile que jamais de gagner de l'argent sur YouTube. Avez-vous publié votre contenu sur YouTube ? Vous pouvez toujours revenir plus tard et apporter des modifications.",
+      "leave": "Aller à l'accueil",
+      "stay": "Continuer la modification"
+    }
 }

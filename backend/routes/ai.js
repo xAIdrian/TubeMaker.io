@@ -26,6 +26,7 @@ router.get("/topic/:language", async (req, res, next) => {
     });
     return; // Return early to avoid further processing
   } 
+  inputFile = `backend/routes/inputprompts/${language}/youtube_topic.txt`;
 
   rawPrompt = readTextFileToPrompt(inputFile);
 

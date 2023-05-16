@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AUTO_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
+import { VideoMetadata } from '../../model/video/videometadata.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,41 +21,31 @@ export class AutoContentRepository extends ContentRepository {
 
   override collectionPath: string = 'auto_pages';
 
-  scriptTotalNumberOfPoints: number = 0;
-  
-  currentTopic: string;
-  currentDuration: VideoDuration = {
-    name: 'please wait',
-    header: '',
-    description: '',
-    sections: [
-      {
-        name: 'please wait',
-        controlName: 'introduction',
-        isLoading: false,
-        isOptimizing: false,
-        points: [],
-      },
-    ],
-  };
-
   setCurrentPageObject(): Observable<YoutubeVideoPage> {
-    const newDoc = { 
-      structuredScript: new Map<string, string>([
-        //controlName -> script section
-        ['introduction', ''],
-        ['mainContent', ''],
-        ['caseStudies', ''],
-        ['opinions', ''],
-        ['questions', ''],
-        ['actionables', ''],
-        ['conclusion', ''],
-      ]) 
-    } as YoutubeVideoPage;
+    const structuredScript = new Map<string, string>([
+      //controlName -> script section
+      ['introduction', ''],
+      ['mainContent', ''],
+      ['caseStudies', ''],
+      ['opinions', ''],
+      ['questions', ''],
+      ['actionables', ''],
+      ['conclusion', ''],
+    ]) 
     return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
       'auto_pages',
-      newDoc
+      { /** */ } as YoutubeVideoPage
     )).pipe(
+      tap((doc) => {
+        if (doc.id === undefined) {
+          throw new Error('🔥 doc.id is undefined')
+        }
+        this.firestoreRepository.updateUsersDocumentMap(
+          'auto_pages',
+          doc.id,
+          structuredScript
+        );
+      }),
       tap((page) => this.currentPageSubject.next(page)),
       catchError((err) => {
         console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 58 ~ ExtractContentRepository ~ catchError ~ err", err)
@@ -89,21 +80,20 @@ export class AutoContentRepository extends ContentRepository {
     )
   }
 
-  getCurrentTopic(): string {
-    return this.currentTopic;
-  }
-
-  getCurrentVideoDuration(): VideoDuration {
-    return this.currentDuration;
-  }
-
   updateScriptMap(controlName: string, script: string) {
+    const property = `structuredScript.${controlName}`;
     this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
       this.currentPage?.id ?? '',
-      {
-        structuredScript: { controlName: script }
-      }
+      {  [property]: script  }
+    );
+  }
+  
+  updateCompleteMetaData(completedMetaData: VideoMetadata) {
+    this.firestoreRepository.updateUsersDocument(
+      this.collectionPath,
+      this.currentPage?.id ?? '',
+      {  metadata: completedMetaData  }
     );
   }
 
@@ -130,30 +120,6 @@ export class AutoContentRepository extends ContentRepository {
         }
       })
     );
-  }
-
-  getTotalNumberOfPoints(): number {
-    return this.scriptTotalNumberOfPoints;
-  }
-
-  submitInputs(
-    topic: string,
-    videoStyle: VideoNiche,
-    videoDuration: VideoDuration
-  ): Observable<YoutubeVideoPage> {
-    this.scriptTotalNumberOfPoints = 0;
-
-    this.currentTopic = topic
-    super.currentNiche = videoStyle
-    this.currentDuration = videoDuration
-
-    this.currentDuration.sections.forEach((section) => {
-      section.points.forEach((point) => {
-        this.scriptTotalNumberOfPoints++;
-      });
-    });
-
-    return this.setCurrentPageObject();
   }
 
   submitScriptSections(

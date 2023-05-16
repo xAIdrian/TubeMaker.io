@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 interface DropdownItem {
   id: number;
@@ -21,14 +22,16 @@ export class AudioDropdownComponent implements OnInit {
 
   currentPlayingAudio: HTMLAudioElement;
 
-  constructor() {
+  constructor(
+    private translate: TranslateService
+  ) {
     /** */
   }
 
   ngOnInit() {
     // Set the default selected item
     this.selectedItem = {
-      name: 'Select a voice',
+      name: this.translate.instant('extract.select_voice'),
       sampleUrl: 'https://www.youtube.com/watch?v=QH2-TGUlwu4',
     };
   }

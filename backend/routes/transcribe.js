@@ -31,6 +31,7 @@ router.post("", async (req, res) => {
   const language = reqBody.language;
 
   if (!videoId || !language) {
+    console.log("🚀 ~ file: transcribe.js:34 ~ router.post ~ language:", videoId, language)
     res.status(400).json({
       message: "Video ID and language are required.",
     });

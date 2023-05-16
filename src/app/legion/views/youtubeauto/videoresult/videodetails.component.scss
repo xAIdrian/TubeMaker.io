@@ -48,10 +48,6 @@
   margin-bottom: 1rem;
 }
 
-::ng-deep .mat-horizontal-stepper-header {
-  pointer-events: none !important;
-}
-
 .mat-input-element {
   background-color: #fff;
   border-radius: 10px;
@@ -65,59 +61,73 @@
   padding-top: 1rem;
 }
 
-mat-button-toggle-group {
-  padding-top: 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 1rem;
+textarea {
+  width: 100%;
+  height: auto;
   border: none;
-  orientation: vertical;
-  display: block; // display the buttons as block elements for vertical orientation
-
-  mat-button-toggle {
-    margin: 0.5rem;
-    margin-top: 5px; // add a margin to the top of each button
-    border-radius: 10px;
-    color: #333;
-    font-size: 1rem;
-    display: block;
-
-    border: 1px solid #333 !important;
-    background-color: transparent;
-    color: #333;
-
-    &.mat-button-toggle-checked {
-      background-color: #007bff;
-      color: #fff;
-      border: 1px solid #007bff !important;
-    }
-  }
 }
 
-.row {
+.tags-textarea {
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #F2F2F2;
+}
+
+input {
+  width: 100%;
+  height: auto;
+  border: none;
+  font-weight: bold;
+}
+
+.section-row {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
+  flex-direction: row;
+}
+
+.metadata-row {
+  display: flex; 
+  flex-grow: 1;
+  // display: flex;
+  // flex-wrap: wrap;
+  width: 100%;
+  flex-direction: row;
+
+  align-items: flex-start; 
+  background-color: #F2F2F2; 
+  padding-top: 1rem;  
+  padding: 0.5rem; 
+  // width: 100%; 
+}
+
+.custom-dropdown-menu {
+  width: 130%;
+  font-weight: bold;
+}
+
+.dropdown-header {
+  font-weight: bold;
+  color: darkslategray;
+  flex-wrap: wrap;
+  white-space: normal;
+}
+
+.ai-button {
+  border: 1px solid gray; 
+  margin-left: 0.25rem; 
+  margin-right: 0.25rem;
+  display: inline-block;
+  margin-top: 0.75rem;
 }
 
 .col-8 {
-  flex-basis: calc(80% - 20px);
-  max-width: calc(80% - 20px);
+  flex-basis: calc(85%);
+  max-width: calc(85%);
 }
 
 .col-2 {
-  flex-basis: calc(20% - 20px);
-  max-width: calc(20% - 20px);
-}
-
-h4 {
-  padding-top: 2rem;
-}
-
-h5 {
-  margin-top: 1rem;
-}
-
-.col-btn {
-  width: 100%;
-  margin-bottom: 0.5rem;
+  flex-basis: calc(15%);
+  max-width: calc(15%);
 }

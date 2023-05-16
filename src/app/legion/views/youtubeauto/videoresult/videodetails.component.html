@@ -1,6 +1,6 @@
 <c-card class="mb-4">
   <c-card-body>
-
+    <!-- Loading Page -->
     <div style="display: flex; align-items: center;" *ngIf="contentGenerationIsLoading">
       <c-progress class="mb-3" style="width: 100%">
         <c-progress-bar [value]="contentProgressValue"></c-progress-bar>
@@ -18,105 +18,114 @@
       {{ scriptProgressLabel }}
     </p>
 
-    <mat-horizontal-stepper [linear]="isLinear" #stepper>
-
-      <mat-step [stepControl]="infoFormGroup" *ngIf="!contentGenerationIsLoading">
-        <h4>{{ 'video_editor.make_video_your_own_title' | translate }}</h4>
-        <p class="text-medium-emphasis small">
-          {{ 'video_editor.edit_video_context' | translate }}
-        </p>
-        <form [formGroup]="infoFormGroup">
-          <ng-template matStepLabel>{{ 'video_editor.text' | translate }}</ng-template>
-
-          <h5>{{ 'video_editor.title_label' | translate }}</h5>
-          <div class="row">
-            <div class="col-8">
-              <textarea 
-                autosize
-                style="height: 100%; margin-bottom: 0.5rem;" 
-                cFormControl 
-                formControlName="title">
-            </textarea>
+    <!-- Main Page -->
+    <div *ngIf="!contentGenerationIsLoading">
+      <!-- Video Placeholder -->
+      <div class="section-row">
+        <div class="col-8">
+          <div class="ratio ratio-16x9">
+            <div class="embed-responsive embed-responsive-16by9">
+              <div style="position: relative; width: 97%; height: 0; padding-top: 56.2500%;
+                padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-bottom: 0.9em; overflow: hidden;
+                border-radius: 8px; will-change: transform;">
+                <iframe loading="lazy"
+                  style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+                  src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFi7dFKD-w&#x2F;view?embed">
+                </iframe>
+              </div>
             </div>
-            <div class="col-2">
-              <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTitleLoading"
-                  (click)="rerollTitle()">
+          </div>
+
+          <!-- Metadata Section -->
+          <form [formGroup]="infoFormGroup">
+
+            <div class="section-row" style="margin-top: 1rem; border: 0;">
+              <input sizing="lg" style="height: 100%; margin-bottom: 0.5rem; flex: 1;" cFormControl
+                formControlName="title" />
+              <c-dropdown #dropdown direction="dropstart" variant="btn-group">
+                <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
+                  [disabled]="isTitleLoading">
+                  {{ 'extract.use_ai' | translate }}
                   <c-spinner *ngIf="isTitleLoading" size="sm"></c-spinner>
-                  {{ 'video_editor.new' | translate }}
                 </button>
+                <ul cDropdownMenu class="custom-dropdown-menu">
+                  <li class="dropdown-header">{{ 'extract.choose_how_to_improve' | translate }}</li>
+                  <li>
+                    <hr cDropdownDivider>
+                  </li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('funnier')">{{ 'extract.funnier' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('formal')">{{ 'extract.formal' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('simpler')">{{ 'extract.simpler' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('expand')">{{ 'extract.expand' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onTitleImproveClick('shorten')">{{ 'extract.shorten' | translate }}</button></li>
+                </ul>
+              </c-dropdown>
+              <div style="display: flex; align-items: center; padding: 0; margin:0">
+                <button class="ai-button" cButton shape="rounded-pill" color="light" (click)="copyTitle()">{{
+                  'video_review_card.copy_button' | translate }}</button>
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
+                  [ngClass]="{'d-none': !showTitleBadge}">
+                  {{ 'video_review_card.copied_badge' | translate }}
+                </c-badge>
               </div>
             </div>
-          </div>
 
-          <h5>{{ 'video_editor.description_label' | translate }}</h5>
-          <div class="row">
-            <div class="col-8">
-              <textarea  
-                autosize
-                style="height: 100%; margin-bottom: 0.5rem;" 
-                cFormControl 
-                formControlName="description" >
+            <div class="metadata-row" style="margin-top: 1rem;">
+              <textarea autosize style="height: 100%; margin-bottom: 0.5rem; background-color: #F2F2F2;" cFormControl
+                formControlName="description">
             </textarea>
-            </div>
-            <div class="col-2">
-              <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isDescLoading"
-                  (click)="rerollDescription()">
+              <c-dropdown #dropdown direction="dropstart" variant="btn-group">
+                <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
+                  [disabled]="isDescLoading">
+                  {{ 'extract.use_ai' | translate }}
                   <c-spinner *ngIf="isDescLoading" size="sm"></c-spinner>
-                  {{ 'video_editor.new' | translate }}
                 </button>
+                <ul cDropdownMenu class="custom-dropdown-menu">
+                  <li class="dropdown-header">{{ 'extract.edit_your_script' | translate }}</li>
+                  <li>
+                    <hr cDropdownDivider>
+                  </li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('funnier')">{{ 'extract.funnier' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('formal')">{{ 'extract.formal' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('simpler')">{{ 'extract.simpler' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('expand')">{{ 'extract.expand' | translate }}</button></li>
+                  <li><button cDropdownItem (click)="onDescriptionImproveClick('shorten')">{{ 'extract.shorten' | translate }}</button></li>
+                </ul>
+              </c-dropdown>
+              <div style="display: flex; align-items: center; padding: 0; margin:0">
+                <button class="ai-button" cButton shape="rounded-pill" color="light" (click)="copyDescription()">{{
+                  'video_review_card.copy_button' | translate }}</button>
+                <c-badge color="danger" position="absolute" shape="rounded-pill"
+                  [ngClass]="{'d-none': !showDescriptionBadge}">
+                  {{ 'video_review_card.copied_badge' | translate }}
+                </c-badge>
               </div>
             </div>
-          </div>
 
-          <h5>{{ 'video_editor.tags_label' | translate }}</h5>
-          <div class="row">
-            <div class="col-8">
-              <textarea autosize style="height: 100%; margin-bottom: 0.5rem;" cFormControl formControlName="tags">
-            </textarea>
-            </div>
-            <div class="col-2">
+            <div class="metadata-row">
+              <textarea autosize style="height: 100%; margin-bottom: 0.5rem; background-color: #F2F2F2;" cFormControl
+                formControlName="tags">
+              </textarea>
               <div style="display: flex; align-items: center; padding: 0; margin:0">
-                <button cButton class="col-btn" variant="outline" color="dark" [disabled]="isTagsLoading"
+                <button cButton class="ai-button" shape="rounded-pill" color="light" [disabled]="isTagsLoading"
                   (click)="rerollTags()">
                   <c-spinner *ngIf="isTagsLoading" size="sm"></c-spinner>
                   {{ 'video_editor.new' | translate }}
                 </button>
               </div>
             </div>
-          </div>
+          </form>
 
-          <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button cButton variant="outline" color="dark" (click)="onReset()">{{ 'video_editor.reset_content_button' | translate }}</button>
-            <button 
-              class="btn btn-primary" 
-              style="margin-left: 1rem;" 
-              matStepperNext 
-              (click)="onInfoSectionClick()">
-              {{ 'video_editor.next_step_button' | translate }}
-              </button>
-          </div>
-        </form>
-      </mat-step>
-
-      <mat-step [stepControl]="scriptFormGroup" *ngIf="!contentGenerationIsLoading">
-        <ng-template matStepLabel>{{ 'video_editor.script' | translate }}</ng-template>
-        <video-script [parentScriptFormGroup]="scriptFormGroup"></video-script>
-      </mat-step>
-
-      <mat-step *ngIf="!contentGenerationIsLoading">
-        <ng-template matStepLabel>{{ 'video_editor.media' | translate }}</ng-template>
-        <auto-media></auto-media>
-      </mat-step>
-
-    </mat-horizontal-stepper>
-
-    <c-card class="container" *ngIf="hasInputError" style="margin-bottom: 1rem;">
-      <div class="text-area">
-          <p>{{ 'video_editor.error_message.complete_forms' | translate }}</p>
+        </div>
+        <div class="col-2">
+          <auto-media></auto-media>
+        </div>
       </div>
-  </c-card>
+
+      <div *ngIf="!contentGenerationIsLoading">
+        <video-script [parentScriptFormGroup]="scriptFormGroup"></video-script>
+      </div>
+    </div>
 
   </c-card-body>
 </c-card>

@@ -55,6 +55,10 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
   ) {}
 
   ngOnInit() {
+    this.voiceService.getTextTooLongErrorObserver().subscribe((response) => {
+      this.generatedAudioIsLoading = false;
+      alert(response);
+    });
     this.voiceService.getErrorObserver().subscribe((response) => {
       this.generatedAudioIsLoading = false;
       alert(response);
@@ -119,7 +123,8 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
         this.audioPlayer.nativeElement.play();
       },
       error: (error) => {
-        console.log('error', error)
+        console.log('🔥 error', error)
+        this.generatedAudioIsLoading = false;
       },
       complete: () => {
         console.log('complete')

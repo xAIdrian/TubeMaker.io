@@ -1,4 +1,5 @@
 import {
+  cilCat,
   cilApps,
   cibCcAmex,
   cibCcApplePay,
@@ -191,6 +192,7 @@ export const iconSubset = {
 };
 
 export enum IconSubset {
+  cilCat = 'cilCat',
   cilApps = 'cilApps',
   cibCcAmex = 'cibCcAmex',
   cibCcApplePay = 'cibCcApplePay',

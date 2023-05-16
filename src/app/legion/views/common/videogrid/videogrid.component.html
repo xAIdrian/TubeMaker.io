@@ -4,8 +4,9 @@
     <!-- Thumbnail Formatter -->
     <div class="stretchy-wrapper">
       <div class="hover-overlay">
-        <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onVideoClick(video)">Copy
-          Cat</button>
+        <button type="button" class="mybuttonoverlap btn btn-danger" (click)="onVideoClick(video)">
+          {{ 'extract.copy_cat' | translate }}
+        </button>
         <img class="myimageoverlap" [src]="video.thumbnailUrl" alt="Responsive image"
           style="overflow: hidden; width:100%;" />
       </div>
@@ -14,8 +15,6 @@
     <div style="padding: 1rem;">
       <h5>{{ video.title }}</h5>
       <p class="text-mediumemphasis" style="margin: 0">@{{ video.channelTitle }}</p>
-      <p class="text-medium-emphasis small" class="published">{{ 'video_list.published' | translate }}: {{
-        video.publishedAt }}</p>
     </div>
   </div>
 </div>

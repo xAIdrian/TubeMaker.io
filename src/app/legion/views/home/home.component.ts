@@ -24,10 +24,17 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
     ngOnInit() {
         this.homeService.getCompleteVideoListObserver().subscribe((response) => {
+            console.log("🚀 ~ file: home.component.ts:27 ~ HomeComponent ~ this.homeService.getCompleteVideoListObserver ~ response:", response)
             this.isLoading = false
             this.videos = response;
             this.youtubeVideos = this.videos.map((videoPage) => {
-                return videoPage.youtubeVideo;
+                return {
+                    id: videoPage.id ?? '',
+                    title: videoPage.metadata?.title ?? '',
+                    description: videoPage.metadata?.description ?? '',
+                    thumbnailUrl: videoPage.youtubeVideo?.thumbnailUrl ?? 'https://i.ytimg.com/vi/kyV59RjHnCI/hqdefault.jpg',
+                    channelTitle: videoPage.youtubeVideo?.channelTitle ?? 'you'
+                } as YoutubeVideo
             });
             this.changeDetectorRef.detectChanges();
         });
@@ -43,12 +50,12 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
     onItemSelectedEvent(video: YoutubeVideo) {
         console.log("🚀 ~ file: home.component.ts:51 ~ HomeComponent ~ onItemSelectedEvent ~ video:", video)
-        const matchingPage = this.videos.filter((videoPage) => { 
-            console.log("🚀 ~ file: home.component.ts:52 ~ HomeComponent ~ matchingPage ~ videoPage:", videoPage)
-            return videoPage.youtubeVideo.id === video.id 
-        } )[0];
-        if (matchingPage !== undefined) {
-            this.homeService.videoPageSelected(matchingPage.id ?? '');
+        // const matchingPage = this.videos.filter((videoPage) => { 
+        //     console.log("🚀 ~ file: home.component.ts:52 ~ HomeComponent ~ matchingPage ~ videoPage:", videoPage)
+        //     return videoPage.youtubeVideo.id === video.id 
+        // } )[0];
+        if (video !== undefined) {
+            this.homeService.videoPageSelected(video.id ?? '');
         }
     }
 

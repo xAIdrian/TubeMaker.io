@@ -43,10 +43,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   toggleLanguage() {
     if (this.getCurrentLanguage() === 'en') {
-      console.log("🚀 ~ file: dashboard.component.ts:146 ~ DashboardComponent ~ toggleLanguage ~ getCurrentLanguage:", this.getCurrentLanguage)
       this.switchLanguageToFrench();
     } else if (this.getCurrentLanguage() === 'fr') {
-      console.log("🚀 ~ file: dashboard.component.ts:149 ~ DashboardComponent ~ toggleLanguage ~ this.getCurrentLanguage():", this.getCurrentLanguage())
       this.switchLanguageToEnglish();
     } else {
       throw new Error('Language not supported')

@@ -1,11 +1,11 @@
 <div *ngIf="parentIsLoading" stlye="margin: 1rem;">
     <c-spinner></c-spinner>
-    <p style="color: gray">Loading your videos...</p>
+    <p style="color: gray">{{ 'extract.loading' | translate }}</p>
 </div>
 <div *ngIf="!parentIsLoading" style="margin-top: 1rem;">
-    <h5>Edit Your Script</h5>
+    <h5>{{ 'extract.edit_your_script' | translate }}</h5>
     <p class="text-medium-emphasis" style="padding-right: 1rem;;">
-        Customize your script by editing and rearranging the script sections. Enhance the quality with our AI tools.
+        {{ 'extract.edit_your_script_description' | translate }}
     </p>
     <div cdkDropList (cdkDropListDropped)="onDrop($event)">
         <div cdkDrag [cdkDragDisabled]="!dragIsEnabled" cdkDragLockAxis="y"
@@ -25,24 +25,24 @@
                     <c-dropdown #dropdown direction="dropstart" variant="btn-group">
                         <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
                             [disabled]="transcriptSections[i].isLoading">
-                            Use AI
+                            {{ 'extract.use_ai' | translate }}
                             <c-spinner *ngIf="transcriptSections[i].isLoading" size="sm"></c-spinner>
                         </button>
                         <ul cDropdownMenu class="custom-dropdown-menu">
-                            <li class="dropdown-header">Pick a way to improve this script:</li>
+                            <li class="dropdown-header">{{ 'extract.choose_how_to_improve' | translate }}</li>
                             <li>
                                 <hr cDropdownDivider>
                             </li>
                             <li><button cDropdownItem
-                                    (click)="onImproveClick('funnier', transcriptSections[i], i)">Funnier</button></li>
+                                    (click)="onImproveClick('funnier', transcriptSections[i], i)">{{ 'extract.funnier' | translate }}</button></li>
                             <li><button cDropdownItem
-                                    (click)="onImproveClick('formal', transcriptSections[i], i)">Formal</button></li>
+                                    (click)="onImproveClick('formal', transcriptSections[i], i)">{{ 'extract.formal' | translate }}</button></li>
                             <li><button cDropdownItem
-                                    (click)="onImproveClick('simpler', transcriptSections[i], i)">Simpler</button></li>
+                                    (click)="onImproveClick('simpler', transcriptSections[i], i)">{{ 'extract.simpler' | translate }}</button></li>
                             <li><button cDropdownItem
-                                    (click)="onImproveClick('expand', transcriptSections[i], i)">Expand</button></li>
+                                    (click)="onImproveClick('expand', transcriptSections[i], i)">{{ 'extract.expand' | translate }}</button></li>
                             <li><button cDropdownItem
-                                    (click)="onImproveClick('shorten', transcriptSections[i], i)">Shorten</button></li>
+                                    (click)="onImproveClick('shorten', transcriptSections[i], i)">{{ 'extract.shorten' | translate }}</button></li>
                         </ul>
                     </c-dropdown>
                 </div>

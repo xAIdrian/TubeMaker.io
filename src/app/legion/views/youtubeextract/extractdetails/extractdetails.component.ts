@@ -101,7 +101,6 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
         });
         this.extractDetailsService.getTranscriptIsLoadingObserver().subscribe({
             next: (isLoading: boolean) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:51 ~ ExtractDetailsComponent ~ this.youtubeService.getTranscriptIsLoadingObserver ~ isLoading:", isLoading)
                 this.transcriptIsLoading = isLoading;
             }
         });

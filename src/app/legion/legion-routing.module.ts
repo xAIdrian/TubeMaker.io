@@ -3,7 +3,6 @@ import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./views/home/home.component";
 import { VideoCreateComponent } from "./views/youtubeauto/videocreate/videocreate.component";
 import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodetails.component";
-import { VideoUploadComponent } from "./views/youtubeauto/videoupload/videoupload.component";
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
 import { ExtractDetailsComponent } from "./views/youtubeextract/extractdetails/extractdetails.component";
 import { CanDeactivateGuard } from "./service/auth/deactivate.guard";
@@ -18,14 +17,14 @@ const routes: Routes = [
         path: "copycat",
         component: VideoCopyComponent,
         data: {
-            title: "Copy Cat"
+            title: "Imitateur"
         },
     },
     {
         path: "copycat/details",
         component: ExtractDetailsComponent,
         data: {
-            title: "Transcript"
+            title: "Transcription"
         },
         canDeactivate: [CanDeactivateGuard]
     },
@@ -33,7 +32,7 @@ const routes: Routes = [
         path: "copycat/details/:id",
         component: ExtractDetailsComponent,
         data: {
-            title: "Transcript"
+            title: "Transcription"
         },
         canDeactivate: [CanDeactivateGuard]
     },
@@ -41,7 +40,7 @@ const routes: Routes = [
         path: "list",
         component: HomeComponent,
         data: {
-            title: "Your Videos"
+            title: "Vos vidéos"
         },
         pathMatch: "prefix"
     },
@@ -49,21 +48,14 @@ const routes: Routes = [
         path: "auto",
         component: VideoCreateComponent,
         data: {
-            title: "Create"
+            title: "Créer"
         }
     },
     {
         path: "auto/details",
         component: VideoDetailsComponent,
         data: {
-            title: "Details"
-        }
-    },
-    {
-        path: "auto/upload",
-        component: VideoUploadComponent,
-        data: {
-            title: "Upload"
+            title: "Détails"
         }
     }
 ];

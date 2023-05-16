@@ -12,7 +12,6 @@ export interface DurationSection {
   controlName: string;
   points: string[];
   isLoading?: boolean;
-  isOptimizing?: boolean;
 }
 
 export function getDefaultVideoDurations(
