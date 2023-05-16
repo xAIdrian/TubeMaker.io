@@ -99,6 +99,8 @@ export class FirestoreRepository {
     collectionPath: string,
     userId: string = this.fireAuthRepository.sessionUser?.uid || ''
   ): Observable<T[]> {
+    console.log("🚀 ~ file: firestore.repo.ts:102 ~ FirestoreRepository ~ userId:", userId)
+    console.log("🚀 ~ file: firestore.repo.ts:102 ~ FirestoreRepository ~ collectionPath:", collectionPath)
     const collectionRef = this.firestore
       .collection(USERS_COL)
       .doc(userId)

@@ -4,4 +4,6 @@ export interface FirebaseUser {
     displayName: string;
     photoURL: string;
     emailVerified: boolean;
+
+    isVirgin: boolean;
  }

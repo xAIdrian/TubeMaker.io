@@ -38,7 +38,7 @@ export class LanderComponent implements OnInit {
 
   errorCallback(errorData: FirebaseUISignInFailure) {
     console.log("🔥 ~ file: login.component.ts:18 ~ LoginComponent ~ errorCallback ~ $event:", errorData)
-    
+    alert(errorData.code);
   }
 
   successCallback(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {

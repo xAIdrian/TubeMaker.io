@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import{ HomeService } from './home.service';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { match } from 'assert';
+import { HumaneDateUtility } from '../../helper/humanedate.utility';
 
 @Component({
     selector: 'home',
@@ -10,7 +11,7 @@ import { match } from 'assert';
     styleUrls: ['./home.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class HomeComponent implements OnInit, AfterContentInit {
+export class HomeComponent implements OnInit, AfterContentInit, AfterViewInit {
 
     isLoading = true;
 
@@ -19,8 +20,9 @@ export class HomeComponent implements OnInit, AfterContentInit {
     
     constructor(
         private homeService: HomeService,
+        private dateUtils: HumaneDateUtility,
         private changeDetectorRef: ChangeDetectorRef,
-    ) { }
+    ) { /** */ }
 
     ngOnInit() {
         this.homeService.getCompleteVideoListObserver().subscribe((response) => {
@@ -33,12 +35,14 @@ export class HomeComponent implements OnInit, AfterContentInit {
                     title: videoPage.metadata?.title ?? '',
                     description: videoPage.metadata?.description ?? '',
                     thumbnailUrl: videoPage.youtubeVideo?.thumbnailUrl ?? 'https://i.ytimg.com/vi/kyV59RjHnCI/hqdefault.jpg',
-                    channelTitle: videoPage.youtubeVideo?.channelTitle ?? 'you'
+                    channelTitle: videoPage.youtubeVideo?.channelTitle ?? 'you',
+                    publishedAt: this.dateUtils.updateDateToHumanForm(videoPage.createdDate),
                 } as YoutubeVideo
             });
             this.changeDetectorRef.detectChanges();
         });
         this.homeService.getErrorObserver().subscribe((response) => {
+            this.isLoading = false
             alert(response);
         });
     }
@@ -46,6 +50,10 @@ export class HomeComponent implements OnInit, AfterContentInit {
     ngAfterContentInit() {
         this.homeService.getCompleteVideoList()
         this.changeDetectorRef.detectChanges();
+    }
+
+    ngAfterViewInit() {
+        /** */
     }
 
     onItemSelectedEvent(video: YoutubeVideo) {

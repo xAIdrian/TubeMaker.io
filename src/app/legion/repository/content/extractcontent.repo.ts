@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ContentRepository } from './content.repo';
 import { Observable, catchError, concatMap, from, map, of, tap } from 'rxjs';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
-import { EXTRACT_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
       
 @Injectable({
@@ -14,6 +13,7 @@ export class ExtractContentRepository extends ContentRepository {
 
   setCurrentPageObject(newYoutubeVideo: YoutubeVideo): Observable<YoutubeVideoPage> {
     const newDoc: YoutubeVideoPage = {
+      createdDate: new Date().toISOString(),
       youtubeVideo: newYoutubeVideo
     } 
     return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(

@@ -7,7 +7,7 @@ import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
 import { ExtractionContentService } from '../../service/content/extractcontent.service';
 import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
-import { formatDistance } from 'date-fns'
+import { HumaneDateUtility } from '../../helper/humanedate.utility';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +29,8 @@ export class ExtractDetailsService {
     private navigationService: NavigationService,
     private textSplitUtility: TextSplitUtility,
     private youtubeRepo: YoutubeDataRepository,
-    private extractContentRepo: ExtractContentRepository
+    private extractContentRepo: ExtractContentRepository,
+    private dateUtils: HumaneDateUtility
   ) {}
 
   getErrorObserver(): Observable<string> {
@@ -111,7 +112,7 @@ export class ExtractDetailsService {
         return {
           ...video,
           title: cleanedText,
-          publishedAt: this.updateDateToHumanForm(video.publishedAt),
+          publishedAt: this.dateUtils.updateDateToHumanForm(video.publishedAt),
           statistics: {
             viewCount: this.getRandomNumber(),
             likeCount: this.getRandomNumber(),
@@ -306,9 +307,4 @@ export class ExtractDetailsService {
   navigateHome() {
     this.navigationService.navigateToCopyCat();
   }
-
-  private updateDateToHumanForm(isoDate: string): string {
-    const date = new Date(isoDate);
-    return formatDistance(date, new Date(), { addSuffix: true })
-  }  
 }

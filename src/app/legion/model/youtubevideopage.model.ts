@@ -5,6 +5,7 @@ import { VideoDuration } from "./autocreate/videoduration.model";
 
 export interface YoutubeVideoPage {
     id?: string;
+    createdDate: string;
 
     youtubeVideo: YoutubeVideo;
     metadata?: VideoMetadata;

@@ -57,9 +57,7 @@ export abstract class ContentRepository {
   }
 
   getDefaultVideoNiches() {
-    this.translate.onLangChange.pipe(
-      concatMap((event: LangChangeEvent) => this.translate.getTranslation(event.lang))
-    ).subscribe({
+    this.translate.getTranslation(this.translate.currentLang).subscribe({
       next: (res) => {
         this.defaultNichesSubject.next(getDefaultVideoNiches(this.translate));
       },
@@ -70,6 +68,16 @@ export abstract class ContentRepository {
   }
 
   getDefaultVideoNichesObserver(): Observable<VideoNiche[]> {
+    this.translate.onLangChange.pipe(
+      concatMap((event: LangChangeEvent) => this.translate.getTranslation(event.lang))
+    ).subscribe({
+      next: (res) => {
+        this.defaultNichesSubject.next(getDefaultVideoNiches(this.translate));
+      },
+      error: (err) => {
+        console.log("~ getDefaultVideoNiches error", err)
+      }
+    })
     return this.defaultNichesSubject.asObservable();
   }
 
@@ -176,7 +184,9 @@ export abstract class ContentRepository {
       .getUsersCollection<YoutubeVideoPage>(this.collectionPath)
       .pipe(
         map((documents) => {
+          console.log("🚀 ~ file: content.repo.ts:179 ~ ContentRepository ~ map ~ documents:", documents)
           return documents.map((document) => {
+            console.log("🚀 ~ file: content.repo.ts:183 ~ ContentRepository ~ returndocuments.map ~ document:", document)
             return document as YoutubeVideoPage;
           })
         }

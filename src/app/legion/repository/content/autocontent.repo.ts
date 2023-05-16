@@ -34,7 +34,9 @@ export class AutoContentRepository extends ContentRepository {
     ]) 
     return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
       'auto_pages',
-      { /** */ } as YoutubeVideoPage
+      { 
+        createdDate: new Date().toISOString(),
+      } as YoutubeVideoPage
     )).pipe(
       tap((doc) => {
         if (doc.id === undefined) {
