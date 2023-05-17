@@ -1,22 +1,27 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import{ HomeService } from './home.service';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { match } from 'assert';
 import { HumaneDateUtility } from '../../helper/humanedate.utility';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
+    providers: [HomeService],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class HomeComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
 
     isLoading = true;
 
     videos: YoutubeVideoPage[] = [];
     youtubeVideos: YoutubeVideo[];
+
+    completeListSubscription: Subscription;
+    errorSubscription: Subscription;
     
     constructor(
         private homeService: HomeService,
@@ -25,7 +30,7 @@ export class HomeComponent implements OnInit, AfterContentInit, AfterViewInit {
     ) { /** */ }
 
     ngOnInit() {
-        this.homeService.getCompleteVideoListObserver().subscribe((response) => {
+        this.completeListSubscription = this.homeService.getCompleteVideoListObserver().subscribe((response) => {
             console.log("🚀 ~ file: home.component.ts:27 ~ HomeComponent ~ this.homeService.getCompleteVideoListObserver ~ response:", response)
             this.isLoading = false
             this.videos = response;
@@ -41,19 +46,20 @@ export class HomeComponent implements OnInit, AfterContentInit, AfterViewInit {
             });
             this.changeDetectorRef.detectChanges();
         });
-        this.homeService.getErrorObserver().subscribe((response) => {
+        this.errorSubscription = this.homeService.getErrorObserver().subscribe((response) => {
             this.isLoading = false
             alert(response);
         });
     }
 
     ngAfterContentInit() {
-        this.homeService.getCompleteVideoList()
+        this.homeService.getCompleteVideoList();
         this.changeDetectorRef.detectChanges();
     }
 
-    ngAfterViewInit() {
-        /** */
+    ngOnDestroy() {
+        this.completeListSubscription.unsubscribe();
+        this.errorSubscription.unsubscribe();
     }
 
     onItemSelectedEvent(video: YoutubeVideo) {

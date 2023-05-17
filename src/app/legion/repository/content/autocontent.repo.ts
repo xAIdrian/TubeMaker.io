@@ -100,6 +100,7 @@ export class AutoContentRepository extends ContentRepository {
   }
 
   getCompleteScript(): Observable<string> {
+    console.log("🇯🇵 ~ AutoContentRepository ~ getCompleteScript ~ getCompleteScript:")
     let script = '';
     return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
       this.collectionPath, 

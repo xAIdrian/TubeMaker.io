@@ -91,7 +91,13 @@ export class ExtractDetailsService {
   }
 
   getCurrentPage(id: string) {
-    return this.extractContentRepo.getCurrentPage(id)
+    return this.extractContentRepo.getCurrentPage(id).pipe(
+      tap((response) => {
+        if (response !== null && response !== undefined) {
+          this.currentCopyCatVideo = response.youtubeVideo;
+        }
+      })
+    )
   }
 
   getCurrentVideoUrl(): string {
@@ -147,6 +153,7 @@ export class ExtractDetailsService {
   }
 
   getNewVideoTranscript() {
+    console.log("🚀 ~ file: extractdetails.service.ts:156 ~ ExtractDetailsService ~ getNewVideoTranscript ~ getNewVideoTranscript:")
     if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
       this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
       return; // uncomment for prod
@@ -188,6 +195,7 @@ export class ExtractDetailsService {
   }
 
   getVideoTranscript() {
+    console.log("🚀 ~ file: extractdetails.service.ts:198 ~ ExtractDetailsService ~ getVideoTranscript ~ getVideoTranscript:")
     this.extractContentRepo.getCompleteScript().subscribe({
       next: (script) => {
         if (script === null || script === undefined || script.length === 0) {

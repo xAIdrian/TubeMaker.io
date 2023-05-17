@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ContentRepository } from './content.repo';
-import { Observable, catchError, concatMap, from, map, of, tap } from 'rxjs';
+import { Observable, catchError, concatMap, from, map, of, takeUntil, tap } from 'rxjs';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
       
@@ -41,6 +41,7 @@ export class ExtractContentRepository extends ContentRepository {
       this.collectionPath,
       this.currentPage?.id ?? ''
     ).pipe(
+      takeUntil(this.currentPageSubject),
       map((doc) => {
         return doc.listScript?.join('\n\n') ?? '';
       }),

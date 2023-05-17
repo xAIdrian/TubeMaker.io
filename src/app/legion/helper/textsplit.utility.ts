@@ -52,10 +52,13 @@ export class TextSplitUtility {
     
         para += (para ? ' ' : '') + text;
       }
-      
-      ret.push(para);
+      const updatePara = this.capitalizeFirstLetter(para);
+      ret.push(updatePara);
     
       return ret;
     }
     
+    private capitalizeFirstLetter(str: string): string {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 }

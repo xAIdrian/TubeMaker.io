@@ -3,7 +3,7 @@ import {
   getDefaultVideoNiches,
   VideoNiche,
 } from '../../model/autocreate/videoniche.model';
-import { combineLatest, concatMap, filter, from, map, Observable, of, Subject, tap } from 'rxjs';
+import { combineLatest, concatMap, filter, from, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { FirestoreRepository } from '../firebase/firestore.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
@@ -44,14 +44,14 @@ export abstract class ContentRepository {
     this.getCurrentPageObserver().subscribe({
       next: (youtubeVideoPage) => { 
         if (youtubeVideoPage.id !== undefined && youtubeVideoPage.id !== '') {
-          console.log("~ empty object created successfully", youtubeVideoPage)
+          console.log("🚀 ~ extract.content.repo fetched object successfully", youtubeVideoPage)
           this.currentPage = youtubeVideoPage; 
         } else {
-          console.log("~ empty object created unsuccessfully ID MISSING", youtubeVideoPage)
+          console.log("🚀 ~ extract.content.repo fetched object created unsuccessfully ID MISSING", youtubeVideoPage)
         }
       },
       error: (err) => { 
-        console.log("~ empty object error", err) 
+        console.log("🚀 ~ extract.content.repo fetched object error", err) 
       }
     })
   }
@@ -98,6 +98,7 @@ export abstract class ContentRepository {
   }
 
   getCurrentPage(id: string): Observable<YoutubeVideoPage> {
+    //this is a fresh access to the page
     if (id === '' && this.currentPage !== undefined) {
       return of(this.currentPage)
     } else {
@@ -117,6 +118,7 @@ export abstract class ContentRepository {
       this.collectionPath,
       this.currentPage?.id ?? ''
     ).pipe(
+      takeUntil(this.currentPageSubject),
       //filiering for undefined
       filter((data) => !!data),
       map((document) => {
@@ -141,6 +143,7 @@ export abstract class ContentRepository {
       this.collectionPath,
       parentVideoId
     ).pipe(
+      takeUntil(this.currentPageSubject),
       //filiering for undefined
       filter((data) => !!data),
       map((document) => {
@@ -180,9 +183,7 @@ export abstract class ContentRepository {
       .getUsersCollection<YoutubeVideoPage>(this.collectionPath)
       .pipe(
         map((documents) => {
-          console.log("🚀 ~ file: content.repo.ts:179 ~ ContentRepository ~ map ~ documents:", documents)
           return documents.map((document) => {
-            console.log("🚀 ~ file: content.repo.ts:183 ~ ContentRepository ~ returndocuments.map ~ document:", document)
             return document as YoutubeVideoPage;
           })
         }

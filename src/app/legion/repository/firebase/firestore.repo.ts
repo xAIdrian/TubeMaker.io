@@ -4,12 +4,12 @@ import {
   AngularFirestoreDocument,
   QueryFn,
 } from '@angular/fire/compat/firestore';
-import { Observable, from } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { FireAuthRepository } from './fireauth.repo';
 import { USERS_COL } from './firebase.constants';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -99,8 +99,6 @@ export class FirestoreRepository {
     collectionPath: string,
     userId: string = this.fireAuthRepository.sessionUser?.uid || ''
   ): Observable<T[]> {
-    console.log("🚀 ~ file: firestore.repo.ts:102 ~ FirestoreRepository ~ userId:", userId)
-    console.log("🚀 ~ file: firestore.repo.ts:102 ~ FirestoreRepository ~ collectionPath:", collectionPath)
     const collectionRef = this.firestore
       .collection(USERS_COL)
       .doc(userId)

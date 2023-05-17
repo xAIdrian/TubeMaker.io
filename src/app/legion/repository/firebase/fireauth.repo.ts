@@ -40,7 +40,6 @@ export class FireAuthRepository {
     private angularFirestore: AngularFirestore
   ) {
     this.angularFireAuth.authState.subscribe((user: any) => {
-      console.log("🚀 ~ file: fireauth.repo.ts:52 ~ FireAuthRepository ~ this.userAuthObservable.subscribe ~ user:", user)
       if (user) {
         this.sessionUser = user;
         this.setUserData(user);

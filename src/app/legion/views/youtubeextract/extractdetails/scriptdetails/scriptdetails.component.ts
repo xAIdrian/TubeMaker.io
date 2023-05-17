@@ -37,7 +37,7 @@ import { ExtractContentRepository } from "src/app/legion/repository/content/extr
         });
         this.extractDetailsService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
+                console.log("🚀 ~ file: extractdetails.component.ts:40 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
             },
             complete: () => {
