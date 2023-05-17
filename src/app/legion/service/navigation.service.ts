@@ -1,26 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class NavigationService {
-  
-  constructor(
-    private router: Router
-  ) { /** */ }
-  
-  navigateToCreateVideo() {
+  constructor(private router: Router) {
+    /** */
+  }
+
+  navigateToBrandNew() {
     this.router.navigate(['maker/auto']);
   }
 
-  navigateToResults() {
-    this.router.navigate(['maker/auto/details']);
-  }
-
-  navigateToUploadVideo() {
-    this.router.navigate(['maker/auto/upload']);
+  navigateToAutoDetails(id: string = '') {
+    if (id === '') {
+      this.router.navigate(['maker/auto/details']);
+    } else {
+      // localStorage.setItem('detailsId', id); for page refresh mid-edit
+      this.router.navigate(['maker/auto/details', id]);
+    }
   }
 
   navigateToLander() {
@@ -35,7 +34,7 @@ export class NavigationService {
     if (id === '') {
       this.router.navigate(['maker/copycat/details']);
     } else {
-      // localStorage.setItem('detailsId', id);
+      // localStorage.setItem('detailsId', id); for page refresh mid-edit
       this.router.navigate(['maker/copycat/details', id]);
     }
   }

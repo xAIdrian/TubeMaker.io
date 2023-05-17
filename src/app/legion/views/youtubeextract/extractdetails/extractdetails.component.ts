@@ -3,11 +3,6 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormGroup } from "@angular/forms";
 import { ExtractDetailsService } from "../extractdetails.service";
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ExtractMediaComponent } from "./videomedia/extractmedia.component";
-import { TitleDetailsComponent } from "./titledetails/titledetails.component";
-import { ScriptDetailsComponent } from "./scriptdetails/scriptdetails.component";
-import { Observable, endWith, filter, flatMap, interval, of, takeUntil, takeWhile, timer } from "rxjs";
-import { VideoMediaComponent } from "../../common/videomedia/videomedia.component";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { YoutubeVideoPage } from "src/app/legion/model/youtubevideopage.model";
 
@@ -17,7 +12,7 @@ import { YoutubeVideoPage } from "src/app/legion/model/youtubevideopage.model";
     styleUrls: ['./extractdetails.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class ExtractDetailsComponent implements OnInit, AfterContentInit {
 
     isKickbackVisible = false;
     kickbackText = 'Are you sure you want to return to the home page?';
@@ -30,6 +25,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
     isLinear: any;
     videoEmbedUrl: SafeResourceUrl;
 
+    //output observable for all of our ViewChilds
     currentPageId: string;
 
     constructor(
@@ -41,17 +37,17 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
     
     ngOnInit(): void {
         let pathId: string = '';
+        // TODO refresh page get item BUT it must be from firebase
         // if (localStorage.getItem('detailsId') !== null && localStorage.getItem('detailsId') !== '') {
         //     console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ ngOnInit ~ localStorage.getItem('detailsId'):", localStorage.getItem('detailsId'))
         //     pathId = localStorage.getItem('detailsId')!!;
         // } 
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
-            console.log("🚀 ~ file: extractdetails.component.ts:49 ~ ExtractDetailsComponent ~ this.activatedRoute.paramMap.subscribe ~ params:", params)
             if (params.has('id')) {
                 pathId = params.get('id')!!;
                 this.extractDetailsService.getCurrentPage(pathId).subscribe({
                     next: (page: YoutubeVideoPage) => {
-                        console.log("🚀 ~ file: extractdetails.component.ts:62 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ page:", page)
+                        this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractDetailsService.getCurrentVideoUrl());
                         this.currentPageId = page.id ?? '';
                     },
                     error: (error: any) => {
@@ -62,6 +58,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
                 });
             } else {
                 this.currentPageId = '';
+                this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractDetailsService.getCurrentVideoUrl());
             }
         });
 
@@ -70,11 +67,6 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit, AfterV
     }
     
     ngAfterContentInit(): void {
-        this.changeDetectorRef.detectChanges();
-    }
-    
-    ngAfterViewInit(): void {
-        this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractDetailsService.getCurrentVideoUrl());
         this.changeDetectorRef.detectChanges();
     }
 

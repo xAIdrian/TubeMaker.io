@@ -22,7 +22,7 @@ export class VoiceService {
   private erroSubject = new Subject<string>();
   private voiceObserverSubject = new Subject<{ name: string; sampleUrl: string }[]>();
   private textToSpeechObserverSubject = new Subject<string>();
-  textTooLongErrorSubject: any;
+  textTooLongErrorSubject = new Subject<string>();
 
   constructor(
     private firebaseRepository: FirebaseStorageRepository,

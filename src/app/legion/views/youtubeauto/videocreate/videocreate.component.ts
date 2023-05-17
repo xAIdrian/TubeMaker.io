@@ -50,7 +50,10 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
   hasError = false;
   inputErrorText = 'Please fill out all fields.';
 
+  isLinear: any;
+
   constructor(
+    private contentModel: AutoContentRepository,
     private videoDetailsService: VideoDetailsService,
     private _formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef
@@ -100,6 +103,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
       this.hasError = true;
       this.inputErrorText = response;
     });
+    this.contentModel.getDefaultVideoNiches();
   }
 
   reRollTopic() { 

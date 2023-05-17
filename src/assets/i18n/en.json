@@ -13,7 +13,7 @@
     "welcome": "Welcome",
     "publish_videos_title": "Create a New Video",
     "create_new_video": "Select a video from the list to edit or create a new one by clicking the 'New Video' button.",
-    "published": "Published",
+    "published": "Created",
     "input": {
       "video_title": "",
       "video_channel_title": "",
@@ -24,7 +24,7 @@
     "script_outline": "Script Outline",
     "similar_channels": "Similar Channels",
     "monthly_revenue": "Monthly Revenue",
-    "topic": "topic",
+    "topic": "Topic",
     "pick_your_video_subject": "Pick Your Video Subject",
     "enter_topic_instructions": "Simply enter your video topic into the box below, or our AI will a topic for you!",
     "get_an_idea": "Get an Idea",
@@ -117,9 +117,16 @@
     "tags_label": "Tags",
     "script_label": "Script",
     "copy_button": "Copy",
+    "copy_script_button": "Copy Complete Script",
     "copied_badge": "Copied!",
     "reset_media_button": "Reset Media",
     "reset_content_button": "Reset Content"
+  },
+  "video_details": {
+    "script_progress_label": "Starting soon...",
+    "content_progress_label": "Loading...",
+    "simple_content_progress_label": "Generating endless income...",
+    "simple_script_progress_label": "Planning world domination..."
   },
   "navigation": {
     "copy_cat": "Copy Cat",

@@ -4,12 +4,13 @@ import {
   AngularFirestoreDocument,
   QueryFn,
 } from '@angular/fire/compat/firestore';
-import { Observable, from } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError, concatMap, filter, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { FireAuthRepository } from './fireauth.repo';
 import { USERS_COL } from './firebase.constants';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { error } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -17,14 +18,14 @@ import { Inject, Injectable } from '@angular/core';
 export class FirestoreRepository {
   constructor(
     private firestore: AngularFirestore,
-    private fireAuthRepository: FireAuthRepository
+    private fireAuth: FireAuthRepository
   ) {}
 
   // Create a single data object under a user ID
   async createUsersDocument<T>(
     collectionPath: string,
     data: T,
-    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
+    userId: string = this.fireAuth.sessionUser?.uid || ''
   ): Promise<T> {
     const docRef = this.firestore
       .collection(USERS_COL)
@@ -59,7 +60,7 @@ export class FirestoreRepository {
 
   async createUsersCollection(
     collectionPath: string,
-    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
+    userId: string = this.fireAuth.sessionUser?.uid || ''
   ): Promise<void> {
     const collectionRef = this.firestore
       .collection(USERS_COL)
@@ -69,11 +70,27 @@ export class FirestoreRepository {
     return emptyDocRef.set({}); // Set an empty object to the document
   }
 
-  // Fetch a single data object under a user ID
   getUsersDocument<T>(
     collectionPath: string,
     documentKey: string,
-    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
+    userId: string = this.fireAuth.sessionUser?.uid || ''
+  ): Observable<T> {
+    if (userId === '') {
+      return this.fireAuth.getUserAuthObservable().pipe(
+        concatMap((user) => {
+          return this.getFocusedUsersDoc<T>(collectionPath, documentKey, user.uid);
+        })
+      );
+    } else {
+      return this.getFocusedUsersDoc<T>(collectionPath, documentKey, userId);
+    }
+  }
+
+
+  private getFocusedUsersDoc<T>(
+    collectionPath: string,
+    documentKey: string,
+    userId: string = this.fireAuth.sessionUser?.uid || ''
   ): Observable<T> {
     const docRef = this.firestore
       .collection(USERS_COL)
@@ -97,7 +114,22 @@ export class FirestoreRepository {
 
   getUsersCollection<T>(
     collectionPath: string,
-    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
+    userId: string = this.fireAuth.sessionUser?.uid || ''
+  ): Observable<T[]> {
+    if (userId === '') {
+      return this.fireAuth.getUserAuthObservable().pipe(
+        concatMap((user) => {
+          return this.getFocusedCollectionRef<T>(collectionPath, user.uid);
+        })
+      );
+    } else {
+      return this.getFocusedCollectionRef<T>(collectionPath, userId);
+    }
+  }
+
+  private getFocusedCollectionRef<T>(
+    collectionPath: string,
+    userId: string
   ): Observable<T[]> {
     const collectionRef = this.firestore
       .collection(USERS_COL)
@@ -116,44 +148,12 @@ export class FirestoreRepository {
     );
   }
 
-  getUsersDocumentAsMap(
-    collectionPath: string,
-    documentKey: string,
-    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
-  ): Observable<Map<string, string>> {
-    const docRef = this.firestore
-      .collection(USERS_COL)
-      .doc(userId)
-      .collection(collectionPath)
-      .doc(documentKey);
-
-    return docRef.get().pipe(
-      map((doc) => {
-        if (doc.exists) {
-          const data = doc.data() as { [key: string]: string };
-          return new Map(Object.entries(data));
-        } else {
-          throw new Error('Document does not exist');
-        }
-      }),
-      tap((data) => {
-        if (!environment.production) {
-          console.groupCollapsed(
-            `❤️‍🔥 Firestore Streaming [${collectionPath}] [getUserDocumentMap] [${userId}]`
-          );
-          console.log(data);
-          console.groupEnd();
-        }
-      })
-    );
-  }
-
   // Patch specific properties and objects as children of the single data object
   async updateUsersDocument<T>(
     collectionPath: string,
     documentKey: string,
     data: Partial<T>,
-    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
+    userId: string = this.fireAuth.sessionUser?.uid || ''
   ): Promise<boolean> {
     const docRef = this.firestore
       .collection(USERS_COL)
@@ -185,7 +185,7 @@ export class FirestoreRepository {
     collectionPath: string,
     documentKey: string,
     data: Map<string, string>,
-    userId: string = this.fireAuthRepository.sessionUser?.uid || ''
+    userId: string = this.fireAuth.sessionUser?.uid || ''
   ): Promise<void> {
     const docRef = this.firestore
       .collection(USERS_COL)

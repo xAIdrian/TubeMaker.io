@@ -40,7 +40,6 @@ export class FireAuthRepository {
     private angularFirestore: AngularFirestore
   ) {
     this.angularFireAuth.authState.subscribe((user: any) => {
-      console.log("🚀 ~ file: fireauth.repo.ts:52 ~ FireAuthRepository ~ this.userAuthObservable.subscribe ~ user:", user)
       if (user) {
         this.sessionUser = user;
         this.setUserData(user);
@@ -73,21 +72,30 @@ export class FireAuthRepository {
    * sign up with username/password and sign in with social auth  
    * provider in Firestore database using AngularFirestore + AngularFirestoreDocument service 
    */
-  setUserData(user: any) {
-    const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(
-      `${USERS_COL}/${user.uid}`
-    );
-    const userData: FirebaseUser = {
+  async setUserData(user: any) {
+    const existingUserRef = this.angularFirestore.doc(`${USERS_COL}/${user.uid}`);
+    const userData = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
+      isVirgin: true
     };
-    return userRef.set(this.removeUndefinedProperties(user), {
-      merge: true,
-    });
+  
+    // Check if the user document exists
+    const snapshot = await existingUserRef.get().toPromise();
+    if (snapshot?.exists) {
+      // User exists, update the existing user data
+      userData['isVirgin'] = false;
+      return existingUserRef.set(this.removeUndefinedProperties(userData), { merge: true });
+    } else {
+      userData['isVirgin'] = true;
+      // User doesn't exist, create a new user document
+      return existingUserRef.set(this.removeUndefinedProperties(userData));
+    }
   }
+  
 
   // Sign out
   async signOut() {

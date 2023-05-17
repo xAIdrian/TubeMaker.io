@@ -1,6 +1,6 @@
 <c-card class="mb-4">
-  <c-card-body  style="min-height: 80vh">
-    <mat-horizontal-stepper [linear]="true" #stepper style="padding: 1rem;">
+  <c-card-body style="min-height: 80vh">
+    <mat-horizontal-stepper [linear]="isLinear" #stepper style="padding: 1rem;">
 
       <mat-step [stepControl]="topicFormGroup">
         <h4>{{ 'video_wizard.pick_your_video_subject' | translate }}</h4>
@@ -10,50 +10,42 @@
         <form [formGroup]="topicFormGroup" class="d-flex align-items-center">
           <ng-template matStepLabel>{{ 'video_wizard.topic' | translate }}</ng-template>
           <div class="col-auto" style="display: flex; align-items: center;">
-            <button class="btn btn-info" style="padding-right: 2rem; padding-left: 2rem; margin-right: 1rem;;"
-              [disabled]="topicLoading" (click)="reRollTopic()">
-              <c-spinner *ngIf="topicLoading" size="sm" color="white"></c-spinner>
+            <button cButton class="ai-button" shape="rounded-pill" color="light"
+              style="padding-right: 2rem; padding-left: 2rem; margin-right: 1rem;;" [disabled]="topicLoading"
+              (click)="reRollTopic()">
+              <c-spinner *ngIf="topicLoading" size="sm" color="primary"></c-spinner>
               {{ 'video_wizard.get_an_idea' | translate }}
             </button>
           </div>
           <div class="flex-grow-1">
-            <textarea 
-              matInput 
-              placeholder="{{ 'video_wizard.type_your_idea' | translate }}" 
-              formControlName="topic" required
-              aria-label="lg input example" 
-              cFormControl sizing="md" 
-              type="text" 
-              class="mat-input-element" 
+            <textarea matInput placeholder="{{ 'video_wizard.type_your_idea' | translate }}" formControlName="topic"
+              required aria-label="lg input example" cFormControl sizing="md" type="text" class="mat-input-element"
               rows="2"></textarea>
           </div>
           <br />
         </form>
         <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
           <button variant="outline" color="dark" cButton>{{ 'video_wizard.need_help' | translate }}</button>
-          <button class="btn btn-primary ml-3" style="margin-left: 1rem;" matStepperNext>{{ 'video_wizard.go_to_next_step' | translate }}</button>
+          <button class="btn btn-primary ml-3" style="margin-left: 1rem;" matStepperNext>{{
+            'video_wizard.go_to_next_step' | translate }}</button>
         </div>
       </mat-step>
 
       <mat-step [stepControl]="styleFormGroup">
         <form [formGroup]="styleFormGroup">
           <ng-template matStepLabel>{{ 'video_wizard.style' | translate }}</ng-template>
-          <div class="row">
-            <div class="col-4">
-              <mat-button-toggle-group formControlName="selectedStyle">
-                <mat-button-toggle *ngFor="let videoOption of videoNiches" [value]="videoOption"
-                  (click)="onVideoOptionSelected(videoOption)">{{ videoOption.name }}</mat-button-toggle>
-              </mat-button-toggle-group>
-            </div>
-            <div class="col-8">
-              <h4>{{ selectedVideoNiche.header }}</h4>
-              <p class="text-medium-emphasis" style="margin-top: 2rem;">{{ selectedVideoNiche.description }}</p>
-            </div>
-          </div>
+          <mat-button-toggle-group formControlName="selectedStyle">
+            <mat-button-toggle *ngFor="let videoOption of videoNiches" [value]="videoOption"
+              (click)="onVideoOptionSelected(videoOption)">{{ videoOption.name }}</mat-button-toggle>
+          </mat-button-toggle-group>
+          <h4>{{ selectedVideoNiche.header }}</h4>
+          <p class="text-medium-emphasis" style="margin-top: 2rem;">{{ selectedVideoNiche.description }}</p>
           <br />
           <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-            <button variant="outline" color="dark" cButton matStepperPrevious>{{ 'improve_script_with_ai.go_back_button' | translate }}</button>
-            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>{{ 'improve_script_with_ai.next_step_button' | translate }}</button>
+            <button variant="outline" color="dark" cButton matStepperPrevious>{{ 'improve_script_with_ai.go_back_button'
+              | translate }}</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" matStepperNext>{{
+              'improve_script_with_ai.next_step_button' | translate }}</button>
           </div>
         </form>
 
@@ -62,39 +54,35 @@
       <mat-step [stepControl]="durationFormGroup">
         <form [formGroup]="durationFormGroup">
           <ng-template matStepLabel>{{ 'video_wizard.length' | translate }}</ng-template>
-          <div class="row">
-            <div class="col-4">
-              <mat-button-toggle-group formControlName="selectedDuration">
-                <mat-button-toggle *ngFor="let durationOption of videoDurations" [value]="durationOption"
-                  (click)="onVideoDurationSelected(durationOption)">{{ durationOption.name }}</mat-button-toggle>
-              </mat-button-toggle-group>
-            </div>
-            <div class="col-8">
-              <h4>{{ selectedVideoDuration.header }}</h4>
-              <p class="text-medium-emphasis" style="margin-top: 1rem;">{{ selectedVideoDuration.description }}</p>
-              <h5 *ngIf="selectedVideoDuration.sections.length > 0" style="padding-top: 1rem;">{{ 'video_wizard.script_outline' | translate }}</h5>
-              <div *ngFor="let section of selectedVideoDuration.sections" style="padding: 1rem;">
-                <strong>{{section.name}}</strong>
-                <ul>
-                  <li *ngFor="let item of section.points">{{item}}</li>
-                </ul>
-              </div>
-            </div>
-            </div>
+          <mat-button-toggle-group formControlName="selectedDuration">
+            <mat-button-toggle *ngFor="let durationOption of videoDurations" [value]="durationOption"
+              (click)="onVideoDurationSelected(durationOption)">{{ durationOption.name }}</mat-button-toggle>
+          </mat-button-toggle-group>
+          <h4>{{ selectedVideoDuration.header }}</h4>
+          <p class="text-medium-emphasis" style="margin-top: 1rem;">{{ selectedVideoDuration.description }}</p>
+          <h5 *ngIf="selectedVideoDuration.sections.length > 0" style="padding-top: 1rem;">{{
+            'video_wizard.script_outline' | translate }}</h5>
+          <div *ngFor="let section of selectedVideoDuration.sections" style="padding: 1rem;">
+            <strong>{{section.name}}</strong>
+            <ul>
+              <li *ngFor="let item of section.points">{{item}}</li>
+            </ul>
+          </div>
           <br />
           <div class="d-flex justify-content-end align-items-center full-width" style="margin-top: 2rem;">
-              <button variant="outline" color="dark" cButton matStepperPrevious>{{ 'improve_script_with_ai.go_back_button' | translate }}</button>
-              <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">
-                {{ 'video_wizard.generate_video_script' | translate }}
-              </button>
-            </div>
+            <button variant="outline" color="dark" cButton matStepperPrevious>{{ 'improve_script_with_ai.go_back_button'
+              | translate }}</button>
+            <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">
+              {{ 'video_wizard.generate_video_script' | translate }}
+            </button>
+          </div>
         </form>
       </mat-step>
     </mat-horizontal-stepper>
     <c-card class="container" *ngIf="hasError" style="margin-bottom: 1rem;">
       <div class="text-area">
-          <p>{{ inputErrorText }}</p>
+        <p>{{ inputErrorText }}</p>
       </div>
-  </c-card>
+    </c-card>
   </c-card-body>
 </c-card>

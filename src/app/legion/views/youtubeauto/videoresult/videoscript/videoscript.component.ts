@@ -2,6 +2,8 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormGroup } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../../../model/autocreate/videoduration.model";
 import { VideoDetailsService } from "../../videodetails.service";
+import { AutoContentRepository } from "src/app/legion/repository/content/autocontent.repo";
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'video-script',
@@ -10,14 +12,16 @@ import { VideoDetailsService } from "../../videodetails.service";
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoScriptComponent implements AfterContentInit, OnChanges {
-
   @Input() parentScriptFormGroup: FormGroup;
-  
+
   isScriptLoading: boolean = false;
 
-  currentVideoDuration: VideoDuration; 
+  currentVideoDuration: VideoDuration;
+  showScriptBadge = false;
 
   constructor(
+    private contentRepo: AutoContentRepository,
+    private clipboard: Clipboard,
     private videoDetailsService: VideoDetailsService,
     private changeDetectorRef: ChangeDetectorRef
   ) {
@@ -26,11 +30,11 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
 
   /**
    * Where we receive updates from our parent FormControl
-   * @param changes 
+   * @param changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["parentFormGroup"] && this.parentScriptFormGroup) {
-      console.log("🚀 ~ file: videoscript.component.ts:45 ~ VideoScriptComponent ~ ngOnChanges ~ parentFormGroup:", this.parentScriptFormGroup)
+    if (changes['parentScriptFormGroup']) {
+      this.parentScriptFormGroup = changes['parentScriptFormGroup'].currentValue;
     }
   }
 
@@ -42,5 +46,14 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
     this.videoDetailsService.updateScriptSection(prompt, section);
   }
 
+  copyScript() {
+    this.contentRepo
+      .getScriptForDownload('auto-content-file')
+      .subscribe((blobItem) => {
+        this.clipboard.copy(blobItem);
+        this.showScriptBadge = true;
+        setTimeout(() => (this.showScriptBadge = false), 1000);
+      });
+  }
 }
 

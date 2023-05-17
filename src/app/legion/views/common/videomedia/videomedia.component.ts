@@ -96,12 +96,6 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
     this.selectedVoice = voice;
   }
 
-  downloadTextFile() {
-    this.contentRepo.getScriptForDownload('auto-content-file').subscribe((blobItem) => {
-      saveAs(blobItem.blob, blobItem.filename);
-    });
-  }
-
   generateTextToSpeech() {
     if (this.selectedVoice === null || this.selectedVoice === undefined) {
       alert('Please select a voice before generating audio');
@@ -140,9 +134,5 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
 
   onMediaOptionSelected(option: string) {
     this.selectedMediaOption = option;
-  }
-
-  goToReview() {
-    this.navigationService.navigateToUploadVideo();
   }
 }

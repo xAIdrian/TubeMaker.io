@@ -40,7 +40,7 @@
           <form [formGroup]="infoFormGroup">
 
             <div class="section-row" style="margin-top: 1rem; border: 0;">
-              <input sizing="lg" style="height: 100%; margin-bottom: 0.5rem; flex: 1;" cFormControl
+              <input style="height: 100%; margin-bottom: 0.5rem; flex: 1;" cFormControl
                 formControlName="title" />
               <c-dropdown #dropdown direction="dropstart" variant="btn-group">
                 <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
@@ -123,7 +123,7 @@
       </div>
 
       <div *ngIf="!contentGenerationIsLoading">
-        <video-script [parentScriptFormGroup]="scriptFormGroup"></video-script>
+        <video-script  [parentScriptFormGroup]="scriptFormGroup"></video-script>
       </div>
     </div>
 

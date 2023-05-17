@@ -43,10 +43,7 @@ export class VideoDetailsService {
   }
 
   getInitVideoNiche() {
-    return this.contentRepo.getInitVideoNiche(
-      'video_style.init_header',
-      'video_style.init_description'
-    );
+    return this.contentRepo.getInitVideoNiche();
   }
   getInitVideoDurationObserver() {
     return this.contentRepo.getInitVideoDurationObserver();
@@ -114,7 +111,7 @@ export class VideoDetailsService {
     this.submitInputs(topic, selectedStyle, selectedDuration)
       .subscribe({
         next: (response) => {
-          this.navigationService.navigateToResults();
+          this.navigationService.navigateToAutoDetails();
         },
         error: (error) => {
           console.log(error);
@@ -135,7 +132,28 @@ export class VideoDetailsService {
 
     this.contentService.setTotalScriptPoints(videoDuration);
 
-    return this.contentRepo.setCurrentPageObject();
+    return this.contentRepo.setCurrentPageObject(
+      this.currentTopic,
+      this.currentNiche,
+      this.currentDuration
+    );
+  }
+
+  getCurrentPage(id: string) {
+    return this.contentRepo.getCurrentPage(id).pipe(
+      tap((response) => {
+        console.log("🚀 ~ file: videodetails.service.ts:145 ~ VideoDetailsService ~ tap ~ response:", response)
+        if (response.topic !== undefined) {
+          this.currentTopic = response.topic;
+        }
+        if (response.niche !== undefined) {
+          this.currentNiche = response.niche;
+        }
+        if (response.duration !== undefined) {
+          this.currentDuration = response.duration;
+        }
+      })
+    );
   }
 
   getVideoMetaData() {

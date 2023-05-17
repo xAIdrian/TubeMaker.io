@@ -1,7 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { AfterContentInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { GenerateContentService } from "../../../../service/content/generation.service";
+import { Clipboard } from "@angular/cdk/clipboard";
 import { ExtractDetailsService } from "../../extractdetails.service";
+import { ExtractContentRepository } from "src/app/legion/repository/content/extractcontent.repo";
 
 @Component({
     selector: 'script-details',
@@ -17,9 +18,12 @@ import { ExtractDetailsService } from "../../extractdetails.service";
     dragIsEnabled = true;
     showErrorToast = false;
     errorToastText = ''
+    showScriptBadge = false;
 
     constructor(
+        private contentRepo: ExtractContentRepository,
         private extractDetailsService: ExtractDetailsService,
+        private clipboard: Clipboard,
         private changeDetectorRef: ChangeDetectorRef
     ) { /** */ }
 
@@ -33,7 +37,7 @@ import { ExtractDetailsService } from "../../extractdetails.service";
         });
         this.extractDetailsService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
+                console.log("🚀 ~ file: extractdetails.component.ts:40 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
                 this.transcriptSections = sections;
             },
             complete: () => {
@@ -95,4 +99,14 @@ import { ExtractDetailsService } from "../../extractdetails.service";
         this.dragIsEnabled = !this.dragIsEnabled;
         this.changeDetectorRef.detectChanges();
     }
+
+    copyScript() {
+        this.contentRepo
+          .getScriptForDownload('auto-content-file')
+          .subscribe((blobItem) => {
+            this.clipboard.copy(blobItem);
+            this.showScriptBadge = true;
+            setTimeout(() => (this.showScriptBadge = false), 1000);
+          });
+      }
 }

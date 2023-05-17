@@ -5,14 +5,17 @@ import { VideoDuration } from "./autocreate/videoduration.model";
 
 export interface YoutubeVideoPage {
     id?: string;
+    createdDate: string;
+    createdFrom: string;
 
-    youtubeVideo: YoutubeVideo;
+    youtubeVideo?: YoutubeVideo;
     metadata?: VideoMetadata;
     structuredScript?: Map<string, string>;
     listScript?: string[];
 
     generatedAudioUrl?: string;
 
+    topic?: string;
     niche?: VideoNiche;
     duration?: VideoDuration;
 }

@@ -7,7 +7,7 @@ import { NavigationService } from '../../service/navigation.service';
 import { TextSplitUtility } from '../../helper/textsplit.utility';
 import { ExtractionContentService } from '../../service/content/extractcontent.service';
 import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
-import { formatDistance } from 'date-fns'
+import { HumaneDateUtility } from '../../helper/humanedate.utility';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +29,8 @@ export class ExtractDetailsService {
     private navigationService: NavigationService,
     private textSplitUtility: TextSplitUtility,
     private youtubeRepo: YoutubeDataRepository,
-    private extractContentRepo: ExtractContentRepository
+    private extractContentRepo: ExtractContentRepository,
+    private dateUtils: HumaneDateUtility
   ) {}
 
   getErrorObserver(): Observable<string> {
@@ -90,7 +91,13 @@ export class ExtractDetailsService {
   }
 
   getCurrentPage(id: string) {
-    return this.extractContentRepo.getCurrentPage(id)
+    return this.extractContentRepo.getCurrentPage(id).pipe(
+      tap((response) => {
+        if (response !== null && response !== undefined) {
+          this.currentCopyCatVideo = response.youtubeVideo!!;
+        }
+      })
+    )
   }
 
   getCurrentVideoUrl(): string {
@@ -111,7 +118,7 @@ export class ExtractDetailsService {
         return {
           ...video,
           title: cleanedText,
-          publishedAt: this.updateDateToHumanForm(video.publishedAt),
+          publishedAt: this.dateUtils.updateDateToHumanForm(video.publishedAt),
           statistics: {
             viewCount: this.getRandomNumber(),
             likeCount: this.getRandomNumber(),
@@ -146,6 +153,7 @@ export class ExtractDetailsService {
   }
 
   getNewVideoTranscript() {
+    console.log("🚀 ~ file: extractdetails.service.ts:156 ~ ExtractDetailsService ~ getNewVideoTranscript ~ getNewVideoTranscript:")
     if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
       this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
       return; // uncomment for prod
@@ -187,6 +195,7 @@ export class ExtractDetailsService {
   }
 
   getVideoTranscript() {
+    console.log("🚀 ~ file: extractdetails.service.ts:198 ~ ExtractDetailsService ~ getVideoTranscript ~ getVideoTranscript:")
     this.extractContentRepo.getCompleteScript().subscribe({
       next: (script) => {
         if (script === null || script === undefined || script.length === 0) {
@@ -306,9 +315,4 @@ export class ExtractDetailsService {
   navigateHome() {
     this.navigationService.navigateToCopyCat();
   }
-
-  private updateDateToHumanForm(isoDate: string): string {
-    const date = new Date(isoDate);
-    return formatDistance(date, new Date(), { addSuffix: true })
-  }  
 }
