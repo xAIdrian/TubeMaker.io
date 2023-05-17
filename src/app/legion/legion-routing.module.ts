@@ -6,6 +6,7 @@ import { VideoDetailsComponent } from "./views/youtubeauto/videoresult/videodeta
 import { VideoCopyComponent } from "./views/youtubeextract/videocopy/videocopy.component";
 import { ExtractDetailsComponent } from "./views/youtubeextract/extractdetails/extractdetails.component";
 import { CanDeactivateGuard } from "./service/auth/deactivate.guard";
+import { CanNavigateForwardGuard } from "./service/auth/navforward.guard";
 
 const routes: Routes = [
     {
@@ -20,17 +21,18 @@ const routes: Routes = [
     {
         path: "copycat/details",
         component: ExtractDetailsComponent,
-        canDeactivate: [CanDeactivateGuard]
+        canDeactivate: [CanDeactivateGuard],
     },
     {
         path: "copycat/details/:id",
         component: ExtractDetailsComponent,
-        canDeactivate: [CanDeactivateGuard]
+        canDeactivate: [CanDeactivateGuard],
     },
     {
         path: "list",
         component: HomeComponent,
-        pathMatch: "prefix"
+        pathMatch: "prefix",
+        canDeactivate: [CanNavigateForwardGuard],
     },
     {
         path: "auto",
@@ -39,12 +41,12 @@ const routes: Routes = [
     {
         path: "auto/details",
         component: VideoDetailsComponent,
-        canDeactivate: [CanDeactivateGuard]
+        canDeactivate: [CanDeactivateGuard],
     },
     {
         path: "auto/details/:id",
         component: VideoDetailsComponent,
-        canDeactivate: [CanDeactivateGuard]
+        canDeactivate: [CanDeactivateGuard],
     }
 ];
 
