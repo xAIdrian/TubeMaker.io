@@ -32,7 +32,7 @@ const routes: Routes = [
         path: "list",
         component: HomeComponent,
         pathMatch: "prefix",
-        canDeactivate: [CanNavigateForwardGuard],
+        // canDeactivate: [CanNavigateForwardGuard],
     },
     {
         path: "auto",

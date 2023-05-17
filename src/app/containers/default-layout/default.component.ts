@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Subscription } from 'rxjs';
 import { INavData } from '@coreui/angular';
@@ -20,9 +20,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
   };
 
   constructor(
-    private router: Router,
     private angularFireAuth: AngularFireAuth,
     private translate: TranslateService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { /** */ }
 
   ngOnInit() {
@@ -98,7 +99,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
     if (this.isLoggedIn) {
       console.log("🚀 ~ onLogoutEvent ~ onLogoutEvent:")
       this.angularFireAuth.signOut()
-      this.router.navigate(['./pages/lander']);
+      this.router.navigate(['/lander'], { relativeTo: this.activatedRoute });
     }
   }
 

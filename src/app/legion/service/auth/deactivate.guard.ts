@@ -12,6 +12,7 @@ export class CanDeactivateGuard implements CanDeactivate<any> {
   constructor(private dialog: MatDialog) {}
 
   canDeactivate(component: any): Observable<boolean> | boolean {
+    console.log("🚀 ~ file: deactivate.guard.ts:15 ~ CanDeactivateGuard ~ canDeactivate ~ component:", component)
     if (component.isCurrentVideoPresent()) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '400px'

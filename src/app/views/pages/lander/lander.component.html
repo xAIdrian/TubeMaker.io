@@ -1,31 +1,31 @@
-<div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+<div class="bg-dark min-vh-100 d-flex flex-row align-items-center">
   <c-container>
     <c-row class="justify-content-center">
       <c-col md="8">
         <h5 style="align-items: center;" color="red">{{ errorMessage }}</h5>
         <c-card-group>
-          <c-card class="p-4">
-            <c-card-body>
-              <h1>Join The Revolution</h1>
+          <c-card class="p-4" style="orientation: columns;">
+            <div *ngIf="isLoading" stlye="margin: 1rem; align-items: center; justify-content-center;">
+              <strong style="color: gray">{{ 'extract.loading' | translate }}</strong>
+            </div>
+            <c-card-body *ngIf="!isLoading">
+              <h2 style="text-align: center;">Join The Revolution</h2>
               <firebase-ui style="padding: 1rem;"
                 (signInSuccessWithAuthResult)="successCallback($event)"
                 (signInFailure)="errorCallback($event)" 
                 (uiShown)="uiShownCallback()">
               </firebase-ui>
-
             </c-card-body>
           </c-card>
           <c-card [ngStyle]="{'width.%': 44}" class="text-white bg-primary py-5">
-            <c-card-body class="text-center">
+            <c-card-body>
               <div>
-                <h2>Ready To Get Paid?</h2>
                 <p>
-                  Not just anyone can join Youtube Revolution. Exclusive members only. Register now to get started and
-                  start earning passive income online with AI.
+                  By following our three-step process, users can create a successful YouTube channel, work remotely while traveling the world, and turn it into a lucrative source of passive income. Don't miss out on this limited-time opportunity to gain financial freedom and join the pioneering group of individuals benefiting from this method in France.
                 </p>
-                <button [active]="true" cButton class="mt-3" color="primary" routerLink="/">
-                  Register Now!
-                </button>
+                <p>
+                  With our blueprint, users can learn how to generate a monthly income through a YouTube channel without the need to record any videos themselves. 
+                </p>
               </div>
             </c-card-body>
           </c-card>

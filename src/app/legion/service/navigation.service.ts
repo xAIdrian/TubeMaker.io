@@ -9,6 +9,10 @@ export class NavigationService {
     /** */
   }
 
+  // navigateToLander() {
+  //   this.router.navigate(['./pages/lander']);
+  // }
+
   navigateToBrandNew() {
     this.router.navigate(['maker/auto']);
   }
@@ -23,7 +27,7 @@ export class NavigationService {
   }
 
   navigateToLander() {
-    this.router.navigate(['lander']);
+    this.router.navigate(['/lander']);
   }
 
   navigateToCopyCat() {

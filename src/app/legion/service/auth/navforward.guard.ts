@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanDeactivate } from '@angular/router';
-import { stat } from 'fs';
+import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HomeComponent } from '../../views/home/home.component';
+import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
 
 @Injectable({
   providedIn: 'root'
 })
  export class CanNavigateForwardGuard implements CanDeactivate<HomeComponent> {
 
-  constructor(private router: Router) {}
+  constructor(
+    private authRepo: FireAuthRepository
+  ) { /** */ }
 
   canDeactivate(component: any): Observable<boolean> | boolean {
-    console.log("🚀 ~ file: navforward.guard.ts:15 ~ canDeactivate ~ component:", component.clickAwayVideo)
     //if the condition is met to move them away from the page, then DO NOT deactivate guard
-    if (!component.clickAwayVideo) {
+    if (!component.clickAwayVideo && this.authRepo.isAuthenticated()) {
       return false;
     }
     return true;

@@ -61,40 +61,42 @@ $black:     #000000;
 //   "gray-dark":  $gray-800
 // );
 // scss-docs-end colors-map
-$primary-dark: #1d1a7c;
-$primary: #3040A7;
-$primary-50: #8083be;
-$primary-25: #d3d5ed;
+
+$primary-dark: #1c1c1c;
+$primary: #E50000;
+$primary-50: #ff5c5c;
+$primary-25: #ffbdbd;
 
 // Secondary colors
-$secondary-dark: #1e1f2c;
-$secondary: #9E2BF7;
-$secondary-50: #c7b5e5;
-$secondary-25: #f2e9fa;
+$secondary-dark: #282828;
+$secondary: #ffffff;
+$secondary-50: #e5e5e5;
+$secondary-25: #f7f7f7;
 
 // Success colors
-$success-dark: #1e7f30;
-$success: #9E2BF7;
-$success-50: #f8d785;
-$success-25: #fef2cd;
+$success-dark: #006400;
+$success: #00ff00;
+$success-50: #8cff8c;
+$success-25: #d2ffd2;
 
 // Info colors
-$info-dark: #24618c;
-$info: #065FD4;
+$info-dark: #1c75bc;
+$info: #065fd4;
 $info-50: #7fa8d9;
 $info-25: #d1e1f4;
 
 // Warning colors
-$warning-dark: #a15e00;
-$warning: #F9C53E;
-$warning-50: #fcd78c;
-$warning-25: #fef1cc;
+$warning-dark: #e69500;
+$warning: #fbbc05;
+$warning-50: #fedd89;
+$warning-25: #ffedc3;
 
 // Danger colors
-$danger-dark: #8c2e2e;
-$danger: #FF506E;
-$danger-50: #ffb6c3;
-$danger-25: #ffe1e4;
+$danger-dark: #1d1a7c;
+$danger: #3040A7;
+$danger-50: #8083be;
+$danger-25: #d3d5ed;
+
 
 // Light and Dark colors
 $light-dark: #F6F7F8;
@@ -106,6 +108,7 @@ $dark-dark: #2b2b2b;
 $dark: #212233;
 $dark-50: #444455;
 $dark-25: #757584;
+
 // scss-docs-start theme-colors-map
 $theme-colors: (
   "primary":    $primary,

@@ -12,6 +12,7 @@ import { SessionService } from 'src/app/legion/service/auth/session.service';
 export class LanderComponent implements OnInit {
   
   errorMessage = '';
+  isLoading: false;
 
   constructor(
     private router: Router,
@@ -33,16 +34,16 @@ export class LanderComponent implements OnInit {
   }
 
   uiShownCallback() {
-    console.log('UI shown');
+    this.isLoading = false;
+    this.errorMessage = '';
   }
 
   errorCallback(errorData: FirebaseUISignInFailure) {
-    console.log("🔥 ~ file: login.component.ts:18 ~ LoginComponent ~ errorCallback ~ $event:", errorData)
-    alert(errorData.code);
+    this.errorMessage = errorData.code;
+    this.isLoading = false;
   }
 
   successCallback(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
-    console.log("🚀 ~ file: login.component.ts:23 ~ LoginComponent ~ successCallback ~ signinSuccessData:", signinSuccessData)
     this.sessionService.verifyEmail(signinSuccessData)
   }
 }

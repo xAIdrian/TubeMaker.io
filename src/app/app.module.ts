@@ -41,6 +41,7 @@ import {
   ProgressModule,
   SharedModule,
   SidebarModule,
+  SpinnerModule,
   TabsModule,
   UtilitiesModule,
 } from '@coreui/angular';
@@ -91,6 +92,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ...APP_CONTAINERS,
   ],
   imports: [
+    SpinnerModule,
     MatDialogModule,
     BrowserModule,
     BrowserAnimationsModule,

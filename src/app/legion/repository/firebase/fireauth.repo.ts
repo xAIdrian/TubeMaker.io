@@ -9,6 +9,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { FirebaseUser } from '../../model/user/user.model';
 import { PURCHASED_USERS_COL, USERS_COL } from './firebase.constants';
+import { NavigationService } from '../../service/navigation.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,8 @@ export class FireAuthRepository {
 
   constructor(
     private angularFireAuth: AngularFireAuth,
-    private angularFirestore: AngularFirestore
+    private angularFirestore: AngularFirestore,
+    private navigationService: NavigationService
   ) {
     this.angularFireAuth.authState.subscribe((user: any) => {
       if (user) {
@@ -38,8 +40,7 @@ export class FireAuthRepository {
   }
 
   isAuthenticated(): Observable<boolean> {
-    return of(true);
-    // return of(this.sessionUser === undefined ? false : true);
+    return of(this.sessionUser === undefined ? false : true);
   }
 
   verifyPurchaseEmail(email: string): Observable<boolean> {
