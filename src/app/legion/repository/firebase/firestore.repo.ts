@@ -70,8 +70,24 @@ export class FirestoreRepository {
     return emptyDocRef.set({}); // Set an empty object to the document
   }
 
-  // Fetch a single data object under a user ID
   getUsersDocument<T>(
+    collectionPath: string,
+    documentKey: string,
+    userId: string = this.fireAuth.sessionUser?.uid || ''
+  ): Observable<T> {
+    if (userId === '') {
+      return this.fireAuth.getUserAuthObservable().pipe(
+        concatMap((user) => {
+          return this.getFocusedUsersDoc<T>(collectionPath, documentKey, user.uid);
+        })
+      );
+    } else {
+      return this.getFocusedUsersDoc<T>(collectionPath, documentKey, userId);
+    }
+  }
+
+
+  private getFocusedUsersDoc<T>(
     collectionPath: string,
     documentKey: string,
     userId: string = this.fireAuth.sessionUser?.uid || ''
@@ -107,7 +123,7 @@ export class FirestoreRepository {
         })
       );
     } else {
-      return this.getFocusedCollectionRef(collectionPath, userId);
+      return this.getFocusedCollectionRef<T>(collectionPath, userId);
     }
   }
 
@@ -124,38 +140,6 @@ export class FirestoreRepository {
         if (!environment.production) {
           console.groupCollapsed(
             `❤️‍🔥 Firestore Streaming [${collectionPath}] [getUserCollection] [${userId}]`
-          );
-          console.log(data);
-          console.groupEnd();
-        }
-      })
-    );
-  }
-
-  getUsersDocumentAsMap(
-    collectionPath: string,
-    documentKey: string,
-    userId: string = this.fireAuth.sessionUser?.uid || ''
-  ): Observable<Map<string, string>> {
-    const docRef = this.firestore
-      .collection(USERS_COL)
-      .doc(userId)
-      .collection(collectionPath)
-      .doc(documentKey);
-
-    return docRef.get().pipe(
-      map((doc) => {
-        if (doc.exists) {
-          const data = doc.data() as { [key: string]: string };
-          return new Map(Object.entries(data));
-        } else {
-          throw new Error('Document does not exist');
-        }
-      }),
-      tap((data) => {
-        if (!environment.production) {
-          console.groupCollapsed(
-            `❤️‍🔥 Firestore Streaming [${collectionPath}] [getUserDocumentMap] [${userId}]`
           );
           console.log(data);
           console.groupEnd();
