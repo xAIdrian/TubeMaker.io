@@ -12,7 +12,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoScriptComponent implements AfterContentInit, OnChanges {
-  parentScriptFormGroup: FormGroup;
+  @Input() parentScriptFormGroup: FormGroup;
 
   isScriptLoading: boolean = false;
 
@@ -34,8 +34,8 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
    * @param changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['parentVideoDuration']) {
-      this.currentVideoDuration = changes['parentVideoDuration'].currentValue;
+    if (changes['parentScriptFormGroup']) {
+      this.parentScriptFormGroup = changes['parentScriptFormGroup'].currentValue;
     }
   }
 

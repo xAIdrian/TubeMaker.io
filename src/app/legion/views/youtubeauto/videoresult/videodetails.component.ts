@@ -226,8 +226,8 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
     });
   }
 
-  onScriptFormGroupChange(childFormGroup: FormGroup) {
-    this.scriptFormGroup = childFormGroup;
+  onScriptFormGroupChange() {
+    this.scriptFormGroup = this.scriptFormGroup;
   }
 
   onTitleImproveClick(prompt: string) {
@@ -305,6 +305,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         console.log("🔥 ~ file: videoscript.component.ts:85 ~ VideoScriptComponent ~ this.contentService.getScriptSectionObserver ~ default:")
         break;
     }
+    this.onScriptFormGroupChange()
     return this.scriptFormGroup
   }
 }
