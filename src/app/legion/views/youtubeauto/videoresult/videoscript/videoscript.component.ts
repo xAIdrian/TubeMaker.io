@@ -26,7 +26,6 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
     private changeDetectorRef: ChangeDetectorRef
   ) {
     this.currentVideoDuration = videoDetailsService.getCurrentVideoDuration();
-    console.log("🚀 ~ file: videoscript.component.ts:29 ~ VideoScriptComponent ~ currentVideoDuration:", this.currentVideoDuration)
   }
 
   /**

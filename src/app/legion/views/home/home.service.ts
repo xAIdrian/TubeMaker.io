@@ -8,57 +8,40 @@ import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
 
 @Injectable()
 export class HomeService {
-
   private errorSubject = new Subject<string>();
   private completeVideoListSubject = new Subject<YoutubeVideoPage[]>();
 
   constructor(
     private navigationService: NavigationService,
     private autoContentRepository: AutoContentRepository,
-    private extractContentRepository: ExtractContentRepository,
-    private authRepo: FireAuthRepository
+    private extractContentRepository: ExtractContentRepository
   ) {}
 
   getErrorObserver() {
     return this.errorSubject.asObservable();
   }
-  
+
   getCompleteVideoListObserver() {
     return this.completeVideoListSubject.asObservable();
   }
 
   getCompleteVideoList() {
-    if (this.authRepo.sessionUser === undefined) {
-      this.authRepo.getUserAuthObservable().pipe(
-        switchMap(() => combineLatest([
-          this.autoContentRepository.getVideosList(),
-          this.extractContentRepository.getVideosList()
-        ]))
-      ).subscribe({
-        next: ([firstList, secondList]) => {
-          const joinedList = [...firstList, ...secondList];
-          this.completeVideoListSubject.next(joinedList);
-        },
-        error: (error) => {
-          console.log("🔥 ~ file: home.service.ts:45 ~ HomeService ~ getCompleteVideoList ~ error:", error)
-          this.errorSubject.next(error);
-        }
-      });
-    } else {
-      combineLatest([
-        this.autoContentRepository.getVideosList(),
-        this.extractContentRepository.getVideosList()
-      ]).subscribe({
-        next: ([firstList, secondList]) => {
-          const joinedList = [...firstList, ...secondList];
-          this.completeVideoListSubject.next(joinedList);
-        },
-        error: (error) => {
-          console.log("🔥 ~ file: home.service.ts:45 ~ HomeService ~ getCompleteVideoList ~ error:", error)
-          this.errorSubject.next(error);
-        }
-      });
-    }
+    combineLatest([
+      this.autoContentRepository.getVideosList(),
+      this.extractContentRepository.getVideosList(),
+    ]).subscribe({
+      next: ([firstList, secondList]) => {
+        const joinedList = [...firstList, ...secondList];
+        this.completeVideoListSubject.next(joinedList);
+      },
+      error: (error) => {
+        console.log(
+          '🔥 ~ file: home.service.ts:45 ~ HomeService ~ getCompleteVideoList ~ error:',
+          error
+        );
+        this.errorSubject.next(error);
+      },
+    });
   }
 
   videoPageSelected(pageId: string, createdFrom: string) {
