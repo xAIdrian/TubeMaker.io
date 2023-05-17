@@ -47,14 +47,6 @@ export class VideoCopyComponent implements OnInit, AfterContentInit {
     }
 
     private setupObservers() {
-        this.contentModel.getInitVideoNiche(
-            'Welcome To Youtube Automation',
-            'We\'re excited to have you join us on this journey of passive income with faceless youtube channels.  Just select a niche to the left of this text and we will present you will the most profitable videos on youtube this week.  You can then copy these videos and upload them to your own channel.  We will even provide you with the script to use for your video.  Just click the copy button and you\'re on your way to making money with youtube.'
-        ).subscribe({
-            next: (videoNiche: VideoNiche) => {
-                this.selectedVideoNiche = videoNiche;
-            }
-        });
         this.contentModel.getDefaultVideoNichesObserver().subscribe({
             next: (videoNiches: VideoNiche[]) => this.videoNiches = videoNiches
         });

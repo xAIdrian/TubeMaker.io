@@ -61,8 +61,18 @@ export class HomeService {
     }
   }
 
-  videoPageSelected(pageId: string) {
-    this.navigationService.navigateToExtractDetails(pageId);
+  videoPageSelected(pageId: string, createdFrom: string) {
+    if (!pageId || pageId === '' || !createdFrom || createdFrom === '') {
+      this.errorSubject.next('Invalid pageId or createdFrom');
+      return;
+    }
+    if (createdFrom === 'extract') {
+      this.navigationService.navigateToExtractDetails(pageId);
+    } else if (createdFrom === 'auto') {
+      this.navigationService.navigateToAutoDetails(pageId);
+    } else {
+      this.errorSubject.next('Invalid createdFrom');
+    }
   }
 
   goToCopyCat() {
@@ -70,6 +80,6 @@ export class HomeService {
   }
 
   goToAutoCreate() {
-    this.navigationService.navigateToCreateVideo();
+    this.navigationService.navigateToBrandNew();
   }
 }

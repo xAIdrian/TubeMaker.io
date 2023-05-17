@@ -37,17 +37,16 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     
     ngOnInit(): void {
         let pathId: string = '';
+        // TODO refresh page get item BUT it must be from firebase
         // if (localStorage.getItem('detailsId') !== null && localStorage.getItem('detailsId') !== '') {
         //     console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ ngOnInit ~ localStorage.getItem('detailsId'):", localStorage.getItem('detailsId'))
         //     pathId = localStorage.getItem('detailsId')!!;
         // } 
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
-            console.log("🚀 ~ file: extractdetails.component.ts:49 ~ ExtractDetailsComponent ~ this.activatedRoute.paramMap.subscribe ~ params:", params)
             if (params.has('id')) {
                 pathId = params.get('id')!!;
                 this.extractDetailsService.getCurrentPage(pathId).subscribe({
                     next: (page: YoutubeVideoPage) => {
-                        console.log("🚀 ~ file: extractdetails.component.ts:62 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ page:", page)
                         this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.extractDetailsService.getCurrentVideoUrl());
                         this.currentPageId = page.id ?? '';
                     },

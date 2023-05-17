@@ -81,22 +81,6 @@ export abstract class ContentRepository {
     return this.defaultNichesSubject.asObservable();
   }
 
-  getInitVideoNiche(headerKey: string, descriptionKey: string): Observable<VideoNiche>{
-    return combineLatest([
-      this.translate.get(headerKey),
-      this.translate.get(descriptionKey),
-    ]).pipe(
-      concatMap(([header, description]) => {
-        return of({
-          name: '',
-          header: header,
-          description: description,
-          value: '',
-        });
-      })
-    )
-  }
-
   getCurrentPage(id: string): Observable<YoutubeVideoPage> {
     //this is a fresh access to the page
     if (id === '' && this.currentPage !== undefined) {

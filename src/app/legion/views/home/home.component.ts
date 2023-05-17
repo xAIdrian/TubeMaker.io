@@ -31,12 +31,13 @@ export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
 
     ngOnInit() {
         this.completeListSubscription = this.homeService.getCompleteVideoListObserver().subscribe((response) => {
-            console.log("🚀 ~ file: home.component.ts:27 ~ HomeComponent ~ this.homeService.getCompleteVideoListObserver ~ response:", response)
             this.isLoading = false
             this.videos = response;
             this.youtubeVideos = this.videos.map((videoPage) => {
                 return {
                     id: videoPage.id ?? '',
+                    createdFrom: videoPage.createdFrom ?? '',
+
                     title: videoPage.metadata?.title ?? '',
                     description: videoPage.metadata?.description ?? '',
                     thumbnailUrl: videoPage.youtubeVideo?.thumbnailUrl ?? 'https://i.ytimg.com/vi/kyV59RjHnCI/hqdefault.jpg',
@@ -63,13 +64,12 @@ export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     onItemSelectedEvent(video: YoutubeVideo) {
-        console.log("🚀 ~ file: home.component.ts:51 ~ HomeComponent ~ onItemSelectedEvent ~ video:", video)
         // const matchingPage = this.videos.filter((videoPage) => { 
         //     console.log("🚀 ~ file: home.component.ts:52 ~ HomeComponent ~ matchingPage ~ videoPage:", videoPage)
         //     return videoPage.youtubeVideo.id === video.id 
         // } )[0];
         if (video !== undefined) {
-            this.homeService.videoPageSelected(video.id ?? '');
+            this.homeService.videoPageSelected(video.id ?? '', video.createdFrom ?? '');
         }
     }
 

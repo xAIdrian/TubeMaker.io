@@ -122,6 +122,12 @@
     "reset_media_button": "Reset Media",
     "reset_content_button": "Reset Content"
   },
+  "video_details": {
+    "script_progress_label": "Starting soon...",
+    "content_progress_label": "Loading...",
+    "simple_content_progress_label": "Generating endless income...",
+    "simple_script_progress_label": "Planning world domination..."
+  },
   "navigation": {
     "copy_cat": "Copy Cat",
     "create": "Create",

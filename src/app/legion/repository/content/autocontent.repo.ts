@@ -8,20 +8,20 @@ import {
 } from '../../model/autocreate/videoduration.model';
 import { catchError, combineLatest, concatMap, from, map, Observable, of, tap } from 'rxjs';
 import{ ContentRepository } from './content.repo';
-import { TranslateService } from '@ngx-translate/core';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AUTO_YOUTUBE_VIDEO_PAGE_COL } from '../firebase/firebase.constants';
 import { VideoMetadata } from '../../model/video/videometadata.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AutoContentRepository extends ContentRepository {
-
   override collectionPath: string = 'auto_pages';
 
-  setCurrentPageObject(): Observable<YoutubeVideoPage> {
+  setCurrentPageObject(
+    videoTopic: string,
+    videoNiche: VideoNiche,
+    videoDuration: VideoDuration
+  ): Observable<YoutubeVideoPage> {
     const structuredScript = new Map<string, string>([
       //controlName -> script section
       ['introduction', ''],
@@ -31,16 +31,23 @@ export class AutoContentRepository extends ContentRepository {
       ['questions', ''],
       ['actionables', ''],
       ['conclusion', ''],
-    ]) 
-    return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
-      'auto_pages',
-      { 
-        createdDate: new Date().toISOString(),
-      } as YoutubeVideoPage
-    )).pipe(
+    ]);
+    const newDoc: YoutubeVideoPage = {
+      createdDate: new Date().toISOString(),
+      createdFrom: 'auto',
+      topic: videoTopic,
+      niche: videoNiche,
+      duration: videoDuration,
+    };
+    return from(
+      this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
+        'auto_pages',
+        newDoc
+      )
+    ).pipe(
       tap((doc) => {
         if (doc.id === undefined) {
-          throw new Error('🔥 doc.id is undefined')
+          throw new Error('🔥 doc.id is undefined');
         }
         this.firestoreRepository.updateUsersDocumentMap(
           'auto_pages',
@@ -50,28 +57,47 @@ export class AutoContentRepository extends ContentRepository {
       }),
       tap((page) => this.currentPageSubject.next(page)),
       catchError((err) => {
-        console.log("❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 58 ~ ExtractContentRepository ~ catchError ~ err", err)
+        console.log(
+          '❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 58 ~ ExtractContentRepository ~ catchError ~ err',
+          err
+        );
         throw new Error(err);
       })
     );
   }
 
-  getInitVideoDurationObserver() {
-        return combineLatest([
-          //perhaps this could be optimized to get from the 'res'
-          this.translate.get('video_duration.init_header'),
-          this.translate.get('video_duration.init_description'),
-        ]).pipe(
-          concatMap(([header, description]) => {
-            return of({
-              name: '',
-              header: header,
-              description: description,
-              sections: [],
-            });
-          })
-        );
-      }
+  getInitVideoDurationObserver(): Observable<VideoDuration> {
+    return combineLatest([
+      //perhaps this could be optimized to get from the 'res'
+      this.translate.get('video_duration.init_header'),
+      this.translate.get('video_duration.init_description'),
+    ]).pipe(
+      concatMap(([header, description]) => {
+        return of({
+          name: '',
+          header: header,
+          description: description,
+          sections: [],
+        });
+      })
+    );
+  }
+
+  getInitVideoNiche(): Observable<VideoNiche> {
+    return combineLatest([
+      this.translate.get('video_style.init_header'),
+      this.translate.get('video_style.init_description'),
+    ]).pipe(
+      concatMap(([header, description]) => {
+        return of({
+          name: '',
+          header: header,
+          description: description,
+          value: '',
+        });
+      })
+    );
+  }
 
   getDefaultVideoDurationsObserver(): Observable<VideoDuration[]> {
     return this.translate.getTranslation(this.translate.currentLang).pipe(
@@ -79,7 +105,7 @@ export class AutoContentRepository extends ContentRepository {
         //perhaps this could be optimized to get from the 'res' insatead of parameter
         return of(getDefaultVideoDurations(this.translate));
       })
-    )
+    );
   }
 
   updateScriptMap(controlName: string, script: string) {
@@ -87,42 +113,48 @@ export class AutoContentRepository extends ContentRepository {
     this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
       this.currentPage?.id ?? '',
-      {  [property]: script  }
+      { [property]: script }
     );
   }
-  
+
   updateCompleteMetaData(completedMetaData: VideoMetadata) {
     this.firestoreRepository.updateUsersDocument(
       this.collectionPath,
       this.currentPage?.id ?? '',
-      {  metadata: completedMetaData  }
+      { metadata: completedMetaData }
     );
   }
 
   getCompleteScript(): Observable<string> {
-    console.log("🇯🇵 ~ AutoContentRepository ~ getCompleteScript ~ getCompleteScript:")
-    let script = '';
-    return this.firestoreRepository.getUsersDocument<YoutubeVideoPage>(
-      this.collectionPath, 
-      this.currentPage?.id ?? ''
-    ).pipe(
-      map((doc) => {
-        const scriptMap = doc.structuredScript;
-        if (scriptMap !== undefined && scriptMap !== null) {
-          // get all the values of the ordered hashmap in the same order
-          let valuesInOrder = [...scriptMap.keys()].map(key => scriptMap.get(key));
-          // add all values to main string
-          valuesInOrder.map(value => {
-            if (value !== undefined && value !== null && value !== '') {
-              script += value + '\n\n';
-            }
-          });
-          return script;
-        } else {
-          throw new Error('scriptMap is undefined or null');
-        }
-      })
+    console.log(
+      '🇯🇵 ~ AutoContentRepository ~ getCompleteScript ~ getCompleteScript:'
     );
+    let script = '';
+    return this.firestoreRepository
+      .getUsersDocument<YoutubeVideoPage>(
+        this.collectionPath,
+        this.currentPage?.id ?? ''
+      )
+      .pipe(
+        map((doc) => {
+          const scriptMap = doc.structuredScript;
+          if (scriptMap !== undefined && scriptMap !== null) {
+            // get all the values of the ordered hashmap in the same order
+            let valuesInOrder = [...scriptMap.keys()].map((key) =>
+              scriptMap.get(key)
+            );
+            // add all values to main string
+            valuesInOrder.map((value) => {
+              if (value !== undefined && value !== null && value !== '') {
+                script += value + '\n\n';
+              }
+            });
+            return script;
+          } else {
+            throw new Error('scriptMap is undefined or null');
+          }
+        })
+      );
   }
 
   submitScriptSections(
@@ -147,7 +179,7 @@ export class AutoContentRepository extends ContentRepository {
       this.collectionPath,
       this.currentPage?.id ?? '',
       {
-        structuredScript: scriptMap
+        structuredScript: scriptMap,
       }
     );
   }

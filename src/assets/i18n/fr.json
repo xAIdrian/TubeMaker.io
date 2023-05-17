@@ -113,6 +113,12 @@
     "reset_media_button": "Réinitialiser les médias",
     "reset_content_button": "Réinitialiser le contenu"
   },
+  "video_details": {
+    "script_progress_label": "Commence bientôt...",
+    "content_progress_label": "Chargement...",
+    "simple_content_progress_label": "Générer des revenus sans fin...",
+    "simple_script_progress_label": "Planifier la domination du monde..."
+  },
   "navigation": {
     "copy_cat": "Imitateur",
     "create": "Créer",

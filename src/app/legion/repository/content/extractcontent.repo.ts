@@ -14,6 +14,7 @@ export class ExtractContentRepository extends ContentRepository {
   setCurrentPageObject(newYoutubeVideo: YoutubeVideo): Observable<YoutubeVideoPage> {
     const newDoc: YoutubeVideoPage = {
       createdDate: new Date().toISOString(),
+      createdFrom: 'extract',
       youtubeVideo: newYoutubeVideo
     } 
     return from(this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(

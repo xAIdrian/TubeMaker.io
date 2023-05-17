@@ -94,7 +94,7 @@ export class ExtractDetailsService {
     return this.extractContentRepo.getCurrentPage(id).pipe(
       tap((response) => {
         if (response !== null && response !== undefined) {
-          this.currentCopyCatVideo = response.youtubeVideo;
+          this.currentCopyCatVideo = response.youtubeVideo!!;
         }
       })
     )

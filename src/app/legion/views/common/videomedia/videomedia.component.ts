@@ -135,8 +135,4 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
   onMediaOptionSelected(option: string) {
     this.selectedMediaOption = option;
   }
-
-  goToReview() {
-    this.navigationService.navigateToUploadVideo();
-  }
 }
