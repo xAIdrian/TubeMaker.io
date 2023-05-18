@@ -5,13 +5,11 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { GenerateContentService } from '../../../service/content/generation.service';
 import {
   FormBuilder,
   FormGroup,
   Validators
 } from '@angular/forms';
-import { NavigationService } from '../../../service/navigation.service';
 import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoNiche } from '../../../model/autocreate/videoniche.model';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';

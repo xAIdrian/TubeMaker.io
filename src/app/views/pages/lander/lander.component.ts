@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from 'src/app/legion/service/auth/session.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LanderComponent implements OnInit {
   isLoading: false;
 
   constructor(
-    private router: Router,
+    private translate: TranslateService,
     private sessionService: SessionService
   ) { 
     this.sessionService.getErrorObserver().subscribe(error => {
@@ -29,7 +30,7 @@ export class LanderComponent implements OnInit {
 
   ngOnInit() {
     this.emailForm.valueChanges.subscribe(value => {
-      // console.log('Form value changed:', value);
+      /** */
     });
   }
 

@@ -71,13 +71,13 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.translate
           .get('video_details.simple_content_progress_label')
           .subscribe((res: string) => {
-            this.contentProgressLabel = res;
+            this.contentProgressLabel = 'Chargement...';
             this.contentProgressValue = 100;
           });
         this.translate
           .get('video_details.simple_script_progress_label')
           .subscribe((res: string) => {
-            this.scriptProgressLabel = res;
+            this.scriptProgressLabel = 'Générer des revenus sans fin...';
           });
         this.scriptProgressValue = 100;
         setTimeout(() => {
@@ -141,12 +141,8 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.contentProgressLabel = this.translate.instant(
-      'videodetails.contentProgressLabel'
-    );
-    this.scriptProgressLabel = this.translate.instant(
-      'videodetails.scriptProgressLabel'
-    );
+    this.contentProgressLabel = 'Chargement...'
+    this.scriptProgressLabel = 'Générer des revenus sans fin...'
     this.translate.currentLang;
     this.changeDetectorRef.detectChanges();
   }

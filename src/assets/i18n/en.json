@@ -141,6 +141,12 @@
     "error_500": "Error 500",
     "new": "NEW"
   },
+  "lander": {
+    "title": "Join The Revolution",
+    "top_description": "By following our process, you can create a successful YouTube channel, work remotely while traveling the world, and turn it into a lucrative source of passive income. Don't miss out on this limited-time opportunity to gain financial freedom and join the pioneering group of individuals benefiting from this method in all over the world.",
+    "description": "Create videos that make money with our AI video creation tool. No experience required.",
+    "create_video_button": "Create Video"
+  },
   "pages": {
     "error_404_heading": "404",
     "oops_lost": "Oops! You're lost.",
