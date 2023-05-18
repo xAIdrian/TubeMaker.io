@@ -18,7 +18,7 @@
         {{ 'extract.edit_your_script_description' | translate }}
     </p>
     <div cdkDropList (cdkDropListDropped)="onDrop($event)">
-        <div cdkDrag [cdkDragDisabled]="!dragIsEnabled" cdkDragLockAxis="y"
+        <div cdkDrag cdkDragLockAxis="y"
             *ngFor="let tran of transcriptSections; let i = index" class="section-row"
             style="padding-bottom: 0.5rem; padding-top: 0.5rem; padding-right: 1rem;">
             <div class="col-8">

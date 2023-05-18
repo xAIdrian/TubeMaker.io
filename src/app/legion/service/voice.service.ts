@@ -69,9 +69,8 @@ export class VoiceService {
         if (scriptValue === null || scriptValue === '') {
           this.erroSubject.next('Script Is Empty.');
         } else if (scriptValue.length >= TEXTX_TO_VOICE_MAX) {
-          this.textTooLongErrorSubject.next('Your script is too long to generate AI text.  Please contact sales if you would like to upgrade your account.');
-          // throw new Error('Script Too Short.');
-          return;
+          // this.textTooLongErrorSubject.next('Your script is too long to generate AI text.  Please shorten your script.');
+          throw new Error('Votre script est trop long pour générer du texte AI. Veuillez raccourcir votre script.');
         } else {
           completeScript = scriptValue;
         }

@@ -125,7 +125,8 @@ function fetchVideoList(niche, publishedAfter) {
     regionCode: "US",
     relevanceLanguage: "en",
     type: "video",
-    videoDuration: "medium",
+    // videoDuration: "medium",
+    videoDuration: "short",
     videoEmbeddable: true,
     key: YOUTUBE_DATA_V3_KEY,
   });

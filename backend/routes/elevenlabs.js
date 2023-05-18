@@ -88,7 +88,7 @@ router.post('', async (req, res) => {
     method: 'POST',
   }).then(response => {
     handleResponse(response, async (streamResponse) => {
-      console.log("🚀 ~ file: elevenlabs.js:91 ~ handleResponse ~ response:", response)
+      console.log("🚀 ~ GOOD file: elevenlabs.js:91 ~ handleResponse ~ response:", response)
       res.set({
         'Content-Type': 'audio/mpeg'
       })
@@ -104,7 +104,6 @@ router.post('', async (req, res) => {
           console.log('Pipeline succeeded.');
         }
       })
-      // streamResponse.body.pipe(res)
     },
     (errorStatus, response) => {
       console.log("🔥 ~ file: elevenlabs.js:111 ~ router.post ~ errorStatus, response:", errorStatus)

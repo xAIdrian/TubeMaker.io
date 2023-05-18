@@ -109,7 +109,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
     ).subscribe({
       next: (response) => {
         console.log(response)
-        this.generatedAudioIsLoading = true;
+        this.generatedAudioIsLoading = false;
         this.generatedAudioUrl = URL.createObjectURL(response);
 
         this.audioPlayer.nativeElement.load();
@@ -118,6 +118,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
       error: (error) => {
         console.log('🔥 error', error)
         this.generatedAudioIsLoading = false;
+        alert(error);
       },
       complete: () => {
         console.log('complete')

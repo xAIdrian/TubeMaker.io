@@ -86,7 +86,7 @@ import { ExtractContentRepository } from "src/app/legion/repository/content/extr
     onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {
         for (let i = 0; i < this.transcriptSections.length; i++) {
             this.toggleLoading(section);
-            this.extractDetailsService.updateNewScriptIndex(prompt, section.section, index);
+            this.extractDetailsService.updateNewScriptIndex(prompt, section.section, i);
             this.changeDetectorRef.detectChanges();
         }
     }
