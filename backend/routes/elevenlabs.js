@@ -103,12 +103,6 @@ router.post('', async (req, res) => {
         } else {
           console.log('Pipeline succeeded.');
         }
-      }).catch(error => {
-        console.log("🔥 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error);
-        res.status(500).json({
-          message: "Pipeline failed.",
-          result: error,
-        });
       })
       // streamResponse.body.pipe(res)
     },

@@ -32,7 +32,6 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
     content: AudioDropdownComponent
   ) {
     if (content) {
-      // initially setter gets called with undefined
       this.audioDropdown = content;
     }
   }

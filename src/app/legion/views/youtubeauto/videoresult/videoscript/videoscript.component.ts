@@ -43,7 +43,9 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
   }
 
   onImproveClick(prompt: string, section: DurationSection) {
-    this.videoDetailsService.updateScriptSection(prompt, section);
+    this.currentVideoDuration.sections.forEach((section) => {
+      this.videoDetailsService.updateScriptSection(prompt, section);
+    });
   }
 
   copyScript() {

@@ -2,7 +2,7 @@
     <c-spinner></c-spinner>
     <p style="color: gray">{{ 'extract.loading' | translate }}</p>
 </div>
-<div *ngIf="!parentIsLoading" style="margin-top: 1rem;">
+<div *ngIf="!parentIsLoading" style="padding: 1rem;">
     <div style="display: flex; align-items: center; justify-content: space-between;">
         <h5>{{ 'extract.edit_your_script' | translate }}</h5>
         <div style="display: flex; align-items: center; padding: 0; margin:0">
@@ -33,26 +33,85 @@
             <div class="col-1">
                 <div style="display: flex; justify-content: center;">
                     <c-dropdown #dropdown direction="dropstart" variant="btn-group">
-                        <button cButton cDropdownToggle shape="rounded-pill" color="light" class="ai-button"
+                        <button 
+                            cButton 
+                            cDropdownToggle 
+                            shape="rounded-pill" 
+                            color="light" 
+                            class="ai-button"
+                            *ngIf="i === 0"
                             [disabled]="transcriptSections[i].isLoading">
-                            {{ 'extract.use_ai' | translate }}
+                                {{ 'extract.use_ai' | translate }}
                             <c-spinner *ngIf="transcriptSections[i].isLoading" size="sm"></c-spinner>
                         </button>
                         <ul cDropdownMenu class="custom-dropdown-menu">
-                            <li class="dropdown-header">{{ 'extract.choose_how_to_improve' | translate }}</li>
+                            <li>
+                                <button cDropdownItem (click)="onImproveClick('funnier', transcriptSections[i], i)" style="display: flex; align-items: center;">
+                                    <svg style="width: 28px; height: 28px; margin-right: 1rem;" cIcon name="cilSmilePlus"></svg>
+                                    <div style="flex-grow: 1;">
+                                        <strong>{{'extract.funnier' | translate }}</strong>
+                                        <p class="text-medium-emphasis" style="padding-left: 1rem; white-space: normal; overflow-wrap: break-word;">
+                                            {{ 'extract.funnier_description' | translate }}
+                                        </p>
+                                    </div>
+                                </button>
+                            </li>
                             <li>
                                 <hr cDropdownDivider>
                             </li>
-                            <li><button cDropdownItem (click)="onImproveClick('funnier', transcriptSections[i], i)">{{
-                                    'extract.funnier' | translate }}</button></li>
-                            <li><button cDropdownItem (click)="onImproveClick('formal', transcriptSections[i], i)">{{
-                                    'extract.formal' | translate }}</button></li>
-                            <li><button cDropdownItem (click)="onImproveClick('simpler', transcriptSections[i], i)">{{
-                                    'extract.simpler' | translate }}</button></li>
-                            <li><button cDropdownItem (click)="onImproveClick('expand', transcriptSections[i], i)">{{
-                                    'extract.expand' | translate }}</button></li>
-                            <li><button cDropdownItem (click)="onImproveClick('shorten', transcriptSections[i], i)">{{
-                                    'extract.shorten' | translate }}</button></li>
+                            <li>
+                                <button cDropdownItem (click)="onImproveClick('formal', transcriptSections[i], i)" style="display: flex; align-items: center;">
+                                    <svg style="width: 32px; height: 32px; margin-right: 1rem;" cIcon name="cilChartPie"></svg>
+                                    <div style="flex-grow: 1;">
+                                        <strong>{{'extract.formal' | translate }}</strong>
+                                        <p class="text-medium-emphasis" style="padding-left: 1rem; white-space: normal; overflow-wrap: break-word;">
+                                            {{ 'extract.formal_description' | translate }}
+                                        </p>
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <hr cDropdownDivider>
+                            </li>
+                            <li>
+                                <button cDropdownItem (click)="onImproveClick('simpler', transcriptSections[i], i)" style="display: flex; align-items: center;">
+                                    <svg style="width: 32px; height: 32px; margin-right: 1rem;" cIcon name="cilSpeech"></svg>
+                                    <div style="flex-grow: 1;">
+                                        <strong>{{'extract.simpler' | translate }}</strong>
+                                        <p class="text-medium-emphasis" style="padding-left: 1rem; white-space: normal; overflow-wrap: break-word;">
+                                            {{ 'extract.simpler_description' | translate }}
+                                        </p>
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <hr cDropdownDivider>
+                            </li>
+                            <li>
+                                <button cDropdownItem (click)="onImproveClick('expand', transcriptSections[i], i)" style="display: flex; align-items: center;">
+                                    <svg style="width: 28px; height: 28px; margin-right: 1rem;" cIcon name="cilResizeHeight"></svg>
+                                    <div style="flex-grow: 1;">
+                                        <strong>{{'extract.expand' | translate }}</strong>
+                                        <p class="text-medium-emphasis" style="padding-left: 1rem; white-space: normal; overflow-wrap: break-word;">
+                                            {{ 'extract.expand_description' | translate }}
+                                        </p>
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <hr cDropdownDivider>
+                            </li>
+                            <li>
+                                <button cDropdownItem (click)="onImproveClick('shorten', transcriptSections[i], i)" style="display: flex; align-items: center;">
+                                    <svg style="width: 32px; height: 32px; margin-right: 1rem;" cIcon name="cilListFilter"></svg>
+                                    <div style="flex-grow: 1;">
+                                        <strong>{{'extract.shorten' | translate }}</strong>
+                                        <p class="text-medium-emphasis" style="padding-left: 1rem; white-space: normal; overflow-wrap: break-word;">
+                                            {{ 'extract.shorten_description' | translate }}
+                                        </p>
+                                    </div>
+                                </button>
+                            </li>
                         </ul>
                     </c-dropdown>
                 </div>

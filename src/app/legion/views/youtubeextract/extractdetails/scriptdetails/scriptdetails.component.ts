@@ -84,9 +84,11 @@ import { ExtractContentRepository } from "src/app/legion/repository/content/extr
     }
 
     onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {
-        this.toggleLoading(section);
-        this.extractDetailsService.updateNewScriptIndex(prompt, section.section, index);
-        this.changeDetectorRef.detectChanges();
+        for (let i = 0; i < this.transcriptSections.length; i++) {
+            this.toggleLoading(section);
+            this.extractDetailsService.updateNewScriptIndex(prompt, section.section, index);
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     onDrop(event: CdkDragDrop<string[]>) {

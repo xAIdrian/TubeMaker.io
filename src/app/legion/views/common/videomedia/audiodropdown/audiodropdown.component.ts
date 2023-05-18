@@ -30,10 +30,12 @@ export class AudioDropdownComponent implements OnInit {
 
   ngOnInit() {
     // Set the default selected item
-    this.selectedItem = {
-      name: this.translate.instant('extract.select_voice'),
-      sampleUrl: 'https://www.youtube.com/watch?v=QH2-TGUlwu4',
-    };
+    this.translate.get('extract.select_voice').subscribe((response) => {
+      this.selectedItem = {
+        name: this.translate.instant('extract.select_voice'),
+        sampleUrl: 'https://www.youtube.com/watch?v=QH2-TGUlwu4',
+      };
+    });
   }
 
   toggleDropdown() {

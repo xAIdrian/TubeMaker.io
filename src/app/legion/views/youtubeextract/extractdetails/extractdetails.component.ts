@@ -37,11 +37,6 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
     
     ngOnInit(): void {
         let pathId: string = '';
-        // TODO refresh page get item BUT it must be from firebase
-        // if (localStorage.getItem('detailsId') !== null && localStorage.getItem('detailsId') !== '') {
-        //     console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ ngOnInit ~ localStorage.getItem('detailsId'):", localStorage.getItem('detailsId'))
-        //     pathId = localStorage.getItem('detailsId')!!;
-        // } 
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
             if (params.has('id')) {
                 pathId = params.get('id')!!;
