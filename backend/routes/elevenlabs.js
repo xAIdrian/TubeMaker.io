@@ -96,23 +96,11 @@ router.post('', async (req, res) => {
       pipeline(stream, res, (err) => {
         if (err) {
           console.error('🔥 Pipeline failed.', err);
-          res.status(500).json({
-            "message": "pipeline failed",
-            "result": err
-          });
+          throw new Error(err.message);
         } else {
           console.log('Pipeline succeeded.');
         }
       })
-    },
-    (errorStatus, response) => {
-      console.log("🔥 ~ file: elevenlabs.js:111 ~ router.post ~ errorStatus, response:", errorStatus)
-      response.then((data) => {
-        console.log("🔥 ~ file: elevenlabs.js:113 ~ response.then ~ data:", data)
-      }).catch((err) => {
-        console.log("🔥 ~ file: elevenlabs.js:115 ~ response.then ~ err:", err)
-      })
-      res.status(errorStatus).json(response)
     })
   }).catch(error => {
     console.log("🔥 ~ file: elevenlabs.js:102 ~ router.post ~ o:", error)

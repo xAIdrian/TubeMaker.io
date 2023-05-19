@@ -2,7 +2,12 @@
   <c-container>
     <c-row class="justify-content-center">
       <c-col md="8">
-        <h5 style="align-items: center;" color="red">{{ errorMessage }}</h5>
+        <!-- Error Card -->
+        <c-card class="container" *ngIf="hasError" style="margin-bottom: 1rem;">
+          <div class="text-area">
+            <p>{{ errorMessage }}</p>
+          </div>
+        </c-card>
         <c-card-group>
           <c-card class="p-4" style="orientation: columns;">
             <div *ngIf="isLoading" stlye="margin: 1rem; align-items: center; justify-content-center;">

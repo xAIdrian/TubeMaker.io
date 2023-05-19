@@ -9,9 +9,9 @@ export class NavigationService {
     /** */
   }
 
-  // navigateToLander() {
-  //   this.router.navigate(['./pages/lander']);
-  // }
+  navigateToList() {
+    this.router.navigate(['/maker/list']);
+  }
 
   navigateToBrandNew() {
     this.router.navigate(['maker/auto']);
@@ -21,7 +21,6 @@ export class NavigationService {
     if (id === '') {
       this.router.navigate(['maker/auto/details']);
     } else {
-      // localStorage.setItem('detailsId', id); for page refresh mid-edit
       this.router.navigate(['maker/auto/details', id]);
     }
   }

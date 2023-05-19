@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { SessionService } from 'src/app/legion/service/auth/session.service';
 
 @Component({
   selector: 'app-default-header',
@@ -16,12 +17,16 @@ export class DefaultHeaderComponent extends HeaderComponent {
   public newMessages = new Array(4)
   public newTasks = new Array(5)
   public newNotifications = new Array(5)
+  profilePic: string;
 
   constructor(
-    private classToggler: ClassToggleService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private sessionService: SessionService
   ) {
     super();
+    this.sessionService.getAuthStateObserver().subscribe(user => {
+      this.profilePic = user.photoURL;
+    });
   }
 
   onUserLogout() {

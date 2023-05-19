@@ -13,28 +13,24 @@ import { TranslateService } from '@ngx-translate/core';
 export class LanderComponent implements OnInit {
   
   errorMessage = '';
+  hasError = false;
   isLoading: false;
 
   constructor(
     private translate: TranslateService,
     private sessionService: SessionService
-  ) { 
+  ) { /** */ }
+
+
+  ngOnInit() {
     this.sessionService.getErrorObserver().subscribe(error => {
+      this.hasError = true;
       this.errorMessage = error;
     });
   }
 
-  emailForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email])
-  });
-
-  ngOnInit() {
-    this.emailForm.valueChanges.subscribe(value => {
-      /** */
-    });
-  }
-
   uiShownCallback() {
+    this.hasError = false;
     this.isLoading = false;
     this.errorMessage = '';
   }

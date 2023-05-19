@@ -16,13 +16,12 @@ import { NavigationService } from '../../service/navigation.service';
 })
 export class FireAuthRepository {
 
-  public sessionUser?: FirebaseUser;
+  private sessionUser?: FirebaseUser;
   private userSubject: Subject<FirebaseUser> = new Subject<FirebaseUser>();
 
   constructor(
     private angularFireAuth: AngularFireAuth,
-    private angularFirestore: AngularFirestore,
-    private navigationService: NavigationService
+    private angularFirestore: AngularFirestore
   ) {
     this.angularFireAuth.authState.subscribe((user: any) => {
       if (user) {
@@ -45,11 +44,7 @@ export class FireAuthRepository {
 
   verifyPurchaseEmail(email: string): Observable<boolean> {
     const docRef = this.angularFirestore.collection(PURCHASED_USERS_COL).doc(email).ref;
-    return from(docRef.get()).pipe(
-      map((doc) => {
-        return doc.exists;
-      })
-    );
+    return of(docRef.id === email);
   }
 
   /* Setting up user data when sign in with username/password, 
@@ -80,15 +75,9 @@ export class FireAuthRepository {
     }
   }
   
-
   // Sign out
   async signOut() {
     await this.angularFireAuth.signOut();
-    localStorage.removeItem('user');
-  }
-
-  async logout() {
-    this.angularFireAuth.signOut();
   }
 
   private removeUndefinedProperties(obj: any): any {
