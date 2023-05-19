@@ -9,6 +9,10 @@ export class NavigationService {
     /** */
   }
 
+  navigateToList() {
+    this.router.navigate(['/maker/list']);
+  }
+
   navigateToBrandNew() {
     this.router.navigate(['maker/auto']);
   }
@@ -17,13 +21,12 @@ export class NavigationService {
     if (id === '') {
       this.router.navigate(['maker/auto/details']);
     } else {
-      // localStorage.setItem('detailsId', id); for page refresh mid-edit
       this.router.navigate(['maker/auto/details', id]);
     }
   }
 
   navigateToLander() {
-    this.router.navigate(['lander']);
+    this.router.navigate(['/lander']);
   }
 
   navigateToCopyCat() {

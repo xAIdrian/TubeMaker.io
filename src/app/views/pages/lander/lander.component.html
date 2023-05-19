@@ -1,31 +1,35 @@
-<div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+<!-- <header style="text-align: right;">
+  <p (click)="goHome()">HOME</p>
+</header> -->
+<div class="bg-dark min-vh-100 d-flex flex-row align-items-center">
   <c-container>
     <c-row class="justify-content-center">
       <c-col md="8">
-        <h5 style="align-items: center;" color="red">{{ errorMessage }}</h5>
+        <!-- Error Card -->
+        <c-card class="container" *ngIf="hasError" style="margin-bottom: 1rem;">
+          <div class="text-area">
+            <p>{{ errorMessage }}</p>
+          </div>
+        </c-card>
         <c-card-group>
-          <c-card class="p-4">
-            <c-card-body>
-              <h1>Join The Revolution</h1>
+          <c-card class="p-4" style="orientation: columns;">
+            <div *ngIf="isLoading" stlye="margin: 1rem; align-items: center; justify-content-center;">
+              <strong style="color: gray">Rejoignez La Révolution</strong>
+            </div>
+            <c-card-body *ngIf="!isLoading">
+              <h2 style="text-align: center;">{{ 'lander.title' | translate }}</h2>
               <firebase-ui style="padding: 1rem;"
                 (signInSuccessWithAuthResult)="successCallback($event)"
                 (signInFailure)="errorCallback($event)" 
                 (uiShown)="uiShownCallback()">
               </firebase-ui>
-
             </c-card-body>
           </c-card>
           <c-card [ngStyle]="{'width.%': 44}" class="text-white bg-primary py-5">
-            <c-card-body class="text-center">
+            <c-card-body style="margin-left: 1rem;">
               <div>
-                <h2>Ready To Get Paid?</h2>
-                <p>
-                  Not just anyone can join Youtube Revolution. Exclusive members only. Register now to get started and
-                  start earning passive income online with AI.
-                </p>
-                <button [active]="true" cButton class="mt-3" color="primary" routerLink="/">
-                  Register Now!
-                </button>
+                <p>En suivant notre processus, vous pouvez créer une chaîne YouTube à succès, travailler à distance tout en voyageant à travers le monde, et la transformer en une source lucrative de revenus passifs. Ne manquez pas cette opportunité limitée dans le temps pour atteindre la liberté financière et rejoindre le groupe de pionniers bénéficiant de cette méthode en France.</p>
+                <p>Créez des vidéos qui rapportent de l'argent avec notre outil de création de vidéos IA. Aucune expérience requise.</p>
               </div>
             </c-card-body>
           </c-card>

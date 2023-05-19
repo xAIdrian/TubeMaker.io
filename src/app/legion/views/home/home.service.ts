@@ -11,6 +11,8 @@ export class HomeService {
   private errorSubject = new Subject<string>();
   private completeVideoListSubject = new Subject<YoutubeVideoPage[]>();
 
+  pageId: string;
+
   constructor(
     private navigationService: NavigationService,
     private autoContentRepository: AutoContentRepository,
@@ -49,6 +51,7 @@ export class HomeService {
       this.errorSubject.next('Invalid pageId or createdFrom');
       return;
     }
+    this.pageId = pageId;
     if (createdFrom === 'extract') {
       this.navigationService.navigateToExtractDetails(pageId);
     } else if (createdFrom === 'auto') {

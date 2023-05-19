@@ -238,18 +238,18 @@ export class AutoContentService extends GenerateContentService {
 
   generateLoadingMessage(): string {
     const messages = [
-      'Processing neural data...',
-      'Optimizing deep learning models...',
-      'Training artificial intelligence...',
-      'Analyzing data sets...',
-      'Generating synthetic samples...',
-      'Improving machine learning algorithms...',
-      'Simulating neural networks...',
-      'Building intelligent agents...',
-      'Modeling data with artificial neural nets...',
-      'Designing natural language processing systems...',
-      'Extracting features from images...',
-      'Creating intelligent decision systems...'
+      'Traitement des données neuronales...',
+      'Optimisation des modèles d\'apprentissage profond...',
+      'Formation de l\'intelligence artificielle...',
+      'Analyse des ensembles de données...',
+      'Génération d\'échantillons synthétiques...',
+      'Amélioration des algorithmes d\'apprentissage automatique...',
+      'Simulation de réseaux neuronaux...',
+      'Création d\'agents intelligents...',
+      'Modélisation de données avec des réseaux neuronaux artificiels...',
+      'Conception de systèmes de traitement du langage naturel...',
+      'Extraction des caractéristiques des images...',
+      'Création de systèmes de décision intelligents...'
     ];
     const index = Math.floor(Math.random() * messages.length);
     return messages[index];

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from 'src/app/legion/service/auth/session.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NavigationService } from 'src/app/legion/service/navigation.service';
 
 @Component({
   selector: 'app-login',
@@ -12,37 +14,39 @@ import { SessionService } from 'src/app/legion/service/auth/session.service';
 export class LanderComponent implements OnInit {
   
   errorMessage = '';
+  hasError = false;
+  isLoading: false;
 
   constructor(
-    private router: Router,
+    private navigationService: NavigationService,
     private sessionService: SessionService
-  ) { 
+  ) { /** */ }
+
+
+  ngOnInit() {
     this.sessionService.getErrorObserver().subscribe(error => {
+      this.hasError = true;
       this.errorMessage = error;
     });
   }
 
-  emailForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email])
-  });
-
-  ngOnInit() {
-    this.emailForm.valueChanges.subscribe(value => {
-      // console.log('Form value changed:', value);
-    });
+  goHome() {
+    console.log("🚀 ~ file: lander.component.ts:34 ~ LanderComponent ~ goHome ~ goHome:")
+    this.navigationService.navigateToList();
   }
 
   uiShownCallback() {
-    console.log('UI shown');
+    this.hasError = false;
+    this.isLoading = false;
+    this.errorMessage = '';
   }
 
   errorCallback(errorData: FirebaseUISignInFailure) {
-    console.log("🔥 ~ file: login.component.ts:18 ~ LoginComponent ~ errorCallback ~ $event:", errorData)
-    alert(errorData.code);
+    this.errorMessage = errorData.code;
+    this.isLoading = false;
   }
 
   successCallback(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
-    console.log("🚀 ~ file: login.component.ts:23 ~ LoginComponent ~ successCallback ~ signinSuccessData:", signinSuccessData)
     this.sessionService.verifyEmail(signinSuccessData)
   }
 }

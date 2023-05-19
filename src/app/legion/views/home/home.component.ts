@@ -2,7 +2,6 @@ import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetecto
 import{ HomeService } from './home.service';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
-import { match } from 'assert';
 import { HumaneDateUtility } from '../../helper/humanedate.utility';
 import { Subscription } from 'rxjs';
 
@@ -16,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
 
     isLoading = true;
+    clickAwayVideo: YoutubeVideo | undefined;
 
     videos: YoutubeVideoPage[] = [];
     youtubeVideos: YoutubeVideo[];
@@ -30,6 +30,8 @@ export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
     ) { /** */ }
 
     ngOnInit() {
+        this.clickAwayVideo = undefined;
+        
         this.completeListSubscription = this.homeService.getCompleteVideoListObserver().subscribe((response) => {
             this.isLoading = false
             this.videos = response;
@@ -64,11 +66,8 @@ export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     onItemSelectedEvent(video: YoutubeVideo) {
-        // const matchingPage = this.videos.filter((videoPage) => { 
-        //     console.log("🚀 ~ file: home.component.ts:52 ~ HomeComponent ~ matchingPage ~ videoPage:", videoPage)
-        //     return videoPage.youtubeVideo.id === video.id 
-        // } )[0];
         if (video !== undefined) {
+            this.clickAwayVideo = video;
             this.homeService.videoPageSelected(video.id ?? '', video.createdFrom ?? '');
         }
     }

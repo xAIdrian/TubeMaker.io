@@ -84,9 +84,11 @@ import { ExtractContentRepository } from "src/app/legion/repository/content/extr
     }
 
     onImproveClick(prompt: string, section: { isLoading: boolean, section: string}, index: number) {
-        this.toggleLoading(section);
-        this.extractDetailsService.updateNewScriptIndex(prompt, section.section, index);
-        this.changeDetectorRef.detectChanges();
+        for (let i = 0; i < this.transcriptSections.length; i++) {
+            this.toggleLoading(section);
+            this.extractDetailsService.updateNewScriptIndex(prompt, section.section, i);
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     onDrop(event: CdkDragDrop<string[]>) {
@@ -101,10 +103,8 @@ import { ExtractContentRepository } from "src/app/legion/repository/content/extr
     }
 
     copyScript() {
-        this.contentRepo
-          .getScriptForDownload('auto-content-file')
-          .subscribe((blobItem) => {
-            this.clipboard.copy(blobItem);
+        this.contentRepo.getCompleteScript().subscribe((script) => {
+            this.clipboard.copy(script);
             this.showScriptBadge = true;
             setTimeout(() => (this.showScriptBadge = false), 1000);
           });

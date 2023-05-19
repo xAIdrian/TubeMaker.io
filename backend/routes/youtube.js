@@ -126,6 +126,7 @@ function fetchVideoList(niche, publishedAfter) {
     relevanceLanguage: "en",
     type: "video",
     videoDuration: "medium",
+    // videoDuration: "short",
     videoEmbeddable: true,
     key: YOUTUBE_DATA_V3_KEY,
   });

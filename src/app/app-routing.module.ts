@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'maker',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '',
@@ -105,7 +105,7 @@ const routes: Routes = [
     }
   },
   {
-    path: '**', redirectTo: 'dashboard'
+    path: '**', redirectTo: 'maker'
   }
 ];
 

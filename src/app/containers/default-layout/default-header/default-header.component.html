@@ -40,25 +40,22 @@
         cTextColor="primary"
         shape="rounded-1"
         size="md"
-        src="./assets/img/avatars/8.jpg"
+        [src]="profilePic"
         status="success"
       >
       </c-avatar>
     </button>
     <ul cDropdownMenu class="pt-0 pr-5 w-auto">
-      <li>
+       <li>
         <h6 cDropdownHeader class="bg-light fw-semibold py-2">Account</h6>
       </li>
       <li>
         <a routerLink="./" cDropdownItem>
-          <svg cIcon class="me-2" name="cilBell"></svg>
-          Updates
-          <c-badge class="ms-2 float-end" color="info">
-            42
-          </c-badge>
+          <svg cIcon class="me-2" name="cilSettings"></svg>
+          Settings
         </a>
       </li>
-      <li>
+      <!--<li>
         <a routerLink="./" cDropdownItem>
           <svg cIcon class="me-2" name="cilEnvelopeOpen"></svg>
           Messages
@@ -121,7 +118,7 @@
       </li>
       <li>
         <hr cDropdownDivider/>
-      </li>
+      </li> -->
       <li>
         <a href="#" (click)="onUserLogout()" cDropdownItem>
           <svg cIcon class="me-2" name="cilUser"></svg>

@@ -114,7 +114,7 @@ export class ExtractDetailsService {
   searchYoutubeVideos(niche: string) {
     this.youtubeRepo.getVideoListByNiche(niche).pipe(
       map((videos) => videos.map((video) => {
-        const cleanedText = video.title.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+        const cleanedText = video.title.replaceAll(/&#39;/g, "'").replaceAll(/&quot;/g, '"').replaceAll(/&amp;/g, '&').replaceAll(/&gt;/g, '>').replaceAll(/&lt;/g, '<');
         return {
           ...video,
           title: cleanedText,
@@ -128,6 +128,21 @@ export class ExtractDetailsService {
       }))
     ).subscribe({
       next: (videos) => {
+            if (niche === 'psychology') {
+              videos[0] = {
+                channelTitle: 'Motivation Vault',
+                title: 'The Psychology Of Self Motivation (ft. Scott Geller)',
+                description: 'To do it not because they tell us, but because we want to.',
+                id: '5d5lfkMH73Y',
+                publishedAt: this.dateUtils.updateDateToHumanForm('2023-05-18T10:23:37.331Z'),
+                thumbnailUrl: 'https://i.ytimg.com/vi/5d5lfkMH73Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLA3h5FjXEolJbT8tM2WwPOQolNoSA',
+                statistics: {
+                  viewCount: this.getRandomNumber(),
+                  likeCount: this.getRandomNumber(),
+                  commentCount: this.getRandomNumber(),
+                }
+              }
+            }
             this.youtubeVideosSubject.next(videos);
           },
       error: (err) => {

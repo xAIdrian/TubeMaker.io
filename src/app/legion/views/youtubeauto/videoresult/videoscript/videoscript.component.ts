@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { DurationSection, VideoDuration } from "../../../../model/autocreate/videoduration.model";
 import { VideoDetailsService } from "../../videodetails.service";
@@ -11,12 +11,24 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrls: ['./videoscript.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoScriptComponent implements AfterContentInit, OnChanges {
+export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges {
   @Input() parentScriptFormGroup: FormGroup;
 
   isScriptLoading: boolean = false;
 
-  currentVideoDuration: VideoDuration;
+  currentVideoDuration: VideoDuration = {
+    name: 'please wait',
+    header: '',
+    description: '',
+    sections: [
+      {
+        name: 'please wait',
+        controlName: 'introduction',
+        isLoading: false,
+        points: [],
+      },
+    ],
+  };
   showScriptBadge = false;
 
   constructor(
@@ -24,10 +36,13 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
     private clipboard: Clipboard,
     private videoDetailsService: VideoDetailsService,
     private changeDetectorRef: ChangeDetectorRef
-  ) {
-    this.currentVideoDuration = videoDetailsService.getCurrentVideoDuration();
-  }
+  ) { /** */ }
 
+  ngOnInit() {
+    this.videoDetailsService.getVideoDetailsDurationObserver().subscribe((duration) => {
+      if (duration !== undefined) {this.currentVideoDuration = duration;}
+    });
+  }
   /**
    * Where we receive updates from our parent FormControl
    * @param changes
@@ -43,14 +58,14 @@ export class VideoScriptComponent implements AfterContentInit, OnChanges {
   }
 
   onImproveClick(prompt: string, section: DurationSection) {
-    this.videoDetailsService.updateScriptSection(prompt, section);
+    this.currentVideoDuration.sections.forEach((section) => {
+      this.videoDetailsService.updateScriptSection(prompt, section);
+    });
   }
 
   copyScript() {
-    this.contentRepo
-      .getScriptForDownload('auto-content-file')
-      .subscribe((blobItem) => {
-        this.clipboard.copy(blobItem);
+    this.contentRepo.getCompleteScript().subscribe((script) => {
+        this.clipboard.copy(script);
         this.showScriptBadge = true;
         setTimeout(() => (this.showScriptBadge = false), 1000);
       });

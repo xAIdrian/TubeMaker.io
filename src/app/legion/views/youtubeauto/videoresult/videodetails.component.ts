@@ -66,23 +66,18 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     let pathId: string = '';
-    // TODO refresh page get item BUT it must be from firebase
-    // if (localStorage.getItem('detailsId') !== null && localStorage.getItem('detailsId') !== '') {
-    //     console.log("🚀 ~ file: extractdetails.component.ts:47 ~ ExtractDetailsComponent ~ ngOnInit ~ localStorage.getItem('detailsId'):", localStorage.getItem('detailsId'))
-    //     pathId = localStorage.getItem('detailsId')!!;
-    // }
     this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
       if (params.has('id')) {
         this.translate
           .get('video_details.simple_content_progress_label')
           .subscribe((res: string) => {
-            this.contentProgressLabel = res;
+            this.contentProgressLabel = 'Chargement...';
             this.contentProgressValue = 100;
           });
         this.translate
           .get('video_details.simple_script_progress_label')
           .subscribe((res: string) => {
-            this.scriptProgressLabel = res;
+            this.scriptProgressLabel = 'Générer des revenus sans fin...';
           });
         this.scriptProgressValue = 100;
         setTimeout(() => {
@@ -107,17 +102,11 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
               page.structuredScript !== undefined ||
               page.structuredScript !== null
             ) {
-              console.log(typeof page.structuredScript);
               for (const [key, value] of Object.entries(
                 page.structuredScript!!
               )) {
-                console.log(
-                  '🚀 ~ file: videodetails.component.ts:103 ~ VideoDetailsComponent ~ this.videoDetailsService.getCurrentPage ~ [key, value]:',
-                  [key, value]
-                );
                 if (value !== undefined && value !== '') {
                   this.assignScriptToFields(key, value);
-                  // this.onScriptFormGroupChange();
                 }
               }
             }
@@ -146,12 +135,8 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.contentProgressLabel = this.translate.instant(
-      'videodetails.contentProgressLabel'
-    );
-    this.scriptProgressLabel = this.translate.instant(
-      'videodetails.scriptProgressLabel'
-    );
+    this.contentProgressLabel = 'Chargement...'
+    this.scriptProgressLabel = 'Générer des revenus sans fin...'
     this.translate.currentLang;
     this.changeDetectorRef.detectChanges();
   }
