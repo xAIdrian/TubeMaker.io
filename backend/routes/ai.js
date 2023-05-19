@@ -2,8 +2,18 @@ const express = require("express");
 const router = express.Router();
 const { Configuration, OpenAIApi } = require("openai");
 const { OPEN_AI_API_KEY } = require("../appsecrets");
-const { Storage } = require('@google-cloud/storage');
-const storage = new Storage();
+const fs = require("fs");
+const path = require('path');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getStorage } = require('firebase-admin/storage');
+
+var serviceAccount = require('../freeadmingptwebapp-384207-firebase-adminsdk-7qlgk-6a26b8eae6.json');
+const { storage } = require("firebase-functions/v1");
+initializeApp({
+  credential: cert(serviceAccount),
+  storageBucket: 'gs://freeadmingptwebapp-384207.appspot.com'
+});
+const bucket = getStorage().bucket();
 
 const configuration = new Configuration({
   apiKey: OPEN_AI_API_KEY,
@@ -725,12 +735,13 @@ async function readTextFileToPrompt(filename) {
     console.log("🚀 ~ file: ai.js:725 ~ readTextFileToPrompt ~ data:", data)
     return data;
   } catch (err) {
-    throw new Error(`Error reading file: ${filename}. Error message: ${err.message}`);
+    console.log(`Error reading file:` + filename);
+    console.log(err.message);
   }
 }
 
 async function readFile(fileName) {
-  const file = storage.bucket("legiontubemaker").file(fileName);
+  const file = bucket.file(fileName);
   console.log("🚀 ~ file: ai.js:733 ~ readFile ~ file:", file)
 
   const data = await file.download();
