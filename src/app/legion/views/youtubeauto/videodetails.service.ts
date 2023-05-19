@@ -29,6 +29,7 @@ export class VideoDetailsService {
   };
   
   private errorSubject = new Subject<string>();
+  private videoDurationsSubject = new Subject<VideoDuration>();
 
   constructor(
     private contentService: AutoContentService,
@@ -93,6 +94,9 @@ export class VideoDetailsService {
   getScriptSectionObserver() {
     return this.contentService.getScriptSectionObserver();
   }
+  getVideoDetailsDurationObserver() {
+    return this.videoDurationsSubject.asObservable();
+  }
   getCurrentTopic(): string {
     return this.currentTopic;
   }
@@ -150,6 +154,7 @@ export class VideoDetailsService {
           this.currentNiche = response.niche;
         }
         if (response.duration !== undefined) {
+          this.videoDurationsSubject.next(response.duration);
           this.currentDuration = response.duration;
         }
       })
@@ -194,6 +199,6 @@ export class VideoDetailsService {
   }
 
   updateScriptSection(prompt: string, section: DurationSection) {
-    // this.contentRepo.updateScriptSection(prompt, section);
+    // this.contentService.(prompt, section);
   }
 }
