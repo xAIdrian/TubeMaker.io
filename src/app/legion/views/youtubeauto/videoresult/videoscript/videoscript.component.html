@@ -23,7 +23,7 @@
         </textarea>
         <div style="display: flex; align-items: start;">
           <c-dropdown #dropdown direction="dropstart" variant="btn-group">
-            <button 
+            <!-- <button 
                 cButton 
                 cDropdownToggle 
                 shape="rounded-pill" 
@@ -33,7 +33,7 @@
                 [disabled]="section.isLoading">
                     {{ 'extract.use_ai' | translate }}
                 <c-spinner *ngIf="section.isLoading" size="sm"></c-spinner>
-            </button>
+            </button> -->
             <ul cDropdownMenu class="custom-dropdown-menu">
                 <li>
                     <button cDropdownItem (click)="onImproveClick('funnier', section)" style="display: flex; align-items: center;">
