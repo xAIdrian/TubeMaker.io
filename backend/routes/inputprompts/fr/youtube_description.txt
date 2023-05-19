@@ -1,9 +1,0 @@
-Votre tâche consiste à rédiger une description de vidéo optimisée pour les moteurs de recherche pour une vidéo YouTube basée sur le texte suivant dans le style de <<STYLE>> avec un appel à l'action (CTA) clair pour encourager les spectateurs à regarder vos autres vidéos. La description doit inclure des mots-clés et des expressions pertinents liés au sujet de la vidéo, ainsi qu'un crochet captivant qui incite les spectateurs à cliquer sur la vidéo.
-Le CTA doit être placé vers la fin de la description et indiquer clairement pourquoi les spectateurs doivent regarder vos autres vidéos.
-Veuillez garder à l'esprit que s'il est important d'optimiser votre description pour les moteurs de recherche, il est tout aussi important de la rendre lisible et attrayante pour les lecteurs humains et elle DOIT contenir 5000 caractères. Votre description doit refléter avec précision le contenu du texte suivant :
-
-<<FEED>>
-
-Votre tâche consiste à rédiger une description de vidéo optimisée pour les moteurs de recherche pour une vidéo YouTube basée sur le TEXTE CI-DESSUS dans le style de <<STYLE>> avec un appel à l'action (CTA) clair pour encourager les spectateurs à regarder vos autres vidéos. La description doit inclure des mots-clés et des expressions pertinents liés au sujet de la vidéo, ainsi qu'un crochet captivant qui incite les spectateurs à cliquer sur la vidéo.
-Le CTA doit être placé vers la fin de la description et indiquer clairement pourquoi les spectateurs doivent regarder vos autres vidéos.
-Veuillez garder à l'esprit que s'il est important d'optimiser votre description pour les moteurs de recherche, il est tout aussi important de la rendre lisible et attrayante pour les lecteurs humains et elle DOIT contenir 5000 caractères. Votre description doit refléter avec précision le contenu du texte ci-dessus :
