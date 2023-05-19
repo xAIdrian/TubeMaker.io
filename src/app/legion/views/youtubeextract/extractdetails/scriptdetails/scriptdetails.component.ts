@@ -103,10 +103,8 @@ import { ExtractContentRepository } from "src/app/legion/repository/content/extr
     }
 
     copyScript() {
-        this.contentRepo
-          .getScriptForDownload('auto-content-file')
-          .subscribe((blobItem) => {
-            this.clipboard.copy(blobItem);
+        this.contentRepo.getCompleteScript().subscribe((script) => {
+            this.clipboard.copy(script);
             this.showScriptBadge = true;
             setTimeout(() => (this.showScriptBadge = false), 1000);
           });

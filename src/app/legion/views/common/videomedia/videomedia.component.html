@@ -1,10 +1,10 @@
 <div>
   <form>
-    <h6>{{ 'media_selection_form.video_option.title' | translate }}</h6>
-    <p style="margin-bottom: 0.5rem;">{{ 'media_selection_form.video_option.description' | translate }}</p>
-    <audio-dropdown #audiochild (voiceSelected)="onVoiceSelected($event)"></audio-dropdown>
+    <h6 *ngIf="!generateAudioHidden">{{ 'media_selection_form.video_option.title' | translate }}</h6>
+    <p *ngIf="!generateAudioHidden" style="margin-bottom: 0.5rem;">{{ 'media_selection_form.video_option.description' | translate }}</p>
+    <audio-dropdown *ngIf="!generateAudioHidden" #audiochild (voiceSelected)="onVoiceSelected($event)"></audio-dropdown>
     <p></p>
-    <div>
+    <div *ngIf="!generateAudioHidden">
       <button cButton variant="outline" style="width: 100%;" variant="outline" color="info"
         [disabled]="generatedAudioIsLoading" (click)="generateTextToSpeech()">
         <c-spinner *ngIf="generatedAudioIsLoading" size="sm"></c-spinner>

@@ -182,6 +182,10 @@ export class VideoDetailsService {
   }
   
   generateVideoContentWithAI() {
+    if (this.currentTopic === undefined || this.currentTopic === '') { 
+      this.navigationService.navigateToBrandNew(); 
+      return;
+    }
     this.contentService.generateVideoContentWithAI(
       this.currentTopic,
       this.currentNiche,

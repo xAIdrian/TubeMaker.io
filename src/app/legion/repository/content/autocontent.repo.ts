@@ -17,21 +17,23 @@ import { VideoMetadata } from '../../model/video/videometadata.model';
 export class AutoContentRepository extends ContentRepository {
   override collectionPath: string = 'auto_pages';
 
+  structuredScript = new Map<string, string>([
+    //controlName -> script section
+    ['introduction', ''],
+    ['mainContent', ''],
+    ['caseStudies', ''],
+    ['opinions', ''],
+    ['questions', ''],
+    ['actionables', ''],
+    ['conclusion', ''],
+  ]);
+
   setCurrentPageObject(
     videoTopic: string,
     videoNiche: VideoNiche,
     videoDuration: VideoDuration
   ): Observable<YoutubeVideoPage> {
-    const structuredScript = new Map<string, string>([
-      //controlName -> script section
-      ['introduction', ''],
-      ['mainContent', ''],
-      ['caseStudies', ''],
-      ['opinions', ''],
-      ['questions', ''],
-      ['actionables', ''],
-      ['conclusion', ''],
-    ]);
+    
     const newDoc: YoutubeVideoPage = {
       createdDate: new Date().toISOString(),
       createdFrom: 'auto',
@@ -52,7 +54,7 @@ export class AutoContentRepository extends ContentRepository {
         this.firestoreRepository.updateUsersDocumentMap(
           'auto_pages',
           doc.id,
-          structuredScript
+          this.structuredScript
         );
       }),
       tap((page) => this.currentPageSubject.next(page)),
@@ -126,9 +128,6 @@ export class AutoContentRepository extends ContentRepository {
   }
 
   getCompleteScript(): Observable<string> {
-    console.log(
-      '🇯🇵 ~ AutoContentRepository ~ getCompleteScript ~ getCompleteScript:'
-    );
     let script = '';
     return this.firestoreRepository
       .getUsersDocument<YoutubeVideoPage>(
@@ -139,16 +138,16 @@ export class AutoContentRepository extends ContentRepository {
         map((doc) => {
           const scriptMap = doc.structuredScript;
           if (scriptMap !== undefined && scriptMap !== null) {
-            // get all the values of the ordered hashmap in the same order
-            let valuesInOrder = [...scriptMap.keys()].map((key) =>
-              scriptMap.get(key)
-            );
-            // add all values to main string
-            valuesInOrder.map((value) => {
-              if (value !== undefined && value !== null && value !== '') {
-                script += value + '\n\n';
-              }
+            Object.entries(scriptMap).forEach((value) => {
+              this.structuredScript.set(value[0], value[1]);
             });
+            // get all the values of the ordered hashmap in the same order
+            this.structuredScript.forEach((value, key) => {
+              if (value !== undefined && value !== null && value !== '') {
+                script += value + '\n' ;
+              }              
+            });
+            console.log(script)
             return script;
           } else {
             throw new Error('scriptMap is undefined or null');

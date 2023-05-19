@@ -102,17 +102,11 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
               page.structuredScript !== undefined ||
               page.structuredScript !== null
             ) {
-              console.log(typeof page.structuredScript);
               for (const [key, value] of Object.entries(
                 page.structuredScript!!
               )) {
-                console.log(
-                  '🚀 ~ file: videodetails.component.ts:103 ~ VideoDetailsComponent ~ this.videoDetailsService.getCurrentPage ~ [key, value]:',
-                  [key, value]
-                );
                 if (value !== undefined && value !== '') {
                   this.assignScriptToFields(key, value);
-                  // this.onScriptFormGroupChange();
                 }
               }
             }

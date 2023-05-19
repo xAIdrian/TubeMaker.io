@@ -3,7 +3,7 @@ import {
   getDefaultVideoNiches,
   VideoNiche,
 } from '../../model/autocreate/videoniche.model';
-import { combineLatest, concatMap, filter, from, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { concatMap, filter, from, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { FirestoreRepository } from '../firebase/firestore.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
@@ -109,17 +109,6 @@ export abstract class ContentRepository {
         return document.metadata as VideoMetadata;
       })
     )
-  }
-
-  getScriptForDownload(givenFileName: string): Observable<string> {
-    return this.getCompleteScript().pipe(
-      concatMap((completeScript) => {
-        if (completeScript === '') {
-          throw new Error(`Script not available ${completeScript}`);
-        }
-        return of(completeScript);
-      })
-    );
   }
 
   getGeneratedAudioUrl(parentVideoId: string) {

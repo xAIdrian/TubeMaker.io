@@ -4,6 +4,7 @@ import { FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from '
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from 'src/app/legion/service/auth/session.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NavigationService } from 'src/app/legion/service/navigation.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LanderComponent implements OnInit {
   isLoading: false;
 
   constructor(
-    private translate: TranslateService,
+    private navigationService: NavigationService,
     private sessionService: SessionService
   ) { /** */ }
 
@@ -27,6 +28,11 @@ export class LanderComponent implements OnInit {
       this.hasError = true;
       this.errorMessage = error;
     });
+  }
+
+  goHome() {
+    console.log("🚀 ~ file: lander.component.ts:34 ~ LanderComponent ~ goHome ~ goHome:")
+    this.navigationService.navigateToList();
   }
 
   uiShownCallback() {

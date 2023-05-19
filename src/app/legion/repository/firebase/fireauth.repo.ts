@@ -16,7 +16,7 @@ import { NavigationService } from '../../service/navigation.service';
 })
 export class FireAuthRepository {
 
-  private sessionUser?: FirebaseUser;
+ sessionUser?: FirebaseUser;
   private userSubject: Subject<FirebaseUser> = new Subject<FirebaseUser>();
 
   constructor(

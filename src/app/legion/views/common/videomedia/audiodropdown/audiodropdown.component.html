@@ -1,5 +1,5 @@
 <c-dropdown>
-    <button cButton cDropdownToggle color="info" style="width: 100%; ">{{ selectedItem.name }}</button>
+    <button cButton cDropdownToggle color="info" style="width: 100%; white-space: normal; overflow-wrap: break-word;">{{ selectedItem.name }}</button>
     <ul cDropdownMenu class="dropdown-list">
         <li *ngFor="let item of voiceOptions" (click)="onItemSelect($event, item)">
             <div class="dropdown-item d-flex align-items-center" (click)="onItemPlay(audioPlayer)">

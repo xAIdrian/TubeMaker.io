@@ -24,9 +24,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
     private sessionService: SessionService
   ) {
     super();
-    this.sessionService.getAuthStateObserver().subscribe(user => {
-      this.profilePic = user.photoURL;
-    });
+    this.profilePic = this.sessionService.getProfilePic();
   }
 
   onUserLogout() {

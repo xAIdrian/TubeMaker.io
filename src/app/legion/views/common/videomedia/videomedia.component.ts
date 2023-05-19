@@ -13,10 +13,11 @@ import {
 import { ContentRepository } from '../../../repository/content/content.repo';
 import { VoiceService } from '../../../service/voice.service';
 import { AudioDropdownComponent } from './audiodropdown/audiodropdown.component';
-import * as saveAs from 'file-saver';
 import { NavigationService } from '../../../service/navigation.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Script } from 'vm';
 
+const TEXTX_TO_VOICE_MAX = 5400;
 @Component({
   selector: 'video-media',
   templateUrl: './videomedia.component.html',
@@ -39,6 +40,7 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
   
   generatedAudioIsLoading = false;
   generatedAudioUrl: string = '';
+  generateAudioHidden = false;
 
   voiceOptions: { name: string; sampleUrl: string }[] = [];
   selectedVoice: { name: string; sampleUrl: string };
@@ -54,9 +56,8 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
   ) {}
 
   ngOnInit() {
-    this.voiceService.getTextTooLongErrorObserver().subscribe((response) => {
-      this.generatedAudioIsLoading = false;
-      alert(response);
+    this.contentRepo.getCompleteScript().subscribe((response) => {
+      this.checkScriptLength(response);
     });
     this.voiceService.getErrorObserver().subscribe((response) => {
       this.generatedAudioIsLoading = false;
@@ -104,25 +105,31 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
     this.generatedAudioIsLoading = false;
     this.generatedAudioIsLoading = true;
 
-    this.voiceService.generateTextToSpeech(
-      this.selectedVoice.name
-    ).subscribe({
-      next: (response) => {
-        console.log(response)
-        this.generatedAudioIsLoading = false;
-        this.generatedAudioUrl = URL.createObjectURL(response);
-
-        this.audioPlayer.nativeElement.load();
-        this.audioPlayer.nativeElement.play();
-      },
-      error: (error) => {
-        console.log('🔥 error', error)
-        this.generatedAudioIsLoading = false;
-        alert(error);
-      },
-      complete: () => {
-        console.log('complete')
-        this.generatedAudioIsLoading = false;
+    this.contentRepo.getCompleteScript().subscribe((response) => {
+      const script = this.checkScriptLength(response);
+      if (script !== '') {
+        this.voiceService.generateTextToSpeech(
+          this.selectedVoice.name,
+          script
+        ).subscribe({
+          next: (response) => {
+            console.log(response)
+            this.generatedAudioIsLoading = false;
+            this.generatedAudioUrl = URL.createObjectURL(response);
+    
+            this.audioPlayer.nativeElement.load();
+            this.audioPlayer.nativeElement.play();
+          },
+          error: (error) => {
+            console.log('🔥 error', error)
+            this.generatedAudioIsLoading = false;
+            alert(error);
+          },
+          complete: () => {
+            console.log('complete')
+            this.generatedAudioIsLoading = false;
+          }
+        });
       }
     });
   }
@@ -134,5 +141,16 @@ export class VideoMediaComponent implements OnInit, AfterContentInit, OnChanges 
 
   onMediaOptionSelected(option: string) {
     this.selectedMediaOption = option;
+  }
+
+  private checkScriptLength(scriptValue: string): string {
+    if (scriptValue === null || scriptValue === '') {
+      this.generateAudioHidden = true;
+    } else if (scriptValue.length >= TEXTX_TO_VOICE_MAX) {
+      this.generateAudioHidden = true;
+    } else {
+      return scriptValue;
+    }
+    return  '';
   }
 }
