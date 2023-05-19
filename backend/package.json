@@ -28,6 +28,6 @@
     "zone.js": "~0.12.0"
   },
   "scripts": {
-    "start": "nodemon ./server.js"
+    "start": "node ./server.js"
   }
 }
