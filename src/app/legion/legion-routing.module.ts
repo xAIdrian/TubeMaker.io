@@ -11,7 +11,7 @@ import { CanNavigateForwardGuard } from "./service/auth/navforward.guard";
 const routes: Routes = [
     {
         path: "",
-        redirectTo: "copycat",
+        redirectTo: "list",
         pathMatch: "prefix"
     },
     {

@@ -80,9 +80,9 @@ export class FireAuthRepository {
   }
   
   // Sign out
-  async signOut() {
+  signOut(): Promise<void> {
     this.sessionUser = undefined;
-    await this.angularFireAuth.signOut();
+    return this.angularFireAuth.signOut();
   }
 
   private removeUndefinedProperties(obj: any): any {
