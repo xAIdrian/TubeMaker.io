@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
       this.sessionService.storeLanguagePref(this.translate.currentLang)
     });
     this.updateInitLanguage();
+    this.sessionService.checkForAuthLogoutRedirect()
   }
 
   private updateInitLanguage() {

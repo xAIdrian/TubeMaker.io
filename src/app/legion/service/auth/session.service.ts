@@ -12,12 +12,40 @@ const LANGUAGE_PREF = 'language';
 })
 export class SessionService {
   private errorSubject = new Subject<string>();
-
+  
   constructor(
     private fireAuthRepo: FireAuthRepository,
     private navService: NavigationService
-  ) {
-    /** */
+    ) {
+      /** */
+    }
+    
+  checkForAuthLoginRedirect() {
+    if (this.fireAuthRepo.sessionUser !== null) {
+      console.log("🚀 ~ file: session.service.ts:35 ~ SessionService ~ this.fireAuthRepo.getUserAuthObservable ~ user:", this.fireAuthRepo.sessionUser)
+      this.navService.navigateToList();
+      return;
+    }
+
+    this.fireAuthRepo.getUserAuthObservable().subscribe({
+      next: (user) => {
+        if (user !== null) {
+          this.navService.navigateToList();
+        }
+      },
+      error: (error) => {
+        console.log('🔥' + error);
+        this.errorSubject.next(error);
+      }
+    });
+  }
+
+  checkForAuthLogoutRedirect() {
+    if (this.fireAuthRepo.sessionUser === null) {
+      console.log("🚀 ~ file: session.service.ts:35 ~ SessionService ~ this.fireAuthRepo.getUserAuthObservable ~ user:", this.fireAuthRepo.sessionUser)
+      this.navService.navigateToLander();
+      return;
+    }
   }
 
   getErrorObserver(): Observable<string> {
@@ -33,6 +61,7 @@ export class SessionService {
       this.fireAuthRepo.sessionUser?.photoURL ?? 'https://placehold.co/48x48'
     );
   }
+
   getLanguagePref(): string | null {
     return localStorage.getItem(LANGUAGE_PREF);
   }

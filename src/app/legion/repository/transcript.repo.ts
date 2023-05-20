@@ -18,7 +18,7 @@ export class TranscriptRepository {
         const language = this.translate.currentLang;
         const config: AxiosRequestConfig = {
             method: 'post',
-            url: `http://localhost:3000/api/download/`,
+            url: `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/download/`,
             data: {
                 'videoId': videoId,
                 'language': language,

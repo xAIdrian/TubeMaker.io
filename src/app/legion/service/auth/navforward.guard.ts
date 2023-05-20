@@ -14,6 +14,7 @@ import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
   ) { /** */ }
 
   canDeactivate(component: any): Observable<boolean> | boolean {
+    console.log("🚀 ~ file: navforward.guard.ts:17 ~ CanNavigateForwardGuard ~ canDeactivate ~ component:", component)
     //if the condition is met to move them away from the page, then DO NOT deactivate guard
     if (!component.clickAwayVideo && this.authRepo.isAuthenticated()) {
       return false;

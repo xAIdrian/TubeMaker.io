@@ -43,7 +43,7 @@ export class YoutubeDataRepository {
     const currentLang = this.translate.currentLang;
     const config: AxiosRequestConfig = {
         method: 'get',
-        url: `http://localhost:3000/api/youtube/videos/${currentLang}`,
+        url: `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/youtube/videos/${currentLang}`,
         params: {
             niche: niche,
             publishedAfter: this.oneMonthAgoIsoDate(),
