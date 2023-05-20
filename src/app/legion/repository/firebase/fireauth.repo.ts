@@ -43,6 +43,10 @@ export class FireAuthRepository {
     return of(this.sessionUser === undefined ? false : true);
   }
 
+  isFirstTimeUser(): Observable<boolean> {
+    return of(this.sessionUser?.isVirgin === true);
+  }
+
   verifyPurchaseEmail(email: string): Observable<boolean> {
     const docRef = this.angularFirestore.collection(PURCHASED_USERS_COL).doc(email).ref;
     return of(docRef.id === email);
@@ -60,17 +64,16 @@ export class FireAuthRepository {
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
-      isVirgin: true
+      isVirgin: user.isVirgin
     };
   
     // Check if the user document exists
     const snapshot = await existingUserRef.get().toPromise();
     if (snapshot?.exists) {
       // User exists, update the existing user data
-      userData['isVirgin'] = false;
+      userData.isVirgin = false;
       return existingUserRef.set(this.removeUndefinedProperties(userData), { merge: true });
     } else {
-      userData['isVirgin'] = true;
       // User doesn't exist, create a new user document
       return existingUserRef.set(this.removeUndefinedProperties(userData));
     }

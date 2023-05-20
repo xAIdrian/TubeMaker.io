@@ -73,17 +73,17 @@ export class SessionService {
 
   verifyEmail(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     const email = signinSuccessData.authResult.user?.email;
-    console.log(
-      '🚀 ~ file: session.service.ts:36 ~ SessionService ~ verifyEmail ~ email:',
-      signinSuccessData.authResult.user
-    );
+    const isFirstTimeUser = signinSuccessData.authResult.additionalUserInfo?.isNewUser;
 
     if (email !== undefined && email !== '') {
       this.fireAuthRepo.verifyPurchaseEmail(email!!).subscribe({
         next: (userExists) => {
           if (userExists) {
             this.fireAuthRepo.setUserData(
-              signinSuccessData.authResult.user?.toJSON()
+              {
+                ...signinSuccessData.authResult.user?.toJSON(),
+                isVirgin: isFirstTimeUser
+              }
             );
             this.navService.navigateToList();
           } else {
