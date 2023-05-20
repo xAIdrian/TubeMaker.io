@@ -25,6 +25,7 @@ export class FireAuthRepository {
   ) {
     this.angularFireAuth.authState.subscribe((user: any) => {
       if (user) {
+        console.log("🚀 ~ file: fireauth.repo.ts:28 ~ FireAuthRepository ~ this.angularFireAuth.authState.subscribe ~ user:", user)
         this.sessionUser = user;
         this.setUserData(user);
         this.userSubject.next(user);
@@ -77,6 +78,7 @@ export class FireAuthRepository {
   
   // Sign out
   async signOut() {
+    this.sessionUser = undefined;
     await this.angularFireAuth.signOut();
   }
 

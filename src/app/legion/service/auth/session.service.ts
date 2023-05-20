@@ -19,33 +19,34 @@ export class SessionService {
     ) {
       /** */
     }
-    
-  checkForAuthLoginRedirect() {
-    if (this.fireAuthRepo.sessionUser !== null) {
-      console.log("🚀 ~ file: session.service.ts:35 ~ SessionService ~ this.fireAuthRepo.getUserAuthObservable ~ user:", this.fireAuthRepo.sessionUser)
-      this.navService.navigateToList();
-      return;
-    }
 
-    this.fireAuthRepo.getUserAuthObservable().subscribe({
-      next: (user) => {
-        if (user !== null) {
-          this.navService.navigateToList();
-        }
-      },
-      error: (error) => {
-        console.log('🔥' + error);
-        this.errorSubject.next(error);
-      }
-    });
+  checkForAuthLoginRedirect() {
+    // if (this.fireAuthRepo.sessionUser !== null) {
+    //   this.navService.navigateToList();
+    //   return;
+    // }
+
+    // this.fireAuthRepo.getUserAuthObservable().subscribe({
+    //   next: (user) => {
+    //     if (user !== null) {
+    //       this.navService.navigateToList();
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.log('🔥' + error);
+    //     this.errorSubject.next(error);
+    //   }
+    // });
   }
 
   checkForAuthLogoutRedirect() {
-    if (this.fireAuthRepo.sessionUser === null) {
-      console.log("🚀 ~ file: session.service.ts:35 ~ SessionService ~ this.fireAuthRepo.getUserAuthObservable ~ user:", this.fireAuthRepo.sessionUser)
-      this.navService.navigateToLander();
-      return;
-    }
+    // if (this.fireAuthRepo.sessionUser === null) {
+    //   console.log("🚀 ~ file: session.service.ts:35 ~ SessionService ~ this.fireAuthRepo.getUserAuthObservable ~ user:", this.fireAuthRepo.sessionUser)
+    //   this.navService.navigateToLander();
+    //   return;
+    // } else {
+    //   this.navService.navigateToList();
+    // }
   }
 
   getErrorObserver(): Observable<string> {
@@ -80,23 +81,13 @@ export class SessionService {
     if (email !== undefined && email !== '') {
       this.fireAuthRepo.verifyPurchaseEmail(email!!).subscribe({
         next: (userExists) => {
-          console.log(
-            '🚀 ~ file: session.service.ts:57 ~ SessionService ~ this.fireAuthRepo.verifyPurchaseEmail ~ userExists:',
-            userExists
-          );
           if (userExists) {
             this.fireAuthRepo.setUserData(
               signinSuccessData.authResult.user?.toJSON()
             );
-            console.log(
-              '🚀 ~ file: session.service.ts:49 ~ SessionService ~ this.fireAuthRepo.verifyPurchaseEmail ~ PURCHAED: GOING TO LIST'
-            );
             this.navService.navigateToList();
           } else {
             this.fireAuthRepo.signOut();
-            console.log(
-              '🚀 ~ file: session.service.ts:53 ~ SessionService ~ this.fireAuthRepo.verifyPurchaseEmail ~ USER NOT PURCHASED'
-            );
             this.errorSubject.next(
               'You are not authorized to use this application. Please contact us.'
             );
