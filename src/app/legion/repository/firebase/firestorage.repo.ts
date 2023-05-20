@@ -1,14 +1,8 @@
 // Import the functions you need from the SDKs you need
 import {
-  getStorage,
-  ref,
-  uploadBytes,
   getDownloadURL,
-  FirebaseStorage,
   StorageReference,
 } from 'firebase/storage';
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 import { Injectable } from '@angular/core';
 import { from, map, Observable, of } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';

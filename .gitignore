@@ -135,5 +135,6 @@ dist
 .github/
 src/environments/
 src/client_secret_355466863083-g129ts2hdg72gl5r3jiqrmg9i588cvqm.apps.googleusercontent.com.json
-
+backend/freeadmingptwebapp-384207-firebase-adminsdk-7qlgk-6a26b8eae6.json
 appsecrets.js
+backend/appsecrets.js

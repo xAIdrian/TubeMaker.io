@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -11,39 +11,37 @@ import { NavigationService } from 'src/app/legion/service/navigation.service';
   templateUrl: './lander.component.html',
   styleUrls: ['./lander.component.scss']
 })
-export class LanderComponent implements OnInit {
+export class LanderComponent implements OnInit, AfterContentInit {
   
   errorMessage = '';
   hasError = false;
   isLoading: false;
-
+  
   constructor(
-    private navigationService: NavigationService,
     private sessionService: SessionService
-  ) { /** */ }
+    ) { /** */ }
+    
+    
+    ngOnInit() {
+      this.sessionService.getErrorObserver().subscribe(error => {
+        alert(error);
+      });
+    }
+    
+    ngAfterContentInit(): void {
+      this.sessionService.checkForAuthLoginRedirect();
+    }
+    
+    goToHome() {
+      this.sessionService.checkForAuthLoginRedirect();
+    }
 
-
-  ngOnInit() {
-    this.sessionService.getErrorObserver().subscribe(error => {
-      this.hasError = true;
-      this.errorMessage = error;
-    });
-  }
-
-  goHome() {
-    console.log("🚀 ~ file: lander.component.ts:34 ~ LanderComponent ~ goHome ~ goHome:")
-    this.navigationService.navigateToList();
-  }
-
-  uiShownCallback() {
-    this.hasError = false;
-    this.isLoading = false;
-    this.errorMessage = '';
+    uiShownCallback() {
+    /** */
   }
 
   errorCallback(errorData: FirebaseUISignInFailure) {
-    this.errorMessage = errorData.code;
-    this.isLoading = false;
+    alert(errorData);
   }
 
   successCallback(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {

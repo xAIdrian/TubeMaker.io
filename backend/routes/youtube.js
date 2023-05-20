@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
 const axios = require("axios");
-const { map, mergeMap, concatMap, filter } = require("rxjs/operators");
+const { map, mergeMap, concatMap } = require("rxjs/operators");
 const { from, forkJoin, of } = require("rxjs");
-const { YOUTUBE_DATA_V3_KEY } = require("../../appsecrets");
+const { YOUTUBE_DATA_V3_KEY } = require("../appsecrets");
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 const SEARCH_URL = `${BASE_URL}/search`;

@@ -11,7 +11,7 @@ const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 const { Configuration, OpenAIApi } = require("openai");
-const { OPEN_AI_API_KEY } = require("../../appsecrets");
+const { OPEN_AI_API_KEY } = require("../appsecrets");
 
 const TranslationService = require("../service/translation.service");
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const { pipeline } = require('stream');
-const { ELEVEN_LABS_API_KEY } = require("../../appsecrets");
+const { ELEVEN_LABS_API_KEY } = require("../appsecrets");
 
 const router = express.Router();
 

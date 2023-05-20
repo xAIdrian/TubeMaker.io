@@ -1,8 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
 const { Configuration, OpenAIApi } = require("openai");
-const { OPEN_AI_API_KEY } = require("../../appsecrets");
+const { OPEN_AI_API_KEY } = require("../appsecrets");
+const fs = require("fs");
+const path = require('path');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getStorage } = require('firebase-admin/storage');
+
+var serviceAccount = require('../freeadmingptwebapp-384207-firebase-adminsdk-7qlgk-6a26b8eae6.json');
+const { storage } = require("firebase-functions/v1");
+initializeApp({
+  credential: cert(serviceAccount),
+  storageBucket: 'gs://freeadmingptwebapp-384207.appspot.com'
+});
+const bucket = getStorage().bucket();
 
 const configuration = new Configuration({
   apiKey: OPEN_AI_API_KEY,
@@ -26,9 +37,9 @@ router.get("/topic/:language", async (req, res, next) => {
     });
     return; // Return early to avoid further processing
   } 
-  inputFile = `backend/routes/inputprompts/${language}/youtube_topic.txt`;
+  inputFile = `inputprompts/${language}/youtube_topic.txt`;
 
-  rawPrompt = readTextFileToPrompt(inputFile);
+  rawPrompt = await readTextFileToPrompt(inputFile);
 
   try {
     const response = await generateTopic(language);
@@ -38,10 +49,10 @@ router.get("/topic/:language", async (req, res, next) => {
       result: { topic: response },
     });
   } catch (error) {
-     console.log("🔥 ~ file: ai.js:34 ~ router.get ~ error:", error);
+     console.log("🔥 ~ file: ai.js:34 ~ router.get ~ error:", error.message);
 
     if (error.response) {
-      console.log("🔥 ~ file: ai.js:31 ~ router.get ~ error.response:", error.response);
+      console.log("🔥 ~ file: ai.js:31 ~ router.get ~ error.response:", error.message);
       res.status(500).json({
         message: "API call failed",
         result: error.response.data,
@@ -57,8 +68,9 @@ router.get("/topic/:language", async (req, res, next) => {
 });
 
 async function generateTopic(language) {
-  const inputFile = `backend/routes/inputprompts/${language}/youtube_topic.txt`;
-  const rawPrompt = readTextFileToPrompt(inputFile);
+  const inputFile = `inputprompts/${language}/youtube_topic.txt`;
+  const rawPrompt = await readTextFileToPrompt(inputFile);
+  console.log("🚀 ~ file: ai.js:63 ~ generateTopic ~ rawPrompt:", rawPrompt)
 
   try {
     const completion = await openai.createCompletion({
@@ -72,6 +84,7 @@ async function generateTopic(language) {
     });
 
     const response = completion.data.choices[0].text;
+    console.log("🚀 ~ file: ai.js:77 ~ generateTopic ~ response:", response)
     return response;
   } catch (error) {
     throw error;
@@ -134,7 +147,7 @@ router.post("/summary/:language", async (req, res, next) => {
 });
 
 async function generateSummary(language, prompt) {
-  const inputFile = `backend/routes/inputprompts/${language}/summary.txt`;
+  const inputFile = `inputprompts/${language}/summary.txt`;
 
   try {
     let gptSummary = await summaryPromptCompletion(inputFile, prompt);
@@ -209,7 +222,7 @@ router.post("/new/title/:language", async (req, res, next) => {
 });
 
 async function generateTitle(language, summary, style) {
-  const inputFile = `backend/routes/inputprompts/${language}/youtube_title.txt`;
+  const inputFile = `inputprompts/${language}/youtube_title.txt`;
 
   try {
     let gptTitle = await newPromptCompletion(inputFile, summary, style);
@@ -313,7 +326,7 @@ router.post("/new/description/:language", async (req, res, next) => {
     });
     return; // Stop further execution
   } 
-  inputFile = `backend/routes/inputprompts/${language}/youtube_description.txt`;
+  inputFile = `inputprompts/${language}/youtube_description.txt`;
   
   if (!summary) {
     res.status(400).json({
@@ -403,7 +416,7 @@ router.post("/new/script/:language", async (req, res, next) => {
     });
     return; // Stop further execution
   } 
-  inputFile = `backend/routes/inputprompts/${language}/youtube_script_section.txt`;
+  inputFile = `inputprompts/${language}/youtube_script_section.txt`;
 
   if (!summary) {
     res.status(400).json({
@@ -499,7 +512,7 @@ router.post("/new/tags/:language", async (req, res, next) => {
     });
     return; // Stop further execution
   } 
-  inputFile = `backend/routes/inputprompts/${language}/youtube_tags.txt`;
+  inputFile = `inputprompts/${language}/youtube_tags.txt`;
 
   if (!summary) {
     res.status(400).json({
@@ -576,7 +589,7 @@ router.post("/improve/tags/:language", async (req, res, next) => {
 ////////////////////
 
 function getImproveFileName(language, prompt) {
-  inputFolder = `backend/routes/inputprompts/${language}`
+  inputFolder = `inputprompts/${language}`
 
   switch (prompt) { 
     case 'funnier': return `${inputFolder}/optimizer_funnier.txt`;
@@ -659,7 +672,7 @@ async function getOptimizedOutputCompletion(prompt, maxRetries = 3) {
   throw new Error("Max retries exceeded for error:", innerError);
 }
 
-function summaryPromptCompletion(inputFile, inputParam) {
+async function summaryPromptCompletion(inputFile, inputParam) {
   if (!inputFile) {
     throw new Error("Invalid input file.");
   }
@@ -668,18 +681,18 @@ function summaryPromptCompletion(inputFile, inputParam) {
     throw new Error("Invalid input parameter.");
   }
 
-  rawPrompt = readTextFileToPrompt(inputFile);
+  rawPrompt = await readTextFileToPrompt(inputFile);
   summaryPrompt = rawPrompt.replace("<<FEED>>", inputParam);
 
   return getNewOutputCompletion(summaryPrompt);
 }
 
-function newScriptPromptCompletion(inputFile, inputParam, styleParam, durationPoint) {
+async function newScriptPromptCompletion(inputFile, inputParam, styleParam, durationPoint) {
   if (!inputFile || !inputParam || !styleParam || !durationPoint) {
     throw new Error("Invalid input parameters. Please provide all required parameters.");
   }
 
-  rawPrompt = readTextFileToPrompt(inputFile); 
+  rawPrompt = await readTextFileToPrompt(inputFile); 
   scriptPrompt = rawPrompt
     .replace("<<FEED>>", inputParam)
     .replace("<<STYLE>>", styleParam)
@@ -688,12 +701,12 @@ function newScriptPromptCompletion(inputFile, inputParam, styleParam, durationPo
   return getNewOutputCompletion(scriptPrompt);
 }
 
-function newPromptCompletion(filename, inputParam, styleParam) {
+async function newPromptCompletion(filename, inputParam, styleParam) {
   if (!filename || !inputParam || !styleParam) {
     throw new Error("Invalid input parameters. Please provide all required parameters.");
   }
 
-  rawPrompt = readTextFileToPrompt(filename);
+  rawPrompt = await readTextFileToPrompt(filename);
   if (inputParam === '') {
     console.log("🔥 ~ file: ai.js:80 ~ newPromptCompletion ~", filename, inputParam, styleParam)
     return
@@ -702,7 +715,7 @@ function newPromptCompletion(filename, inputParam, styleParam) {
   return getNewOutputCompletion(properPrompt);
 }
 
-function improvePromptCompletion(filename, inputParam) {
+async function improvePromptCompletion(filename, inputParam) {
   if (!filename || !inputParam) {
     throw new Error("Invalid input parameters. Please provide all required parameters.");
   }
@@ -711,18 +724,31 @@ function improvePromptCompletion(filename, inputParam) {
     throw new Error("Invalid input parameter. Please provide a valid input parameter.");
   }
 
-  rawPrompt = readTextFileToPrompt(filename);
+  rawPrompt = await readTextFileToPrompt(filename);
   properPrompt = rawPrompt.replace("<<SOURCE>>", inputParam);
   return getOptimizedOutputCompletion(properPrompt);
 }
 
-function readTextFileToPrompt(filename) {
+async function readTextFileToPrompt(filename) {
   try {
-    const data = fs.readFileSync(filename, 'utf8');
+    const data = await readFile(filename);
+    console.log("🚀 ~ file: ai.js:725 ~ readTextFileToPrompt ~ data:", data)
     return data;
   } catch (err) {
-    throw new Error(`Error reading file: ${filename}. Error message: ${err.message}`);
+    console.log(`Error reading file:` + filename);
+    console.log(err.message);
   }
+}
+
+async function readFile(fileName) {
+  const file = bucket.file(fileName);
+  console.log("🚀 ~ file: ai.js:733 ~ readFile ~ file:", file)
+
+  const data = await file.download();
+  const contents = data.toString('utf8');
+  console.log("🚀 ~ file: ai.js:737 ~ readFile ~ contents:", contents)
+
+  return contents;
 }
 
 

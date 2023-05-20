@@ -1,5 +1,5 @@
 const { TranslationServiceClient } = require("@google-cloud/translate");
-const { GOOGLE_PROJECT_ID } = require("../../appsecrets");
+const { GOOGLE_PROJECT_ID } = require("../appsecrets");
 
 class TranslationService {
   
