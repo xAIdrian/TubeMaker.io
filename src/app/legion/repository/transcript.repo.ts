@@ -18,7 +18,7 @@ export class TranscriptRepository {
         const language = this.translate.currentLang;
         const config: AxiosRequestConfig = {
             method: 'post',
-            url: `https://www.api.tubemaker.io/api/download/`,
+            url: `https://api.tubemaker.io/api/download/`,
             data: {
                 'videoId': videoId,
                 'language': language,

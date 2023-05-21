@@ -17,7 +17,7 @@ export class VoiceRepository {
 
   getListOfVoices(): Observable<{ message: string, result: { name: string, id: string }[]}> {
     return this.http.get<{ message: string, result: { name: string, id: string }[]}>(
-      `https://www.api.tubemaker.io/api/voices`
+      `https://api.tubemaker.io/api/voices`
     );
   }
 
@@ -44,7 +44,7 @@ export class VoiceRepository {
       responseType: 'blob' as const
     }
     return this.http.post(
-      `https://www.api.tubemaker.io/api/voices/`,
+      `https://api.tubemaker.io/api/voices/`,
       reqBody,
       options
     );

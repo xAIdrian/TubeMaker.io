@@ -43,7 +43,7 @@ export class YoutubeDataRepository {
     const currentLang = this.translate.currentLang;
     const config: AxiosRequestConfig = {
         method: 'get',
-        url: `https://www.api.tubemaker.io/api/youtube/videos/${currentLang}`,
+        url: `https://api.tubemaker.io/api/youtube/videos/${currentLang}`,
         params: {
             niche: niche,
             publishedAfter: this.oneMonthAgoIsoDate(),
