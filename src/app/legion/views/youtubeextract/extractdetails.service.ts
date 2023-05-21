@@ -113,20 +113,25 @@ export class ExtractDetailsService {
 
   searchYoutubeVideos(niche: string) {
     this.youtubeRepo.getVideoListByNiche(niche).pipe(
-      map((videos) => videos.map((video) => {
+      map((videos) => {
+        const newVideosList: YoutubeVideo[] = [];
+        videos.forEach((video) => {
         const cleanedText = video.title.replaceAll(/&#39;/g, "'").replaceAll(/&quot;/g, '"').replaceAll(/&amp;/g, '&').replaceAll(/&gt;/g, '>').replaceAll(/&lt;/g, '<');
-        return {
-          ...video,
-          title: cleanedText,
-          publishedAt: this.dateUtils.updateDateToHumanForm(video.publishedAt),
-          statistics: {
-            viewCount: this.getRandomNumber(),
-            likeCount: this.getRandomNumber(),
-            commentCount: this.getRandomNumber(),
+        newVideosList.push(
+          {
+            ...video,
+            title: cleanedText,
+            publishedAt: this.dateUtils.updateDateToHumanForm(video.publishedAt),
+            statistics: {
+              viewCount: this.getRandomNumber(),
+              likeCount: this.getRandomNumber(),
+              commentCount: this.getRandomNumber(),
+            }
           }
-        }
-      }))
-    ).subscribe({
+        )
+      })
+      return newVideosList;
+    })).subscribe({
       next: (videos) => {
             if (niche === 'psychology') {
               videos[0] = {

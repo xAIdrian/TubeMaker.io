@@ -18,7 +18,7 @@ export class TranscriptRepository {
         const language = this.translate.currentLang;
         const config: AxiosRequestConfig = {
             method: 'post',
-            url: `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/download/`,
+            url: `https://www.api.tubemaker.io/api/download/`,
             data: {
                 'videoId': videoId,
                 'language': language,
