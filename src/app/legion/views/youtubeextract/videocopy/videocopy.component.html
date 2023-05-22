@@ -13,12 +13,12 @@
   <c-card-body style="min-height: 80vh">
     <form [formGroup]="nicheFormGroup">
       <!-- Search Bar -->
-      <c-input-group class="mb-3" style="padding: 1rem;">
+      <!-- <c-input-group class="mb-3" style="padding: 1rem;">
         <button cButton color="info" id="button-addon1" type="button" variant="outline">
           <svg cIcon name="cilCloudDownload"></svg>
         </button>
         <input aria-describedby="button-addon1" aria-label="Search bar" cFormControl placeholder="Collez le lien vidéo ici" />
-      </c-input-group>
+      </c-input-group> -->
       <!-- Niche Selection -->
       <mat-button-toggle-group formControlName="selectedNiche">
         <mat-button-toggle *ngFor="let videoOption of videoNiches" [value]="selectedVideoNiche"

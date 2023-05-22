@@ -93,11 +93,14 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.videoDetailsService.getCurrentPage(pathId).subscribe({
           next: (page: YoutubeVideoPage) => {
             this.currentPageId = page.id ?? '';
+            const primedTags = page.metadata?.tags.map((tag) => {
+              return tag.trim().replaceAll(' ', '-');
+            }).join(',');
 
             this.infoFormGroup.setValue({
               title: page.metadata?.title.replaceAll('"', '').trim(),
               description: page.metadata?.description.trim(),
-              tags: page.metadata?.tags.join(' #').trim(),
+              tags: `#${primedTags?.replaceAll(',', ', #')}`
             });
 
             if (
