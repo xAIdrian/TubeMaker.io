@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  apiUrl: 'http://localhost:3000',
   firebaseConfig: {
     apiKey: "AIzaSyDSfFtYPRdqAl79FyMko4110FGMP1wm1f8",
     authDomain: "freeadmingptwebapp-384207.firebaseapp.com",
@@ -11,3 +12,4 @@ export const environment = {
     measurementId: "G-NV1DH6VK32"
   }
 };
+

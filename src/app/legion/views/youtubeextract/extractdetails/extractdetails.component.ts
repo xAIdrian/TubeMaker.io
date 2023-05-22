@@ -70,6 +70,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
             next: (error: any) => {
                 this.isErrorVisible = true;
                 this.errorText = error;
+                this.transcriptIsLoading = false;
             },
             complete: () => {
                 this.transcriptIsLoading = false;
@@ -80,6 +81,7 @@ export class ExtractDetailsComponent implements OnInit, AfterContentInit {
             next: (message: string) => {
                 if (message === '') {
                     this.isKickbackVisible = false;
+                    this.transcriptIsLoading = false;
                 } else {
                     this.isKickbackVisible = true;
                     this.kickbackText = message;

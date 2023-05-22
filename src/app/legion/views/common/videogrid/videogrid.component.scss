@@ -73,8 +73,8 @@ div.stretchy-wrapper>div {
 .truncate {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-lines: 2; /* Adjust the value as needed based on the line height and font size */
+  max-lines: 3; /* Adjust the value as needed based on the line height and font size */
 }

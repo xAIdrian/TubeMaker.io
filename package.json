@@ -40,6 +40,7 @@
     "@types/gapi": "^0.0.44",
     "@types/google-one-tap": "^1.2.2",
     "axios": "^1.4.0",
+    "bootstrap": "^5.2.3",
     "chart.js": "^3.9.1",
     "date-fns": "^2.30.0",
     "file-saver": "^2.0.5",

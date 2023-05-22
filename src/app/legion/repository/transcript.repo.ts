@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import axios, { AxiosRequestConfig } from 'axios';
 import { Observable, from, map } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
 
 // import { YOUTUBE_CLIENT_ID } from '../../appsecrets';
 
@@ -18,7 +20,7 @@ export class TranscriptRepository {
         const language = this.translate.currentLang;
         const config: AxiosRequestConfig = {
             method: 'post',
-            url: `https://api.tubemaker.io/api/download/`,
+            url: `${environment.apiUrl}/api/download/`,
             data: {
                 'videoId': videoId,
                 'language': language,

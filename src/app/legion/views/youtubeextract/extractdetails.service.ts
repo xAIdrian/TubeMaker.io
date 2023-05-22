@@ -122,34 +122,12 @@ export class ExtractDetailsService {
             ...video,
             title: cleanedText,
             publishedAt: this.dateUtils.updateDateToHumanForm(video.publishedAt),
-            statistics: {
-              viewCount: this.getRandomNumber(),
-              likeCount: this.getRandomNumber(),
-              commentCount: this.getRandomNumber(),
-            }
           }
         )
       })
       return newVideosList;
     })).subscribe({
-      next: (videos) => {
-            if (niche === 'psychology') {
-              videos[0] = {
-                channelTitle: 'Motivation Vault',
-                title: 'The Psychology Of Self Motivation (ft. Scott Geller)',
-                description: 'To do it not because they tell us, but because we want to.',
-                id: '5d5lfkMH73Y',
-                publishedAt: this.dateUtils.updateDateToHumanForm('2023-05-18T10:23:37.331Z'),
-                thumbnailUrl: 'https://i.ytimg.com/vi/5d5lfkMH73Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLA3h5FjXEolJbT8tM2WwPOQolNoSA',
-                statistics: {
-                  viewCount: this.getRandomNumber(),
-                  likeCount: this.getRandomNumber(),
-                  commentCount: this.getRandomNumber(),
-                }
-              }
-            }
-            this.youtubeVideosSubject.next(videos);
-          },
+      next: (videos) => this.youtubeVideosSubject.next(videos),
       error: (err) => {
         console.log("🔥 ~ file: extractdetails.service.ts:148 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ err:", err)
         this.errorSubject.next(err); 
@@ -326,10 +304,6 @@ export class ExtractDetailsService {
 
   clearCurrentVideoPage() {
     this.extractContentRepo.clearCurrentPage();
-  }
-
-  getRandomNumber(): string {
-    return Math.floor(Math.random() * (3000000 - 500000 + 1) + 500000).toString();
   }
   
   navigateHome() {

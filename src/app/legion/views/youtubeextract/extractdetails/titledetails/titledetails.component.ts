@@ -50,7 +50,12 @@ export class TitleDetailsComponent implements OnInit, AfterContentInit, OnChange
     this.extractDeatilsService.getTagsObserver().subscribe((response) => {  
       this.loadingCount ++;
       this.isTagsLoading = false;
-      this.titleFormGroup.patchValue({ tags: response.join(' #').trim() })
+
+      const primedTags = response.map((tag) => {
+        return tag.trim().replaceAll(' ', '-');
+      }).join(',');
+
+      this.titleFormGroup.patchValue({ tags: `#${primedTags.replaceAll(',', ', #')}` })
       this.changeDetectorRef.detectChanges();
     });
     this.titleFormGroup = this.formGroupBuilder.group({

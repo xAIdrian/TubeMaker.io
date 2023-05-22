@@ -32,15 +32,17 @@ import { ExtractContentRepository } from "src/app/legion/repository/content/extr
             next: (error) => {
                 this.showErrorToast = true;
                 this.errorToastText = error;
+                this.parentIsLoading = false;
                 this.changeDetectorRef.detectChanges();
             }
         });
         this.extractDetailsService.getVideoTranscriptObserver().subscribe({
             next: (sections) => {
-                console.log("🚀 ~ file: extractdetails.component.ts:40 ~ ExtractDetailsComponent ~ this.youtubeService.getVideoTranscriptObserver ~ sections:", sections)
+                this.parentIsLoading = false;
                 this.transcriptSections = sections;
             },
             complete: () => {
+                this.parentIsLoading = false;
                 this.changeDetectorRef.detectChanges();
             }
         });

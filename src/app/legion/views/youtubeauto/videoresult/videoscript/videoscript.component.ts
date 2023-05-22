@@ -13,23 +13,10 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges {
   @Input() parentScriptFormGroup: FormGroup;
-
+  
+  currentVideoDuration: VideoDuration;
   isScriptLoading: boolean = false;
-
-  currentVideoDuration: VideoDuration = {
-    name: 'please wait',
-    header: '',
-    description: '',
-    sections: [
-      {
-        name: 'please wait',
-        controlName: 'introduction',
-        isLoading: false,
-        points: [],
-      },
-    ],
-  };
-  showScriptBadge = false;
+  showScriptBadge: boolean = false;
 
   constructor(
     private contentRepo: AutoContentRepository,
@@ -39,9 +26,23 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
   ) { /** */ }
 
   ngOnInit() {
-    this.videoDetailsService.getVideoDetailsDurationObserver().subscribe((duration) => {
-      if (duration !== undefined) {this.currentVideoDuration = duration;}
-    });
+    if (this.videoDetailsService.currentDuration !== undefined) {
+      this.currentVideoDuration = this.videoDetailsService.currentDuration
+    } else {
+      this.currentVideoDuration = {
+        name: 'please wait',
+        header: '',
+        description: '',
+        sections: [
+          {
+            name: 'please wait',
+            controlName: 'introduction',
+            isLoading: false,
+            points: [],
+          },
+        ],
+      };
+    }
   }
   /**
    * Where we receive updates from our parent FormControl
