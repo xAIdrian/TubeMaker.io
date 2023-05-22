@@ -25,6 +25,7 @@ export class FireAuthRepository {
   ) {
     this.angularFireAuth.authState.subscribe((user: any) => {
       if (user) {
+        console.log("🚀 ~ file: fireauth.repo.ts:28 ~ FireAuthRepository ~ this.angularFireAuth.authState.subscribe ~ user:", user)
         this.sessionUser = user;
         this.setUserData(user);
         this.userSubject.next(user);
@@ -40,6 +41,10 @@ export class FireAuthRepository {
 
   isAuthenticated(): Observable<boolean> {
     return of(this.sessionUser === undefined ? false : true);
+  }
+
+  isFirstTimeUser(): Observable<boolean> {
+    return of(this.sessionUser?.isVirgin === true);
   }
 
   verifyPurchaseEmail(email: string): Observable<boolean> {
@@ -59,25 +64,25 @@ export class FireAuthRepository {
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
-      isVirgin: true
+      isVirgin: user.isVirgin
     };
   
     // Check if the user document exists
     const snapshot = await existingUserRef.get().toPromise();
     if (snapshot?.exists) {
       // User exists, update the existing user data
-      userData['isVirgin'] = false;
+      userData.isVirgin = false;
       return existingUserRef.set(this.removeUndefinedProperties(userData), { merge: true });
     } else {
-      userData['isVirgin'] = true;
       // User doesn't exist, create a new user document
       return existingUserRef.set(this.removeUndefinedProperties(userData));
     }
   }
   
   // Sign out
-  async signOut() {
-    await this.angularFireAuth.signOut();
+  signOut(): Promise<void> {
+    this.sessionUser = undefined;
+    return this.angularFireAuth.signOut();
   }
 
   private removeUndefinedProperties(obj: any): any {

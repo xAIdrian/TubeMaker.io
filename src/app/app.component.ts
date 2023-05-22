@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { SessionService } from './legion/service/auth/session.service';
 import { IconSetService } from '@coreui/icons-angular';

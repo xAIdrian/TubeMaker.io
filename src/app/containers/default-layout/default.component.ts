@@ -65,41 +65,42 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
         url: '/maker/auto',
         iconComponent: { name: 'cil-media-play' }
       },
-      {
-        title: true,
-        name: translate.instant('navigation.members_only')
-      },
-      {
-        name: translate.instant('navigation.courses'),
-        url: '/lander',
-        iconComponent: { name: 'cil-star' },
-        children: [
-          {
-            name: translate.instant('navigation.lander'),
-            url: '/lander'
-          },
-          {
-            name: translate.instant('navigation.register'),
-            url: '/register'
-          },
-          {
-            name: translate.instant('navigation.error_404'),
-            url: '/404'
-          },
-          {
-            name: translate.instant('navigation.error_500'),
-            url: '/500'
-          }
-        ]
-      },
+      // {
+      //   title: true,
+      //   name: translate.instant('navigation.members_only')
+      // },
+      // {
+      //   name: translate.instant('navigation.courses'),
+      //   url: '/lander',
+      //   iconComponent: { name: 'cil-star' },
+      //   children: [
+      //     {
+      //       name: translate.instant('navigation.lander'),
+      //       url: '/lander'
+      //     },
+      //     {
+      //       name: translate.instant('navigation.register'),
+      //       url: '/register'
+      //     },
+      //     {
+      //       name: translate.instant('navigation.error_404'),
+      //       url: '/404'
+      //     },
+      //     {
+      //       name: translate.instant('navigation.error_500'),
+      //       url: '/500'
+      //     }
+      //   ]
+      // },
     ];
   }
 
   onLogoutEvent() {
     if (this.isLoggedIn) {
       console.log("🚀 ~ onLogoutEvent ~ onLogoutEvent:")
-      this.angularFireAuth.signOut()
-      this.router.navigate(['/lander'], { relativeTo: this.activatedRoute });
+      this.angularFireAuth.signOut().then(() => {
+        this.router.navigate(['/lander'], { relativeTo: this.activatedRoute });
+      });
     }
   }
 

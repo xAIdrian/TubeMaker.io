@@ -17,7 +17,7 @@ export class VoiceRepository {
 
   getListOfVoices(): Observable<{ message: string, result: { name: string, id: string }[]}> {
     return this.http.get<{ message: string, result: { name: string, id: string }[]}>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/voices`
+      `https://api.tubemaker.io/api/voices`
     );
   }
 
@@ -44,7 +44,7 @@ export class VoiceRepository {
       responseType: 'blob' as const
     }
     return this.http.post(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/voices/`,
+      `https://api.tubemaker.io/api/voices/`,
       reqBody,
       options
     );

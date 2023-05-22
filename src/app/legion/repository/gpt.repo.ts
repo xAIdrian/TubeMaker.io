@@ -16,7 +16,7 @@ export class GptRepository {
   postNewTopicObservable(): Observable<{ message: string; result: any }> {
     const currLang = this.translate.currentLang;
     return this.http.get<{ message: string; result: any }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/topic/${currLang}`
+      `https://api.tubemaker.io/api/openai/topic/${currLang}` 
     );
   }
 
@@ -27,7 +27,7 @@ export class GptRepository {
     return this.http.post<{
       message: string;
       result: { id: string; summary: string };
-    }>(`http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/summary/${currLang}`, reqBody);
+    }>(`https://api.tubemaker.io/api/openai/summary/${currLang}`, reqBody);
   }
 
   postNewTitleObservable(reqBody: {
@@ -36,7 +36,7 @@ export class GptRepository {
   }): Observable<{ message: string; result: { title: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string; result: { title: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/new/title/${currLang}`,
+      `https://api.tubemaker.io/api/openai/new/title/${currLang}`,
       reqBody
     );
   }
@@ -47,7 +47,7 @@ export class GptRepository {
   }): Observable<{ message: string; result: { title: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string; result: { title: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/improve/title/${currLang}`,
+      `https://api.tubemaker.io/api/openai/improve/title/${currLang}`,
       reqBody
     );
   }
@@ -58,7 +58,7 @@ export class GptRepository {
   }): Observable<{ message: string; result: { description: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string; result: { description: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/new/description/${currLang}`,
+      `https://api.tubemaker.io/api/openai/new/description/${currLang}`,
       reqBody
     );
   }
@@ -69,7 +69,7 @@ export class GptRepository {
   }): Observable<{ message: string; result: { description: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string; result: { description: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/improve/description/${currLang}`,
+      `https://api.tubemaker.io/api/openai/improve/description/${currLang}`,
       reqBody
     );
   }
@@ -77,7 +77,7 @@ export class GptRepository {
   postNewScriptSectionObservable(reqBody: { summary: string, style: string, point: string}): Observable<{ message: string, result: { script: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string, result: { script: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/new/script/${currLang}`,
+      `https://api.tubemaker.io/api/openai/new/script/${currLang}`,
       reqBody
     );
   }
@@ -97,7 +97,7 @@ export class GptRepository {
     }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string, result: { script: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/improve/script/${currLang}`,
+      `https://api.tubemaker.io/api/openai/improve/script/${currLang}`,
       reqBody
     ).pipe(
         map((res) => {
@@ -119,7 +119,7 @@ export class GptRepository {
   }): Observable<{ message: string; result: { tags: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string; result: { tags: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/new/tags/${currLang}`,
+      `https://api.tubemaker.io/api/openai/new/tags/${currLang}`,
       reqBody
     );
   }
@@ -130,7 +130,7 @@ export class GptRepository {
   }): Observable<{ message: string; result: { tags: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string; result: { tags: string } }>(
-      `http://www.freeadmingptwebapp-384207.ew.r.appspot.com/api/openai/improve/tags/${currLang}`,
+      `https://api.tubemaker.io/api/openai/improve/tags/${currLang}`,
       reqBody
     );
   }
