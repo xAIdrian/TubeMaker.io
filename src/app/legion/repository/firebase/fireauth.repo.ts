@@ -48,8 +48,17 @@ export class FireAuthRepository {
   }
 
   verifyPurchaseEmail(email: string): Observable<boolean> {
-    const docRef = this.angularFirestore.collection(PURCHASED_USERS_COL).doc(email).ref;
-    return of(docRef.id === email);
+    return from(this.angularFirestore.collection(PURCHASED_USERS_COL).doc(email).get().toPromise()).pipe(
+      map((doc) => {
+        if (doc !== undefined && doc.exists) {
+          console.debug("🚀 ~ file: fireauth.repo.ts:53 ~ FireAuthRepository ~ verifyPurchaseEmail ~ doc.data():", doc.data())
+          return true;
+        } else {
+          console.debug("No such document!");
+          return false;
+        }
+      })
+    );
   }
 
   /* Setting up user data when sign in with username/password, 

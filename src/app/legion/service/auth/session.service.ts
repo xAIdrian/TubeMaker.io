@@ -79,6 +79,7 @@ export class SessionService {
       this.fireAuthRepo.verifyPurchaseEmail(email!!).subscribe({
         next: (userExists) => {
           if (userExists) {
+            console.log("🚀 ~ file: session.service.ts:104 ~ SessionService ~ this.fireAuthRepo.verifyPurchaseEmail ~ userExists:", userExists)
             this.fireAuthRepo.setUserData(
               {
                 ...signinSuccessData.authResult.user?.toJSON(),
@@ -94,7 +95,7 @@ export class SessionService {
           }
         },
         error: (error) => {
-          console.log('🔥' + error);
+          console.debug('🔥' + error);
           this.fireAuthRepo.signOut();
           this.errorSubject.next(error);
         },
