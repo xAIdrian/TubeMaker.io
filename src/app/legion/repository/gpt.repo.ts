@@ -16,7 +16,7 @@ export class GptRepository {
   postNewTopicObservable(): Observable<{ message: string; result: any }> {
     const currLang = this.translate.currentLang;
     return this.http.get<{ message: string; result: any }>(
-      `https://api.tubemaker.io/api/openai/topic/${currLang}`
+      `https://api.tubemaker.io/api/openai/topic/${currLang}` 
     );
   }
 
