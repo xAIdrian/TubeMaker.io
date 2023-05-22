@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../../../environments/environment';
 import {
   Observable,
   of,
@@ -17,7 +18,7 @@ export class VoiceRepository {
 
   getListOfVoices(): Observable<{ message: string, result: { name: string, id: string }[]}> {
     return this.http.get<{ message: string, result: { name: string, id: string }[]}>(
-      `https://api.tubemaker.io/api/voices`
+      `${environment.apiUrl}/api/voices`
     );
   }
 
@@ -44,7 +45,7 @@ export class VoiceRepository {
       responseType: 'blob' as const
     }
     return this.http.post(
-      `https://api.tubemaker.io/api/voices/`,
+      `${environment.apiUrl}/api/voices/`,
       reqBody,
       options
     );
