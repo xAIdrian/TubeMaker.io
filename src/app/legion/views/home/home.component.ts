@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
                     id: videoPage.id ?? '',
                     createdFrom: videoPage.createdFrom ?? '',
 
-                    title: videoPage.metadata?.title ?? '',
+                    title: videoPage.metadata?.title.replaceAll('"', '').trim() ?? 'Your Video',
                     description: videoPage.metadata?.description ?? '',
                     thumbnailUrl: videoPage.youtubeVideo?.thumbnailUrl ?? 'https://i.ytimg.com/vi/kyV59RjHnCI/hqdefault.jpg',
                     channelTitle: videoPage.youtubeVideo?.channelTitle ?? 'you',

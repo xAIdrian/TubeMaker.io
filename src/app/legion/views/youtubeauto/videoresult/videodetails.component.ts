@@ -1,6 +1,5 @@
 import {
   AfterContentInit,
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -87,7 +86,10 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         }, 500);
 
         pathId = params.get('id')!!;
-        console.log("🚀 ~ file: videodetails.component.ts:95 ~ VideoDetailsComponent ~ this.activatedRoute.paramMap.subscribe ~ pathId:", pathId)
+        console.log(
+          '🚀 ~ file: videodetails.component.ts:95 ~ VideoDetailsComponent ~ this.activatedRoute.paramMap.subscribe ~ pathId:',
+          pathId
+        );
         this.videoDetailsService.getCurrentPage(pathId).subscribe({
           next: (page: YoutubeVideoPage) => {
             this.currentPageId = page.id ?? '';
@@ -123,10 +125,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
       } else {
         this.currentPageId = '';
         this.videoDetailsService.generateVideoContentWithAI();
-        console.log(
-          '🚀 ~ file: extractdetails.component.ts:72 ~ ExtractDetailsComponent ~ ngOnInit ~ this.currentPageId',
-          this.currentPageId
-        );
       }
     });
 
@@ -135,8 +133,8 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.contentProgressLabel = 'Chargement...'
-    this.scriptProgressLabel = 'Générer des revenus sans fin...'
+    this.contentProgressLabel = 'Chargement...';
+    this.scriptProgressLabel = 'Générer des revenus sans fin...';
     this.translate.currentLang;
     this.changeDetectorRef.detectChanges();
   }
@@ -151,16 +149,16 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
       .subscribe((response) => {
         this.contentProgressValue = this.contentProgressValue + response;
         if (this.contentProgressValue === 0) {
-          this.contentProgressLabel = 'Researching the competition...';
+          this.contentProgressLabel = 'Recherche de la concurrence...';
         } else if (this.contentProgressValue === 25) {
           this.contentProgressLabel = 'Analyzing the market...';
         } else if (this.contentProgressValue === 50) {
-          this.contentProgressLabel = 'Predicting trends...';
+          this.contentProgressLabel = 'Analyse du marché...';
         } else if (this.contentProgressValue === 75) {
-          this.contentProgressLabel = 'Searching youtube...';
+          this.contentProgressLabel = 'Recherche youtube...';
         } else if (this.contentProgressValue === 100) {
-          this.contentProgressLabel = 'Done. Moving to script.';
-          this.scriptProgressLabel = 'Waking up your AI...';
+          this.contentProgressLabel = 'Fait. Passage au script.';
+          this.scriptProgressLabel = 'Réveillez votre IA...';
         }
         this.changeDetectorRef.detectChanges();
       });
@@ -172,7 +170,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.scriptProgressLabel = response.label;
 
         if (this.scriptProgressValue >= 97) {
-          this.scriptProgressLabel = 'Done!';
+          this.scriptProgressLabel = 'Fait!';
           setTimeout(() => {
             this.contentGenerationIsLoading = false;
             this.contentProgressValue = 0;
@@ -214,6 +212,18 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
           response
         );
         this.assignScriptToFields(response.position, response.scriptSection);
+      });
+
+    this.videoDetailsService
+      .getVideoDetailsDurationObserver()
+      .subscribe((duration) => {
+        if (duration !== undefined) {
+          console.log(
+            '🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ this.videoDetailsService.getVideoDetailsDurationObserver ~ duration:',
+            duration
+          );
+          this.currentVideoDuration = duration;
+        }
       });
   }
 
