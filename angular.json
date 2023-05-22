@@ -25,7 +25,7 @@
           "options": {
             "outputPath": "dist/coreui-free-angular-admin-template",
             "index": "src/index.html",
-            "main": "src/main.ts",
+            "main": "src/main.js",
             "polyfills": [
               "zone.js"
             ],

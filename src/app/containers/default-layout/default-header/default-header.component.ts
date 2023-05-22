@@ -27,22 +27,11 @@ export class DefaultHeaderComponent extends HeaderComponent {
     this.profilePic = this.sessionService.getProfilePic();
   }
 
-  onUserLogout() {
-    this.logoutEvent.emit();
-  }
-
-  onTranslationClick() {
-    console.log("🚀 ~ file: dashboard.component.ts:132 ~ DashboardComponent ~ onTranslationClick ~ onTranslationClick:")
-    this.toggleLanguage();
-  }
-
-  private switchLanguageToFrench() {
-    this.translate.use('fr');
-  }
-
-  private switchLanguageToEnglish() {
-    this.translate.use('en');
-  }
+  onUserLogout() {  this.logoutEvent.emit();  }
+  onTranslationClick() {  this.toggleLanguage();  }
+  getCurrentLanguage() { return this.translate.currentLang; }
+  private switchLanguageToFrench() {  this.translate.use('fr');  }
+  private switchLanguageToEnglish() {  this.translate.use('en');  }
 
   toggleLanguage() {
     if (this.getCurrentLanguage() === 'en') {
@@ -52,10 +41,5 @@ export class DefaultHeaderComponent extends HeaderComponent {
     } else {
       throw new Error('Language not supported')
     }
-  }
-
-  getCurrentLanguage() {
-    console.log(this.translate.currentLang)
-    return this.translate.currentLang;
   }
 }
