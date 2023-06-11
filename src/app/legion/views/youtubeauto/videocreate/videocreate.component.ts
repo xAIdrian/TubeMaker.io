@@ -82,7 +82,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.videoDetailsService.getInitVideoNiche().subscribe((response) => {
       this.selectedVideoNiche = response;
     });
-    this.videoDetailsService.getInitVideoDurationObserver().subscribe((response) => {
+    this.videoDetailsService.getInitVideoDuration().subscribe((response) => {
       this.selectedVideoDuration = response;
     });
     this.videoDetailsService.getTopicObserver().subscribe((response) => {

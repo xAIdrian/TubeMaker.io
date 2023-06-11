@@ -70,13 +70,13 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.translate
           .get('video_details.simple_content_progress_label')
           .subscribe((res: string) => {
-            this.contentProgressLabel = 'Chargement...';
+            this.contentProgressLabel = 'Loading...';
             this.contentProgressValue = 100;
           });
         this.translate
           .get('video_details.simple_script_progress_label')
           .subscribe((res: string) => {
-            this.scriptProgressLabel = 'Générer des revenus sans fin...';
+            this.scriptProgressLabel = 'Generating endless income...';
           });
         this.scriptProgressValue = 100;
         setTimeout(() => {
@@ -86,10 +86,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         }, 500);
 
         pathId = params.get('id')!!;
-        console.log(
-          '🚀 ~ file: videodetails.component.ts:95 ~ VideoDetailsComponent ~ this.activatedRoute.paramMap.subscribe ~ pathId:',
-          pathId
-        );
         this.videoDetailsService.getCurrentPage(pathId).subscribe({
           next: (page: YoutubeVideoPage) => {
             this.currentPageId = page.id ?? '';
@@ -117,10 +113,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
             }
           },
           error: (error: any) => {
-            console.log(
-              '🚀 ~ file: extractdetails.component.ts:65 ~ ExtractDetailsComponent ~ this.extractDetailsService.getCurrentPage ~ error:',
-              error
-            );
             this.isErrorVisible = true;
             this.errorText = error;
           },
@@ -136,8 +128,8 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.contentProgressLabel = 'Chargement...';
-    this.scriptProgressLabel = 'Générer des revenus sans fin...';
+    this.contentProgressLabel = 'Loading...';
+    this.scriptProgressLabel = 'Please wait. This may take a while.';
     this.translate.currentLang;
     this.changeDetectorRef.detectChanges();
   }
@@ -152,16 +144,16 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
       .subscribe((response) => {
         this.contentProgressValue = this.contentProgressValue + response;
         if (this.contentProgressValue === 0) {
-          this.contentProgressLabel = 'Recherche de la concurrence...';
+          this.contentProgressLabel = 'Researching the competition...';
         } else if (this.contentProgressValue === 25) {
           this.contentProgressLabel = 'Analyzing the market...';
         } else if (this.contentProgressValue === 50) {
-          this.contentProgressLabel = 'Analyse du marché...';
+          this.contentProgressLabel = 'Quantifying results...';
         } else if (this.contentProgressValue === 75) {
-          this.contentProgressLabel = 'Recherche youtube...';
+          this.contentProgressLabel = 'Searching YouTube...';
         } else if (this.contentProgressValue === 100) {
-          this.contentProgressLabel = 'Fait. Passage au script.';
-          this.scriptProgressLabel = 'Réveillez votre IA...';
+          this.contentProgressLabel = 'Done. Moving to the script.';
+          this.scriptProgressLabel = 'Waking up your AI...';
         }
         this.changeDetectorRef.detectChanges();
       });
@@ -173,7 +165,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.scriptProgressLabel = response.label;
 
         if (this.scriptProgressValue >= 97) {
-          this.scriptProgressLabel = 'Fait!';
+          this.scriptProgressLabel = 'Done!';
           setTimeout(() => {
             this.contentGenerationIsLoading = false;
             this.contentProgressValue = 0;
@@ -210,10 +202,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
     this.videoDetailsService
       .getScriptSectionObserver()
       .subscribe((response) => {
-        console.log(
-          '🚀 ~ file: videodetails.component.ts:156 ~ VideoDetailsComponent ~ this.contentService.getScriptSectionObserver ~ response:',
-          response
-        );
         this.assignScriptToFields(response.position, response.scriptSection);
       });
 
@@ -221,10 +209,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
       .getVideoDetailsDurationObserver()
       .subscribe((duration) => {
         if (duration !== undefined) {
-          console.log(
-            '🚀 ~ file: videoscript.component.ts:44 ~ VideoScriptComponent ~ this.videoDetailsService.getVideoDetailsDurationObserver ~ duration:',
-            duration
-          );
           this.currentVideoDuration = duration;
         }
       });

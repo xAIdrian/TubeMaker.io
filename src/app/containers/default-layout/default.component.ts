@@ -52,15 +52,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
         title: true
       },
       {
-        name: translate.instant('navigation.copy_cat'),
-        url: '/maker/copycat',
-        iconComponent: { name: 'cil-speedometer' },
-        badge: {
-          color: 'info',
-          text: translate.instant('navigation.new')
-        }
-      },
-      {
         name: translate.instant('navigation.brand_new'),
         url: '/maker/auto',
         iconComponent: { name: 'cil-media-play' }

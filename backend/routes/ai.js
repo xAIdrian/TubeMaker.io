@@ -71,7 +71,6 @@ router.get("/topic/:language", async (req, res, next) => {
 async function generateTopic(language) {
   const inputFile = `inputprompts/${language}/youtube_topic.txt`;
   const rawPrompt = await readTextFileToPrompt(inputFile);
-  console.log("🚀 ~ file: ai.js:63 ~ generateTopic ~ rawPrompt:", rawPrompt)
 
   try {
     const completion = await openai.createCompletion({
@@ -578,7 +577,6 @@ router.post("/new/script/:language", async (req, res, next) => {
 });
 
 router.post("/improve/script/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:271 ~ router.post ~ req:", req.url, req.body)
 
   let language = req.params.language;
   let current = req.body.current;
@@ -674,7 +672,6 @@ router.post("/new/tags/:language", async (req, res, next) => {
 });
 
 router.post("/improve/tags/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:271 ~ router.post ~ req:", req.url, req.body)
 
   let language = req.params.language;
   let current = req.body.current;

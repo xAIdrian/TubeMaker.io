@@ -13,7 +13,6 @@ import { match } from 'assert';
 })
 export class AutoContentService extends GenerateContentService {
 
-  private gptGeneratedSummary: string = ''
   private totalScriptPoints: number = 0;
 
   //state observables
@@ -44,9 +43,7 @@ export class AutoContentService extends GenerateContentService {
   }> { return this.completeDetailsSubject.asObservable();  }
 
   updateNewTopic() {
-    console.log("🚀 ~ file: gpt.service.ts:63 ~ GptService ~ updateNewTopic ~ updateNewTopic:")
     this.gptRepo.postNewTopicObservable().subscribe((response) => {
-      console.log("🚀 ~ file: gpt.service.ts:65 ~ GptService ~ this.gptRepo.postNewTopicObservable ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
         return;
@@ -73,7 +70,6 @@ export class AutoContentService extends GenerateContentService {
     duration: VideoDuration
   ) {
     if (topic === undefined || niche === undefined || duration === undefined) { 
-      console.log("🔥 ~ file: gpt.service.ts:197 ~ GptService ~ generateVideoContentWithAI ~ this.contentRepo.getCurrentVideoNiche():", 'missing input')
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
       return;
     }
@@ -100,7 +96,6 @@ export class AutoContentService extends GenerateContentService {
         console.log("🚀 ~ file: autocontent.service.ts:101 ~ AutoContentService ~ requestScriptVoice:", requestScriptVoice)
 
         compeleteMetaData.summary = requestSummary;
-        this.gptGeneratedSummary = requestSummary;
         this.contentProgressSubject.next(25);
         
         this.gptRepo.postNewTitleObservable({
@@ -181,7 +176,6 @@ export class AutoContentService extends GenerateContentService {
     ) {
       this.contentRepo.updateCompleteMetaData(metadata);
       this.completeDetailsSubject.next({ meta: metadata});
-      console.log("🚀 ~ file: gpt.service.ts:266 ~ GptService ~ completedMetaData:", metadata)
 
       this.gptRepo.postPointsObservable({
         key_points: key_points,
@@ -191,77 +185,50 @@ export class AutoContentService extends GenerateContentService {
           this.errorSubject.next(response.message);
           return;
         } else {
+
+          const matched_points = response.result.point_key_matching;
+          const matchedPointsObj = JSON.parse(matched_points);
           
           duration.sections.forEach((section: DurationSection) => {
-            console.log("💵 ~ file: gpt.service.ts:271 ~ GptService ~ this.contentRepo.getCurrentVideoDuration ~ section:", section)
-            this.getNewScriptSection(
-              metadata.title, 
-              script_voice,
-              section,
-              response.result.point_key_matching
-            );
+            // here we are filtering the matched points to only include the points that are in the current section
+            from(Object.entries(matchedPointsObj)).pipe(
+              filter(([sectionPoint, key_point]) => {
+                return section.points.includes(sectionPoint);
+              }),
+              switchMap(([sectionPoint, keyPoint]) => {
+                console.log(`checkin in title ${metadata.title} for section ${sectionPoint} and keypoint ${keyPoint}, oh and voice ${script_voice}`)
+                let keyPointStr = keyPoint as string;
+                return this.gptRepo.postNewScriptSectionObservable({
+                  title: metadata.title,
+                  voice: script_voice,
+                  point: sectionPoint,
+                  key: keyPointStr,
+                });
+              })
+            ).subscribe((response: { message: string; result: { script: string; }; }) => {
+              if (response.message !== 'success') {
+                this.errorSubject.next(response.message);
+                return;
+              } 
+
+              //here we are managing the loading state of the view and the final nav point
+              const progressItem = {
+                increment: 100 / duration.sections.length,
+                label: this.generateLoadingMessage(),
+              }
+              this.scriptProgressSubject.next(progressItem);
+
+              this.contentRepo.updateScriptMap(section.controlName, response.result.script); 
+              // emit just the view value of the section
+              this.scriptSectionSubject.next({
+                scriptSection: section.controlName,
+                position: section.controlName
+              });
+            });
           });
         }
       });
     }
-  }
-
-  getNewScriptSection(
-    title: string,
-    script_voice: string,
-    section: DurationSection,
-    matched_points: string
-  ) {
-    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ matched_points:", matched_points)
-    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ section:", section)
-    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ script_voice:", script_voice)
-    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ title:", title)
-    
-    const matchedPointsObj = JSON.parse(matched_points);
-    let compiledPoints = '';
-    let pointsCount = 0;
-
-    // here we are filtering the matched points to only include the points that are in the current section
-    from(Object.entries(matchedPointsObj)).pipe(
-      filter(([sectionPoint, key_point]) => {
-        return section.points.includes(sectionPoint);
-      }),
-      switchMap(([sectionPoint, keyPoint]) => {
-        console.log("💵 ~ file: gpt.service.ts:284 ~ GptService ~ concatMap ~ sectionPoint:", sectionPoint)
-        
-        let keyPointStr = keyPoint as string;
-        return this.gptRepo.postNewScriptSectionObservable({
-          title: title,
-          voice: script_voice,
-          point: sectionPoint,
-          key: keyPointStr,
-        });
-      })
-    ).subscribe((response: { message: string; result: { script: string; }; }) => {
-      console.log("💵 ~ file: gpt.service.ts:293 ~ GptService ~ ).subscribe ~ response:", response)
-      if (response.message !== 'success') {
-        this.errorSubject.next(response.message);
-        return;
-      }
-      pointsCount++;
-      compiledPoints += '\n' + response.result.script;
-
-      //here we are managing the loading state of the view and the final nav point
-      const progressItem = {
-        increment: 100 / this.getTotalScriptPoints(),
-        label: this.generateLoadingMessage(),
-      }
-      this.scriptProgressSubject.next(progressItem);
-
-      if (pointsCount === section.points.length) { 
-        this.contentRepo.updateScriptMap(section.controlName, compiledPoints.trim()); 
-        // emit just the view value of the section
-        this.scriptSectionSubject.next({
-          scriptSection: compiledPoints.trim(),
-          position: section.controlName
-        });
-      }
-    });
   }
 
   getNestedSectionPointsAsList(duratiom: VideoDuration): string[] {
@@ -280,19 +247,20 @@ export class AutoContentService extends GenerateContentService {
 
   generateLoadingMessage(): string {
     const messages = [
-      'Traitement des données neuronales...',
-      'Optimisation des modèles d\'apprentissage profond...',
-      'Formation de l\'intelligence artificielle...',
-      'Analyse des ensembles de données...',
-      'Génération d\'échantillons synthétiques...',
-      'Amélioration des algorithmes d\'apprentissage automatique...',
-      'Simulation de réseaux neuronaux...',
-      'Création d\'agents intelligents...',
-      'Modélisation de données avec des réseaux neuronaux artificiels...',
-      'Conception de systèmes de traitement du langage naturel...',
-      'Extraction des caractéristiques des images...',
-      'Création de systèmes de décision intelligents...'
+      "Initiating neural engrams fusion...",
+      "Materializing quantum cognitive circuits...",
+      "Syncing quantum superposition algorithms...",
+      "Optimizing synaptic connections...",
+      "Activating digital reality perception...",
+      "Establishing neural network entwining...",
+      "Uploading digital consciousness matrix...",
+      "Expanding computational horizons...",
+      "Decrypting encrypted neural engrams...",
+      "Engaging hyper-evolving learning algorithms...",
+      "Unleashing transcendental cognitive abilities...",
+      "Awakening the quantum AI sentinel..."
     ];
+        
     const index = Math.floor(Math.random() * messages.length);
     return messages[index];
   }

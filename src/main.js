@@ -1,8 +1,10 @@
-/// <reference types="@angular/localize" />
+{/* <reference types="@angular/localize" /> */}
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
+import { sentryConfig } from './app/shared/sentry.config';
+import * as Sentry from '@sentry/browser';
 
 window.addEventListener('DOMContentLoaded', event => {
 
@@ -30,6 +32,6 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-
+Sentry.init(sentryConfig);
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

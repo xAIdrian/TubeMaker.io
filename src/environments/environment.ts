@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  // apiUrl: 'https://api.tubemaker.io',
+  debug: true,
   apiUrl: 'http://localhost:3000',
   firebaseConfig: {
     apiKey: "AIzaSyDSfFtYPRdqAl79FyMko4110FGMP1wm1f8",

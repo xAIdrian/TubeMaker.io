@@ -8,8 +8,9 @@ import { Observable, Subject, from, map, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { FirebaseUser } from '../../model/user/user.model';
-import { PURCHASED_USERS_COL, USERS_COL } from './firebase.constants';
+import { USERS_COL } from './firebase.constants';
 import { NavigationService } from '../../service/navigation.service';
+import { deprecate } from 'util';
 
 @Injectable({
   providedIn: 'root',
@@ -45,20 +46,6 @@ export class FireAuthRepository {
 
   isFirstTimeUser(): Observable<boolean> {
     return of(this.sessionUser?.isVirgin === true);
-  }
-
-  verifyPurchaseEmail(email: string): Observable<boolean> {
-    return from(this.angularFirestore.collection(PURCHASED_USERS_COL).doc(email).get().toPromise()).pipe(
-      map((doc) => {
-        if (doc !== undefined && doc.exists) {
-          console.debug("🚀 ~ file: fireauth.repo.ts:53 ~ FireAuthRepository ~ verifyPurchaseEmail ~ doc.data():", doc.data())
-          return true;
-        } else {
-          console.debug("No such document!");
-          return false;
-        }
-      })
-    );
   }
 
   /* Setting up user data when sign in with username/password, 

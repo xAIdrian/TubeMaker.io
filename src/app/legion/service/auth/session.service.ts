@@ -76,34 +76,16 @@ export class SessionService {
     const isFirstTimeUser = signinSuccessData.authResult.additionalUserInfo?.isNewUser;
 
     if (email !== undefined && email !== '') {
-      this.fireAuthRepo.verifyPurchaseEmail(email!!).subscribe({
-        next: (userExists) => {
-          if (userExists) {
-            console.log("🚀 ~ file: session.service.ts:104 ~ SessionService ~ this.fireAuthRepo.verifyPurchaseEmail ~ userExists:", userExists)
-            this.fireAuthRepo.setUserData(
-              {
-                ...signinSuccessData.authResult.user?.toJSON(),
-                isVirgin: isFirstTimeUser
-              }
-            );
-            this.navService.navigateToList();
-          } else {
-            this.fireAuthRepo.signOut();
-            this.errorSubject.next(
-              'You are not authorized to use this application. Please contact us.'
-            );
-          }
-        },
-        error: (error) => {
-          console.debug('🔥' + error);
-          this.fireAuthRepo.signOut();
-          this.errorSubject.next(error);
-        },
-      });
-    } else {
-      this.errorSubject.next(
-        "We couldn't create your account. Please contact us."
+      this.fireAuthRepo.setUserData(
+        {
+          ...signinSuccessData.authResult.user?.toJSON(),
+          isVirgin: isFirstTimeUser
+        }
       );
+      this.navService.navigateToList();
+    } else {
+      this.fireAuthRepo.signOut();
+      this.errorSubject.next('We could not create your account. Please contact us.');
     }
   }
 }

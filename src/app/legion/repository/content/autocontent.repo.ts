@@ -68,7 +68,7 @@ export class AutoContentRepository extends ContentRepository {
     );
   }
 
-  getInitVideoDurationObserver(): Observable<VideoDuration> {
+  getInitVideoDuration(): Observable<VideoDuration> {
     return combineLatest([
       //perhaps this could be optimized to get from the 'res'
       this.translate.get('video_duration.init_header'),
@@ -85,6 +85,20 @@ export class AutoContentRepository extends ContentRepository {
     );
   }
 
+  getDefaultInitVideoDurationObserver(): Observable<VideoDuration> {
+    return this.translate.getTranslation(this.translate.currentLang).pipe(
+      concatMap((res) => {
+        //perhaps this could be optimized to get from the 'res' insatead of parameter
+        return of({
+          name: '',
+          header: res.video_duration.init_header,
+          description: res.video_duration.init_description,
+          sections: [],
+        });
+      })
+    );
+  }
+
   getInitVideoNiche(): Observable<VideoNiche> {
     return combineLatest([
       this.translate.get('video_style.init_header'),
@@ -95,6 +109,20 @@ export class AutoContentRepository extends ContentRepository {
           name: '',
           header: header,
           description: description,
+          value: '',
+        });
+      })
+    );
+  }
+
+  getDefaultInitVideoNicheObserver(): Observable<VideoNiche> {
+    return this.translate.getTranslation(this.translate.currentLang).pipe(
+      concatMap((res) => {
+        //perhaps this could be optimized to get from the 'res' insatead of parameter
+        return of({
+          name: '',
+          header: res.video_style.init_header,
+          description: res.video_style.init_description,
           value: '',
         });
       })

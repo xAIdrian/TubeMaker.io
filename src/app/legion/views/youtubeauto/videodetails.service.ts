@@ -42,12 +42,14 @@ export class VideoDetailsService {
   hasVideoData(): boolean {
     return this.contentService.getTotalScriptPoints() > 0;
   }
+  getInitVideoNicheObserver = this.contentRepo.getDefaultInitVideoNicheObserver();
+  getInitVideoDurationObserver = this.contentRepo.getDefaultInitVideoDurationObserver();
 
   getInitVideoNiche() {
     return this.contentRepo.getInitVideoNiche();
   }
-  getInitVideoDurationObserver() {
-    return this.contentRepo.getInitVideoDurationObserver();
+  getInitVideoDuration() {
+    return this.contentRepo.getInitVideoDuration();
   }
   getTopicObserver() {
     return this.contentService.getTopicObserver();
