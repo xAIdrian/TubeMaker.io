@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
   }
 
   private updateInitLanguage() {
-    const defaultLang = 'fr';
+    const defaultLang = 'en';
     this.translate.addLangs(['en', 'fr']);
     this.translate.setDefaultLang(defaultLang);
     this.translate.use(defaultLang);

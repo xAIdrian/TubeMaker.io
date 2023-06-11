@@ -24,7 +24,6 @@ export class ColorsComponent implements OnInit, AfterViewInit {
           <table class='table w-100'>
             <tr>
               <td class='text-muted'>HEX:</td>
-              <td class='font-weight-bold'>${rgbToHex(background)}</td>
             </tr>
             <tr>
               <td class='text-muted'>RGB:</td>

@@ -9,6 +9,7 @@ const { getStorage } = require('firebase-admin/storage');
 
 var serviceAccount = require('../freeadmingptwebapp-384207-firebase-adminsdk-7qlgk-6a26b8eae6.json');
 const { storage } = require("firebase-functions/v1");
+
 initializeApp({
   credential: cert(serviceAccount),
   storageBucket: 'gs://freeadmingptwebapp-384207.appspot.com'
@@ -120,11 +121,24 @@ router.post("/summary/:language", async (req, res, next) => {
 
   try {
     const gptSummary = await generateSummary(language, prompt);
+
+    if (gptSummary === undefined || gptSummary === '') {
+      res.status(400).json({
+        message: "Invalid prompt. Please provide a valid prompt.",
+      });
+      return;
+    }
+
+    const gptKeyPoints = await generateKeyPoints(language, gptSummary);
+    console.log("🚀 ~ file: ai.js:133 ~ router.post ~ gptKeyPoints:", gptKeyPoints)
+    const gptScriptVoice = await generateScriptVoice(language, gptSummary);
   
     res.status(200).json({
       message: "success",
       result: {
         summary: gptSummary,
+        key_points: gptKeyPoints,
+        script_voice: gptScriptVoice,
       },
     });
   } catch (error) {
@@ -150,10 +164,132 @@ async function generateSummary(language, prompt) {
   const inputFile = `inputprompts/${language}/summary.txt`;
 
   try {
-    let gptSummary = await summaryPromptCompletion(inputFile, prompt);
+    let gptSummary = await simplePromptCompletion(inputFile, prompt);
     console.log("🚀 ~ file: ai.js:77 ~ router.post ~ gptSummary:", gptSummary);
 
     return gptSummary;
+  } catch (error) {
+    throw error;
+  }
+}
+
+////////////////////
+// SCRIPT HELPERS //
+///////////////////
+
+/**
+ * Returns the key points in a list format seperated by commas
+ * @param {*} language 
+ * @param {*} summary 
+ * @returns 
+ */
+async function generateKeyPoints(language, summary) {
+  const inputFile = `inputprompts/${language}/youtube_key_points.txt`;
+
+  try {
+    let gptKeyPoints = await simplePromptCompletion(inputFile, summary);
+    console.log("🚀 ~ file: ai.js:77 ~ router.post ~ gptKeyPoints:", gptKeyPoints);
+
+    return gptKeyPoints;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function generateScriptVoice(language, summary) {
+  const inputFile = `inputprompts/${language}/youtube_script_voice.txt`;
+
+  try {
+    let gptScriptVoice = await simplePromptCompletion(inputFile, summary);
+    console.log("🚀 ~ file: ai.js:77 ~ router.post ~ gptScriptVoice:", gptScriptVoice);
+
+    return gptScriptVoice;
+  } catch (error) {
+    throw error;
+  }
+}
+
+router.post("/points/:language", async (req, res, next) => {
+  console.log("🚀 ~ file: ai.js:85 ~ router.post ~ req:", req.url, req.body)
+
+  let language = req.params.language;
+  let key_points = req.body.key_points;
+  let script_points = req.body.script_points;
+
+  // Validate language input
+  const validLanguages = ['en', 'fr'];
+  if (!validLanguages.includes(language)) {
+    res.status(400).json({
+      message: "Invalid language. Please provide a valid language.",
+    });
+    return; // Return early to avoid further processing
+  }
+
+  // Validate key_points input
+  if (!key_points) {
+    res.status(400).json({
+      message: "Key points are required.",
+    });
+    return; // Return early to avoid further processing
+  }
+
+  // Validate script_points input
+  if (!script_points) {
+    res.status(400).json({
+      message: "Script points are required.",
+    });
+    return; // Return early to avoid further processing
+  }
+
+  try {
+    const gptPointKeyMatching = await generatePointKeyMatching(language, key_points, script_points);
+    console.log("🚀 ~ file: ai.js:246 ~ router.post ~ gptPointKeyMatching:", gptPointKeyMatching)
+  
+    res.status(200).json({
+      message: "success",
+      result: { point_key_matching: gptPointKeyMatching },
+    });
+  } catch (error) {
+    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
+  
+    if (error.response) {
+      console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
+      res.status(500).json({
+        message: "API call failed",
+        result: error.response.data,
+      });
+    } else {
+      console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
+      res.status(500).json({
+        message: "Internal server error",
+        result: error.message,
+      });
+    }
+  }
+});
+
+/**
+ * Takes a list of key points and returns a list of script points. They must be compared as string literals.
+ * @param {*} language 
+ * @param {*} key_points 
+ * @param {*} script_points 
+ * @returns 
+ */
+async function generatePointKeyMatching(language, key_points, script_points) {
+  const inputFile = `inputprompts/${language}/youtube_point_key_matching.txt`;
+
+  if (!language) {
+    throw new Error("Invalid language file.");
+  }
+
+  if (!script_points || !key_points) {
+    throw new Error("Input parameter.");
+  }
+
+  try {
+    rawPrompt = await readTextFileToPrompt(inputFile);
+    matchingPrompt = rawPrompt.replace("<<KEYS>>", key_points).replace("<<POINTS>>", script_points);
+    return getNewOutputCompletion(matchingPrompt);
   } catch (error) {
     throw error;
   }
@@ -402,13 +538,18 @@ router.post("/improve/description/:language", async (req, res, next) => {
 // SCRIPT //////////
 ///////////////////
 
+/**
+ * By the time we get the user has already made a reqeust to get the point & key matching json
+ * Now they are submitting the match point and key for a generated section
+ */
 router.post("/new/script/:language", async (req, res, next) => {
   console.log("🚀 ~ file: ai.js:211 ~ router.post ~ req:", req.url, req.body)
 
   let language = req.params.language;
-  let summary = req.body.summary;
-  let style = req.body.style;
+  let title = req.body.title;
+  let voice = req.body.voice;
   let point = req.body.point;
+  let key = req.body.key;
 
   if (!language || !['en', 'fr'].includes(language)) {
     res.status(400).json({
@@ -416,17 +557,11 @@ router.post("/new/script/:language", async (req, res, next) => {
     });
     return; // Stop further execution
   } 
+  
   inputFile = `inputprompts/${language}/youtube_script_section.txt`;
 
-  if (!summary) {
-    res.status(400).json({
-      message: "Summary is required.",
-    });
-    return; // Stop further execution
-  }
-
   try {
-    let gptScript = await newScriptPromptCompletion(inputFile, summary, style, point);
+    let gptScript = await newScriptPromptCompletion(inputFile, title, voice, point, key);
     console.log("🛸 ~ file: ai.js:155 ~ router.post ~ gptScript:", gptScript);
   
     res.status(200).json({
@@ -672,7 +807,7 @@ async function getOptimizedOutputCompletion(prompt, maxRetries = 3) {
   throw new Error("Max retries exceeded for error:", innerError);
 }
 
-async function summaryPromptCompletion(inputFile, inputParam) {
+async function simplePromptCompletion(inputFile, inputParam) {
   if (!inputFile) {
     throw new Error("Invalid input file.");
   }
@@ -682,21 +817,22 @@ async function summaryPromptCompletion(inputFile, inputParam) {
   }
 
   rawPrompt = await readTextFileToPrompt(inputFile);
-  summaryPrompt = rawPrompt.replace("<<FEED>>", inputParam);
+  reformattedPrompt = rawPrompt.replace("<<FEED>>", inputParam);
 
-  return getNewOutputCompletion(summaryPrompt);
+  return getNewOutputCompletion(reformattedPrompt);
 }
 
-async function newScriptPromptCompletion(inputFile, inputParam, styleParam, durationPoint) {
-  if (!inputFile || !inputParam || !styleParam || !durationPoint) {
+async function newScriptPromptCompletion(inputFile, title, voice, point, key) {
+  if (!inputFile || !title || !voice || !point || !key) {
     throw new Error("Invalid input parameters. Please provide all required parameters.");
   }
 
   rawPrompt = await readTextFileToPrompt(inputFile); 
   scriptPrompt = rawPrompt
-    .replace("<<FEED>>", inputParam)
-    .replace("<<STYLE>>", styleParam)
-    .replace("<<POINT>>", durationPoint);
+    .replace("<<TITLE>>", title)
+    .replace("<<AUTHOR>>", voice)
+    .replace("<<POINT>>", point)
+    .replace("<<KEY>>", key);
 
   return getNewOutputCompletion(scriptPrompt);
 }
@@ -706,7 +842,7 @@ async function newPromptCompletion(filename, inputParam, styleParam) {
     throw new Error("Invalid input parameters. Please provide all required parameters.");
   }
 
-  rawPrompt = await readTextFileToPrompt(filename);
+  rawPrompt = await readTextFileToPrompt(filename, inputParam);
   if (inputParam === '') {
     console.log("🔥 ~ file: ai.js:80 ~ newPromptCompletion ~", filename, inputParam, styleParam)
     return
@@ -732,21 +868,18 @@ async function improvePromptCompletion(filename, inputParam) {
 async function readTextFileToPrompt(filename) {
   try {
     const data = await readFile(filename);
-    console.log("🚀 ~ file: ai.js:725 ~ readTextFileToPrompt ~ data:", data)
     return data;
   } catch (err) {
-    console.log(`Error reading file:` + filename);
+    console.log(`🔥 Error reading file:` + filename);
     console.log(err.message);
   }
 }
 
 async function readFile(fileName) {
   const file = bucket.file(fileName);
-  console.log("🚀 ~ file: ai.js:733 ~ readFile ~ file:", file)
 
   const data = await file.download();
   const contents = data.toString('utf8');
-  console.log("🚀 ~ file: ai.js:737 ~ readFile ~ contents:", contents)
 
   return contents;
 }

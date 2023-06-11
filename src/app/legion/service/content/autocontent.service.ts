@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { from, Observable, Subject, concatMap } from 'rxjs';
-
+import { from, Observable, Subject, concatMap, filter, switchMap } from 'rxjs';
 import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { GptRepository } from '../../repository/gpt.repo';
 import { DurationSection, VideoDuration } from '../../model/autocreate/videoduration.model';
 import { GenerateContentService } from './generation.service';
 import { VideoMetadata } from '../../model/video/videometadata.model';
 import { VideoNiche } from '../../model/autocreate/videoniche.model';
+import { match } from 'assert';
 
 @Injectable({
   providedIn: 'root',
@@ -72,7 +72,6 @@ export class AutoContentService extends GenerateContentService {
     niche: VideoNiche,
     duration: VideoDuration
   ) {
-    console.log("🚀 ~ file: gpt.service.ts:192 ~ GptService ~ generateVideoContentWithAI ~ generateVideoContentWithAI:")
     if (topic === undefined || niche === undefined || duration === undefined) { 
       console.log("🔥 ~ file: gpt.service.ts:197 ~ GptService ~ generateVideoContentWithAI ~ this.contentRepo.getCurrentVideoNiche():", 'missing input')
       this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
@@ -94,10 +93,14 @@ export class AutoContentService extends GenerateContentService {
         return;
       } else {
         const requestSummary = response.result.summary;
+        console.log("🚀 ~ file: autocontent.service.ts:97 ~ AutoContentService ~ requestSummary:", requestSummary)
+        const requestKeyPoints = response.result.key_points;
+        console.log("🚀 ~ file: autocontent.service.ts:99 ~ AutoContentService ~ requestKeyPoints:", requestKeyPoints)
+        const requestScriptVoice = response.result.script_voice;
+        console.log("🚀 ~ file: autocontent.service.ts:101 ~ AutoContentService ~ requestScriptVoice:", requestScriptVoice)
 
         compeleteMetaData.summary = requestSummary;
         this.gptGeneratedSummary = requestSummary;
-
         this.contentProgressSubject.next(25);
         
         this.gptRepo.postNewTitleObservable({
@@ -112,7 +115,8 @@ export class AutoContentService extends GenerateContentService {
             this.contentProgressSubject.next(25);
             this.checkForCompleteResultsCompletion(
               compeleteMetaData,
-              niche,
+              requestKeyPoints,
+              requestScriptVoice,
               duration
             );
           }
@@ -130,7 +134,8 @@ export class AutoContentService extends GenerateContentService {
             this.contentProgressSubject.next(25);
             this.checkForCompleteResultsCompletion(
               compeleteMetaData,
-              niche,
+              requestKeyPoints,
+              requestScriptVoice,
               duration
             );
           }
@@ -148,7 +153,8 @@ export class AutoContentService extends GenerateContentService {
             this.contentProgressSubject.next(25);
             this.checkForCompleteResultsCompletion(
               compeleteMetaData,
-              niche,
+              requestKeyPoints,
+              requestScriptVoice,
               duration
             );
           }
@@ -164,7 +170,8 @@ export class AutoContentService extends GenerateContentService {
    */
   checkForCompleteResultsCompletion(
     metadata: VideoMetadata,
-    niche: VideoNiche,
+    key_points: string,
+    script_voice: string,
     duration: VideoDuration
   ) {
     if (
@@ -175,37 +182,62 @@ export class AutoContentService extends GenerateContentService {
       this.contentRepo.updateCompleteMetaData(metadata);
       this.completeDetailsSubject.next({ meta: metadata});
       console.log("🚀 ~ file: gpt.service.ts:266 ~ GptService ~ completedMetaData:", metadata)
-      
-      duration.sections.forEach((section: DurationSection) => {
-        console.log("💵 ~ file: gpt.service.ts:271 ~ GptService ~ this.contentRepo.getCurrentVideoDuration ~ section:", section)
-        this.getNewScriptSection(niche, section);
+
+      this.gptRepo.postPointsObservable({
+        key_points: key_points,
+        script_points: this.getNestedSectionPointsAsList(duration).join(','),
+      }).subscribe((response) => {
+        if (response.message !== 'success') {
+          this.errorSubject.next(response.message);
+          return;
+        } else {
+          
+          duration.sections.forEach((section: DurationSection) => {
+            console.log("💵 ~ file: gpt.service.ts:271 ~ GptService ~ this.contentRepo.getCurrentVideoDuration ~ section:", section)
+            this.getNewScriptSection(
+              metadata.title, 
+              script_voice,
+              section,
+              response.result.point_key_matching
+            );
+          });
+        }
       });
     }
   }
 
   getNewScriptSection(
-    niche: VideoNiche,
-    section: DurationSection
+    title: string,
+    script_voice: string,
+    section: DurationSection,
+    matched_points: string
   ) {
-    //improve error being sent back here
-    if (this.gptGeneratedSummary === '') {
-      this.errorSubject.next('🤔 Something is not right. Please go back to the beginning and try again.');
-      return;
-    }
+    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ matched_points:", matched_points)
+    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ section:", section)
+    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ script_voice:", script_voice)
+    console.log("🚀 ~ file: autocontent.service.ts:213 ~ AutoContentService ~ title:", title)
+    
+    const matchedPointsObj = JSON.parse(matched_points);
     let compiledPoints = '';
     let pointsCount = 0;
 
-    from(section.points).pipe(
-      concatMap((sectionPoint) => {
+    // here we are filtering the matched points to only include the points that are in the current section
+    from(Object.entries(matchedPointsObj)).pipe(
+      filter(([sectionPoint, key_point]) => {
+        return section.points.includes(sectionPoint);
+      }),
+      switchMap(([sectionPoint, keyPoint]) => {
         console.log("💵 ~ file: gpt.service.ts:284 ~ GptService ~ concatMap ~ sectionPoint:", sectionPoint)
         
+        let keyPointStr = keyPoint as string;
         return this.gptRepo.postNewScriptSectionObservable({
-          summary: this.gptGeneratedSummary,
-          style: niche.name,
+          title: title,
+          voice: script_voice,
           point: sectionPoint,
+          key: keyPointStr,
         });
       })
-    ).subscribe((response) => {
+    ).subscribe((response: { message: string; result: { script: string; }; }) => {
       console.log("💵 ~ file: gpt.service.ts:293 ~ GptService ~ ).subscribe ~ response:", response)
       if (response.message !== 'success') {
         this.errorSubject.next(response.message);
@@ -230,6 +262,16 @@ export class AutoContentService extends GenerateContentService {
         });
       }
     });
+  }
+
+  getNestedSectionPointsAsList(duratiom: VideoDuration): string[] {
+    const pointsList: string[] = [];
+    duratiom.sections.forEach((section) => {
+      section.points.forEach((point) => {
+        pointsList.push(point);
+      });
+    });
+    return pointsList;
   }
 
   getTotalScriptPoints(): number {

@@ -23,11 +23,24 @@ export class GptRepository {
 
   getSummaryObservable(reqBody: {
     prompt: string;
-  }): Observable<{ message: string; result: { id: string; summary: string } }> {
+  }): Observable<{ 
+    message: string;
+    result: { 
+      id: string; 
+      summary: string;
+      key_points: string;
+      script_voice: string; 
+    } 
+  }> {
     const currLang = this.translate.currentLang;
-    return this.http.post<{
-      message: string;
-      result: { id: string; summary: string };
+    return this.http.post<{ 
+      message: string; 
+      result: { 
+        id: string; 
+        summary: string;
+        key_points: string; 
+        script_voice: string; 
+      } 
     }>(`${environment.apiUrl}/api/openai/summary/${currLang}`, reqBody);
   }
 
@@ -75,7 +88,12 @@ export class GptRepository {
     );
   }
 
-  postNewScriptSectionObservable(reqBody: { summary: string, style: string, point: string}): Observable<{ message: string, result: { script: string } }> {
+  postNewScriptSectionObservable(reqBody: { 
+    title: string, 
+    voice: string, 
+    point: string,
+    key: string,
+  }): Observable<{ message: string, result: { script: string } }> {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string, result: { script: string } }>(
       `${environment.apiUrl}/api/openai/new/script/${currLang}`,
@@ -132,6 +150,17 @@ export class GptRepository {
     const currLang = this.translate.currentLang;
     return this.http.post<{ message: string; result: { tags: string } }>(
       `${environment.apiUrl}/api/openai/improve/tags/${currLang}`,
+      reqBody
+    );
+  }
+
+  postPointsObservable(reqBody: {
+    key_points: string;
+    script_points: string;
+  }) {
+    const currLang = this.translate.currentLang;
+    return this.http.post<{ message: string; result: { point_key_matching: any } }>(
+      `${environment.apiUrl}/api/openai/points/${currLang}`,
       reqBody
     );
   }
