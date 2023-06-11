@@ -91,7 +91,6 @@ router.post("", async (req, res) => {
                   return;
                 }
               } else {
-                console.log("🔥 ~ file: transcribe.js:97 ~ transcription:", translation)
                 res.status(200).json({
                   message: "success",
                   result: {

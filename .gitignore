@@ -139,3 +139,7 @@ backend/freeadmingptwebapp-384207-firebase-adminsdk-7qlgk-6a26b8eae6.json
 appsecrets.js
 backend/appsecrets.js
 pnpm-lock.yaml
+src/app/shared/sentry.config.ts
+package-lock.json
+package-lock.json
+package-lock.json

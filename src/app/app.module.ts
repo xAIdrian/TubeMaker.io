@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -48,7 +48,7 @@ import {
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import { ErrorHandlerService } from './shared/error-handler.service';
 import { firebase, firebaseui, FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from "../environments/environment";
 import { AngularFireModule } from "@angular/fire/compat";
@@ -134,6 +134,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     })
   ],
   providers: [
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
