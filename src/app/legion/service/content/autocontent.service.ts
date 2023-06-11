@@ -221,7 +221,7 @@ export class AutoContentService extends GenerateContentService {
               this.contentRepo.updateScriptMap(section.controlName, response.result.script); 
               // emit just the view value of the section
               this.scriptSectionSubject.next({
-                scriptSection: section.controlName,
+                scriptSection: response.result.script,
                 position: section.controlName
               });
             });
