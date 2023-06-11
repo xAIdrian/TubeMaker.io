@@ -188,6 +188,8 @@ export class AutoContentService extends GenerateContentService {
 
           const matched_points = response.result.point_key_matching;
           const matchedPointsObj = JSON.parse(matched_points);
+          let compiledPoints = '';
+          let sectionsCount = 0;
           
           duration.sections.forEach((section: DurationSection) => {
             // here we are filtering the matched points to only include the points that are in the current section
@@ -209,7 +211,9 @@ export class AutoContentService extends GenerateContentService {
               if (response.message !== 'success') {
                 this.errorSubject.next(response.message);
                 return;
-              } 
+              }
+              sectionsCount++;  
+              compiledPoints += '\n' + response.result.script;
 
               //here we are managing the loading state of the view and the final nav point
               const progressItem = {
@@ -218,10 +222,10 @@ export class AutoContentService extends GenerateContentService {
               }
               this.scriptProgressSubject.next(progressItem);
 
-              this.contentRepo.updateScriptMap(section.controlName, response.result.script); 
+              this.contentRepo.updateScriptMap(section.controlName, compiledPoints.trim()); 
               // emit just the view value of the section
               this.scriptSectionSubject.next({
-                scriptSection: response.result.script,
+                scriptSection: response.result.script.trim(),
                 position: section.controlName
               });
             });

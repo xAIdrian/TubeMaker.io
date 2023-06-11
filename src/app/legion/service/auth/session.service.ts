@@ -22,7 +22,7 @@ export class SessionService {
 
   checkForAuthLoginRedirect() {
     // if (this.fireAuthRepo.sessionUser !== null) {
-    //   this.navService.navigateToList();
+      this.navService.navigateToList();
     //   return;
     // }
 

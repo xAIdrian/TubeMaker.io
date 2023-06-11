@@ -33,7 +33,7 @@ export class LanderComponent implements OnInit, AfterContentInit {
     }
     
     goToHome() {
-      // this.sessionService.checkForAuthLoginRedirect();
+      this.sessionService.checkForAuthLoginRedirect();
     }
 
     uiShownCallback() {
