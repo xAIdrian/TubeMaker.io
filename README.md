@@ -7,6 +7,11 @@
 
 
 
+https://github.com/ai-akuma/FreeAdminGptWebApp/assets/7444521/0129844a-2786-4b16-b16a-51b9cbecc87a
+
+
+
+
 # Tubemaker
 
 ## Admin Dashboard for Youtube Script Generation
