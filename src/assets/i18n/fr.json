@@ -297,7 +297,7 @@
     "no_videos": "Bienvenue chez vous. Commençons par ajouter une vidéo à votre liste.",
     "no_videos_description": "TubeMaker extraira la transcription de la vidéo et vous permettra de l'éditer. Vous pouvez choisir de copier les vidéos les plus performantes du monde entier ou créer un script à partir de zéro !",
     "copy_popular_videos": "Copier les Vidéos Populaires",
-    "tubemaker_instructions": "Pour commencer à créer vos propres vidéos YouTube, sélectionnez l'une des niches ci-dessus ou collez un lien YouTube.",
+    "tubemaker_instructions": "Pour commencer à créer vos propres vidéos YouTube, collez un lien YouTube.",
     "loading": "Chargement de vos vidéos...",
     "back": "Retour",
     "use_ai": "Utiliser l'IA",

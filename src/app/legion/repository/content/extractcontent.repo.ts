@@ -44,6 +44,38 @@ export class ExtractContentRepository extends ContentRepository {
     );
   }
 
+  setCurrentPageObjectFromUrlVideoId(
+    videoId: string
+  ): Observable<YoutubeVideoPage> {
+    const newDoc: YoutubeVideoPage = {
+      createdDate: new Date().toISOString(),
+      createdFrom: 'extract',
+      youtubeVideo: {
+        id: videoId,
+        title: '',
+        description: '',
+        thumbnailUrl: '',
+        publishedAt: '',
+        channelTitle: '',
+      },
+    };
+    return from(
+      this.firestoreRepository.createUsersDocument<YoutubeVideoPage>(
+        'extract_pages',
+        newDoc
+      )
+    ).pipe(
+      tap((page) => this.currentPageSubject.next(page)),
+      catchError((err) => {
+        console.log(
+          '❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 64 ~ ExtractContentRepository ~ catchError ~ err',
+          err
+        );
+        throw new Error(err);
+      })
+    );
+  }
+
   updateCopyCatScript(scriptArray: string[]) {
     this.firestoreRepository
       .updateUsersDocument(this.collectionPath, this.currentPage?.id ?? '', {

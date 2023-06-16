@@ -64,11 +64,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
         url: '/maker/auto',
         iconComponent: { name: 'cil-media-play' },
       },
-      {
-        name: 'Copy Cat',
-        url: '/maker/copycat',
-        iconComponent: { name: 'cil-speedometer' },
-      },
+      // {
+      //   name: 'Copy Cat',
+      //   url: '/maker/copycat',
+      //   iconComponent: { name: 'cil-speedometer' },
+      // },
     ];
   }
 
