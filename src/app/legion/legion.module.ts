@@ -55,7 +55,6 @@ import { VideoMediaComponent } from './views/common/videomedia/videomedia.compon
 import { ConfirmationDialogComponent } from './views/common/confirmationdialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { VideoGridComponent } from './views/common/videogrid/videogrid.component';
-import { StatsRowComponent } from './views/common/statsrow/statsrow.component';
 import { DeleteDialogComponent } from './views/common/deletedialog.component';
 
 @NgModule({
@@ -82,7 +81,6 @@ import { DeleteDialogComponent } from './views/common/deletedialog.component';
     ConfirmationDialogComponent,
     DeleteDialogComponent,
     VideoGridComponent,
-    StatsRowComponent,
   ],
   imports: [
     DragDropModule,
