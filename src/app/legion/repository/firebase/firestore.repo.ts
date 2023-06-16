@@ -4,8 +4,15 @@ import {
   AngularFirestoreDocument,
   QueryFn,
 } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
-import { catchError, concatMap, filter, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  filter,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { FireAuthRepository } from './fireauth.repo';
 import { USERS_COL } from './firebase.constants';
@@ -78,14 +85,17 @@ export class FirestoreRepository {
     if (userId === '') {
       return this.fireAuth.getUserAuthObservable().pipe(
         concatMap((user) => {
-          return this.getFocusedUsersDoc<T>(collectionPath, documentKey, user.uid);
+          return this.getFocusedUsersDoc<T>(
+            collectionPath,
+            documentKey,
+            user.uid
+          );
         })
       );
     } else {
       return this.getFocusedUsersDoc<T>(collectionPath, documentKey, userId);
     }
   }
-
 
   private getFocusedUsersDoc<T>(
     collectionPath: string,
@@ -204,6 +214,37 @@ export class FirestoreRepository {
     }
   }
 
+  deleteUsersDocument<T>(
+    collectionPath: string,
+    documentKey: string,
+    userId: string = this.fireAuth.sessionUser?.uid || ''
+  ): Observable<boolean> {
+    const document = this.firestore
+      .collection(USERS_COL)
+      .doc(userId)
+      .collection(collectionPath)
+      .doc<T>(documentKey);
+
+    if (!environment.production) {
+      console.groupCollapsed(
+        `❤️‍🔥 Firestore Service [${collectionPath}] [deleteUsersDocument]`
+      );
+      console.log(`❤️‍🔥 [${userId}]`, documentKey);
+      console.groupEnd();
+    }
+
+    return new Observable<boolean>((subject) => {
+      document
+        .delete()
+        .then(() => {
+          subject.next(true);
+        })
+        .catch((error) => {
+          subject.error(error);
+        });
+    });
+  }
+
   // Observes a single Firestore document
   observeSpecificDocument<T>(
     collectionName: string,
@@ -255,9 +296,7 @@ export class FirestoreRepository {
     documentId: string,
     data: Partial<T>
   ): Promise<void> {
-    const document = this.firestore
-      .collection<T>(collectionName)
-      .doc<T>(documentId);
+    const document = this.firestore.collection(collectionName).doc(documentId);
     return document.update(this.sanitizeObject(data));
   }
 

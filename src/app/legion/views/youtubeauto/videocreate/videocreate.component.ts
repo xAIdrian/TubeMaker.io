@@ -5,12 +5,8 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
-import{ AutoContentRepository } from '../../../repository/content/autocontent.repo';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AutoContentRepository } from '../../../repository/content/autocontent.repo';
 import { VideoNiche } from '../../../model/autocreate/videoniche.model';
 import { VideoDuration } from '../../../model/autocreate/videoduration.model';
 import { VideoDetailsService } from '../videodetails.service';
@@ -22,7 +18,6 @@ import { VideoDetailsService } from '../videodetails.service';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VideoCreateComponent implements OnInit, AfterContentInit {
-
   gptResponse: string = 'Waiting for response...';
 
   topicFormGroup: FormGroup;
@@ -34,17 +29,18 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     name: '',
     header: '',
     description: '',
-    value: ''
-  }
+    value: '',
+  };
   videoDurations: VideoDuration[] = [];
   selectedVideoDuration: VideoDuration = {
     name: '',
     header: '',
     description: '',
-    sections: []
-  }
+    sections: [],
+  };
 
   topicLoading: boolean = false;
+  generateLoading: boolean = false;
   hasError = false;
   inputErrorText = 'Please fill out all fields.';
 
@@ -59,7 +55,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.setupObservers();
-    this.setupForms()
+    this.setupForms();
   }
 
   ngAfterContentInit(): void {
@@ -88,15 +84,19 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.videoDetailsService.getTopicObserver().subscribe((response) => {
       this.topicLoading = false;
       this.topicFormGroup.setValue({
-        topic: response.replaceAll('"', '').trim()
-      })
+        topic: response.replaceAll('"', '').trim(),
+      });
     });
-    this.videoDetailsService.getDefaultVideoNichesObserver().subscribe((response) => {
-      this.videoNiches = response;
-    });
-    this.videoDetailsService.getDefaultVideoDurationsObserver().subscribe((response) => {
-      this.videoDurations = response;
-    });
+    this.videoDetailsService
+      .getDefaultVideoNichesObserver()
+      .subscribe((response) => {
+        this.videoNiches = response;
+      });
+    this.videoDetailsService
+      .getDefaultVideoDurationsObserver()
+      .subscribe((response) => {
+        this.videoDurations = response;
+      });
     this.videoDetailsService.getErrorObservable().subscribe((response) => {
       this.hasError = true;
       this.inputErrorText = response;
@@ -104,7 +104,7 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.contentModel.getDefaultVideoNiches();
   }
 
-  reRollTopic() { 
+  reRollTopic() {
     this.topicLoading = true;
     this.videoDetailsService.reRollTopic();
   }
@@ -122,15 +122,20 @@ export class VideoCreateComponent implements OnInit, AfterContentInit {
     this.styleFormGroup.markAsTouched();
     this.durationFormGroup.markAsTouched();
 
-    if (this.topicFormGroup.invalid || this.styleFormGroup.invalid || this.durationFormGroup.invalid) {
+    if (
+      this.topicFormGroup.invalid ||
+      this.styleFormGroup.invalid ||
+      this.durationFormGroup.invalid
+    ) {
       this.hasError = true;
     } else {
       this.hasError = false;
+      this.generateLoading = true;
       this.videoDetailsService.submitCreate(
         this.topicFormGroup.value.topic,
         this.styleFormGroup.value.selectedStyle,
         this.durationFormGroup.value.selectedDuration
-      )
+      );
     }
   }
 }

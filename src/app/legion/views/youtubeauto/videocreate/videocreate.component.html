@@ -73,6 +73,7 @@
             <button variant="outline" color="dark" cButton matStepperPrevious>{{ 'improve_script_with_ai.go_back_button'
               | translate }}</button>
             <button class="btn btn-primary" style="margin-left: 1rem;" (click)="onSubmit()">
+              <c-spinner *ngIf="generateLoading" size="sm"></c-spinner>
               {{ 'video_wizard.generate_video_script' | translate }}
             </button>
           </div>

@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Subscription } from 'rxjs';
@@ -10,9 +17,8 @@ import { TranslateService } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
-
   public navItems: INavData[];
-  
+
   isLoggedIn: boolean = false;
   private subscription!: Subscription;
   public perfectScrollbarConfig = {
@@ -24,7 +30,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
     private translate: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) { /** */ }
+  ) {
+    /** */
+  }
 
   ngOnInit() {
     this.subscription = this.angularFireAuth.authState.subscribe((user) => {
@@ -45,50 +53,28 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
       {
         name: translate.instant('navigation.view_videos'),
         url: '/maker/list',
-        iconComponent: { name: 'cil-media-play' }
+        iconComponent: { name: 'cil-media-play' },
       },
       {
         name: translate.instant('navigation.create'),
-        title: true
+        title: true,
       },
       {
         name: translate.instant('navigation.brand_new'),
         url: '/maker/auto',
-        iconComponent: { name: 'cil-media-play' }
+        iconComponent: { name: 'cil-media-play' },
       },
-      // {
-      //   title: true,
-      //   name: translate.instant('navigation.members_only')
-      // },
-      // {
-      //   name: translate.instant('navigation.courses'),
-      //   url: '/lander',
-      //   iconComponent: { name: 'cil-star' },
-      //   children: [
-      //     {
-      //       name: translate.instant('navigation.lander'),
-      //       url: '/lander'
-      //     },
-      //     {
-      //       name: translate.instant('navigation.register'),
-      //       url: '/register'
-      //     },
-      //     {
-      //       name: translate.instant('navigation.error_404'),
-      //       url: '/404'
-      //     },
-      //     {
-      //       name: translate.instant('navigation.error_500'),
-      //       url: '/500'
-      //     }
-      //   ]
-      // },
+      {
+        name: 'Copy Cat',
+        url: '/maker/copycat',
+        iconComponent: { name: 'cil-speedometer' },
+      },
     ];
   }
 
   onLogoutEvent() {
     if (this.isLoggedIn) {
-      console.log("🚀 ~ onLogoutEvent ~ onLogoutEvent:")
+      console.log('🚀 ~ onLogoutEvent ~ onLogoutEvent:');
       this.angularFireAuth.signOut().then(() => {
         this.router.navigate(['/lander'], { relativeTo: this.activatedRoute });
       });
