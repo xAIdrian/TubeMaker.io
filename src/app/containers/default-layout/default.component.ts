@@ -74,7 +74,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterContentInit {
 
   onLogoutEvent() {
     if (this.isLoggedIn) {
-      console.log('🚀 ~ onLogoutEvent ~ onLogoutEvent:');
       this.angularFireAuth.signOut().then(() => {
         this.router.navigate(['/lander'], { relativeTo: this.activatedRoute });
       });

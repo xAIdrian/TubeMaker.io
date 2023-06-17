@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const { of, map, from, throwError, concatMap, subscribe } = require("rxjs");
-const util = require('util');
+const util = require("util");
 const unlink = util.promisify(fs.unlink);
 const ytdl = require("ytdl-core");
 
@@ -21,17 +21,15 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 const translationService = new TranslationService();
 
-const storagePath = './backend/audio'
+const storagePath = "./backend/audio";
 
 router.post("", async (req, res) => {
-  console.log("🚀 ~ file: transcribe.js:26 ~ router.get ~ req:", req.body)
   const reqBody = req.body;
 
   const videoId = reqBody.videoId;
   const language = reqBody.language;
 
   if (!videoId || !language) {
-    console.log("🚀 ~ file: transcribe.js:34 ~ router.post ~ language:", videoId, language)
     res.status(400).json({
       message: "Video ID and language are required.",
     });
@@ -46,71 +44,75 @@ router.post("", async (req, res) => {
   };
 
   try {
-    from(ytdl.getInfo(videoUrl, options)).pipe(
-      concatMap(async (info) => {
-        console.log('Start processing download...')
-        
-        const stream = ytdl.downloadFromInfo(info, options);
-        const cleanedString = info.videoDetails.title.replace(/[^a-zA-Z0-9 ]/g, '').trim().replace(/\s+/g, '_');
-        const filename = `${cleanedString}.mp3`;
-        const filePath = `${storagePath}/${filename}`;
+    from(ytdl.getInfo(videoUrl, options))
+      .pipe(
+        concatMap(async (info) => {
+          console.log("Start processing download...");
 
-        ffmpeg(stream)
-          .toFormat("mp3")
-          .saveToFile(filePath)
-          .on("error", function (err) {
-            return throwError(() => new Error('🔥' + err));
-          }).on("end", async function () {
-            console.log("🚀 ~ file: transcribe.js:43 ~ File Downloaded! " + filePath);
+          const stream = ytdl.downloadFromInfo(info, options);
+          const cleanedString = info.videoDetails.title
+            .replace(/[^a-zA-Z0-9 ]/g, "")
+            .trim()
+            .replace(/\s+/g, "_");
+          const filename = `${cleanedString}.mp3`;
+          const filePath = `${storagePath}/${filename}`;
 
-            const transcription = await transcribeAudio(filePath);
-            
-            if (transcription === undefined || transcription === '') {
-              deleteFile(filePath);
-              res.status(404).json({ error: "Transcription Unavailable" });
-              return;
-            } else {
-              let translation = transcription;
+          ffmpeg(stream)
+            .toFormat("mp3")
+            .saveToFile(filePath)
+            .on("error", function (err) {
+              return throwError(() => new Error("🔥" + err));
+            })
+            .on("end", async function () {
+              const transcription = await transcribeAudio(filePath);
 
-              if (language === 'fr') {
-                translation = await translationService.translateText(transcription);
+              if (transcription === undefined || transcription === "") {
+                deleteFile(filePath);
+                res.status(404).json({ error: "Transcription Unavailable" });
+                return;
+              } else {
+                let translation = transcription;
 
-                if (translation !== undefined && translation !== '') {
-                  console.log("🚀 ~ file: transcribe.js:82 ~ translation:", translation)
+                if (language === "fr") {
+                  translation = await translationService.translateText(
+                    transcription
+                  );
+
+                  if (translation !== undefined && translation !== "") {
+                    res.status(200).json({
+                      message: "success",
+                      result: {
+                        translation: translation,
+                      },
+                    });
+                    deleteFile(filePath);
+                  } else {
+                    console.log("🔥 Translation Empty");
+                    deleteFile(filePath);
+                    res.status(500).json({ error: "Translations Empty" });
+                    return;
+                  }
+                } else {
                   res.status(200).json({
                     message: "success",
                     result: {
                       translation: translation,
-                    }
+                    },
                   });
-                  deleteFile(filePath)
-                } else {
-                  console.log('🔥 Translation Empty')
                   deleteFile(filePath);
-                  res.status(500).json({ error: "Translations Empty" });
-                  return;
                 }
-              } else {
-                res.status(200).json({
-                  message: "success",
-                  result: {
-                    translation: translation,
-                  }
-                });
-                deleteFile(filePath)
               }
-            }
-          })
-      })
-    ).subscribe({
-      error: (err) => {
-        console.error(`🔥 ${err}`);
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
-      }
-    })
+            });
+        })
+      )
+      .subscribe({
+        error: (err) => {
+          console.error(`🔥 ${err}`);
+          console.error(err);
+          res.status(500).json({ error: "Internal server error" });
+        },
+      });
   } catch (error) {
-    console.log("🔥 ~ file: transcribe.js:151 ~ transcribeAudio ~ error:", error)
     deleteFile(filePath);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -126,7 +128,6 @@ async function deleteFile(filePath) {
 }
 
 async function transcribeAudio(filePath) {
-  console.log("🚀 ~ file: transcribe.js:86 ~ transcribeAudio ~ Transcription In Progress!")
   try {
     // Call the OpenAI API to transcribe the audio
     const response = await openai.createTranscription(
@@ -138,15 +139,14 @@ async function transcribeAudio(filePath) {
       "en", // Language
       {
         maxBodyLength: 25 * 1024 * 1024,
-      },
+      }
     );
     // Parse the response and extract the transcribed text
     const transcript = response.data.text;
     return transcript;
   } catch (error) {
-    console.log("🚀 ~ file: transcribe.js:151 ~ transcribeAudio ~ error:", error)
     deleteFile(filePath);
-    return '';
+    return "";
   }
 }
 

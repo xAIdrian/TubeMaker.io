@@ -26,23 +26,17 @@ export function getDefaultVideoDurations(
         {
           name: translate.instant('video_duration.introduction'),
           controlName: 'introduction',
-          points: [
-            translate.instant('video_duration.attention_grabbing_hook'),
-          ],
+          points: [translate.instant('video_duration.attention_grabbing_hook')],
         },
         {
           name: translate.instant('video_duration.main_content'),
           controlName: 'mainContent',
-          points: [
-            translate.instant('video_duration.brief_introduction'),
-          ],
+          points: [translate.instant('video_duration.brief_introduction')],
         },
         {
           name: translate.instant('video_duration.conclusion'),
           controlName: 'conclusion',
-          points: [
-            translate.instant('video_duration.call_to_action'),
-          ],
+          points: [translate.instant('video_duration.call_to_action')],
         },
       ],
     },
@@ -103,9 +97,7 @@ export function getDefaultVideoDurations(
         {
           name: translate.instant('video_duration.actionable_takeaway'),
           controlName: 'actionables',
-          points: [
-            translate.instant('video_duration.practical_tip'),
-          ],
+          points: [translate.instant('video_duration.practical_tip')],
         },
         {
           name: translate.instant('video_duration.conclusion'),
@@ -147,65 +139,6 @@ export function getDefaultVideoDurations(
           points: [
             translate.instant('video_duration.relevant_cases'),
             translate.instant('video_duration.relevant_application'),
-          ],
-        },
-        {
-          name: translate.instant('video_duration.questions'),
-          controlName: 'questions',
-          points: [
-            translate.instant('video_duration.address_questions'),
-            translate.instant('video_duration.clairfy'),
-          ],
-        },
-        {
-          name: translate.instant('video_duration.conclusion'),
-          controlName: 'conclusion',
-          points: [
-            translate.instant('video_duration.summarize'),
-            translate.instant('video_duration.takeaway'),
-            translate.instant('video_duration.call_to_action'),
-          ],
-        },
-      ],
-    },
-    {
-      name: translate.instant('video_duration.very_long'),
-      header: translate.instant('video_duration.very_long_header'),
-      description: translate.instant('video_duration.very_long_description'),
-      sections: [
-        {
-          name: translate.instant('video_duration.introduction'),
-          controlName: 'introduction',
-          points: [
-            translate.instant('video_duration.attention_grabbing_hook'),
-            translate.instant('video_duration.brief_introduction'),
-            translate.instant('video_duration.preview_key_points'),
-          ],
-        },
-        {
-          name: translate.instant('video_duration.main_content'),
-          controlName: 'mainContent',
-          points: [
-            translate.instant('video_duration.organize_subtext'),
-            translate.instant('video_duration.in_depth_explanation'),
-            translate.instant('video_duration.multiple_examples'),
-            translate.instant('video_duration.organize_subtext'),
-            translate.instant('video_duration.practical_tip'),
-          ],
-        },
-        {
-          name: translate.instant('video_duration.case_studies'),
-          controlName: 'caseStudies',
-          points: [
-            translate.instant('video_duration.relevant_cases'),
-            translate.instant('video_duration.relevant_application'),
-          ],
-        },
-        {
-          name: translate.instant('video_duration.expert_insights'),
-          controlName: 'opinions',
-          points: [ 
-            translate.instant('video_duration.include_insights'),
           ],
         },
         {

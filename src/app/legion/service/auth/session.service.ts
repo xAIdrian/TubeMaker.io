@@ -12,17 +12,17 @@ const LANGUAGE_PREF = 'language';
 })
 export class SessionService {
   private errorSubject = new Subject<string>();
-  
+
   constructor(
     private fireAuthRepo: FireAuthRepository,
     private navService: NavigationService
-    ) {
-      /** */
-    }
+  ) {
+    /** */
+  }
 
   checkForAuthLoginRedirect() {
     // if (this.fireAuthRepo.sessionUser !== null) {
-      this.navService.navigateToList();
+    this.navService.navigateToList();
     //   return;
     // }
 
@@ -41,7 +41,6 @@ export class SessionService {
 
   checkForAuthLogoutRedirect() {
     // if (this.fireAuthRepo.sessionUser === null) {
-    //   console.log("🚀 ~ file: session.service.ts:35 ~ SessionService ~ this.fireAuthRepo.getUserAuthObservable ~ user:", this.fireAuthRepo.sessionUser)
     //   this.navService.navigateToLander();
     //   return;
     // } else {
@@ -73,19 +72,20 @@ export class SessionService {
 
   verifyEmail(signinSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     const email = signinSuccessData.authResult.user?.email;
-    const isFirstTimeUser = signinSuccessData.authResult.additionalUserInfo?.isNewUser;
+    const isFirstTimeUser =
+      signinSuccessData.authResult.additionalUserInfo?.isNewUser;
 
     if (email !== undefined && email !== '') {
-      this.fireAuthRepo.setUserData(
-        {
-          ...signinSuccessData.authResult.user?.toJSON(),
-          isVirgin: isFirstTimeUser
-        }
-      );
+      this.fireAuthRepo.setUserData({
+        ...signinSuccessData.authResult.user?.toJSON(),
+        isVirgin: isFirstTimeUser,
+      });
       this.navService.navigateToList();
     } else {
       this.fireAuthRepo.signOut();
-      this.errorSubject.next('We could not create your account. Please contact us.');
+      this.errorSubject.next(
+        'We could not create your account. Please contact us.'
+      );
     }
   }
 }

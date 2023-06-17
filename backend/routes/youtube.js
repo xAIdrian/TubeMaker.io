@@ -29,27 +29,25 @@ router.get("/videos/:language", async (req, res) => {
     fetchCompleteVideoData(language, reqNiche, reqPublishedAtfter).subscribe(
       (data) => {
         of(data).subscribe({
-            next: (results) => {
-              console.log("🚀 ~ file: youtube.js:23 ~ router.get ~ data:", results)
-              res.status(200).json(results);
-            },
-            error: (err) => {
-              console.log("🔥 ~ file: youtube.js:35 ~ of ~ err:", err)
-              console.error(err);
-              res.status(500).json(err);
-            }
-          })
-      })
+          next: (results) => {
+            res.status(200).json(results);
+          },
+          error: (err) => {
+            console.error(err);
+            res.status(500).json(err);
+          },
+        });
+      }
+    );
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
   }
 });
 
-
 /**
  * Complete wrapper for our fetch functions
- * @returns 
+ * @returns
  */
 function fetchCompleteVideoData(language, niche, publishedAfter) {
   if (!language || !niche || !publishedAfter) {
@@ -59,50 +57,60 @@ function fetchCompleteVideoData(language, niche, publishedAfter) {
   return fetchVideoList(niche, publishedAfter).pipe(
     map((data) => {
       return data.items
-        .filter((item) => englishRegex.test(item.snippet.title ))
+        .filter((item) => englishRegex.test(item.snippet.title))
         .map(async (item) => {
+          let processedTitle = item.snippet.title;
+          let processedDescription = item.snippet.description;
 
-        let processedTitle = item.snippet.title;
-        let processedDescription = item.snippet.description;
-  
-        if (language === 'fr') {
-          if (processedTitle !== undefined && processedTitle !== null && processedTitle !== "") {
-            processedTitle = await translationService.translateText(processedTitle);
+          if (language === "fr") {
+            if (
+              processedTitle !== undefined &&
+              processedTitle !== null &&
+              processedTitle !== ""
+            ) {
+              processedTitle = await translationService.translateText(
+                processedTitle
+              );
+            }
+            if (
+              processedDescription !== undefined &&
+              processedDescription !== null &&
+              processedDescription !== ""
+            ) {
+              processedDescription = await translationService.translateText(
+                processedDescription
+              );
+            }
+            return {
+              id: item.id.videoId,
+              title: processedTitle,
+              description: processedDescription,
+              thumbnailUrl: item.snippet.thumbnails.high.url,
+              publishedAt: item.snippet.publishTime,
+              channelTitle: item.snippet.channelTitle,
+            };
+          } else {
+            return {
+              id: item.id.videoId,
+              title: processedTitle,
+              description: processedDescription,
+              thumbnailUrl: item.snippet.thumbnails.high.url,
+              publishedAt: item.snippet.publishTime,
+              channelTitle: item.snippet.channelTitle,
+            };
           }
-          if (processedDescription !== undefined && processedDescription !== null && processedDescription !== "") {
-            processedDescription = await translationService.translateText(processedDescription);
-          }
-          return {
-            id: item.id.videoId,
-            title: processedTitle,
-            description: processedDescription,
-            thumbnailUrl: item.snippet.thumbnails.high.url,
-            publishedAt: item.snippet.publishTime,
-            channelTitle: item.snippet.channelTitle,
-          }
-        } else {
-          return {
-            id: item.id.videoId,
-            title: processedTitle,
-            description: processedDescription,
-            thumbnailUrl: item.snippet.thumbnails.high.url,
-            publishedAt: item.snippet.publishTime,
-            channelTitle: item.snippet.channelTitle,
-          };
-        }
-      });
+        });
     }),
-    concatMap((observables) => forkJoin(observables)),
+    concatMap((observables) => forkJoin(observables))
     // mergeMap((videoList) => mapVideoListToDetails(videoList))
   );
 }
 
-
 /**
  * Gets our list of videos from the YouTube API and checks for errors
- * @param {string} apiUrl 
- * @param {URLSearchParams} params 
- * @returns 
+ * @param {string} apiUrl
+ * @param {URLSearchParams} params
+ * @returns
  */
 function fetchVideoList(niche, publishedAfter) {
   if (!niche || !publishedAfter) {
@@ -137,10 +145,14 @@ function fetchVideoList(niche, publishedAfter) {
       if (res.ok) {
         return from(res.json());
       } else if (res.status === 403) {
-        throw new Error("YouTube Data API quota exceeded. Please try again later.");
+        throw new Error(
+          "YouTube Data API quota exceeded. Please try again later."
+        );
         //create unique error for quota exceeded that will logged by Crashylitics
       } else {
-        throw new Error("Failed to fetch video list from the YouTube Data API.");
+        throw new Error(
+          "Failed to fetch video list from the YouTube Data API."
+        );
       }
     })
   );
@@ -148,8 +160,8 @@ function fetchVideoList(niche, publishedAfter) {
 
 /**
  * Fetch data from youtube API and update our list
- * @param {*} id 
- * @param {*} params 
+ * @param {*} id
+ * @param {*} params
  * @returns Observable<>
  */
 function fetchVideoDetails(videoId) {
@@ -171,31 +183,30 @@ function fetchVideoDetails(videoId) {
   });
 
   const apiUrl = `${VIDEO_URL}?${queryParams.toString()}`;
-  return from(axios.get(apiUrl, {
+  return from(
+    axios.get(apiUrl, {
       params: queryParams,
-      ...params
-    })).pipe(
-      mergeMap((response) => {
-        try {
-          return from(response.data);
-        } catch (err) {
-          console.log("🔥 ~ file: youtube.js:115 ~ mergeMap ~ err:", err)
-          return of(null);
-        }
-      })
-    );
+      ...params,
+    })
+  ).pipe(
+    mergeMap((response) => {
+      try {
+        return from(response.data);
+      } catch (err) {
+        return of(null);
+      }
+    })
+  );
 }
 
 /**
  * Function that updates the video data for all the items in the input list
  * @param {Array} videoList
- */ 
+ */
 function mapVideoListToDetails(videoList) {
-  console.log("🚀 ~ file: youtube.js:128 ~ updateVideoList ~ videoList:", videoList)
   const updateObservables = videoList.map((video) =>
     fetchVideoDetails(video.id).pipe(
       map((data) => {
-        console.log("🚀 ~ file: youtube.js:131 ~ map ~ data:", data)
         const videoDetails = data.items[0].statistics;
         return {
           ...video,
@@ -206,7 +217,8 @@ function mapVideoListToDetails(videoList) {
           },
         };
       })
-  ));
+    )
+  );
 
   return forkJoin(updateObservables);
 }

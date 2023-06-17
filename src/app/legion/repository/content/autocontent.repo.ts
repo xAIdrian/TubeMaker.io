@@ -66,10 +66,6 @@ export class AutoContentRepository extends ContentRepository {
       }),
       tap((page) => this.currentPageSubject.next(page)),
       catchError((err) => {
-        console.log(
-          '❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 58 ~ ExtractContentRepository ~ catchError ~ err',
-          err
-        );
         throw new Error(err);
       })
     );

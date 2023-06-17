@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { NavigationService } from '../../service/navigation.service';
 import { AutoContentService } from '../../service/content/autocontent.service';
-import { DurationSection, VideoDuration } from '../../model/autocreate/videoduration.model';
+import {
+  DurationSection,
+  VideoDuration,
+} from '../../model/autocreate/videoduration.model';
 import { VideoNiche } from '../../model/autocreate/videoniche.model';
 import { Observable, Subject, tap } from 'rxjs';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
@@ -11,7 +14,6 @@ import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
   providedIn: 'root',
 })
 export class VideoDetailsService {
-  
   currentTopic: string;
   currentNiche: VideoNiche;
   currentDuration: VideoDuration = {
@@ -27,7 +29,7 @@ export class VideoDetailsService {
       },
     ],
   };
-  
+
   private errorSubject = new Subject<string>();
   private videoDurationsSubject = new Subject<VideoDuration>();
 
@@ -42,8 +44,10 @@ export class VideoDetailsService {
   hasVideoData(): boolean {
     return this.contentService.getTotalScriptPoints() > 0;
   }
-  getInitVideoNicheObserver = this.contentRepo.getDefaultInitVideoNicheObserver();
-  getInitVideoDurationObserver = this.contentRepo.getDefaultInitVideoDurationObserver();
+  getInitVideoNicheObserver =
+    this.contentRepo.getDefaultInitVideoNicheObserver();
+  getInitVideoDurationObserver =
+    this.contentRepo.getDefaultInitVideoDurationObserver();
 
   getInitVideoNiche() {
     return this.contentRepo.getInitVideoNiche();
@@ -62,12 +66,6 @@ export class VideoDetailsService {
   }
   getErrorObservable() {
     return this.errorSubject.asObservable();
-  }
-  getContentProgressObserver() {
-    return this.contentService.getContentProgressObserver();
-  }
-  getScriptProgressObserver() {
-    return this.contentService.getScriptProgressObserver();
   }
   getCompleteResultsObserver() {
     return this.contentService.getCompleteResultsObserver();
@@ -114,15 +112,14 @@ export class VideoDetailsService {
     selectedStyle: VideoNiche,
     selectedDuration: VideoDuration
   ) {
-    this.submitInputs(topic, selectedStyle, selectedDuration)
-      .subscribe({
-        next: (response) => {
-          this.navigationService.navigateToAutoDetails();
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+    this.submitInputs(topic, selectedStyle, selectedDuration).subscribe({
+      next: (response) => {
+        this.navigationService.navigateToAutoDetails();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   submitInputs(
@@ -132,9 +129,9 @@ export class VideoDetailsService {
   ): Observable<YoutubeVideoPage> {
     this.contentService.resetTotalScriptPoints();
 
-    this.currentTopic = topic
-    this.currentNiche = videoStyle
-    this.currentDuration = videoDuration
+    this.currentTopic = topic;
+    this.currentNiche = videoStyle;
+    this.currentDuration = videoDuration;
 
     this.contentService.setTotalScriptPoints(videoDuration);
 
@@ -148,7 +145,10 @@ export class VideoDetailsService {
   getCurrentPage(id: string) {
     return this.contentRepo.getCurrentPage(id).pipe(
       tap((response) => {
-        console.log("🚀 ~ file: videodetails.service.ts:145 ~ VideoDetailsService ~ tap ~ response:", response)
+        console.log(
+          '🚀 ~ file: videodetails.service.ts:145 ~ VideoDetailsService ~ tap ~ response:',
+          response
+        );
         if (response.topic !== undefined) {
           this.currentTopic = response.topic;
         }
@@ -187,10 +187,10 @@ export class VideoDetailsService {
   updateTags(title: string, description: string) {
     this.contentService.getNewTags(title, description);
   }
-  
+
   generateVideoContentWithAI() {
-    if (this.currentTopic === undefined || this.currentTopic === '') { 
-      this.navigationService.navigateToBrandNew(); 
+    if (this.currentTopic === undefined || this.currentTopic === '') {
+      this.navigationService.navigateToBrandNew();
       return;
     }
     this.contentService.generateVideoContentWithAI(
