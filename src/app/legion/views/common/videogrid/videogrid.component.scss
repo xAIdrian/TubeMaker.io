@@ -39,13 +39,12 @@
   grid-template-columns: repeat(4, 1fr);
     
   justify-content: flex-start;
-  
-  
 }
 
 .grid-item {
   // width: 24%;
   margin: 0.5rem;
+  height: 100%
 }
 
 h4 {
@@ -72,6 +71,8 @@ div.stretchy-wrapper>div {
 
 .truncate {
   display: -webkit-box;
+  -webkit-line-clamp: 3;
+  min-height: 5em;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;

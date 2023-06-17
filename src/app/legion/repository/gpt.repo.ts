@@ -8,39 +8,33 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class GptRepository {
-
-  constructor(
-    private http: HttpClient,
-    private translate: TranslateService
-  ) {}
+  constructor(private http: HttpClient, private translate: TranslateService) {}
 
   postNewTopicObservable(): Observable<{ message: string; result: any }> {
     const currLang = this.translate.currentLang;
     return this.http.get<{ message: string; result: any }>(
-      `${environment.apiUrl}/api/openai/topic/${currLang}` 
+      `${environment.apiUrl}/api/openai/topic/${currLang}`
     );
   }
 
-  getSummaryObservable(reqBody: {
-    prompt: string;
-  }): Observable<{ 
+  getSummaryObservable(reqBody: { prompt: string }): Observable<{
     message: string;
-    result: { 
-      id: string; 
+    result: {
+      id: string;
       summary: string;
       key_points: string;
-      script_voice: string; 
-    } 
+      script_voice: string;
+    };
   }> {
     const currLang = this.translate.currentLang;
-    return this.http.post<{ 
-      message: string; 
-      result: { 
-        id: string; 
+    return this.http.post<{
+      message: string;
+      result: {
+        id: string;
         summary: string;
-        key_points: string; 
-        script_voice: string; 
-      } 
+        key_points: string;
+        script_voice: string;
+      };
     }>(`${environment.apiUrl}/api/openai/summary/${currLang}`, reqBody);
   }
 
@@ -88,48 +82,49 @@ export class GptRepository {
     );
   }
 
-  postNewScriptSectionObservable(reqBody: { 
-    title: string, 
-    voice: string, 
-    point: string,
-    key: string,
-  }): Observable<{ message: string, result: { script: string } }> {
+  postNewScriptSectionObservable(reqBody: {
+    title: string;
+    voice: string;
+    point: string;
+    key: string;
+  }): Observable<{ message: string; result: { script: string } }> {
     const currLang = this.translate.currentLang;
-    return this.http.post<{ message: string, result: { script: string } }>(
+    return this.http.post<{ message: string; result: { script: string } }>(
       `${environment.apiUrl}/api/openai/new/script/${currLang}`,
       reqBody
     );
   }
 
   postOptimizeScriptSectionObservable(
-    reqBody: { 
-      prompt: string,
-      current: string
+    reqBody: {
+      prompt: string;
+      current: string;
     },
     position: any
-  ): Observable<{ 
-      message: string,
-      result: { 
-        script: string ,
-        position: any
-      } 
-    }> {
+  ): Observable<{
+    message: string;
+    result: {
+      script: string;
+      position: any;
+    };
+  }> {
     const currLang = this.translate.currentLang;
-    return this.http.post<{ message: string, result: { script: string } }>(
-      `${environment.apiUrl}/api/openai/improve/script/${currLang}`,
-      reqBody
-    ).pipe(
+    return this.http
+      .post<{ message: string; result: { script: string } }>(
+        `${environment.apiUrl}/api/openai/improve/script/${currLang}`,
+        reqBody
+      )
+      .pipe(
         map((res) => {
-          console.log("🚀 ~ file: gpt.repo.ts:102 ~ GptRepository ~ map ~ res:", res)
           return {
             message: res.message,
             result: {
               script: res.result.script,
-              position: position
-            }
-          }
-      })
-    );
+              position: position,
+            },
+          };
+        })
+      );
   }
 
   postNewTagsObservable(reqBody: {
@@ -154,14 +149,11 @@ export class GptRepository {
     );
   }
 
-  postPointsObservable(reqBody: {
-    key_points: string;
-    script_points: string;
-  }) {
+  postPointsObservable(reqBody: { key_points: string; script_points: string }) {
     const currLang = this.translate.currentLang;
-    return this.http.post<{ message: string; result: { point_key_matching: any } }>(
-      `${environment.apiUrl}/api/openai/points/${currLang}`,
-      reqBody
-    );
+    return this.http.post<{
+      message: string;
+      result: { point_key_matching: any };
+    }>(`${environment.apiUrl}/api/openai/points/${currLang}`, reqBody);
   }
 }

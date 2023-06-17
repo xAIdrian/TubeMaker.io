@@ -17,5 +17,8 @@
       <p class="text-medium-emphasis">@{{ video.channelTitle }}</p>
       <p class="text-medium-emphasis small">{{video.publishedAt}}</p>
     </div>
+    <button type="button" class="btn btn-light" (click)="onDeleteClick(video)">
+      <svg cIcon class="me-2" name="cilTrash"></svg>
+    </button>
   </div>
 </div>

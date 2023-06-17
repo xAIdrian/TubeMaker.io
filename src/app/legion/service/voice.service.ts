@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
 import { VoiceRepository } from '../repository/voice.repo';
 import { FirebaseStorageRepository } from '../repository/firebase/firestorage.repo';
-import {
-  Observable,
-  Subject,
-  map,
-  concatMap,
-} from 'rxjs';
+import { Observable, Subject, map, concatMap } from 'rxjs';
 import { ExtractContentRepository } from '../repository/content/extractcontent.repo';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VoiceService {
-
   private erroSubject = new Subject<string>();
-  private voiceObserverSubject = new Subject<{ name: string; sampleUrl: string }[]>();
+  private voiceObserverSubject = new Subject<
+    { name: string; sampleUrl: string }[]
+  >();
   private textToSpeechObserverSubject = new Subject<string>();
 
   constructor(
@@ -38,36 +34,43 @@ export class VoiceService {
   }
 
   getVoices() {
-    this.firebaseRepository.getSampleVoices().subscribe((samples: { name: string, sampleUrl: string }[]) => {
-      this.voiceObserverSubject.next(samples);
-    });
+    this.firebaseRepository
+      .getSampleVoices()
+      .subscribe((samples: { name: string; sampleUrl: string }[]) => {
+        this.voiceObserverSubject.next(samples);
+      });
   }
 
   /**
    * There will be two parts to this.
-   * 1. Get the list of voices from eleven labs and make sure that what is 
+   * 1. Get the list of voices from eleven labs and make sure that what is
    * selected is provided. Get is voice_id or show error.
    * 2. Generate text to speech. Ideally we stream it.
-   * @param name 
-   * @param scriptValue 
+   * @param name
+   * @param scriptValue
    */
   generateTextToSpeech(name: string, completeScript: string): Observable<Blob> {
-
     return this.voiceRepository.getListOfVoices().pipe(
-      map((response: { message: string, result: { name: string, id: string }[]}) => {
-        console.log("🚀 ~ file: voice.service.ts:69 ~ VoiceService ~ map ~ response:", response)
-        if (response.message !== 'success') {
-          this.erroSubject.next('Error getting voices');
-          return
+      map(
+        (response: {
+          message: string;
+          result: { name: string; id: string }[];
+        }) => {
+          if (response.message !== 'success') {
+            this.erroSubject.next('Error getting voices');
+            return;
+          }
+          const voiceObj = response.result.find((voice) => {
+            return voice.name === name;
+          });
+          return voiceObj?.id;
         }
-        const voiceObj = response.result.find((voice) => {
-          return voice.name === name
-        })
-        return voiceObj?.id
-      }),
+      ),
       concatMap((voice) => {
-        console.log("🚀 ~ file: voice.service.ts:80 ~ VoiceService ~ concatMap ~ voice:", voice)
-        return this.voiceRepository.getTextToSpeechSteam(voice ?? '', completeScript)
+        return this.voiceRepository.getTextToSpeechSteam(
+          voice ?? '',
+          completeScript
+        );
       })
     );
   }

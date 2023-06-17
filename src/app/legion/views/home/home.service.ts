@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { AutoContentRepository } from '../../repository/content/autocontent.repo';
 import { ExtractContentRepository } from '../../repository/content/extractcontent.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
-import { Subject, combineLatest, switchMap } from 'rxjs';
+import { Observable, Subject, combineLatest, of, switchMap } from 'rxjs';
 import { NavigationService } from '../../service/navigation.service';
 import { FireAuthRepository } from '../../repository/firebase/fireauth.repo';
+import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 
 @Injectable()
 export class HomeService {
@@ -59,6 +60,30 @@ export class HomeService {
     } else {
       this.errorSubject.next('Invalid createdFrom');
     }
+  }
+
+  deleteVideo(video: YoutubeVideo): Observable<boolean> {
+    if (!video || video.id === '') {
+      this.errorSubject.next('Invalid video');
+      return of(false);
+    }
+
+    let deleteObs: Observable<boolean>;
+    if (video.createdFrom === 'extract') {
+      deleteObs = this.extractContentRepository.deleteVideo(video);
+    } else {
+      deleteObs = this.autoContentRepository.deleteVideo(video);
+    }
+
+    deleteObs.subscribe((response) => {
+      if (response) {
+        this.getCompleteVideoList();
+      } else {
+        this.errorSubject.next('Delete failed');
+      }
+    });
+
+    return deleteObs;
   }
 
   goToCopyCat() {

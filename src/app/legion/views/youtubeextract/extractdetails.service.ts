@@ -1,6 +1,6 @@
 import { TranscriptRepository } from '../../repository/transcript.repo';
 import { Injectable } from '@angular/core';
-import { concatMap, from, map, Observable, Observer, of, Subject, tap } from 'rxjs';
+import { map, Observable, of, Subject, tap } from 'rxjs';
 import { YoutubeDataRepository } from '../../repository/youtubedata.repo';
 import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 import { NavigationService } from '../../service/navigation.service';
@@ -13,13 +13,14 @@ import { HumaneDateUtility } from '../../helper/humanedate.utility';
   providedIn: 'root',
 })
 export class ExtractDetailsService {
-  
   private errorSubject = new Subject<string>();
   private kickBackErrorSubject = new Subject<string>();
   private isTranscriptLoadingSubject = new Subject<boolean>();
 
   private youtubeVideosSubject = new Subject<YoutubeVideo[]>();
-  private videoTranscriptSubject = new Subject<{ isLoading: boolean, section: string }[]>();
+  private videoTranscriptSubject = new Subject<
+    { isLoading: boolean; section: string }[]
+  >();
 
   private currentCopyCatVideo: YoutubeVideo;
 
@@ -49,45 +50,50 @@ export class ExtractDetailsService {
     return this.youtubeVideosSubject.asObservable();
   }
 
-  getVideoTranscriptObserver(): Observable<{ isLoading: boolean, section: string }[]> {
+  getVideoTranscriptObserver(): Observable<
+    { isLoading: boolean; section: string }[]
+  > {
     return this.videoTranscriptSubject.asObservable();
   }
 
   getScriptSectionObserver(): Observable<{
-    scriptSection: string
-    sectionIndex: number
+    scriptSection: string;
+    sectionIndex: number;
   }> {
     return this.generationService.getScriptSectionObserver().pipe(
       map((scriptSection) => {
-        console.log("🚀 ~ file: extractdetails.service.ts:54 ~ ExtractDetailsService ~ map ~ scriptSection:", scriptSection)
+        console.log(
+          '🚀 ~ file: extractdetails.service.ts:54 ~ ExtractDetailsService ~ map ~ scriptSection:',
+          scriptSection
+        );
         return {
           scriptSection: scriptSection.scriptSection.trim(),
-          sectionIndex: scriptSection.position as number
-        }
+          sectionIndex: scriptSection.position as number,
+        };
       })
     );
   }
 
-  getTitleObserver() { 
+  getTitleObserver() {
     return this.generationService.getTitleObserver().pipe(
       tap((title) => {
-        this.extractContentRepo.updateTitle(title)
+        this.extractContentRepo.updateTitle(title);
       })
-    ); 
+    );
   }
-  getDescriptionObserver() { 
+  getDescriptionObserver() {
     return this.generationService.getDescriptionObserver().pipe(
       tap((description) => {
-        this.extractContentRepo.updateDescription(description)
+        this.extractContentRepo.updateDescription(description);
       })
-    ); 
+    );
   }
-  getTagsObserver() { 
+  getTagsObserver() {
     return this.generationService.getTagsObserver().pipe(
       tap((tags) => {
-        this.extractContentRepo.updateTags(tags)
+        this.extractContentRepo.updateTags(tags);
       })
-    ); 
+    );
   }
 
   getCurrentPage(id: string) {
@@ -97,43 +103,61 @@ export class ExtractDetailsService {
           this.currentCopyCatVideo = response.youtubeVideo!!;
         }
       })
-    )
+    );
   }
 
   getCurrentVideoUrl(): string {
-    if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
+    if (
+      this.currentCopyCatVideo === null ||
+      this.currentCopyCatVideo === undefined
+    ) {
       this.navigationService.navigateToCopyCat();
     }
-    return `https://www.youtube.com/embed/${this.currentCopyCatVideo.id}`
+    return `https://www.youtube.com/embed/${this.currentCopyCatVideo.id}`;
   }
 
   isCurrentVideoPresent() {
-    return this.currentCopyCatVideo !== null && this.currentCopyCatVideo !== undefined;
+    return (
+      this.currentCopyCatVideo !== null &&
+      this.currentCopyCatVideo !== undefined
+    );
   }
 
   searchYoutubeVideos(niche: string) {
-    this.youtubeRepo.getVideoListByNiche(niche).pipe(
-      map((videos) => {
-        const newVideosList: YoutubeVideo[] = [];
-        videos.forEach((video) => {
-        const cleanedText = video.title.replaceAll(/&#39;/g, "'").replaceAll(/&quot;/g, '"').replaceAll(/&amp;/g, '&').replaceAll(/&gt;/g, '>').replaceAll(/&lt;/g, '<');
-        newVideosList.push(
-          {
-            ...video,
-            title: cleanedText,
-            publishedAt: this.dateUtils.updateDateToHumanForm(video.publishedAt),
-          }
-        )
-      })
-      return newVideosList;
-    })).subscribe({
-      next: (videos) => this.youtubeVideosSubject.next(videos),
-      error: (err) => {
-        console.log("🔥 ~ file: extractdetails.service.ts:148 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ err:", err)
-        this.errorSubject.next(err); 
-        this.youtubeVideosSubject.complete();
-      }
-    });
+    this.youtubeRepo
+      .getVideoListByNiche(niche)
+      .pipe(
+        map((videos) => {
+          const newVideosList: YoutubeVideo[] = [];
+          videos.forEach((video) => {
+            const cleanedText = video.title
+              .replaceAll(/&#39;/g, "'")
+              .replaceAll(/&quot;/g, '"')
+              .replaceAll(/&amp;/g, '&')
+              .replaceAll(/&gt;/g, '>')
+              .replaceAll(/&lt;/g, '<');
+            newVideosList.push({
+              ...video,
+              title: cleanedText,
+              publishedAt: this.dateUtils.updateDateToHumanForm(
+                video.publishedAt
+              ),
+            });
+          });
+          return newVideosList;
+        })
+      )
+      .subscribe({
+        next: (videos) => this.youtubeVideosSubject.next(videos),
+        error: (err) => {
+          console.log(
+            '🔥 ~ file: extractdetails.service.ts:148 ~ ExtractDetailsService ~ this.youtubeRepo.getVideoListByNiche ~ err:',
+            err
+          );
+          this.errorSubject.next(err);
+          this.youtubeVideosSubject.complete();
+        },
+      });
   }
 
   setCopyCatVideoId(video: YoutubeVideo) {
@@ -146,65 +170,115 @@ export class ExtractDetailsService {
       },
       error: (err) => {
         this.errorSubject.next(err);
-      }
+      },
     });
+  }
+
+  setCopyCatVideoIdFromString(videoUrl: string) {
+    const videoId = this.extractVideoId(videoUrl);
+    this.extractContentRepo
+      .setCurrentPageObjectFromUrlVideoId(videoId)
+      .subscribe({
+        next: (response) => {
+          this.currentCopyCatVideo = response.youtubeVideo!!;
+          if (response !== null && response !== undefined) {
+            this.navigationService.navigateToExtractDetails();
+          }
+        },
+        error: (err) => {
+          this.errorSubject.next(err);
+        },
+      });
   }
 
   getNewVideoTranscript() {
-    console.log("🚀 ~ file: extractdetails.service.ts:156 ~ ExtractDetailsService ~ getNewVideoTranscript ~ getNewVideoTranscript:")
-    if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
-      this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
+    console.log(
+      '🚀 ~ file: extractdetails.service.ts:156 ~ ExtractDetailsService ~ getNewVideoTranscript ~ getNewVideoTranscript:'
+    );
+    if (
+      this.currentCopyCatVideo === null ||
+      this.currentCopyCatVideo === undefined
+    ) {
+      this.errorSubject.next(
+        'No videoId found. Sending placeholder for testing purposes.'
+      );
       return; // uncomment for prod
-    } 
+    }
 
     // this.transcriptRepo.getTranscript('test').pipe(
-    this.transcriptRepo.getTranscript(this.currentCopyCatVideo.id).pipe(
-    ).subscribe({
-      next: (response: { message: string, result: { translation: string }}) => {
-        if (response.message !== 'success' || response.result.translation === '') {
-          this.errorSubject.next(response.message);
-          return;
-        }
-        if (response.result.translation === '') {
-          this.errorSubject.next('No transcript found.');
-          return;
-        }
+    this.transcriptRepo
+      .getTranscript(this.currentCopyCatVideo.id)
+      .pipe()
+      .subscribe({
+        next: (response: {
+          message: string;
+          result: { translation: string };
+        }) => {
+          if (
+            response.message !== 'success' ||
+            response.result.translation === ''
+          ) {
+            this.errorSubject.next(response.message);
+            return;
+          }
+          if (response.result.translation === '') {
+            this.errorSubject.next('No transcript found.');
+            return;
+          }
 
-        const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
-        const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(response.result.translation)
-        this.extractContentRepo.updateCopyCatScript(splitParagraphs)
+          const uiPreppedResponse: { isLoading: boolean; section: string }[] =
+            [];
+          const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(
+            response.result.translation
+          );
+          this.extractContentRepo.updateCopyCatScript(splitParagraphs);
 
-        splitParagraphs.forEach((paragraph) => {
-          uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
-        });
+          splitParagraphs.forEach((paragraph) => {
+            uiPreppedResponse.push({
+              isLoading: false,
+              section: paragraph.trim(),
+            });
+          });
 
-        this.videoTranscriptSubject.next(uiPreppedResponse);
-        this.isTranscriptLoadingSubject.next(false);
-      },
-      error: (err) => {
-        if (err = 'Error: Request failed with status code 505') {
-          this.kickBackErrorSubject.next('Seems like the video you selected is not available for translation. Please select another video.');
-        } else {
-          console.log("🔥 ~ file: extractdetails.service.ts:122 ~ ExtractDetailsService ~ getVideoTranscript ~ err:", err)
-          this.errorSubject.next(err);
-        }
-      },
-    });
+          this.videoTranscriptSubject.next(uiPreppedResponse);
+          this.isTranscriptLoadingSubject.next(false);
+        },
+        error: (err) => {
+          if ((err = 'Error: Request failed with status code 505')) {
+            this.kickBackErrorSubject.next(
+              'Seems like the video you selected is not available for translation. Please select another video.'
+            );
+          } else {
+            console.log(
+              '🔥 ~ file: extractdetails.service.ts:122 ~ ExtractDetailsService ~ getVideoTranscript ~ err:',
+              err
+            );
+            this.errorSubject.next(err);
+          }
+        },
+      });
   }
 
   getVideoTranscript() {
-    console.log("🚀 ~ file: extractdetails.service.ts:198 ~ ExtractDetailsService ~ getVideoTranscript ~ getVideoTranscript:")
+    console.log(
+      '🚀 ~ file: extractdetails.service.ts:198 ~ ExtractDetailsService ~ getVideoTranscript ~ getVideoTranscript:'
+    );
     this.extractContentRepo.getCompleteScript().subscribe({
       next: (script) => {
         if (script === null || script === undefined || script.length === 0) {
           this.getNewVideoTranscript();
           return;
         } else {
-          const uiPreppedResponse: { isLoading: boolean, section: string }[] = [];
-          const splitParagraphs = this.textSplitUtility.splitIntoParagraphs(script)
+          const uiPreppedResponse: { isLoading: boolean; section: string }[] =
+            [];
+          const splitParagraphs =
+            this.textSplitUtility.splitIntoParagraphs(script);
 
           splitParagraphs.forEach((paragraph) => {
-            uiPreppedResponse.push({ isLoading: false, section: paragraph.trim() });
+            uiPreppedResponse.push({
+              isLoading: false,
+              section: paragraph.trim(),
+            });
           });
 
           this.videoTranscriptSubject.next(uiPreppedResponse);
@@ -213,7 +287,7 @@ export class ExtractDetailsService {
       },
       error: (err) => {
         this.errorSubject.next(err);
-      }
+      },
     });
   }
 
@@ -221,24 +295,31 @@ export class ExtractDetailsService {
     this.generationService.optimizeNewScriptIndex(prompt, section, index);
   }
 
-  updateScript(transcriptSections: { isLoading: boolean; section: string; }[]) {
-    of(transcriptSections).pipe(
-      map((sections) => {
-        const script: string[] = [];
-        sections.forEach((section) => {
-          script.push(section.section.trim());
-        });
-        return script
-      })
-    ).subscribe((scriptArray: string[]) => {
-      this.extractContentRepo.updateCopyCatScript(scriptArray)
-    });
+  updateScript(transcriptSections: { isLoading: boolean; section: string }[]) {
+    of(transcriptSections)
+      .pipe(
+        map((sections) => {
+          const script: string[] = [];
+          sections.forEach((section) => {
+            script.push(section.section.trim());
+          });
+          return script;
+        })
+      )
+      .subscribe((scriptArray: string[]) => {
+        this.extractContentRepo.updateCopyCatScript(scriptArray);
+      });
   }
 
   getNewVideoMetaData() {
-    if (this.currentCopyCatVideo === null || this.currentCopyCatVideo === undefined) {
-      this.errorSubject.next('No videoId found. Sending placeholder for testing purposes.');
-      return
+    if (
+      this.currentCopyCatVideo === null ||
+      this.currentCopyCatVideo === undefined
+    ) {
+      this.errorSubject.next(
+        'No videoId found. Sending placeholder for testing purposes.'
+      );
+      return;
     }
     //real code to uncomment below
     this.generationService.getNewTitle(
@@ -263,17 +344,17 @@ export class ExtractDetailsService {
         this.generationService.tagsSubject.next(response.tags);
       },
       error: (err) => {
-        this.errorSubject.next(err);  
-      }
+        this.errorSubject.next(err);
+      },
     });
   }
 
-  updateTitle(prompt: string, current: string) { 
-    this.generationService.optimizeTitle(prompt, current); 
+  updateTitle(prompt: string, current: string) {
+    this.generationService.optimizeTitle(prompt, current);
   }
 
-  updateDescription(prompt: string, current: string) { 
-    this.generationService.optimizeDescription(prompt, current); 
+  updateDescription(prompt: string, current: string) {
+    this.generationService.optimizeDescription(prompt, current);
   }
 
   updateTags() {
@@ -285,8 +366,8 @@ export class ExtractDetailsService {
 
   submitSave(
     generatedAudioUrl: string,
-    title: string, 
-    description: string, 
+    title: string,
+    description: string,
     tags: string,
     script: string[]
   ) {
@@ -298,15 +379,33 @@ export class ExtractDetailsService {
         },
         error: (err) => {
           this.errorSubject.next(err);
-        }
-      })
+        },
+      });
   }
 
   clearCurrentVideoPage() {
     this.extractContentRepo.clearCurrentPage();
   }
-  
+
   navigateHome() {
     this.navigationService.navigateToCopyCat();
+  }
+
+  extractVideoId(url: string) {
+    let videoId = '';
+
+    // Case 1: youtu.be format
+    const youtuBeMatch = url.match(/youtu\.be\/([^\?]+)/i);
+    if (youtuBeMatch) {
+      videoId = youtuBeMatch[1];
+    }
+
+    // Case 2: youtube.com/watch?v= format
+    const youtubeMatch = url.match(/youtube\.com\/watch\?v=([^\?&]+)/i);
+    if (youtubeMatch) {
+      videoId = youtubeMatch[1];
+    }
+
+    return videoId;
   }
 }

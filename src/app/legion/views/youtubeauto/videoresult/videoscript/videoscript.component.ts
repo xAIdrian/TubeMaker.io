@@ -1,8 +1,20 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { DurationSection, VideoDuration } from "../../../../model/autocreate/videoduration.model";
-import { VideoDetailsService } from "../../videodetails.service";
-import { AutoContentRepository } from "src/app/legion/repository/content/autocontent.repo";
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import {
+  DurationSection,
+  VideoDuration,
+} from '../../../../model/autocreate/videoduration.model';
+import { VideoDetailsService } from '../../videodetails.service';
+import { AutoContentRepository } from 'src/app/legion/repository/content/autocontent.repo';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -11,9 +23,11 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrls: ['./videoscript.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges {
+export class VideoScriptComponent
+  implements OnInit, AfterContentInit, OnChanges
+{
   @Input() parentScriptFormGroup: FormGroup;
-  
+
   currentVideoDuration: VideoDuration;
   isScriptLoading: boolean = false;
   showScriptBadge: boolean = false;
@@ -23,11 +37,13 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
     private clipboard: Clipboard,
     private videoDetailsService: VideoDetailsService,
     private changeDetectorRef: ChangeDetectorRef
-  ) { /** */ }
+  ) {
+    /** */
+  }
 
   ngOnInit() {
     if (this.videoDetailsService.currentDuration !== undefined) {
-      this.currentVideoDuration = this.videoDetailsService.currentDuration
+      this.currentVideoDuration = this.videoDetailsService.currentDuration;
     } else {
       this.currentVideoDuration = {
         name: 'please wait',
@@ -50,7 +66,8 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['parentScriptFormGroup']) {
-      this.parentScriptFormGroup = changes['parentScriptFormGroup'].currentValue;
+      this.parentScriptFormGroup =
+        changes['parentScriptFormGroup'].currentValue;
     }
   }
 
@@ -65,11 +82,14 @@ export class VideoScriptComponent implements OnInit, AfterContentInit, OnChanges
   }
 
   copyScript() {
-    this.contentRepo.getCompleteScript().subscribe((script) => {
-        this.clipboard.copy(script);
-        this.showScriptBadge = true;
-        setTimeout(() => (this.showScriptBadge = false), 1000);
-      });
+    // Get an array of form controls from the form group
+    const valauesArray = [];
+    const controlsArray = Object.values(this.parentScriptFormGroup.controls);
+    for (const control of controlsArray) {
+      valauesArray.push(control.value);
+    }
+    this.clipboard.copy(valauesArray.join('\n'));
+    this.showScriptBadge = true;
+    setTimeout(() => (this.showScriptBadge = false), 1000);
   }
 }
-

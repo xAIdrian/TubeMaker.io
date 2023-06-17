@@ -89,14 +89,16 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
         this.videoDetailsService.getCurrentPage(pathId).subscribe({
           next: (page: YoutubeVideoPage) => {
             this.currentPageId = page.id ?? '';
-            const primedTags = page.metadata?.tags.map((tag) => {
-              return tag.trim().replaceAll(' ', '-');
-            }).join(',');
+            const primedTags = page.metadata?.tags
+              .map((tag) => {
+                return tag.trim().replaceAll(' ', '-');
+              })
+              .join(',');
 
             this.infoFormGroup.setValue({
               title: page.metadata?.title.replaceAll('"', '').trim(),
               description: page.metadata?.description.trim(),
-              tags: `#${primedTags?.replaceAll(',', ', #')}`
+              tags: `#${primedTags?.replaceAll(',', ', #')}`,
             });
 
             if (
@@ -140,41 +142,6 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
 
   setupObservers() {
     this.videoDetailsService
-      .getContentProgressObserver()
-      .subscribe((response) => {
-        this.contentProgressValue = this.contentProgressValue + response;
-        if (this.contentProgressValue === 0) {
-          this.contentProgressLabel = 'Researching the competition...';
-        } else if (this.contentProgressValue === 25) {
-          this.contentProgressLabel = 'Analyzing the market...';
-        } else if (this.contentProgressValue === 50) {
-          this.contentProgressLabel = 'Quantifying results...';
-        } else if (this.contentProgressValue === 75) {
-          this.contentProgressLabel = 'Searching YouTube...';
-        } else if (this.contentProgressValue === 100) {
-          this.contentProgressLabel = 'Done. Moving to the script.';
-          this.scriptProgressLabel = 'Waking up your AI...';
-        }
-        this.changeDetectorRef.detectChanges();
-      });
-    this.videoDetailsService
-      .getScriptProgressObserver()
-      .subscribe((response) => {
-        this.scriptProgressValue =
-          this.scriptProgressValue + response.increment;
-        this.scriptProgressLabel = response.label;
-
-        if (this.scriptProgressValue >= 97) {
-          this.scriptProgressLabel = 'Done!';
-          setTimeout(() => {
-            this.contentGenerationIsLoading = false;
-            this.contentProgressValue = 0;
-            this.scriptProgressValue = 0;
-          }, 500);
-        }
-      });
-
-    this.videoDetailsService
       .getCompleteResultsObserver()
       .subscribe((response: { meta: VideoMetadata }) => {
         this.infoFormGroup.setValue({
@@ -182,6 +149,7 @@ export class VideoDetailsComponent implements OnInit, AfterContentInit {
           description: response.meta.description.trim(),
           tags: response.meta.tags.join(' #').trim(),
         });
+        this.contentGenerationIsLoading = false;
       });
 
     this.videoDetailsService.getTitleObserver().subscribe((response) => {

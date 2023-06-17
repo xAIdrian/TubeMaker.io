@@ -129,7 +129,7 @@
     "simple_script_progress_label": "Planning world domination..."
   },
   "navigation": {
-    "copy_cat": "Edit",
+    "copy_cat": "Copy Cat",
     "create": "Create",
     "brand_new": "Brand New",
     "view_videos": "View Videos",
@@ -300,12 +300,12 @@
     "description": "This niche is focused on providing beauty tips and tutorials specifically for mature skin. Creators in this niche often share tips and tricks for skincare, makeup, and hair care that are tailored to the needs of older viewers. Monetization can come from sponsorships, affiliate marketing, or merchandise sales."
   },
   "extract": {
-    "copy_cat": "Copy",
+    "copy_cat": "Edit",
     "your_videos": "Your Videos",
     "no_videos": "Welcome Home. Let's get started by adding a video to your list.",
     "no_videos_description": "TubeMaker will extract the transcript from the video and allow you to edit it. Just decide if you want to copy from the top performing videos from around the world or create a script from scratch!",
     "copy_popular_videos": "Copy Popular Videos",
-    "tubemaker_instructions": "To start making your own Youtube videos select one of the niches above or paste a youtube link",
+    "tubemaker_instructions": "To start making your own Youtube videos paste a youtube link",
     "loading": "Loading Your Content...",
     "back": "Back",
     "use_ai": "Use AI",
@@ -329,5 +329,11 @@
     "description": "It is easier than ever to make money on youtube. Have you posted your content on Youtube?  You can always come back later and make changes.",
     "leave": "Go To Home",
     "stay": "Continue Editing"
+  },
+  "deletion_dialog": {
+    "title": "You are about to lose your script!",
+    "description": "Once you delete your script you will be unable to retrieve it.  Are you sure?",
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }

@@ -3,16 +3,17 @@ const router = express.Router();
 const { Configuration, OpenAIApi } = require("openai");
 const { OPEN_AI_API_KEY } = require("../appsecrets");
 const fs = require("fs");
-const path = require('path');
-const { initializeApp, cert } = require('firebase-admin/app');
-const { getStorage } = require('firebase-admin/storage');
+const path = require("path");
+const { initializeApp, cert } = require("firebase-admin/app");
+const { getStorage } = require("firebase-admin/storage");
 
-var serviceAccount = require('../freeadmingptwebapp-384207-firebase-adminsdk-7qlgk-6a26b8eae6.json');
+var serviceAccount = require("../freeadmingptwebapp-384207-firebase-adminsdk-7qlgk-6a26b8eae6.json");
 const { storage } = require("firebase-functions/v1");
+const { raw } = require("body-parser");
 
 initializeApp({
   credential: cert(serviceAccount),
-  storageBucket: 'gs://freeadmingptwebapp-384207.appspot.com'
+  storageBucket: "gs://freeadmingptwebapp-384207.appspot.com",
 });
 const bucket = getStorage().bucket();
 
@@ -26,40 +27,34 @@ const openai = new OpenAIApi(configuration);
 ///////////////////
 
 router.get("/topic/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:14 ~ router.get ~ req:", req.url, req.body)
-
   let language = req.params.language;
 
   // Validate language input
-  const validLanguages = ['en', 'fr'];
+  const validLanguages = ["en", "fr"];
   if (!validLanguages.includes(language)) {
     res.status(400).json({
       message: "Invalid language. Please provide a valid language.",
     });
     return; // Return early to avoid further processing
-  } 
+  }
   inputFile = `inputprompts/${language}/youtube_topic.txt`;
 
   rawPrompt = await readTextFileToPrompt(inputFile);
 
   try {
     const response = await generateTopic(language);
-  
+
     res.status(200).json({
       message: "success",
       result: { topic: response },
     });
   } catch (error) {
-     console.log("🔥 ~ file: ai.js:34 ~ router.get ~ error:", error.message);
-
     if (error.response) {
-      console.log("🔥 ~ file: ai.js:31 ~ router.get ~ error.response:", error.message);
       res.status(500).json({
         message: "API call failed",
         result: error.response.data,
       });
     } else {
-      console.log("🔥 ~ file: ai.js:34 ~ router.get ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
         result: error.message,
@@ -84,7 +79,6 @@ async function generateTopic(language) {
     });
 
     const response = completion.data.choices[0].text;
-    console.log("🚀 ~ file: ai.js:77 ~ generateTopic ~ response:", response)
     return response;
   } catch (error) {
     throw error;
@@ -96,13 +90,11 @@ async function generateTopic(language) {
 ///////////////////
 
 router.post("/summary/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:57 ~ router.post ~ req:", req.url, req.body)
-
   let language = req.params.language;
   let prompt = req.body.prompt;
 
   // Validate language input
-  const validLanguages = ['en', 'fr'];
+  const validLanguages = ["en", "fr"];
   if (!validLanguages.includes(language)) {
     res.status(400).json({
       message: "Invalid language. Please provide a valid language.",
@@ -121,7 +113,7 @@ router.post("/summary/:language", async (req, res, next) => {
   try {
     const gptSummary = await generateSummary(language, prompt);
 
-    if (gptSummary === undefined || gptSummary === '') {
+    if (gptSummary === undefined || gptSummary === "") {
       res.status(400).json({
         message: "Invalid prompt. Please provide a valid prompt.",
       });
@@ -129,9 +121,8 @@ router.post("/summary/:language", async (req, res, next) => {
     }
 
     const gptKeyPoints = await generateKeyPoints(language, gptSummary);
-    console.log("🚀 ~ file: ai.js:133 ~ router.post ~ gptKeyPoints:", gptKeyPoints)
     const gptScriptVoice = await generateScriptVoice(language, gptSummary);
-  
+
     res.status(200).json({
       message: "success",
       result: {
@@ -141,16 +132,12 @@ router.post("/summary/:language", async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
-  
     if (error.response) {
-      console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
       res.status(500).json({
         message: "API call failed",
         result: error.response.data,
       });
     } else {
-      console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
         result: error.message,
@@ -164,8 +151,6 @@ async function generateSummary(language, prompt) {
 
   try {
     let gptSummary = await simplePromptCompletion(inputFile, prompt);
-    console.log("🚀 ~ file: ai.js:77 ~ router.post ~ gptSummary:", gptSummary);
-
     return gptSummary;
   } catch (error) {
     throw error;
@@ -178,17 +163,15 @@ async function generateSummary(language, prompt) {
 
 /**
  * Returns the key points in a list format seperated by commas
- * @param {*} language 
- * @param {*} summary 
- * @returns 
+ * @param {*} language
+ * @param {*} summary
+ * @returns
  */
 async function generateKeyPoints(language, summary) {
   const inputFile = `inputprompts/${language}/youtube_key_points.txt`;
 
   try {
     let gptKeyPoints = await simplePromptCompletion(inputFile, summary);
-    console.log("🚀 ~ file: ai.js:77 ~ router.post ~ gptKeyPoints:", gptKeyPoints);
-
     return gptKeyPoints;
   } catch (error) {
     throw error;
@@ -200,8 +183,6 @@ async function generateScriptVoice(language, summary) {
 
   try {
     let gptScriptVoice = await simplePromptCompletion(inputFile, summary);
-    console.log("🚀 ~ file: ai.js:77 ~ router.post ~ gptScriptVoice:", gptScriptVoice);
-
     return gptScriptVoice;
   } catch (error) {
     throw error;
@@ -209,14 +190,12 @@ async function generateScriptVoice(language, summary) {
 }
 
 router.post("/points/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:85 ~ router.post ~ req:", req.url, req.body)
-
   let language = req.params.language;
   let key_points = req.body.key_points;
   let script_points = req.body.script_points;
 
   // Validate language input
-  const validLanguages = ['en', 'fr'];
+  const validLanguages = ["en", "fr"];
   if (!validLanguages.includes(language)) {
     res.status(400).json({
       message: "Invalid language. Please provide a valid language.",
@@ -241,24 +220,23 @@ router.post("/points/:language", async (req, res, next) => {
   }
 
   try {
-    const gptPointKeyMatching = await generatePointKeyMatching(language, key_points, script_points);
-    console.log("🚀 ~ file: ai.js:246 ~ router.post ~ gptPointKeyMatching:", gptPointKeyMatching)
-  
+    const rawMatching = await generatePointKeyMatching(
+      language,
+      key_points,
+      script_points
+    );
+    const gptPointKeyMatching = "{" + rawMatching;
     res.status(200).json({
       message: "success",
       result: { point_key_matching: gptPointKeyMatching },
     });
   } catch (error) {
-    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
-  
     if (error.response) {
-      console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
       res.status(500).json({
         message: "API call failed",
         result: error.response.data,
       });
     } else {
-      console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
         result: error.message,
@@ -269,10 +247,10 @@ router.post("/points/:language", async (req, res, next) => {
 
 /**
  * Takes a list of key points and returns a list of script points. They must be compared as string literals.
- * @param {*} language 
- * @param {*} key_points 
- * @param {*} script_points 
- * @returns 
+ * @param {*} language
+ * @param {*} key_points
+ * @param {*} script_points
+ * @returns
  */
 async function generatePointKeyMatching(language, key_points, script_points) {
   const inputFile = `inputprompts/${language}/youtube_point_key_matching.txt`;
@@ -287,7 +265,9 @@ async function generatePointKeyMatching(language, key_points, script_points) {
 
   try {
     rawPrompt = await readTextFileToPrompt(inputFile);
-    matchingPrompt = rawPrompt.replace("<<KEYS>>", key_points).replace("<<POINTS>>", script_points);
+    matchingPrompt = rawPrompt
+      .replace("<<KEYS>>", key_points)
+      .replace("<<POINTS>>", script_points);
     return getNewOutputCompletion(matchingPrompt);
   } catch (error) {
     throw error;
@@ -299,14 +279,12 @@ async function generatePointKeyMatching(language, key_points, script_points) {
 ///////////////////
 
 router.post("/new/title/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:85 ~ router.post ~ req:", req.url, req.body)
-
   let language = req.params.language;
   let summary = req.body.summary;
   let style = req.body.style;
 
   // Validate language input
-  const validLanguages = ['en', 'fr'];
+  const validLanguages = ["en", "fr"];
   if (!validLanguages.includes(language)) {
     res.status(400).json({
       message: "Invalid language. Please provide a valid language.",
@@ -332,22 +310,18 @@ router.post("/new/title/:language", async (req, res, next) => {
 
   try {
     const gptTitle = await generateTitle(language, summary, style);
-  
+
     res.status(200).json({
       message: "success",
       result: { title: gptTitle },
     });
   } catch (error) {
-    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
-  
     if (error.response) {
-      console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
       res.status(400).json({
         message: "API call failed",
         result: error.response.data,
       });
     } else {
-      console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
         result: error.message,
@@ -361,8 +335,6 @@ async function generateTitle(language, summary, style) {
 
   try {
     let gptTitle = await newPromptCompletion(inputFile, summary, style);
-    console.log("🚀 ~ file: ai.js:112 ~ router.post ~ gptTitle:", gptTitle);
-
     return gptTitle;
   } catch (error) {
     throw error;
@@ -370,14 +342,12 @@ async function generateTitle(language, summary, style) {
 }
 
 router.post("/improve/title/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:114 ~ router.post ~ req:", req.url, req.body)
-  
   let language = req.params.language;
   let current = req.body.current;
   let prompt = req.body.prompt;
 
   // Validate language input
-  const validLanguages = ['en', 'fr'];
+  const validLanguages = ["en", "fr"];
   if (!validLanguages.includes(language)) {
     res.status(400).json({
       message: "Invalid language. Please provide a valid language.",
@@ -385,7 +355,7 @@ router.post("/improve/title/:language", async (req, res, next) => {
     return; // Return early to avoid further processing
   }
 
-  if (current === undefined || current === '') {
+  if (current === undefined || current === "") {
     res.status(400).json({
       message: "current is required",
     });
@@ -401,22 +371,18 @@ router.post("/improve/title/:language", async (req, res, next) => {
 
   try {
     const gptTitle = await getImprovedCompletion(language, current, prompt);
-  
+
     res.status(200).json({
       message: "success",
       result: { title: gptTitle },
     });
   } catch (error) {
-    console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error:", error);
-  
     if (error.response) {
-      console.log("🔥 ~ file: ai.js:31 ~ router.post ~ error.response:", error.response);
       res.status(500).json({
         message: "API call failed",
         result: error.response.data,
       });
     } else {
-      console.log("🔥 ~ file: ai.js:34 ~ router.post ~ error.message:", error.message);
       res.status(500).json({
         message: "Internal server error",
         result: error.message,
@@ -427,7 +393,7 @@ router.post("/improve/title/:language", async (req, res, next) => {
 
 async function getImprovedCompletion(language, current, prompt) {
   let inputFile = getImproveFileName(language, prompt);
-  if (inputFile === '') {
+  if (inputFile === "") {
     res.status(400).json({
       message: "Something is missing in the request body.",
     });
@@ -436,8 +402,6 @@ async function getImprovedCompletion(language, current, prompt) {
 
   try {
     let gptTitle = await improvePromptCompletion(inputFile, current);
-    console.log("🚀 ~ file: ai.js:280 ~ improveTitle ~ gptTitle:", gptTitle)
-
     return gptTitle;
   } catch (error) {
     throw error;
@@ -449,20 +413,18 @@ async function getImprovedCompletion(language, current, prompt) {
 ///////////////////
 
 router.post("/new/description/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:149 ~ router.post ~ req:", req.url, req.body)
-
   let language = req.params.language;
   let summary = req.body.summary;
   let style = req.body.style;
 
-  if (!language || !['en', 'fr'].includes(language)) {
+  if (!language || !["en", "fr"].includes(language)) {
     res.status(400).json({
       message: "Invalid language. Language must be 'en' or 'fr'.",
     });
     return; // Stop further execution
-  } 
+  }
   inputFile = `inputprompts/${language}/youtube_description.txt`;
-  
+
   if (!summary) {
     res.status(400).json({
       message: "Summary is required.",
@@ -472,8 +434,6 @@ router.post("/new/description/:language", async (req, res, next) => {
 
   try {
     let gptDescription = await newPromptCompletion(inputFile, summary, style);
-    console.log("🚀 ~ file: ai.js:170 ~ router.post ~ gptDescription:", gptDescription);
-  
     res.status(200).json({
       message: "success",
       result: { description: gptDescription },
@@ -482,34 +442,32 @@ router.post("/new/description/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while generating the description.",
-      result: error.message
+      result: error.message,
     });
   }
 });
 
 router.post("/improve/description/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:179 ~ router.post ~ req:", req.url, req.body)
-  
   let language = req.params.language;
   let current = req.body.current;
   let prompt = req.body.prompt;
 
-  if (!language || !['en', 'fr'].includes(language)) {
+  if (!language || !["en", "fr"].includes(language)) {
     res.status(400).json({
       message: "Invalid language. Language must be 'en' or 'fr'.",
     });
     return; // Stop further execution
-  } 
-  
+  }
+
   if (!current) {
     res.status(400).json({
       message: "Current is required.",
     });
     return; // Stop further execution
   }
-  
+
   let inputFile = getImproveFileName(language, prompt);
-  if (inputFile === '') {
+  if (inputFile === "") {
     res.status(400).json({
       message: "Something is missing in the request body.",
     });
@@ -518,8 +476,6 @@ router.post("/improve/description/:language", async (req, res, next) => {
 
   try {
     let gptDescription = await improvePromptCompletion(inputFile, current);
-    console.log("🚀 ~ file: ai.js:199 ~ router.post ~ gptDescription:", gptDescription);
-  
     res.status(200).json({
       message: "success",
       result: { description: gptDescription },
@@ -528,7 +484,7 @@ router.post("/improve/description/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while improving the description.",
-      result: error.message
+      result: error.message,
     });
   }
 });
@@ -542,27 +498,29 @@ router.post("/improve/description/:language", async (req, res, next) => {
  * Now they are submitting the match point and key for a generated section
  */
 router.post("/new/script/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:211 ~ router.post ~ req:", req.url, req.body)
-
   let language = req.params.language;
   let title = req.body.title;
   let voice = req.body.voice;
   let point = req.body.point;
   let key = req.body.key;
 
-  if (!language || !['en', 'fr'].includes(language)) {
+  if (!language || !["en", "fr"].includes(language)) {
     res.status(400).json({
       message: "Invalid language. Language must be 'en' or 'fr'.",
     });
     return; // Stop further execution
-  } 
-  
+  }
+
   inputFile = `inputprompts/${language}/youtube_script_section.txt`;
 
   try {
-    let gptScript = await newScriptPromptCompletion(inputFile, title, voice, point, key);
-    console.log("🛸 ~ file: ai.js:155 ~ router.post ~ gptScript:", gptScript);
-  
+    let gptScript = await newScriptPromptCompletion(
+      inputFile,
+      title,
+      voice,
+      point,
+      key
+    );
     res.status(200).json({
       message: "success",
       result: { script: gptScript },
@@ -571,23 +529,22 @@ router.post("/new/script/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while generating the script.",
-      result: error.message
+      result: error.message,
     });
   }
 });
 
 router.post("/improve/script/:language", async (req, res, next) => {
-
   let language = req.params.language;
   let current = req.body.current;
   let prompt = req.body.prompt;
 
-  if (!language || !['en', 'fr'].includes(language)) {
+  if (!language || !["en", "fr"].includes(language)) {
     res.status(400).json({
       message: "Invalid language. Language must be 'en' or 'fr'.",
     });
     return; // Stop further execution
-  } 
+  }
 
   if (!current) {
     res.status(400).json({
@@ -596,7 +553,7 @@ router.post("/improve/script/:language", async (req, res, next) => {
     return; // Stop further execution
   }
 
-  if (prompt === undefined || prompt === '') {
+  if (prompt === undefined || prompt === "") {
     res.status(400).json({
       message: "Prompt is required.",
     });
@@ -604,7 +561,7 @@ router.post("/improve/script/:language", async (req, res, next) => {
   }
 
   let inputFile = getImproveFileName(language, prompt);
-  if (inputFile === '') {
+  if (inputFile === "") {
     res.status(400).json({
       message: "Something is missing in the request body.",
     });
@@ -613,8 +570,6 @@ router.post("/improve/script/:language", async (req, res, next) => {
 
   try {
     let gptScript = await improvePromptCompletion(inputFile, current);
-    console.log("🚀 ~ file: ai.js:212 ~ router.post ~ gptScript:", gptScript);
-  
     res.status(200).json({
       message: "success",
       result: { script: gptScript },
@@ -623,7 +578,7 @@ router.post("/improve/script/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while improving the script.",
-      result: error.message
+      result: error.message,
     });
   }
 });
@@ -633,18 +588,16 @@ router.post("/improve/script/:language", async (req, res, next) => {
 ///////////////////
 
 router.post("/new/tags/:language", async (req, res, next) => {
-  console.log("🚀 ~ file: ai.js:242 ~ router.post ~ req:", req.url, req.body)
-
   let language = req.params.language;
   let summary = req.body.summary;
   let style = req.body.style;
 
-  if (!language || !['en', 'fr'].includes(language)) {
+  if (!language || !["en", "fr"].includes(language)) {
     res.status(400).json({
       message: "Invalid language. Language must be 'en' or 'fr'.",
     });
     return; // Stop further execution
-  } 
+  }
   inputFile = `inputprompts/${language}/youtube_tags.txt`;
 
   if (!summary) {
@@ -653,11 +606,9 @@ router.post("/new/tags/:language", async (req, res, next) => {
     });
     return; // Stop further execution
   }
-  
+
   try {
     let gptTags = await newPromptCompletion(inputFile, summary, style);
-    console.log("🚀 ~ file: ai.js:262 ~ router.post ~ gptTags:", gptTags);
-  
     res.status(200).json({
       message: "success",
       result: { tags: gptTags },
@@ -666,23 +617,22 @@ router.post("/new/tags/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while generating new tags.",
-      result: error.message
+      result: error.message,
     });
   }
 });
 
 router.post("/improve/tags/:language", async (req, res, next) => {
-
   let language = req.params.language;
   let current = req.body.current;
   let prompt = req.body.prompt;
 
-  if (!language || !['en', 'fr'].includes(language)) {
+  if (!language || !["en", "fr"].includes(language)) {
     res.status(400).json({
       message: "Invalid language. Language must be 'en' or 'fr'.",
     });
     return; // Stop further execution
-  } 
+  }
 
   if (current === "") {
     res.status(500).json({
@@ -692,7 +642,7 @@ router.post("/improve/tags/:language", async (req, res, next) => {
   }
 
   let inputFile = getImproveFileName(language, prompt);
-  if (inputFile === '') {
+  if (inputFile === "") {
     res.status(400).json({
       message: "Something is missing in the request body.",
     });
@@ -701,8 +651,6 @@ router.post("/improve/tags/:language", async (req, res, next) => {
 
   try {
     let gptTags = await improvePromptCompletion(inputFile, current);
-    console.log("🚀 ~ file: ai.js:212 ~ router.post ~ gptTags:", gptTags)
-  
     res.status(200).json({
       message: "success",
       result: { tags: gptTags },
@@ -711,7 +659,7 @@ router.post("/improve/tags/:language", async (req, res, next) => {
     console.error("Error:", error);
     res.status(500).json({
       message: "An error occurred while improving tags.",
-      result: error.message
+      result: error.message,
     });
   }
 });
@@ -721,24 +669,29 @@ router.post("/improve/tags/:language", async (req, res, next) => {
 ////////////////////
 
 function getImproveFileName(language, prompt) {
-  inputFolder = `inputprompts/${language}`
+  inputFolder = `inputprompts/${language}`;
 
-  switch (prompt) { 
-    case 'funnier': return `${inputFolder}/optimizer_funnier.txt`;
-    case 'formal': return `${inputFolder}/optimizer_formal.txt`;
-    case 'simpler': return `${inputFolder}/optimizer_simpler.txt`;
-    case 'expand': return `${inputFolder}/optimizer_expand.txt`;
-    case 'shorten': return `${inputFolder}/optimizer_shorten.txt`;
+  switch (prompt) {
+    case "funnier":
+      return `${inputFolder}/optimizer_funnier.txt`;
+    case "formal":
+      return `${inputFolder}/optimizer_formal.txt`;
+    case "simpler":
+      return `${inputFolder}/optimizer_simpler.txt`;
+    case "expand":
+      return `${inputFolder}/optimizer_expand.txt`;
+    case "shorten":
+      return `${inputFolder}/optimizer_shorten.txt`;
     default: {
-      console.log('🔥 Invalid prompt:', prompt);
-      return ''
+      console.log("🔥 Invalid prompt:", prompt);
+      return "";
     }
   }
 }
 
 async function getNewOutputCompletion(prompt, maxRetries = 3) {
   let retryCount = 0; //implement retry mechanism
-  let innerError = '';
+  let innerError = "";
 
   if (!prompt) {
     throw new Error("Prompt is required.");
@@ -754,10 +707,12 @@ async function getNewOutputCompletion(prompt, maxRetries = 3) {
         top_p: 1,
       });
       return completion.data.choices[0].text;
-      
     } catch (error) {
       if (error.response) {
-        console.log("API Error:", error.response.status + ", " + error.response.data);
+        console.log(
+          "API Error:",
+          error.response.status + ", " + error.response.data
+        );
         innerError = error.response.data;
       } else {
         console.log("Request Error:", error.message);
@@ -771,7 +726,7 @@ async function getNewOutputCompletion(prompt, maxRetries = 3) {
 
 async function getOptimizedOutputCompletion(prompt, maxRetries = 3) {
   let retryCount = 0; //implement retry mechanism
-  let innerError = '';
+  let innerError = "";
 
   if (!prompt) {
     throw new Error("Prompt is required.");
@@ -786,13 +741,15 @@ async function getOptimizedOutputCompletion(prompt, maxRetries = 3) {
         max_tokens: 2500,
         top_p: 1,
         presence_penalty: 0.6,
-        frequency_penalty: 0.6
+        frequency_penalty: 0.6,
       });
       return completion.data.choices[0].text;
-      
     } catch (error) {
       if (error.response) {
-        console.log("API Error:", error.response.status + ", " + error.response.data);
+        console.log(
+          "API Error:",
+          error.response.status + ", " + error.response.data
+        );
         innerError = error.response.data;
       } else {
         console.log("Request Error:", error.message);
@@ -821,10 +778,12 @@ async function simplePromptCompletion(inputFile, inputParam) {
 
 async function newScriptPromptCompletion(inputFile, title, voice, point, key) {
   if (!inputFile || !title || !voice || !point || !key) {
-    throw new Error("Invalid input parameters. Please provide all required parameters.");
+    throw new Error(
+      "Invalid input parameters. Please provide all required parameters."
+    );
   }
 
-  rawPrompt = await readTextFileToPrompt(inputFile); 
+  rawPrompt = await readTextFileToPrompt(inputFile);
   scriptPrompt = rawPrompt
     .replace("<<TITLE>>", title)
     .replace("<<AUTHOR>>", voice)
@@ -836,25 +795,32 @@ async function newScriptPromptCompletion(inputFile, title, voice, point, key) {
 
 async function newPromptCompletion(filename, inputParam, styleParam) {
   if (!filename || !inputParam || !styleParam) {
-    throw new Error("Invalid input parameters. Please provide all required parameters.");
+    throw new Error(
+      "Invalid input parameters. Please provide all required parameters."
+    );
   }
 
   rawPrompt = await readTextFileToPrompt(filename, inputParam);
-  if (inputParam === '') {
-    console.log("🔥 ~ file: ai.js:80 ~ newPromptCompletion ~", filename, inputParam, styleParam)
-    return
+  if (inputParam === "") {
+    return;
   }
-  properPrompt = rawPrompt.replace("<<FEED>>", inputParam).replace("<<STYLE>>", styleParam);
+  properPrompt = rawPrompt
+    .replace("<<FEED>>", inputParam)
+    .replace("<<STYLE>>", styleParam);
   return getNewOutputCompletion(properPrompt);
 }
 
 async function improvePromptCompletion(filename, inputParam) {
   if (!filename || !inputParam) {
-    throw new Error("Invalid input parameters. Please provide all required parameters.");
+    throw new Error(
+      "Invalid input parameters. Please provide all required parameters."
+    );
   }
 
-  if (inputParam === '') {
-    throw new Error("Invalid input parameter. Please provide a valid input parameter.");
+  if (inputParam === "") {
+    throw new Error(
+      "Invalid input parameter. Please provide a valid input parameter."
+    );
   }
 
   rawPrompt = await readTextFileToPrompt(filename);
@@ -876,10 +842,9 @@ async function readFile(fileName) {
   const file = bucket.file(fileName);
 
   const data = await file.download();
-  const contents = data.toString('utf8');
+  const contents = data.toString("utf8");
 
   return contents;
 }
-
 
 module.exports = router;

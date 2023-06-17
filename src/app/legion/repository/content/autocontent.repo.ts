@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
-import {
-  VideoNiche,
-} from '../../model/autocreate/videoniche.model';
+import { VideoNiche } from '../../model/autocreate/videoniche.model';
 import {
   getDefaultVideoDurations,
   VideoDuration,
 } from '../../model/autocreate/videoduration.model';
-import { catchError, combineLatest, concatMap, from, map, Observable, of, tap } from 'rxjs';
-import{ ContentRepository } from './content.repo';
+import {
+  catchError,
+  combineLatest,
+  concatMap,
+  from,
+  map,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
+import { ContentRepository } from './content.repo';
 import { YoutubeVideoPage } from '../../model/youtubevideopage.model';
 import { VideoMetadata } from '../../model/video/videometadata.model';
+import { YoutubeVideo } from '../../model/video/youtubevideo.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +41,6 @@ export class AutoContentRepository extends ContentRepository {
     videoNiche: VideoNiche,
     videoDuration: VideoDuration
   ): Observable<YoutubeVideoPage> {
-    
     const newDoc: YoutubeVideoPage = {
       createdDate: new Date().toISOString(),
       createdFrom: 'auto',
@@ -59,10 +66,6 @@ export class AutoContentRepository extends ContentRepository {
       }),
       tap((page) => this.currentPageSubject.next(page)),
       catchError((err) => {
-        console.log(
-          '❤️‍🔥 ~ file: extractcontent.repo.ts ~ line 58 ~ ExtractContentRepository ~ catchError ~ err',
-          err
-        );
         throw new Error(err);
       })
     );
@@ -172,10 +175,10 @@ export class AutoContentRepository extends ContentRepository {
             // get all the values of the ordered hashmap in the same order
             this.structuredScript.forEach((value, key) => {
               if (value !== undefined && value !== null && value !== '') {
-                script += value + '\n' ;
-              }              
+                script += value + '\n';
+              }
             });
-            console.log(script)
+            console.log(script);
             return script;
           } else {
             throw new Error('scriptMap is undefined or null');

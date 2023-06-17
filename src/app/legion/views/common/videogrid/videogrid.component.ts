@@ -24,6 +24,7 @@ import { ExtractDetailsService } from '../../youtubeextract/extractdetails.servi
 export class VideoGridComponent implements OnChanges, AfterContentInit {
   @Input() parentVideos: YoutubeVideo[] = [];
   @Output() itemSelectEvent = new EventEmitter<YoutubeVideo>();
+  @Output() itemDeletedEvent = new EventEmitter<YoutubeVideo>();
 
   isLoading: boolean = false;
   videos: YoutubeVideo[] = [];
@@ -47,5 +48,9 @@ export class VideoGridComponent implements OnChanges, AfterContentInit {
 
   onVideoClick(video: YoutubeVideo) {
     this.itemSelectEvent.emit(video);
+  }
+
+  onDeleteClick(video: YoutubeVideo) {
+    this.itemDeletedEvent.emit(video);
   }
 }
